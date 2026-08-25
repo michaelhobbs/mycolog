@@ -1,0 +1,203 @@
+---
+import type { Locale } from '../i18n';
+import type { MushroomSighting } from '../types/mushroom';
+import { l10n } from '../i18n/helpers';
+import { formatDate } from '../i18n';
+
+interface Props {
+  sighting: MushroomSighting;
+  locale: Locale;
+}
+
+const { sighting, locale } = Astro.props;
+const t = l10n;
+const w = 48;
+---
+
+<div class="tui-card">
+  <div class="tui-card__head">
+    <span class="tui-card__title">┌─ {t(sighting.commonName, locale)}</span>
+  </div>
+
+  <div class="tui-card__img">
+    <img
+      src={sighting.imageUrl}
+      alt={t(sighting.commonName, locale)}
+      loading="lazy"
+    />
+    <div class="tui-card__overlay">
+      <span class="tui-card__date">{formatDate(sighting.dateSpotted, locale)}</span>
+    </div>
+  </div>
+
+  <div class="tui-card__body">
+    <div class="tui-card__row">
+      <span class="tui-card__label">species</span>
+      <span class="tui-card__sep-dots"></span>
+      <span class="tui-card__val">{sighting.species}</span>
+    </div>
+    <div class="tui-card__row">
+      <span class="tui-card__label">location</span>
+      <span class="tui-card__sep-dots"></span>
+      <span class="tui-card__val">{t(sighting.location.name, locale)}</span>
+    </div>
+    {sighting.habitat && (
+      <div class="tui-card__row">
+        <span class="tui-card__label">habitat</span>
+        <span class="tui-card__sep-dots"></span>
+        <span class="tui-card__val">{t(sighting.habitat, locale)}</span>
+      </div>
+    )}
+
+    <div class="tui-card__divider"></div>
+
+    <div class="tui-card__features">
+      <span class="tui-card__features-hdr">├─ {t(sighting.determiningFeatures[0], locale) ? 'features:' : ''}</span>
+      <ul>
+        {sighting.determiningFeatures.map((f) => (
+          <li>│  <span class="tui-card__bullet">▸</span> {t(f, locale)}</li>
+        ))}
+      </ul>
+    </div>
+
+    {sighting.notes && (
+      <>
+        <div class="tui-card__divider"></div>
+        <div class="tui-card__notes">
+          └─ <span class="tui-card__note-text">{t(sighting.notes, locale)}</span>
+        </div>
+      </>
+    )}
+  </div>
+</div>
+
+<style>
+  .tui-card {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    font-size: 0.8125rem;
+    transition: border-color 0.1s;
+  }
+
+  .tui-card:hover {
+    border-color: var(--accent-dim);
+  }
+
+  .tui-card__head {
+    padding: 0.5rem 0.75rem 0;
+    font-size: 0.75rem;
+  }
+
+  .tui-card__title {
+    color: var(--fg-bright);
+    font-weight: 700;
+  }
+
+  .tui-card__img {
+    position: relative;
+    margin: 0.5rem 0.75rem;
+    border: 1px solid var(--fg-muted);
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .tui-card__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.6) brightness(0.85);
+  }
+
+  .tui-card:hover .tui-card__img img {
+    filter: saturate(0.8) brightness(0.95);
+  }
+
+  .tui-card__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .tui-card__date {
+    display: inline-block;
+    background: var(--bg);
+    border: 1px solid var(--border-char);
+    border-top: none;
+    border-left: none;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    color: var(--yellow);
+  }
+
+  .tui-card__body {
+    padding: 0 0.75rem 0.75rem;
+  }
+
+  .tui-card__row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.7;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .tui-card__label {
+    color: var(--fg-dim);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .tui-card__sep-dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 1rem;
+    margin-bottom: 0.2em;
+  }
+
+  .tui-card__val {
+    color: var(--fg-bright);
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tui-card__divider {
+    border-top: 1px dashed var(--fg-muted);
+    margin: 0.5rem 0;
+  }
+
+  .tui-card__features-hdr {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .tui-card__features ul {
+    list-style: none;
+  }
+
+  .tui-card__features li {
+    color: var(--fg);
+    line-height: 1.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .tui-card__bullet {
+    color: var(--accent-dim);
+  }
+
+  .tui-card__notes {
+    color: var(--fg-dim);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  .tui-card__note-text {
+    color: var(--fg);
+  }
+</style>

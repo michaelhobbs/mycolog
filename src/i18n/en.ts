@@ -33,7 +33,7 @@ export default {
     features: 'Key Features',
   },
   footer: {
-    copyright: '© 2026 Pilzwelt Garmisch-Partenkirchen',
+    copyright: '© 2026 myco.log',
     tagline: 'Only forage mushrooms you can positively identify!',
   },
   meta: {

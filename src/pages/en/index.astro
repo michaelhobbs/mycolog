@@ -10,28 +10,50 @@ const t = getTranslations(locale);
 
 const recentSightings = sightings
   .slice()
-  .sort((a, b) => new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime())
+  .sort(
+    (a, b) =>
+      new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime(),
+  )
   .slice(0, 6);
 ---
 
-<Layout title="pilzwelt — mushroom sightings" locale={locale}>
+<Layout title="myco.log — mushroom sightings" locale={locale}>
   <section class="hero">
-    <pre class="hero__ascii" aria-hidden="true">@@@@@@@@   @@@  @@@       @@@@@@@@@  @@@  @@@  @@@  @@@@@@@@  @@@       @@@@@@@
-@@@@@@@@@  @@@  @@@       @@@@@@@@@  @@@  @@@  @@@  @@@@@@@@  @@@       @@@@@@@
-@@!  @@@  @@!  @@!            @@!  @@!  @@!  @@!  @@!       @@!         @@!
-!@!  @!@  !@!  !@!           !@!   !@!  !@!  !@!  !@!       !@!         !@!
-@!@@!@!   !!@  @!!          @!!    @!!  !!@  @!@  @!!!:!    @!!         @!!
-!!@!!!    !!!  !!!         !!!     !@!  !!!  !@!  !!!!!:    !!!         !!!
-!!:       !!:  !!:        !!:      !!:  !!:  !!:  !!:       !!:         !!:
-:!:       :!:   :!:      :!:       :!:  :!:  :!:  :!:        :!:        :!:
- ::        ::   :: ::::   :: ::::   :::: :: :::    :: ::::   :: ::::     ::
- :        :    : :: : :  : :: : :    :: :  : :    : :: ::   : :: : :     :</pre>
+    <pre
+      class="hero__ascii"
+      aria-hidden="true">                                                                                                                                      
+                                                                                                                                      
+                                                                                         lllllll                                      
+                                                                                         l:::::l                                      
+                                                                                         l:::::l                                      
+                                                                                         l:::::l                                      
+   mmmmmmm    mmmmmmm yyyyyyy           yyyyyyy cccccccccccccccc   ooooooooooo            l::::l    ooooooooooo      ggggggggg   ggggg
+ mm:::::::m  m:::::::mmy:::::y         y:::::ycc:::::::::::::::c oo:::::::::::oo          l::::l  oo:::::::::::oo   g:::::::::ggg::::g
+m::::::::::mm::::::::::my:::::y       y:::::yc:::::::::::::::::co:::::::::::::::o         l::::l o:::::::::::::::o g:::::::::::::::::g
+m::::::::::::::::::::::m y:::::y     y:::::yc:::::::cccccc:::::co:::::ooooo:::::o         l::::l o:::::ooooo:::::og::::::ggggg::::::gg
+m:::::mmm::::::mmm:::::m  y:::::y   y:::::y c::::::c     ccccccco::::o     o::::o         l::::l o::::o     o::::og:::::g     g:::::g 
+m::::m   m::::m   m::::m   y:::::y y:::::y  c:::::c             o::::o     o::::o         l::::l o::::o     o::::og:::::g     g:::::g 
+m::::m   m::::m   m::::m    y:::::y:::::y   c:::::c             o::::o     o::::o         l::::l o::::o     o::::og:::::g     g:::::g 
+m::::m   m::::m   m::::m     y:::::::::y    c::::::c     ccccccco::::o     o::::o         l::::l o::::o     o::::og::::::g    g:::::g 
+m::::m   m::::m   m::::m      y:::::::y     c:::::::cccccc:::::co:::::ooooo:::::o        l::::::lo:::::ooooo:::::og:::::::ggggg:::::g 
+m::::m   m::::m   m::::m       y:::::y       c:::::::::::::::::co:::::::::::::::o ...... l::::::lo:::::::::::::::o g::::::::::::::::g 
+m::::m   m::::m   m::::m      y:::::y         cc:::::::::::::::c oo:::::::::::oo  .::::. l::::::l oo:::::::::::oo   gg::::::::::::::g 
+mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo    ...... llllllll   ooooooooooo       gggggggg::::::g 
+                            y:::::y                                                                                           g:::::g 
+                           y:::::y                                                                                gggggg      g:::::g 
+                          y:::::y                                                                                 g:::::gg   gg:::::g 
+                         y:::::y                                                                                   g::::::ggg:::::::g 
+                        yyyyyyy                                                                                     gg:::::::::::::g  
+                                                                                                                      ggg::::::ggg    
+                                                                                                                         gggggg       
+</pre>
     <h1 class="hero__title">{t.home.heroTitle}</h1>
     <p class="hero__line">{'─'.repeat(50)}</p>
     <p class="hero__desc">{t.home.heroDescription}</p>
     <div class="hero__actions">
       <a href={`/${locale}/map`} class="tui-btn">
-        {'>'} {t.home.heroCta}
+        {'>'}
+        {t.home.heroCta}
       </a>
     </div>
   </section>
@@ -43,14 +65,17 @@ const recentSightings = sightings
     </div>
 
     <div class="grid">
-      {recentSightings.map((sighting) => (
-        <MushroomCard sighting={sighting} locale={locale} />
-      ))}
+      {
+        recentSightings.map((sighting) => (
+          <MushroomCard sighting={sighting} locale={locale} />
+        ))
+      }
     </div>
 
     <div class="section__footer">
       <a href={`/${locale}/map`} class="tui-link">
-        {'>'} {t.home.viewAll}
+        {'>'}
+        {t.home.viewAll}
       </a>
     </div>
   </section>
@@ -118,7 +143,9 @@ const recentSightings = sightings
     color: var(--accent);
     text-decoration: none;
     font-size: 0.875rem;
-    transition: background 0.1s, color 0.1s;
+    transition:
+      background 0.1s,
+      color 0.1s;
   }
 
   .tui-btn:hover {
@@ -126,7 +153,9 @@ const recentSightings = sightings
     color: var(--bg);
   }
 
-  .section { margin-top: 1.5rem; }
+  .section {
+    margin-top: 1.5rem;
+  }
 
   .section__header {
     margin-bottom: 1.25rem;
@@ -179,11 +208,19 @@ const recentSightings = sightings
     font-size: 0.8125rem;
   }
 
-  .tui-box--warn { border-color: var(--red); }
-  .tui-box--warn .tui-box__title { color: var(--red); }
+  .tui-box--warn {
+    border-color: var(--red);
+  }
+  .tui-box--warn .tui-box__title {
+    color: var(--red);
+  }
 
-  .tui-box--nature { border-color: var(--accent-dim); }
-  .tui-box--nature .tui-box__title { color: var(--accent); }
+  .tui-box--nature {
+    border-color: var(--accent-dim);
+  }
+  .tui-box--nature .tui-box__title {
+    color: var(--accent);
+  }
 
   .tui-box__title {
     padding: 0.5rem 0.75rem;
@@ -199,8 +236,14 @@ const recentSightings = sightings
   }
 
   @media (max-width: 640px) {
-    .hero { padding: 1.5rem 0 2rem; }
-    .hero__ascii { font-size: 0.5rem; }
-    .grid { grid-template-columns: 1fr; }
+    .hero {
+      padding: 1.5rem 0 2rem;
+    }
+    .hero__ascii {
+      font-size: 0.5rem;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

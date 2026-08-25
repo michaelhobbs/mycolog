@@ -33,7 +33,7 @@ export default {
     features: 'Bestimmungsmerkmale',
   },
   footer: {
-    copyright: '© 2026 Pilzwelt Garmisch-Partenkirchen',
+    copyright: '© 2026 myco.log',
     tagline: 'Sammele nur Pilze, die du genau kennst!',
   },
   meta: {

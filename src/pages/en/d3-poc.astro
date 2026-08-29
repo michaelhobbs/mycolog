@@ -101,6 +101,14 @@ const sightingsJSON = JSON.stringify(sightings);
   }
   const LABEL_LIMIT = 140; // hard ceiling so the map never becomes a wall of text
 
+  // Peak altitude labels: a peak only gets its elevation printed once you zoom
+  // in far enough (PEAK_ALT_K), OR it is a genuinely tall summit (>= TALL_PEAK_ELE)
+  // that is already labelled — so the biggest peaks carry their height even at
+  // the default municipality view, while lesser summits reveal theirs on zoom.
+  const PEAK_ALT_K = 6; // zoom factor past which every visible peak shows its altitude
+  const TALL_PEAK_ELE = 2500; // m — summits at or above this always show altitude
+
+
   document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('map');
     if (!container) return;
@@ -327,6 +335,23 @@ const sightingsJSON = JSON.stringify(sightings);
       return f.properties.name && k >= labelKForImp(f.properties.imp);
     }
 
+    // Whether a peak's altitude should be printed alongside its name at zoom k.
+    function showPeakAltitude(f, k) {
+      const ele = f.properties.ele;
+      if (!ele) return false;
+      return k >= PEAK_ALT_K || ele >= TALL_PEAK_ELE;
+    }
+
+    // Peak labels read "Name 1234 m"; other feature labels stay just the name.
+    function labelText(f, k) {
+      const name = f.properties.name;
+      if (f.properties.ele) {
+        const alt = showPeakAltitude(f, k) ? ` ${Math.round(f.properties.ele)} m` : '';
+        return name + alt;
+      }
+      return name;
+    }
+
     function renderLabels(t, k) {
       const candidates = [];
       for (const f of peaks.features) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
@@ -405,12 +430,13 @@ const sightingsJSON = JSON.stringify(sightings);
           const el = labelLayer
             .append('text')
             .attr('class', 'label')
-            .text(p.c.f.properties.name)
+            .text(labelText(p.c.f, k))
             .attr('text-anchor', p.c.f.geometry.type === 'Point' ? 'middle' : 'start');
           rec = { el, f: p.c.f };
           drawn.set(kk, rec);
         }
         rec.el
+          .text(labelText(p.c.f, k))
           .attr('x', p.sx)
           .attr('y', p.sy)
           .attr('dx', p.c.f.geometry.type === 'Point' ? 0 : 4)

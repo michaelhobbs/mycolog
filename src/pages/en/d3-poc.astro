@@ -35,7 +35,7 @@ const sightingsJSON = JSON.stringify(sightings);
         <span class="leg"><i class="sw sw--lake"></i>lake</span>
         <span class="leg"><i class="sw sw--road"></i>major road</span>
         <span class="leg"><i class="sw sw--peak"></i>peak</span>
-        <span class="leg"><i class="sw sw--mushroom"></i>mushroom sighting</span>
+        <span class="leg"><i class="sw sw--mushroom">@@</i>mushroom sighting</span>
       </div>
     </div>
 
@@ -159,13 +159,29 @@ const sightingsJSON = JSON.stringify(sightings);
     const labelLayer = svg.append('g').attr('class', 'labels');
 
     // ── Lakes ────────────────────────────────────────
+    // d3's geoPath spherical-clipping tessellates tiny ring polygons into an
+    // enormous, off-screen path, so project each ring vertex directly instead.
+    // Each ring is a closed subpath, so multi-ring (multipolygon) lakes render
+    // all their parts and any islands show as holes under the fill.
+    const lakePath = (geom) => {
+      const rings = geom.coordinates;
+      let s = '';
+      for (const ring of rings) {
+        for (let i = 0; i < ring.length; i++) {
+          const p = projection(ring[i]);
+          s += (i === 0 ? 'M' : 'L') + p[0].toFixed(2) + ',' + p[1].toFixed(2);
+        }
+        s += 'Z';
+      }
+      return s;
+    };
     zoomed
       .append('g')
       .attr('class', 'layer lakes')
       .selectAll('path')
       .data(lakes.features)
       .join('path')
-      .attr('d', geoPath)
+      .attr('d', (d) => lakePath(d.geometry))
       .attr('class', (d) => `lake lake--imp${d.properties.imp}`);
 
     // ── Rivers / streams ─────────────────────────────
@@ -410,6 +426,7 @@ const sightingsJSON = JSON.stringify(sightings);
     height: 640px;
     cursor: grab;
     touch-action: none;
+    background: var(--bg-highlight);
   }
 
   .poc__map:active { cursor: grabbing; }
@@ -428,10 +445,10 @@ const sightingsJSON = JSON.stringify(sightings);
   .sw { display: inline-block; width: 14px; height: 10px; }
   .sw--river { border-bottom: 2px solid #3aa0b8; }
   .sw--stream { border-bottom: 2px solid #2a6a80; }
-  .sw--lake { background: #1d5564; }
+  .sw--lake { background: #2a7d94; }
   .sw--road { border-bottom: 2px solid var(--fg-bright); }
-  .sw--peak { border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid var(--accent); width: 0; height: 0; }
-  .sw--mushroom { color: var(--red); font-weight: 700; font-size: 11px; line-height: 1; text-align: center; width: auto; background: none; }
+  .sw--peak { border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #ffd24a; width: 0; height: 0; }
+  .sw--mushroom { color: #33ff33; font-weight: 700; font-size: 12px; line-height: 1; text-align: center; width: auto; height: auto; letter-spacing: -0.18em; background: none; }
 
   .poc__note { margin-top: 1rem; }
 
@@ -455,10 +472,10 @@ const sightingsJSON = JSON.stringify(sightings);
   /* ── svg rendering ───────────────────────────── */
 
   /* lakes */
-  :global(.lake--imp1) { fill: #1d5564; stroke: #2a6a80; stroke-width: 1.5; }
-  :global(.lake--imp2) { fill: #1a4550; stroke: #245a68; stroke-width: 1; }
-  :global(.lake--imp3) { fill: #173a44; stroke: #1f4b57; stroke-width: 1; }
-  :global(.lake--imp4) { fill: #122e37; stroke: #1a3f49; stroke-width: 0.75; }
+  :global(.lake--imp1) { fill: #2a7d94; stroke: #3d9cb5; stroke-width: 1.5; }
+  :global(.lake--imp2) { fill: #236a7d; stroke: #3590a6; stroke-width: 1; }
+  :global(.lake--imp3) { fill: #1d5a6b; stroke: #2c7c90; stroke-width: 1; }
+  :global(.lake--imp4) { fill: #1a4a58; stroke: #26687a; stroke-width: 0.75; }
 
   /* rivers */
   :global(.river--imp1) { fill: none; stroke: #3aa0b8; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -472,24 +489,24 @@ const sightingsJSON = JSON.stringify(sightings);
   :global(.road--imp4) { fill: none; stroke: #2d5a2d; stroke-width: 0.6; stroke-linecap: round; }
 
   /* peaks */
-  :global(.peak--imp1) { fill: var(--accent); stroke: var(--accent-dim); stroke-width: 0.5; }
-  :global(.peak--imp2) { fill: #6fbf6f; stroke: #3a6a3a; stroke-width: 0.5; }
-  :global(.peak--imp3) { fill: #4a8f4a; stroke: #2a4f2a; stroke-width: 0.5; }
-  :global(.peak--imp4) { fill: #2d5a2d; stroke: #1a3a1a; stroke-width: 0.5; }
+  :global(.peak--imp1) { fill: #ffd24a; stroke: #b99b2e; stroke-width: 0.5; }
+  :global(.peak--imp2) { fill: #d4b233; stroke: #8f7420; stroke-width: 0.5; }
+  :global(.peak--imp3) { fill: #a3872a; stroke: #6b5720; stroke-width: 0.5; }
+  :global(.peak--imp4) { fill: #6d5a22; stroke: #463a18; stroke-width: 0.5; }
 
   /* mushrooms */
   :global(.mushroom) {
     font-family: var(--font-mono);
     font-size: 15px;
     font-weight: 900;
-    fill: var(--red);
+    fill: #33ff33;
     paint-order: stroke;
     stroke: var(--bg);
     stroke-width: 3;
     stroke-linejoin: round;
     letter-spacing: -0.18em;
   }
-  :global(.mushroom:hover) { fill: #ff6a55; }
+  :global(.mushroom:hover) { fill: #66ff66; }
 
   /* mushroom detail panel */
   .mushroom-detail {
@@ -512,7 +529,7 @@ const sightingsJSON = JSON.stringify(sightings);
     align-items: center;
     padding: 0.5rem 0.75rem;
     border-bottom: 1px solid var(--border-char);
-    color: var(--red);
+    color: #33ff33;
     font-weight: 700;
     font-size: 0.8125rem;
   }

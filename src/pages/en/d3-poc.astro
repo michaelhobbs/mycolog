@@ -1,0 +1,581 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { sightings } from '../../data/sightings';
+
+const sightingsJSON = JSON.stringify(sightings);
+---
+<!--
+  Proof of concept: a vector map of the municipality of Garmisch-Partenkirchen
+  drawn with d3 (no raster tiles). Road, river, lake and peak geometry is
+  bundled as GeoJSON under /data/d3poc and rendered client-side.
+
+  Named features are shown only once the viewer has zoomed in far enough —
+  minor / less important features are revealed at higher zoom levels so the
+  initial map stays uncluttered.
+-->
+<Layout title="d3 POC — vector map of Garmisch-Partenkirchen" locale="en">
+  <section class="poc">
+    <div class="poc__header">
+      <span class="poc__tag">╔══ d3 vector map — Garmisch-Partenkirchen [POC]</span>
+      <span class="poc__sub">
+        roads · rivers · lakes · peaks · mushrooms — drawn with d3, no raster tiles. Scroll to zoom.
+      </span>
+    </div>
+
+    <div class="poc__frame">
+      <div class="poc__toolbar">
+        <span class="poc__zoom">zoom <b data-zoom>1.0×</b></span>
+        <span class="poc__hint">drag to pan · scroll to zoom</span>
+        <span class="poc__live">● live</span>
+      </div>
+      <div id="map" class="poc__map" data-sightings={sightingsJSON}></div>
+      <div class="poc__legend">
+        <span class="leg"><i class="sw sw--river"></i>river</span>
+        <span class="leg"><i class="sw sw--stream"></i>stream</span>
+        <span class="leg"><i class="sw sw--lake"></i>lake</span>
+        <span class="leg"><i class="sw sw--road"></i>major road</span>
+        <span class="leg"><i class="sw sw--peak"></i>peak</span>
+        <span class="leg"><i class="sw sw--mushroom"></i>mushroom sighting</span>
+      </div>
+    </div>
+
+    <div class="poc__note">
+      <span class="poc__note-tag">╔═ how it works</span>
+      <p>
+        A zoom transform drives which <b>names</b> are visible. The main river,
+        the largest lakes and the highest peaks are labelled first; street names,
+        minor streams and lower summits only appear once you zoom in. The
+        mushroom sightings are pinned as <b>@@</b> markers — click one for
+        details. A collision check prevents overlapping labels, so the initial
+        municipality view stays clean and fills in as you zoom.
+      </p>
+    </div>
+  </section>
+
+  <div id="mushroom-detail" class="mushroom-detail" aria-hidden="true">
+    <div class="mushroom-detail__inner">
+      <div class="mushroom-detail__head">
+        <span>╔═ mushroom sighting</span>
+        <button data-d-close class="mushroom-detail__close">[x]</button>
+      </div>
+      <img data-d-img class="mushroom-detail__img" alt="" />
+      <div class="mushroom-detail__body">
+        <span data-d-common class="mushroom-detail__common"></span>
+        <span data-d-name class="mushroom-detail__name"></span>
+        <div class="mushroom-detail__row">
+          <span class="mushroom-detail__lbl">date</span>
+          <span class="mushroom-detail__dot"></span>
+          <span data-d-date></span>
+        </div>
+        <div class="mushroom-detail__row">
+          <span class="mushroom-detail__lbl">loc</span>
+          <span class="mushroom-detail__dot"></span>
+          <span data-d-loc></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import * as d3 from 'd3';
+
+  // Each feature carries an `imp` tier (1 = most important … 5 = least).
+  // The zoom factor (k, relative to the fitted base view) at which a feature's
+  // *label* becomes eligible is derived from that tier — only features above
+  // their tier threshold are candidates at the current zoom.
+  const TIER_K = [1.0, 2.2, 4.2, 7.5, 12]; // imp 1..5
+
+  function labelKForImp(imp) {
+    const i = Math.min(Math.max(imp ?? 5, 1), 5);
+    return TIER_K[i - 1];
+  }
+
+  // Greedy label collision handling. At a given zoom factor the minimum pixel
+  // distance between two labels shrinks, so more names fit as you zoom in.
+  // A sparse starts from a clean, uncluttered municipality view.
+  function minLabelDistance(k) {
+    return Math.max(26, Math.min(120, 120 / k));
+  }
+  const LABEL_LIMIT = 140; // hard ceiling so the map never becomes a wall of text
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const container = document.getElementById('map');
+    if (!container) return;
+    const width = container.clientWidth || 900;
+    const height = container.clientHeight || 640;
+
+    const svg = d3
+      .select(container)
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .style('display', 'block');
+
+    const [roads, waterways, lakes, peaks] = await Promise.all([
+      fetch('/data/d3poc/roads.json').then((r) => r.json()),
+      fetch('/data/d3poc/waterways.json').then((r) => r.json()),
+      fetch('/data/d3poc/waterbodies.json').then((r) => r.json()),
+      fetch('/data/d3poc/peaks.json').then((r) => r.json()),
+    ]);
+
+    // Mushroom sightings are serialized into the page at build time and rendered
+    // as prominent (tier-1) point markers so they stay visible from the start.
+    const sightings = JSON.parse(container.dataset.sightings || '[]').map((s) => ({
+      properties: {
+        id: 'mushroom-' + s.id,
+        name: s.commonName.en,
+        kind: 'mushroom',
+        imp: 1,
+        s: s,
+      },
+      geometry: { type: 'Point', coordinates: [s.location.lng, s.location.lat] },
+    }));
+
+    // Fit the whole municipality into the viewport. The zoom transform then
+    // starts from k = 1 (the fitted view) and scales up as the user zooms in.
+    // Note: lakes are drawn separately and deliberately left out of the fit —
+    // a few low-quality water polygons make d3's path.bounds/fitExtent behave
+    // erratically, but they render fine once the projection is established.
+    const projection = d3.geoMercator().fitExtent(
+      [
+        [20, 20],
+        [width - 20, height - 20],
+      ],
+      {
+        type: 'FeatureCollection',
+        features: waterways.features
+          .concat(roads.features)
+          .concat(peaks.features),
+      },
+    );
+
+    const geoPath = d3.geoPath(projection);
+
+    // Geometry group sits inside the zoom transform; the label group does not,
+    // so its text stays at a constant readable size while everything scales.
+    const zoomed = svg.append('g').attr('class', 'zoomed');
+    const labelLayer = svg.append('g').attr('class', 'labels');
+
+    // ── Lakes ────────────────────────────────────────
+    zoomed
+      .append('g')
+      .attr('class', 'layer lakes')
+      .selectAll('path')
+      .data(lakes.features)
+      .join('path')
+      .attr('d', geoPath)
+      .attr('class', (d) => `lake lake--imp${d.properties.imp}`);
+
+    // ── Rivers / streams ─────────────────────────────
+    zoomed
+      .append('g')
+      .attr('class', 'layer rivers')
+      .selectAll('path')
+      .data(waterways.features)
+      .join('path')
+      .attr('d', geoPath)
+      .attr('class', (d) => `river river--imp${d.properties.imp}`);
+
+    // ── Roads ────────────────────────────────────────
+    zoomed
+      .append('g')
+      .attr('class', 'layer roads')
+      .selectAll('path')
+      .data(roads.features)
+      .join('path')
+      .attr('d', geoPath)
+      .attr('class', (d) => `road road--imp${d.properties.imp}`);
+
+    // ── Peaks (triangle markers) ─────────────────────
+    zoomed
+      .append('g')
+      .attr('class', 'layer peaks')
+      .selectAll('path')
+      .data(peaks.features)
+      .join('path')
+      .attr('d', (d) => {
+        const p = projection(d.geometry.coordinates);
+        if (!p) return null;
+        return `M${p[0]},${p[1] - 5} L${p[0] + 4},${p[1] + 3} L${p[0] - 4},${p[1] + 3} Z`;
+      })
+      .attr('class', (d) => `peak peak--imp${d.properties.imp}`);
+
+    // ── Mushrooms (markers) ───────────────────────────
+    zoomed
+      .append('g')
+      .attr('class', 'layer mushrooms')
+      .selectAll('text')
+      .data(sightings)
+      .join('text')
+      .attr('class', 'mushroom')
+      .attr('x', (d) => projection(d.geometry.coordinates)[0])
+      .attr('y', (d) => projection(d.geometry.coordinates)[1])
+      .attr('text-anchor', 'middle')
+      .attr('dy', '0.35em')
+      .text('@@')
+      .attr('data-id', (d) => d.properties.id)
+      .style('cursor', 'pointer')
+      .on('click', (event, d) => showMushroom(d.properties.s));
+
+    function showMushroom(s) {
+      const fmt = (n) => n.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      const box = document.getElementById('mushroom-detail');
+      if (!box) return;
+      const name = s.commonName.en || s.species;
+      const loc = s.location.name?.en || `${s.location.lat.toFixed(3)}, ${s.location.lng.toFixed(3)}`;
+      box.querySelector('[data-d-name]').textContent = s.species;
+      box.querySelector('[data-d-common]').textContent = name;
+      box.querySelector('[data-d-date]').textContent = fmt(new Date(s.dateSpotted));
+      box.querySelector('[data-d-loc]').textContent = loc;
+      box.querySelector('[data-d-img]').src = s.imageUrl;
+      box.classList.add('is-open');
+    }
+
+    document.getElementById('mushroom-detail')?.addEventListener('click', (e) => {
+      if (e.target.closest('[data-d-close]')) e.currentTarget.classList.remove('is-open');
+    });
+
+    let drawn = new Map(); // key -> { el: text, feat, k }
+
+    function featureKey(f) {
+      return f.properties.id ?? f.properties.name + '|' + f.geometry.type + '|' + JSON.stringify(f.geometry.coordinates);
+    }
+
+    function labelCenter(f) {
+      const g = f.geometry;
+      let coords;
+      if (g.type === 'Point') coords = g.coordinates;
+      else if (g.type === 'LineString') coords = g.coordinates[Math.floor(g.coordinates.length / 2)];
+      else coords = g.coordinates[0][Math.floor(g.coordinates[0].length / 2)];
+      return projection(coords);
+    }
+
+    function shouldShowName(f, k) {
+      return f.properties.name && k >= labelKForImp(f.properties.imp);
+    }
+
+    function renderLabels(t, k) {
+      const candidates = [];
+      for (const f of peaks.features) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
+      for (const f of waterways.features) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
+      for (const f of lakes.features) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
+      for (const f of roads.features) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
+      for (const f of sightings) if (shouldShowName(f, k)) candidates.push({ f, pt: labelCenter(f) });
+
+      // Most important features get to place their label first. Mushrooms are
+      // the site's focus, so they always win; then the tier order, and within a
+      // tier peaks are ordered by elevation so the highest summits win early.
+      function tierSort(f) {
+        if (f.properties.kind === 'mushroom') return -1;
+        return f.properties.imp || 5;
+      }
+      candidates.sort((a, b) => {
+        const ta = tierSort(a.f) - tierSort(b.f);
+        if (ta !== 0) return ta;
+        const ea = a.f.properties.ele || 0;
+        const eb = b.f.properties.ele || 0;
+        return eb - ea;
+      });
+
+      // A single street or river is often stored as many separate segments
+      // with the same name (e.g. 43 ways named "Hauptstraße"). Show only ONE
+      // label per unique name so the map never fills with duplicates.
+      const seenNames = new Set();
+      const deduped = [];
+      for (const c of candidates) {
+        if (seenNames.has(c.f.properties.name)) continue;
+        seenNames.add(c.f.properties.name);
+        deduped.push(c);
+      }
+
+      // Greedy placement: pick labels that are far enough apart on screen.
+      const minDist = minLabelDistance(k);
+      const picked = [];
+      const pickedPts = [];
+      for (const c of deduped) {
+        if (picked.length >= LABEL_LIMIT) break;
+        const sx = c.pt[0] * t.k + t.x;
+        const sy = c.pt[1] * t.k + t.y;
+        if (sx < -120 || sx > width + 120 || sy < -60 || sy > height + 60) continue;
+        let ok = true;
+        for (let i = 0; i < pickedPts.length; i++) {
+          const dx = sx - pickedPts[i][0];
+          const dy = sy - pickedPts[i][1];
+          if (dx * dx + dy * dy < minDist * minDist) {
+            ok = false;
+            break;
+          }
+        }
+        if (ok) {
+          pickedPts.push([sx, sy]);
+          picked.push({ c, sx, sy });
+        }
+      }
+
+      const shownKeys = new Set(picked.map((p) => featureKey(p.c.f)));
+
+      // remove labels that are no longer visible
+      for (const [key, rec] of drawn) {
+        if (!shownKeys.has(key)) {
+          rec.el.remove();
+          drawn.delete(key);
+        }
+      }
+
+      // (re)position + create labels. Geometry lives under the transform
+      // `translate(t.x,t.y) scale(t.k)`, so a projected-pixel point p maps to
+      // `p * t.k + t`. Labels use the same mapping to stay glued to features.
+      for (const p of picked) {
+        const kk = featureKey(p.c.f);
+        let rec = drawn.get(kk);
+        if (!rec) {
+          const el = labelLayer
+            .append('text')
+            .attr('class', 'label')
+            .text(p.c.f.properties.name)
+            .attr('text-anchor', p.c.f.geometry.type === 'Point' ? 'middle' : 'start');
+          rec = { el, f: p.c.f };
+          drawn.set(kk, rec);
+        }
+        rec.el
+          .attr('x', p.sx)
+          .attr('y', p.sy)
+          .attr('dx', p.c.f.geometry.type === 'Point' ? 0 : 4)
+          .attr('dy', p.c.f.geometry.type === 'Point' ? 5 : 3.5);
+      }
+    }
+
+    function applyTransform(t) {
+      zoomed.attr('transform', `translate(${t.x},${t.y}) scale(${t.k})`);
+      const readout = document.querySelector('[data-zoom]');
+      if (readout) readout.textContent = t.k.toFixed(1) + '×';
+      renderLabels(t, t.k);
+    }
+
+    const zoom = d3.zoom().scaleExtent([0.2, 200]).on('zoom', (event) => applyTransform(event.transform));
+
+    svg.call(zoom).call(zoom.transform, d3.zoomIdentity);
+    applyTransform(d3.zoomIdentity);
+  });
+</script>
+
+<style>
+  .poc { padding-bottom: 1rem; }
+
+  .poc__header { margin-bottom: 1rem; }
+
+  .poc__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .poc__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .poc__frame {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .poc__toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+    font-size: 0.75rem;
+  }
+
+  .poc__zoom { color: var(--fg-dim); }
+  .poc__zoom b { color: var(--accent); }
+  .poc__hint { color: var(--fg-muted); }
+
+  .poc__live {
+    color: var(--accent);
+    animation: blink 1.2s steps(1) infinite;
+  }
+
+  @keyframes blink { 50% { opacity: 0.2; } }
+
+  .poc__map {
+    width: 100%;
+    height: 640px;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .poc__map:active { cursor: grabbing; }
+
+  .poc__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-top: 1px solid var(--border-char);
+    font-size: 0.6875rem;
+    color: var(--fg-dim);
+  }
+
+  .leg { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .sw { display: inline-block; width: 14px; height: 10px; }
+  .sw--river { border-bottom: 2px solid #3aa0b8; }
+  .sw--stream { border-bottom: 2px solid #2a6a80; }
+  .sw--lake { background: #1d5564; }
+  .sw--road { border-bottom: 2px solid var(--fg-bright); }
+  .sw--peak { border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid var(--accent); width: 0; height: 0; }
+  .sw--mushroom { color: var(--red); font-weight: 700; font-size: 11px; line-height: 1; text-align: center; width: auto; background: none; }
+
+  .poc__note { margin-top: 1rem; }
+
+  .poc__note-tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .poc__note p {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    max-width: 720px;
+  }
+
+  .poc__note b { color: var(--fg-bright); }
+
+  /* ── svg rendering ───────────────────────────── */
+
+  /* lakes */
+  :global(.lake--imp1) { fill: #1d5564; stroke: #2a6a80; stroke-width: 1.5; }
+  :global(.lake--imp2) { fill: #1a4550; stroke: #245a68; stroke-width: 1; }
+  :global(.lake--imp3) { fill: #173a44; stroke: #1f4b57; stroke-width: 1; }
+  :global(.lake--imp4) { fill: #122e37; stroke: #1a3f49; stroke-width: 0.75; }
+
+  /* rivers */
+  :global(.river--imp1) { fill: none; stroke: #3aa0b8; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  :global(.river--imp2) { fill: none; stroke: #2a6a80; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  :global(.river--imp3) { fill: none; stroke: #1f5568; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* roads */
+  :global(.road--imp1) { fill: none; stroke: #d4f0d4; stroke-width: 2.2; stroke-linecap: round; }
+  :global(.road--imp2) { fill: none; stroke: #8fbf8f; stroke-width: 1.4; stroke-linecap: round; }
+  :global(.road--imp3) { fill: none; stroke: #4a8f4a; stroke-width: 0.9; stroke-linecap: round; }
+  :global(.road--imp4) { fill: none; stroke: #2d5a2d; stroke-width: 0.6; stroke-linecap: round; }
+
+  /* peaks */
+  :global(.peak--imp1) { fill: var(--accent); stroke: var(--accent-dim); stroke-width: 0.5; }
+  :global(.peak--imp2) { fill: #6fbf6f; stroke: #3a6a3a; stroke-width: 0.5; }
+  :global(.peak--imp3) { fill: #4a8f4a; stroke: #2a4f2a; stroke-width: 0.5; }
+  :global(.peak--imp4) { fill: #2d5a2d; stroke: #1a3a1a; stroke-width: 0.5; }
+
+  /* mushrooms */
+  :global(.mushroom) {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 900;
+    fill: var(--red);
+    paint-order: stroke;
+    stroke: var(--bg);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    letter-spacing: -0.18em;
+  }
+  :global(.mushroom:hover) { fill: #ff6a55; }
+
+  /* mushroom detail panel */
+  .mushroom-detail {
+    position: fixed;
+    right: 1rem;
+    top: 5.5rem;
+    z-index: 300;
+    width: 260px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-char);
+    display: none;
+  }
+  .mushroom-detail.is-open { display: block; }
+
+  .mushroom-detail__inner { font-size: 0.8125rem; }
+
+  .mushroom-detail__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+    color: var(--red);
+    font-weight: 700;
+    font-size: 0.8125rem;
+  }
+
+  .mushroom-detail__close {
+    background: none;
+    border: none;
+    color: var(--fg-dim);
+    font-family: var(--font-mono);
+    cursor: pointer;
+  }
+  .mushroom-detail__close:hover { color: var(--fg-bright); }
+
+  .mushroom-detail__img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    filter: saturate(0.5) brightness(0.85);
+    border-bottom: 1px solid var(--border-char);
+  }
+
+  .mushroom-detail__body { padding: 0.625rem 0.75rem; }
+
+  .mushroom-detail__common {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  .mushroom-detail__name {
+    display: block;
+    color: var(--accent-dim);
+    font-style: italic;
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .mushroom-detail__row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  .mushroom-detail__lbl { color: var(--fg-muted); flex-shrink: 0; }
+  .mushroom-detail__dot { flex: 1; border-bottom: 1px dotted var(--fg-muted); min-width: 0.5rem; margin-bottom: 0.2em; }
+
+  /* labels */
+  :global(text.label) {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    fill: var(--fg-bright);
+    paint-order: stroke;
+    stroke: var(--bg);
+    stroke-width: 3;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .poc__map { height: 420px; }
+    .poc__hint { display: none; }
+  }
+</style>

@@ -252,9 +252,10 @@ const GARMISCH = [11.0922, 47.4917];
       maxzoom: 15,
     });
 
-    // Draw contours low in the stack — above landcover/terrain but below water,
-    // buildings and roads — for a clean topographic look (like the d3 POC).
-    const beforeId = (map.getLayer('water') && 'water') ||
+    // Draw contours right above land cover / terrain fills (background, water,
+    // landcover, landuse, park) but below waterway lines, buildings, roads and
+    // labels — a clean topographic look, like the d3 POC.
+    const beforeId = (map.getLayer('waterway') && 'waterway') ||
       (map.getLayer('hiking-peak') && 'hiking-peak') ||
       undefined;
     map.addLayer(

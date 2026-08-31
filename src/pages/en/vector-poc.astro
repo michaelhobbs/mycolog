@@ -16,7 +16,7 @@ const GARMISCH = [11.0922, 47.4917];
       >
       <span class="poc__sub">
         vector tiles from OpenStreetMap via OpenFreeMap · fiord style + d3 POC palette, with
-        mountain peaks, shelters, guideposts and named trails. Drag to pan, scroll to zoom.</span
+        20 m altitude contours, peaks, shelters, guideposts and named trails. Drag to pan, scroll to zoom.</span
       >
     </div>
 
@@ -35,7 +35,9 @@ const GARMISCH = [11.0922, 47.4917];
         runtime to match the <b>/en/d3-poc</b> palette, and hiking data is added straight from
         the same tiles: mountain <b>peaks</b> (name + elevation), <b>shelters</b>, hiking
         <b>guideposts</b>, drinking water, viewpoints, and <b>named trail labels</b> — all from
-        the OpenMapTiles schema, requiring no extra tile source or key.
+        the OpenMapTiles schema, requiring no extra tile source or key. <b>20 m altitude
+        contours</b> are generated in the browser by <code>maplibre-contour</code> from free
+        Mapzen/AWS raster-DEM elevation tiles.
       </p>
     </div>
   </section>
@@ -44,8 +46,23 @@ const GARMISCH = [11.0922, 47.4917];
 <script>
   import maplibregl from 'maplibre-gl';
   import 'maplibre-gl/dist/maplibre-gl.css';
+  import mlcontour from 'maplibre-contour';
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord';
+
+  // Altitude contours generated on the fly from free raster-DEM tiles
+  // (AWS Mapzen "terrarium" elevation tiles, z0-14, no key required).
+  // maplibre-contour converts the DEM into vector contour lines client-side,
+  // matching the 20 m contour concept of the d3 POC.
+  const demSource = new mlcontour.DemSource({
+    url: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
+    encoding: 'terrarium',
+    maxzoom: 14,
+    worker: false,
+    cacheSize: 50,
+    timeoutMs: 10_000,
+  });
+  demSource.setupMaplibre(maplibregl);
 
   // Palette lifted from the d3 POC (src/pages/en/d3-poc.astro): dark green
   // hypsometric terrain, teal lakes/rivers, green-toned roads + accent trails.
@@ -211,6 +228,70 @@ const GARMISCH = [11.0922, 47.4917];
     });
   }
 
+  // Altitude contour lines (vector, generated from the demo DEM source).
+  // Minor lines use the d3-POC minor green, index/major lines a lighter green.
+  function addContours(map) {
+    if (map.getSource('hiking-contours')) return;
+
+    map.addSource('hiking-contours', {
+      type: 'vector',
+      tiles: [
+        demSource.contourProtocolUrl({
+          thresholds: {
+            12: [40, 200],
+            13: [20, 100],
+            14: [20, 50],
+          },
+          contourLayer: 'contours',
+          elevationKey: 'ele',
+          levelKey: 'level',
+          extent: 4096,
+          buffer: 1,
+        }),
+      ],
+      maxzoom: 15,
+    });
+
+    // Draw contours low in the stack — above landcover/terrain but below water,
+    // buildings and roads — for a clean topographic look (like the d3 POC).
+    const beforeId = (map.getLayer('water') && 'water') ||
+      (map.getLayer('hiking-peak') && 'hiking-peak') ||
+      undefined;
+    map.addLayer(
+      {
+        id: 'hiking-contour-minor',
+        type: 'line',
+        source: 'hiking-contours',
+        'source-layer': 'contours',
+        filter: ['==', ['get', 'level'], 0],
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#3a4a35',
+          'line-width': 0.6,
+          'line-opacity': 0.9,
+        },
+      },
+      beforeId,
+    );
+
+    map.addLayer(
+      {
+        id: 'hiking-contour-major',
+        type: 'line',
+        source: 'hiking-contours',
+        'source-layer': 'contours',
+        filter: ['>=', ['get', 'level'], 1],
+        layout: { 'line-join': 'round', 'line-cap': 'round' },
+        paint: {
+          'line-color': '#5a6c52',
+          'line-width': 0.9,
+          'line-opacity': 1,
+        },
+      },
+      beforeId,
+    );
+  }
+
   function initMap() {
     const container = document.getElementById('map');
     if (!container) return;
@@ -239,9 +320,11 @@ const GARMISCH = [11.0922, 47.4917];
     map.on('load', () => {
       applyPalette(map);
 
-      // Add hiking data layers (peaks, POIs, trail labels) BEFORE the mask so
-      // anything outside the 15 km box stays hidden behind box-mask-fill.
+      // Add hiking data layers (peaks, POIs, trail labels) and altitude
+      // contours BEFORE the mask so anything outside the 15 km box stays
+      // hidden behind box-mask-fill.
       addHikingLayers(map);
+      addContours(map);
 
       // Mask = a world fill with the box as a hole, so the area outside the
       // 5 km box is hidden. The hole is defined with a reversed winding order.

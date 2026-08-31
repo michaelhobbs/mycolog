@@ -411,7 +411,7 @@ const sightingsJSON = JSON.stringify(sightings);
         id: 'box-mask-fill',
         type: 'fill',
         source: 'box-mask',
-        paint: { 'fill-color': '#4e715e', 'fill-opacity': 1 },
+        paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
       });
 
       // Outline of the 15 km box
@@ -428,10 +428,6 @@ const sightingsJSON = JSON.stringify(sightings);
     map.addControl(
       new maplibregl.NavigationControl({ showCompass: false }),
       'bottom-right',
-    );
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      'bottom-left',
     );
   }
 
@@ -520,5 +516,9 @@ const sightingsJSON = JSON.stringify(sightings);
     .poc__map {
       height: 420px;
     }
+  }
+
+  :global(.maplibregl-ctrl-attrib) {
+    display: none;
   }
 </style>

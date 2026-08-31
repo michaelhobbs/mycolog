@@ -15,8 +15,8 @@ const GARMISCH = [11.0922, 47.4917];
         >╔══ maplibre vector map — Garmisch-Partenkirchen [POC]</span
       >
       <span class="poc__sub">
-        vector tiles from OpenStreetMap via OpenFreeMap · base style, no
-        customizations. Drag to pan, scroll to zoom.</span
+        vector tiles from OpenStreetMap via OpenFreeMap · fiord style repainted at runtime
+        with the d3 POC palette. Drag to pan, scroll to zoom.</span
       >
     </div>
 
@@ -30,9 +30,11 @@ const GARMISCH = [11.0922, 47.4917];
     <div class="poc__note">
       <span class="poc__note-tag">╔═ how it works</span>
       <p>
-        A <b>MapLibre GL</b> map loads the free <b>OpenFreeMap</b> style — vector
-        tiles generated from OpenStreetMap, no API key required. The base style is
-        shown unchanged, centred on Garmisch-Partenkirchen.
+        A <b>MapLibre GL</b> map loads the free <b>OpenFreeMap</b> fiord style — vector
+        tiles generated from OpenStreetMap, no API key required. Its layers are then
+        repainted at runtime (via <code>setPaintProperty</code>) to match the colour
+        palette of the <b>/en/d3-poc</b> map, so the two proofs-of-concept share a look
+        while one draws everything itself and the other uses vector tiles.
       </p>
     </div>
   </section>
@@ -42,7 +44,56 @@ const GARMISCH = [11.0922, 47.4917];
   import maplibregl from 'maplibre-gl';
   import 'maplibre-gl/dist/maplibre-gl.css';
 
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord';
+
+  // Palette lifted from the d3 POC (src/pages/en/d3-poc.astro): dark green
+  // hypsometric terrain, teal lakes/rivers, green-toned roads + accent trails.
+  function applyPalette(map) {
+    const paint = (layer, props) => {
+      if (map.getLayer(layer)) {
+        Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v));
+      }
+    };
+
+    // terrain / background (d3 elevation ramp, lowest band)
+    paint('background', { 'background-color': '#0e120b' });
+    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 });
+    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 });
+    paint('landcover_ice_shelf', { 'fill-color': '#20291a' });
+    paint('landcover_glacier', { 'fill-color': '#20291a' });
+
+    // hide parks and their dotted outlines entirely
+    ['park', 'park_outline'].forEach((l) => {
+      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none');
+    });
+
+    // water (d3 lake/river palette)
+    paint('water', { 'fill-color': '#2a7d94' });
+    paint('waterway', { 'line-color': '#2a6a80' });
+
+    // buildings
+    paint('building', { 'fill-color': '#263222' });
+
+    // roads (d3 road palette: bright -> muted green)
+    paint('highway_major_casing', { 'line-color': '#151a10' });
+    paint('highway_major_inner', { 'line-color': '#d4f0d4' });
+    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 });
+    paint('highway_motorway_casing', { 'line-color': '#151a10' });
+    paint('highway_motorway_inner', { 'line-color': '#d4f0d4' });
+    paint('highway_minor', { 'line-color': '#8fbf8f' });
+
+    // hiking trails (d3 mushroom accent)
+    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] });
+
+    // boundaries
+    paint('boundary_state', { 'line-color': '#2d5a2d' });
+    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' });
+
+    // labels -> d3 bright road green, dark halo for legibility
+    ['place_city_large', 'place_city', 'place_town', 'place_village', 'place_suburb', 'place_other',
+      'highway_name_other', 'highway_name_motorway', 'water_name'].
+      forEach((l) => paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }));
+  }
 
   function initMap() {
     const container = document.getElementById('map');
@@ -70,6 +121,8 @@ const GARMISCH = [11.0922, 47.4917];
     });
 
     map.on('load', () => {
+      applyPalette(map);
+
       // Mask = a world fill with the box as a hole, so the area outside the
       // 5 km box is hidden. The hole is defined with a reversed winding order.
       const mask = {
@@ -188,6 +241,10 @@ const GARMISCH = [11.0922, 47.4917];
 
   .poc__note b {
     color: var(--fg-bright);
+  }
+
+  .poc__note code {
+    color: var(--accent);
   }
 
   :global(.maplibregl-map) {

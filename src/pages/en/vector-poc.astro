@@ -15,8 +15,8 @@ const GARMISCH = [11.0922, 47.4917];
         >╔══ maplibre vector map — Garmisch-Partenkirchen [POC]</span
       >
       <span class="poc__sub">
-        vector tiles from OpenStreetMap via OpenFreeMap · fiord style repainted at runtime
-        with the d3 POC palette. Drag to pan, scroll to zoom.</span
+        vector tiles from OpenStreetMap via OpenFreeMap · fiord style + d3 POC palette, with
+        mountain peaks, shelters, guideposts and named trails. Drag to pan, scroll to zoom.</span
       >
     </div>
 
@@ -31,10 +31,11 @@ const GARMISCH = [11.0922, 47.4917];
       <span class="poc__note-tag">╔═ how it works</span>
       <p>
         A <b>MapLibre GL</b> map loads the free <b>OpenFreeMap</b> fiord style — vector
-        tiles generated from OpenStreetMap, no API key required. Its layers are then
-        repainted at runtime (via <code>setPaintProperty</code>) to match the colour
-        palette of the <b>/en/d3-poc</b> map, so the two proofs-of-concept share a look
-        while one draws everything itself and the other uses vector tiles.
+        tiles generated from OpenStreetMap, no API key required. Its layers are repainted at
+        runtime to match the <b>/en/d3-poc</b> palette, and hiking data is added straight from
+        the same tiles: mountain <b>peaks</b> (name + elevation), <b>shelters</b>, hiking
+        <b>guideposts</b>, drinking water, viewpoints, and <b>named trail labels</b> — all from
+        the OpenMapTiles schema, requiring no extra tile source or key.
       </p>
     </div>
   </section>
@@ -95,6 +96,121 @@ const GARMISCH = [11.0922, 47.4917];
       forEach((l) => paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }));
   }
 
+  // Hiking data/labels, all from the existing OpenMapTiles `openmaptiles`
+  // source already used by the fiord style (no new tile source or key).
+  // These layers are added BEFORE box-mask-fill so out-of-box features stay
+  // hidden behind the mask. Layers added after `place_*/highway_name_*` show
+  // above them; use "beforeId" to keep natural road/label ordering intact.
+  function addHikingLayers(map) {
+    const add = (id, type, beforeId, { sourceLayer, filter, layout = {}, paint = {}, minzoom, maxzoom }) => {
+      map.addLayer(
+        {
+          id,
+          type,
+          source: 'openmaptiles',
+          'source-layer': sourceLayer,
+          filter,
+          layout,
+          paint,
+          ...(minzoom !== undefined ? { minzoom } : {}),
+          ...(maxzoom !== undefined ? { maxzoom } : {}),
+        },
+        beforeId,
+      );
+    };
+
+    const base = map.getStyle().layers.find((l) => l.id === 'boundary_state');
+    const b4 = base ? base.id : undefined;
+
+    // --- mountain peaks (summits with name + elevation) ---
+    add('hiking-peak', 'symbol', b4, {
+      sourceLayer: 'mountain_peak',
+      filter: ['all', ['==', ['get', 'class'], 'peak'], ['<=', ['get', 'rank'], 4]],
+      layout: {
+        'icon-image': 'marker',
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 12, 0.6, 14, 1],
+        'text-field': [
+          'concat',
+          ['coalesce', ['get', 'name_de'], ['get', 'name'], ''],
+          ['literal', ' '],
+          ['coalesce', ['to-string', ['get', 'ele']], ''],
+          ['literal', ' m'],
+        ],
+        'text-font': ['Noto Sans Bold'],
+        'text-size': 11,
+        'text-anchor': 'left',
+        'text-offset': [0.7, 0],
+        'text-allow-overlap': false,
+      },
+      paint: {
+        'text-color': '#d4f0d4',
+        'text-halo-color': '#0e120b',
+        'text-halo-width': 1.5,
+      },
+    });
+
+    // --- hiking POIs (shelters, guideposts, drinking water, viewpoints) ---
+    // POI data only exists in the tiles from z14, so these fade in on zoom.
+    const poiB4 = 'hiking-peak';
+    add('hiking-poi', 'symbol', poiB4, {
+      sourceLayer: 'poi',
+      minzoom: 14,
+      filter: [
+        'all',
+        ['match', ['geometry-type'], ['Point', 'MultiPoint'], true, false],
+        [
+          'match',
+          ['get', 'subclass'],
+          ['shelter', 'guidepost', 'map', 'viewpoint', 'drinking_water', 'alpine_hut', 'hostel', 'spring'],
+          true,
+          false,
+        ],
+        ['<=', ['get', 'rank'], 15],
+      ],
+      layout: {
+        'icon-image': 'marker',
+        'icon-size': 0.4,
+        'text-field': ['coalesce', ['get', 'name_de'], ['get', 'name'], ''],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': 10,
+        'text-anchor': 'top',
+        'text-offset': [0, 0.5],
+        'text-allow-overlap': false,
+      },
+      paint: {
+        'text-color': '#8fbf8f',
+        'text-halo-color': '#0e120b',
+        'text-halo-width': 1.2,
+      },
+    });
+
+    // --- named hiking trail labels (from transportation_name) ---
+    add('hiking-trail-label', 'symbol', b4, {
+      sourceLayer: 'transportation_name',
+      minzoom: 14,
+      filter: [
+        'all',
+        ['==', ['get', 'class'], 'path'],
+        ['match', ['geometry-type'], ['LineString', 'MultiLineString'], true, false],
+        ['!=', ['coalesce', ['get', 'name'], ''], ''],
+      ],
+      layout: {
+        'symbol-placement': 'line',
+        'text-field': ['coalesce', ['get', 'name'], ''],
+        'text-font': ['Noto Sans Regular'],
+        'text-size': 10.5,
+        'text-letter-spacing': 0.02,
+        'symbol-spacing': 300,
+        'text-rotation-alignment': 'map',
+      },
+      paint: {
+        'text-color': '#33ff33',
+        'text-halo-color': '#0e120b',
+        'text-halo-width': 1.4,
+      },
+    });
+  }
+
   function initMap() {
     const container = document.getElementById('map');
     if (!container) return;
@@ -115,13 +231,17 @@ const GARMISCH = [11.0922, 47.4917];
       container,
       style: STYLE_URL,
       center: [lon, lat],
-      zoom: 12,
+      zoom: 13,
       // No maxBounds / minZoom: the user can pan and zoom freely. Everything
       // outside the 5 km box is simply hidden behind a mask polygon.
     });
 
     map.on('load', () => {
       applyPalette(map);
+
+      // Add hiking data layers (peaks, POIs, trail labels) BEFORE the mask so
+      // anything outside the 15 km box stays hidden behind box-mask-fill.
+      addHikingLayers(map);
 
       // Mask = a world fill with the box as a hole, so the area outside the
       // 5 km box is hidden. The hole is defined with a reversed winding order.
@@ -147,7 +267,7 @@ const GARMISCH = [11.0922, 47.4917];
         id: 'box-mask-fill',
         type: 'fill',
         source: 'box-mask',
-        paint: { 'fill-color': '#16161a', 'fill-opacity': 1 },
+        paint: { 'fill-color': '#4e715e', 'fill-opacity': 1 },
       });
 
       // Outline of the 15 km box

@@ -1,0 +1,149 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const GARMISCH = [11.0922, 47.4917];
+---
+
+<!--
+  Proof of concept: the free OpenFreeMap vector map of Garmisch-Partenkirchen,
+  rendered with MapLibre GL JS in the dark style, no customizations.
+-->
+<Layout title="maplibre vector POC — Garmisch-Partenkirchen" locale="en">
+  <section class="poc">
+    <div class="poc__header">
+      <span class="poc__tag"
+        >╔══ maplibre vector map — Garmisch-Partenkirchen [POC]</span
+      >
+      <span class="poc__sub">
+        vector tiles from OpenStreetMap via OpenFreeMap · base style, no
+        customizations. Drag to pan, scroll to zoom.</span
+      >
+    </div>
+
+    <div class="poc__frame">
+      <div id="map" class="poc__map"></div>
+      <div class="poc__attribution">
+        <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
+      </div>
+    </div>
+
+    <div class="poc__note">
+      <span class="poc__note-tag">╔═ how it works</span>
+      <p>
+        A <b>MapLibre GL</b> map loads the free <b>OpenFreeMap</b> style — vector
+        tiles generated from OpenStreetMap, no API key required. The base style is
+        shown unchanged, centred on Garmisch-Partenkirchen.
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import maplibregl from 'maplibre-gl';
+  import 'maplibre-gl/dist/maplibre-gl.css';
+
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/dark';
+
+  function initMap() {
+    const container = document.getElementById('map');
+    if (!container) return;
+
+    const map = new maplibregl.Map({
+      container,
+      style: STYLE_URL,
+      center: [11.0922, 47.4917],
+      zoom: 12,
+    });
+
+    map.addControl(
+      new maplibregl.NavigationControl({ showCompass: false }),
+      'bottom-right',
+    );
+    map.addControl(
+      new maplibregl.AttributionControl({ compact: true }),
+      'bottom-left',
+    );
+  }
+
+  document.addEventListener('DOMContentLoaded', initMap);
+</script>
+
+<style>
+  .poc {
+    padding-bottom: 1rem;
+  }
+
+  .poc__header {
+    margin-bottom: 1rem;
+  }
+
+  .poc__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .poc__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .poc__frame {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .poc__map {
+    width: 100%;
+    height: 640px;
+    cursor: grab;
+    touch-action: none;
+    background: var(--bg-highlight);
+  }
+
+  .poc__map:active {
+    cursor: grabbing;
+  }
+
+  .poc__attribution {
+    padding: 0.375rem 0.75rem;
+    border-top: 1px solid var(--border-char);
+    font-size: 0.6875rem;
+    color: var(--fg-dim);
+  }
+
+  .poc__note {
+    margin-top: 1rem;
+  }
+
+  .poc__note-tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .poc__note p {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    max-width: 720px;
+  }
+
+  .poc__note b {
+    color: var(--fg-bright);
+  }
+
+  :global(.maplibregl-map) {
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 768px) {
+    .poc__map {
+      height: 420px;
+    }
+  }
+</style>

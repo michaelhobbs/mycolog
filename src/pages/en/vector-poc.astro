@@ -48,11 +48,64 @@ const GARMISCH = [11.0922, 47.4917];
     const container = document.getElementById('map');
     if (!container) return;
 
+    // 15 km from center in each direction (30 km NS total), with the east-west
+    // extent derived to match the container's aspect ratio so the box is a
+    // rectangle matching the visible viewport.
+    // 1 deg lat ~ 111.32 km; 1 deg lon ~ 111.32 * cos(lat).
+    const lat = 47.4917, lon = 11.0922;
+    const ar = container.clientWidth / container.clientHeight;
+
+    const dLat = 15 / 111.32;                                 // 15 km NS
+    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180)); // EW keeps aspect ratio
+    const w = lon - dLon, e = lon + dLon;
+    const s = lat - dLat, n = lat + dLat;
+
     const map = new maplibregl.Map({
       container,
       style: STYLE_URL,
-      center: [11.0922, 47.4917],
+      center: [lon, lat],
       zoom: 12,
+      // No maxBounds / minZoom: the user can pan and zoom freely. Everything
+      // outside the 5 km box is simply hidden behind a mask polygon.
+    });
+
+    map.on('load', () => {
+      // Mask = a world fill with the box as a hole, so the area outside the
+      // 5 km box is hidden. The hole is defined with a reversed winding order.
+      const mask = {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+              type: 'Polygon',
+              coordinates: [
+                [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]],
+                [[w, s], [w, n], [e, n], [e, s], [w, s]],
+              ],
+            },
+          },
+        ],
+      };
+
+      map.addSource('box-mask', { type: 'geojson', data: mask });
+      map.addLayer({
+        id: 'box-mask-fill',
+        type: 'fill',
+        source: 'box-mask',
+        paint: { 'fill-color': '#16161a', 'fill-opacity': 1 },
+      });
+
+      // Outline of the 15 km box
+      map.addLayer({
+        id: 'box-mask-outline',
+        type: 'line',
+        source: 'box-mask',
+        paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
+      });
+
+      map.fitBounds([[w, s], [e, n]], { padding: 16 });
     });
 
     map.addControl(

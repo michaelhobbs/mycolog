@@ -371,7 +371,7 @@ const sightingsJSON = JSON.stringify(sightings);
       container,
       style: STYLE_URL,
       center: [lon, lat],
-      zoom: 13,
+      bounds: [[w, s], [e, n]]
       // No maxBounds / minZoom: the user can pan and zoom freely. Everything
       // outside the 5 km box is simply hidden behind a mask polygon.
     });
@@ -421,8 +421,6 @@ const sightingsJSON = JSON.stringify(sightings);
         source: 'box-mask',
         paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
       });
-
-      map.fitBounds([[w, s], [e, n]], { padding: 16 });
     });
 
     map.addControl(

@@ -1,0 +1,181 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { getTranslations, formatDate } from '../../i18n';
+import { l10n } from '../../i18n/helpers';
+import type { Locale } from '../../i18n';
+
+const locale: Locale = 'de';
+const t = getTranslations(locale);
+
+const sightings = (await getCollection('sightings')).sort(
+  (a, b) => new Date(a.data.dateSpotted).getTime() - new Date(b.data.dateSpotted).getTime(),
+);
+
+const byDate = new Map<string, typeof sightings>();
+for (const s of sightings) {
+  const d = s.data.dateSpotted;
+  if (!byDate.has(d)) byDate.set(d, []);
+  byDate.get(d)!.push(s);
+}
+const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1));
+---
+
+<Layout title="protokoll — myco.log" locale={locale}>
+  <section class="log-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.log.title}</span>
+      <span class="page-header__sub">{t.log.subtitle}</span>
+    </div>
+
+    <div class="days">
+      {days.map(([date, list]) => (
+        <article class="day">
+          <header class="day__head">
+            <a href={`/${locale}/log/${date}`} class="day__date">{formatDate(date, locale)}</a>
+            <span class="day__meta">({list.length} {t.log.sightingsCount})</span>
+          </header>
+
+          <ul class="day__list">
+            {list.map((entry) => {
+              const s = entry.data;
+              const cover = s.images?.[0];
+              return (
+                <li class="day-item">
+                  {cover && (
+                    <a href={`/${locale}/log/${date}`} class="day-item__img" aria-hidden="true">
+                      <Image src={cover} alt={l10n(s.commonName, locale)} loading="lazy" width={96} />
+                    </a>
+                  )}
+                  <div class="day-item__body">
+                    <span class="day-item__species">{s.species}</span>
+                    <a href={`/${locale}/mushrooms/${s.id}`} class="day-item__name">{l10n(s.commonName, locale)}</a>
+                    <span class="day-item__loc">@{l10n(s.location.name, locale) || t.mushrooms.unknown}</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .log-page { padding-bottom: 2rem; }
+
+  .page-header { margin-bottom: 1.25rem; }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .day {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .day__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+  }
+
+  .day__date {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .day__date:hover {
+    color: var(--fg-bright);
+  }
+
+  .day__meta {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+
+  .day__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .day-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px dashed var(--fg-muted);
+    font-size: 0.8125rem;
+  }
+
+  .day-item:last-child {
+    border-bottom: none;
+  }
+
+  .day-item__img {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .day-item__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.5) brightness(0.8);
+  }
+
+  .day-item__body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .day-item__species {
+    display: block;
+    font-size: 0.6875rem;
+    color: var(--accent-dim);
+  }
+
+  .day-item__name {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin: 0.125rem 0 0.25rem;
+  }
+
+  .day-item__name:hover {
+    color: var(--accent);
+  }
+
+  .day-item__loc {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+</style>

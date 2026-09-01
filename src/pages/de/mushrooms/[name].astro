@@ -1,0 +1,286 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { getTranslations } from '../../../i18n';
+import { l10n } from '../../../i18n/helpers';
+import type { Locale } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const sightings = await getCollection('sightings');
+  const ids = [...new Set(sightings.map((s) => s.data.id))].sort();
+  return ids.map((id) => ({ params: { name: id } }));
+}
+
+const locale: Locale = 'de';
+const t = getTranslations(locale);
+const { name } = Astro.params;
+
+const all = await getCollection('sightings');
+const entries = all
+  .filter((s) => s.data.id === name)
+  .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1));
+
+const first = entries[0];
+const s = first?.data;
+const allImages = entries.flatMap((e) => e.data.images);
+const notes = entries.map((e) => e.data.notes).find(Boolean);
+const habitat = entries.map((e) => e.data.habitat).find(Boolean);
+const edibility = entries.map((e) => e.data.edibility).find(Boolean);
+const features = entries[0]?.data.determiningFeatures ?? [];
+---
+
+<Layout title={`${s ? l10n(s.commonName, locale) : name} — myco.log`} locale={locale}>
+  <section class="species-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {s ? l10n(s.commonName, locale) : name}</span>
+      <span class="page-header__sub">{s?.species}</span>
+    </div>
+
+    <div class="back">
+      <a href={`/${locale}/mushrooms`} class="tui-link">{'<'} {t.mushrooms.backToIndex}</a>
+    </div>
+
+    {first && (
+      <>
+        <div class="gallery">
+          {allImages.map((img, i) => (
+            <figure class="gallery__item">
+              <Image src={img} alt={`${l10n(s.commonName, locale)} — ${i + 1}`} loading="lazy" widths={[320, 640]} />
+            </figure>
+          ))}
+        </div>
+
+        <div class="facts">
+          <div class="fact-row">
+            <span class="fact-lbl">{t.mushrooms.edibility}</span>
+            <span class="fact-dot"></span>
+            <span class="fact-val">{edibility ? l10n(edibility, locale) : '—'}</span>
+          </div>
+          <div class="fact-row">
+            <span class="fact-lbl">{t.mushrooms.habitat}</span>
+            <span class="fact-dot"></span>
+            <span class="fact-val">{habitat ? l10n(habitat, locale) : '—'}</span>
+          </div>
+        </div>
+
+        {features.length > 0 && (
+          <section class="block">
+            <div class="block__hdr">╔═ {t.mushrooms.features}</div>
+            <ul class="block__list">
+              {features.map((f) => (
+                <li>▸ {l10n(f, locale)}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {notes && (
+          <section class="block">
+            <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
+            <p class="block__notes">{l10n(notes, locale)}</p>
+          </section>
+        )}
+
+        <section class="block">
+          <div class="block__hdr">╔═ {t.mushrooms.sightings} ({entries.length})</div>
+          <ul class="block__sightings">
+            {entries.map((e) => {
+              const sd = e.data;
+              const cover = sd.images?.[0];
+              return (
+                <li class="sighting">
+                  {cover && (
+                    <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__img">
+                      <Image src={cover} alt={l10n(sd.commonName, locale)} loading="lazy" width={96} />
+                    </a>
+                  )}
+                  <div class="sighting__body">
+                    <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__date">
+                      {new Date(sd.dateSpotted).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </a>
+                    <span class="sighting__loc">@{l10n(sd.location.name, locale) || t.mushrooms.unknown}</span>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      </>
+    )}
+  </section>
+</Layout>
+
+<style>
+  .species-page { padding-bottom: 2rem; }
+
+  .page-header { margin-bottom: 1rem; }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--accent-dim);
+    font-size: 0.8125rem;
+  }
+
+  .back { margin-bottom: 1.25rem; }
+
+  .tui-link {
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .tui-link:hover {
+    color: var(--accent);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .gallery__item {
+    margin: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .gallery__item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    filter: saturate(0.6) brightness(0.85);
+  }
+
+  .facts {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .fact-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.8;
+  }
+
+  .fact-lbl {
+    color: var(--fg-dim);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .fact-dot {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 0.5rem;
+    margin-bottom: 0.2em;
+  }
+
+  .fact-val {
+    color: var(--fg-bright);
+    text-align: right;
+  }
+
+  .block {
+    margin-bottom: 1.25rem;
+  }
+
+  .block__hdr {
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .block__list {
+    list-style: none;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+  }
+
+  .block__list li {
+    color: var(--fg);
+    line-height: 1.9;
+    font-size: 0.8125rem;
+  }
+
+  .block__notes {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+    color: var(--fg);
+    font-style: italic;
+    line-height: 1.7;
+    font-size: 0.8125rem;
+  }
+
+  .block__sightings {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .sighting {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    font-size: 0.8125rem;
+  }
+
+  .sighting__img {
+    width: 72px;
+    height: 56px;
+    flex-shrink: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .sighting__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.5) brightness(0.8);
+  }
+
+  .sighting__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .sighting__date {
+    color: var(--yellow);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .sighting__date:hover {
+    color: var(--fg-bright);
+  }
+
+  .sighting__loc {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+</style>

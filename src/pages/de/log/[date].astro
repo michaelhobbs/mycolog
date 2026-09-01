@@ -1,0 +1,207 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { getTranslations, formatDate } from '../../../i18n';
+import { l10n } from '../../../i18n/helpers';
+import type { Locale } from '../../../i18n';
+
+export async function getStaticPaths() {
+  const sightings = await getCollection('sightings');
+  const dates = [...new Set(sightings.map((s) => s.data.dateSpotted))].sort();
+  return dates.map((date) => ({ params: { date } }));
+}
+
+const locale: Locale = 'de';
+const t = getTranslations(locale);
+const { date } = Astro.params;
+
+const all = await getCollection('sightings');
+const list = all
+  .filter((s) => s.data.dateSpotted === date)
+  .sort((a, b) => a.data.id.localeCompare(b.data.id));
+---
+
+<Layout title={`${t.log.today} ${date ?? ''} — myco.log`} locale={locale}>
+  <section class="day-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.log.today} {date ? formatDate(date, locale) : ''}</span>
+      <span class="page-header__sub">{list.length} {t.log.sightingsCount}</span>
+    </div>
+
+    <div class="back">
+      <a href={`/${locale}/log`} class="tui-link">{'<'} {t.log.backToLog}</a>
+    </div>
+
+    {list.length === 0 && (
+      <p class="empty">{t.log.noSightings}</p>
+    )}
+
+    <section class="list">
+      {list.map((entry) => {
+        const s = entry.data;
+        const cover = s.images?.[0];
+        return (
+          <article class="entry">
+            {cover && (
+              <a href={`/${locale}/mushrooms/${s.id}`} class="entry__img">
+                <Image src={cover} alt={l10n(s.commonName, locale)} loading="lazy" width={320} />
+              </a>
+            )}
+
+            <div class="entry__body">
+              <span class="entry__species">{s.species}</span>
+              <a href={`/${locale}/mushrooms/${s.id}`} class="entry__name">{l10n(s.commonName, locale)}</a>
+
+              <div class="entry__row">
+                <span class="entry__lbl">{t.log.location}:</span>
+                <span class="entry__dot"></span>
+                <span class="entry__val">{l10n(s.location.name, locale) || t.mushrooms.unknown}</span>
+              </div>
+              <div class="entry__row">
+                <span class="entry__lbl">{t.log.habitat}:</span>
+                <span class="entry__dot"></span>
+                <span class="entry__val">{l10n(s.habitat, locale) || '—'}</span>
+              </div>
+
+              <ul class="entry__features">
+                {s.determiningFeatures.map((f) => (
+                  <li>▸ {l10n(f, locale)}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        );
+      })}
+    </section>
+  </section>
+</Layout>
+
+<style>
+  .day-page { padding-bottom: 2rem; }
+
+  .page-header { margin-bottom: 1rem; }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .back { margin-bottom: 1rem; }
+
+  .tui-link {
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .tui-link:hover {
+    color: var(--accent);
+  }
+
+  .empty {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .entry {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.625rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    font-size: 0.8125rem;
+  }
+
+  .entry__img {
+    width: 160px;
+    flex-shrink: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .entry__img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.55) brightness(0.82);
+  }
+
+  .entry__body { flex: 1; min-width: 0; }
+
+  .entry__species {
+    font-size: 0.6875rem;
+    color: var(--accent-dim);
+  }
+
+  .entry__name {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    text-decoration: none;
+    margin: 0.125rem 0 0.5rem;
+  }
+
+  .entry__name:hover {
+    color: var(--accent);
+  }
+
+  .entry__row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.7;
+  }
+
+  .entry__lbl {
+    color: var(--fg-dim);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .entry__dot {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 0.5rem;
+    margin-bottom: 0.2em;
+  }
+
+  .entry__val {
+    color: var(--fg-bright);
+    text-align: right;
+  }
+
+  .entry__features {
+    list-style: none;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--fg-muted);
+  }
+
+  .entry__features li {
+    color: var(--fg);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .entry__img {
+      width: 96px;
+    }
+  }
+</style>

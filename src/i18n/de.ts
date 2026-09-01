@@ -3,6 +3,8 @@ export default {
   nav: {
     home: 'Startseite',
     map: 'Karte',
+    log: 'Protokoll',
+    mushrooms: 'Pilze',
   },
   home: {
     heroTitle: 'Pilze rund um Garmisch-Partenkirchen',
@@ -31,6 +33,34 @@ export default {
   },
   card: {
     features: 'Bestimmungsmerkmale',
+  },
+  log: {
+    title: 'Fundprotokoll',
+    subtitle: 'Tage mit dokumentierten Pilzfunden',
+    daysLabel: 'Tage',
+    sightingsCount: 'Beobachtungen',
+    today: 'Funde vom',
+    noSightings: 'An diesem Tag wurden keine Funde verzeichnet.',
+    backToLog: 'Alle Protokolltage',
+    species: 'Art',
+    location: 'Ort',
+    habitat: 'Lebensraum',
+  },
+  mushrooms: {
+    title: 'Pilzarten',
+    subtitle: 'Alle bisher dokumentierten Arten',
+    count: 'Arten',
+    description: 'Beschreibung',
+    features: 'Bestimmungsmerkmale',
+    notes: 'Anmerkungen',
+    habitat: 'Lebensraum',
+    edibility: 'Genießbarkeit',
+    sightings: 'Beobachtungen',
+    backToIndex: 'Alle Arten',
+    spottedIn: 'Gesehen in',
+    onDate: 'am',
+    at: 'bei',
+    unknown: 'Unbekannt',
   },
   footer: {
     copyright: '© 2026 myco.log',

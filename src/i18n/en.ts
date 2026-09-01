@@ -3,6 +3,8 @@ export default {
   nav: {
     home: 'Home',
     map: 'Map',
+    log: 'Log',
+    mushrooms: 'Mushrooms',
   },
   home: {
     heroTitle: 'Mushrooms of Garmisch-Partenkirchen',
@@ -31,6 +33,34 @@ export default {
   },
   card: {
     features: 'Key Features',
+  },
+  log: {
+    title: 'Field Log',
+    subtitle: 'Days of documented fungal finds',
+    daysLabel: 'Days',
+    sightingsCount: 'sightings',
+    today: 'Sightings from',
+    noSightings: 'No sightings recorded on this day.',
+    backToLog: 'All log days',
+    species: 'species',
+    location: 'location',
+    habitat: 'habitat',
+  },
+  mushrooms: {
+    title: 'Mushroom Species',
+    subtitle: 'All species documented so far',
+    count: 'species',
+    description: 'Description',
+    features: 'Key Features',
+    notes: 'Notes',
+    habitat: 'Habitat',
+    edibility: 'Edibility',
+    sightings: 'Sightings',
+    backToIndex: 'All species',
+    spottedIn: 'Spotted in',
+    onDate: 'on',
+    at: 'at',
+    unknown: 'Unknown',
   },
   footer: {
     copyright: '© 2026 myco.log',

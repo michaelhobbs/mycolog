@@ -1,0 +1,24 @@
+{
+  "id": "hydnellum-peckii",
+  "species": "Hydnellum peckii",
+  "commonName": { "en": "Devil's tooth", "de": "Blutender Zahn" },
+  "dateSpotted": "2026-08-07",
+  "location": {
+    "lat": 47.581599,
+    "lng": 10.93031,
+    "name": { "en": "Brunnenkopf", "de": "Brunnenkopf" }
+  },
+  "images": ["./images/hydnellum-peckii.jpg"],
+  "determiningFeatures": [
+    { "en": "White to pinkish-brown velvety cap exuding red droplets when young", "de": "Weißlicher bis bräunlich-rosa samtiger Hut, jung mit roten Tropfen" },
+    { "en": "Teeth/spines underneath instead of pores or gills", "de": "Zähnchen statt Poren oder Lamellen" },
+    { "en": "Irregular, tough, fan-shaped fruit body", "de": "Unregelmäßiger, zäher, fanschelförmiger Fruchtkörper" },
+    { "en": "Found growing on ground among moss in coniferous forest", "de": "Wächst am Boden zwischen Moos im Nadelwald" }
+  ],
+  "notes": {
+    "en": "Exudes bright red droplets when young, giving it a \"bleeding\" appearance; turns brown and tough with age",
+    "de": "Jung sondern leuchtend rote Tropfen ab, weshalb er wie „blutend\" wirkt; wird mit der Zeit braun und zäh"
+  },
+  "habitat": { "en": "Coniferous forest", "de": "Nadelwald" },
+  "edibility": { "en": "Inedible", "de": "Ungenießbar" }
+}

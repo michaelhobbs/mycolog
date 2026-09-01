@@ -1,7 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sightings } from '../../data/sightings';
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 
+const sightings = await Promise.all(
+  (await getCollection('sightings')).map(async (entry) => {
+    const data = entry.data;
+    const cover = data.images?.[0] ? await getImage({ src: data.images[0], width: 320 }) : null;
+    const { images: _images, ...rest } = data;
+    return { ...rest, imageUrl: cover?.src ?? '' };
+  }),
+);
 const sightingsJSON = JSON.stringify(sightings);
 ---
 <!--

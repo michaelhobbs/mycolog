@@ -1,18 +1,17 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import MushroomCard from '../../components/MushroomCard.astro';
-import { sightings } from '../../data/sightings';
+import { getCollection } from 'astro:content';
 import { getTranslations } from '../../i18n';
 import type { Locale } from '../../i18n';
 
 const locale: Locale = 'de';
 const t = getTranslations(locale);
 
-const recentSightings = sightings
-  .slice()
+const recentSightings = (await getCollection('sightings'))
   .sort(
     (a, b) =>
-      new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime(),
+      new Date(b.data.dateSpotted).getTime() - new Date(a.data.dateSpotted).getTime(),
   )
   .slice(0, 6);
 ---

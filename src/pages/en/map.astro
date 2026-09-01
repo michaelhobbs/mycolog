@@ -1,12 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Map from '../../components/Map.astro';
-import { sightings } from '../../data/sightings';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import { getTranslations } from '../../i18n';
 import type { Locale } from '../../i18n';
 
 const locale: Locale = 'en';
 const t = getTranslations(locale);
+
+const sightings = await getCollection('sightings');
 ---
 
 <Layout title="map — myco.log" locale={locale}>
@@ -33,7 +36,8 @@ const t = getTranslations(locale);
         <span class="list__title">╠══ {t.map.allSightings} ({sightings.length})</span>
       </div>
       <div class="list__grid">
-        {sightings.map((sighting) => {
+        {sightings.map((entry) => {
+          const sighting = entry.data;
           const date = new Date(sighting.dateSpotted).toLocaleDateString('en-GB', {
             day: 'numeric',
             month: 'short',
@@ -43,7 +47,9 @@ const t = getTranslations(locale);
           return (
             <div class="list-item">
               <div class="list-item__img">
-                <img src={sighting.imageUrl} alt={sighting.commonName.en} loading="lazy" />
+                {sighting.images?.[0] && (
+                  <Image src={sighting.images[0]} alt={sighting.commonName.en} loading="lazy" width={96} />
+                )}
               </div>
               <div class="list-item__body">
                 <span class="list-item__species">{sighting.species}</span>

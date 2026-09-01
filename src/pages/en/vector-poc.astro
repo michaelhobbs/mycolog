@@ -1,7 +1,16 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { sightings } from '../../data/sightings';
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 
+const sightings = await Promise.all(
+  (await getCollection('sightings')).map(async (entry) => {
+    const data = entry.data;
+    const cover = data.images?.[0] ? await getImage({ src: data.images[0], width: 320 }) : null;
+    const { images: _images, ...rest } = data;
+    return { ...rest, imageUrl: cover?.src ?? '' };
+  }),
+);
 const sightingsJSON = JSON.stringify(sightings);
 ---
 
@@ -40,8 +49,8 @@ const sightingsJSON = JSON.stringify(sightings);
         the OpenMapTiles schema, requiring no extra tile source or key. <b>20 m altitude
         contours</b> are generated in the browser by <code>maplibre-contour</code> from free
         Mapzen/AWS raster-DEM elevation tiles. The accent <b>◎ mushroom sightings</b> are the
-        site's own records from <code>src/data/sightings.ts</code>, embedded on the page and
-        rendered as GeoJSON points.
+        site's own records from the <code>sightings</code> content collection, embedded on the
+        page and rendered as GeoJSON points.
       </p>
     </div>
   </section>

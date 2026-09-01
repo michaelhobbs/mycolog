@@ -1,9 +1,10 @@
 ---
 import type { Locale } from '../i18n';
-import type { MushroomSighting } from '../types/mushroom';
+import type { CollectionEntry } from 'astro:content';
+import { getImage } from 'astro:assets';
 
 interface Props {
-  sightings: MushroomSighting[];
+  sightings: CollectionEntry<'sightings'>[];
   locale: Locale;
   center?: [number, number];
   zoom?: number;
@@ -16,7 +17,16 @@ const {
   zoom = 13,
 } = Astro.props;
 
-const sightingsJSON = JSON.stringify(sightings);
+const clientSightings = await Promise.all(
+  sightings.map(async (entry) => {
+    const data = entry.data;
+    const cover = data.images?.[0] ? await getImage({ src: data.images[0], width: 320 }) : null;
+    const { images: _images, ...rest } = data;
+    return { ...rest, imageUrl: cover?.src ?? '' };
+  }),
+);
+
+const sightingsJSON = JSON.stringify(clientSightings);
 ---
 
 <div class="map-frame">

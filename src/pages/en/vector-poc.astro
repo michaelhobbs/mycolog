@@ -305,7 +305,7 @@ const sightingsJSON = JSON.stringify(sightings);
     const features = sightings.map((s: { commonName: { de: any; en: any; }; species: any; location: { lng: any; lat: any; }; }) => ({
       type: 'Feature',
       properties: {
-        name: s.commonName?.de ?? s.commonName?.en ?? s.species ?? '',
+        name: s.commonName?.en ?? s.commonName?.de ?? s.species ?? '',
         species: s.species ?? '',
       },
       geometry: { type: 'Point', coordinates: [s.location.lng, s.location.lat] },

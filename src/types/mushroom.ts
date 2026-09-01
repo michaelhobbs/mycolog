@@ -19,4 +19,5 @@ export interface MushroomSighting {
   determiningFeatures: LocalizedString[];
   notes?: LocalizedString;
   habitat?: LocalizedString;
+  edibility?: LocalizedString;
 }

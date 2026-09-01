@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Map from '../../components/Map.astro';
+import MapVector from '../../components/MapVector.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import { getTranslations } from '../../i18n';
@@ -19,11 +19,10 @@ const sightings = await getCollection('sightings');
       <span class="page-header__sub">{t.map.subtitle}</span>
     </div>
 
-    <Map
+    <MapVector
       sightings={sightings}
       locale={locale}
       center={[47.4917, 11.0922]}
-      zoom={13}
     />
 
     <div class="legend">

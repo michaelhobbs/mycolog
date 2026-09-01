@@ -1,60 +1,43 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import type { Locale } from '../i18n';
+import type { CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
+import { l10n } from '../i18n/helpers';
 
-const sightings = await Promise.all(
-  (await getCollection('sightings')).map(async (entry) => {
+interface Props {
+  sightings: CollectionEntry<'sightings'>[];
+  locale: Locale;
+  center?: [number, number];
+}
+
+const { sightings, locale, center = [47.4917, 11.0922] } = Astro.props;
+
+const clientSightings = await Promise.all(
+  sightings.map(async (entry) => {
     const data = entry.data;
     const cover = data.images?.[0] ? await getImage({ src: data.images[0], width: 320 }) : null;
     const { images: _images, ...rest } = data;
-    return { ...rest, imageUrl: cover?.src ?? '' };
+    return {
+      ...rest,
+      imageUrl: cover?.src ?? '',
+      name: l10n(data.commonName, locale) ?? '',
+    };
   }),
 );
-const sightingsJSON = JSON.stringify(sightings);
+
+const sightingsJSON = JSON.stringify(clientSightings);
 ---
 
-<!--
-  Proof of concept: the free OpenFreeMap vector map of Garmisch-Partenkirchen,
-  rendered with MapLibre GL JS in the dark style, no customizations.
--->
-<Layout title="maplibre vector POC — Garmisch-Partenkirchen" locale="en">
-  <section class="poc">
-    <div class="poc__header">
-      <span class="poc__tag"
-        >╔══ maplibre vector map — Garmisch-Partenkirchen [POC]</span
-      >
-      <span class="poc__sub">
-        vector tiles from OpenStreetMap via OpenFreeMap · fiord style + d3 POC palette, with
-        20 m altitude contours, peaks, shelters, guideposts, named trails and
-        <span style="color: var(--accent)">◎ mushroom sightings</span>. Drag to pan, scroll to zoom.</span
-      >
-    </div>
-
-    <div class="poc__frame">
-      <div id="map" class="poc__map" data-sightings={sightingsJSON}></div>
-      <div class="poc__attribution">
-        <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
-      </div>
-    </div>
-
-    <div class="poc__note">
-      <span class="poc__note-tag">╔═ how it works</span>
-      <p>
-        A <b>MapLibre GL</b> map loads the free <b>OpenFreeMap</b> fiord style — vector
-        tiles generated from OpenStreetMap, no API key required. Its layers are repainted at
-        runtime to match the <b>/en/d3-poc</b> palette, and hiking data is added straight from
-        the same tiles: mountain <b>peaks</b> (name + elevation), <b>shelters</b>, hiking
-        <b>guideposts</b>, drinking water, viewpoints, and <b>named trail labels</b> — all from
-        the OpenMapTiles schema, requiring no extra tile source or key. <b>20 m altitude
-        contours</b> are generated in the browser by <code>maplibre-contour</code> from free
-        Mapzen/AWS raster-DEM elevation tiles. The accent <b>◎ mushroom sightings</b> are the
-        site's own records from the <code>sightings</code> content collection, embedded on the
-        page and rendered as GeoJSON points.
-      </p>
-    </div>
-  </section>
-</Layout>
+<div class="map-frame">
+  <div class="map-frame__title">
+    <span class="map-frame__title-text">[ map ]</span>
+    <span class="map-frame__title-coords">{center[0].toFixed(4)}°N {center[1].toFixed(4)}°E</span>
+  </div>
+  <div id="map" class="map" data-sightings={sightingsJSON} data-center={JSON.stringify(center)} data-locale={locale}></div>
+  <div class="map-frame__attribution">
+    <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
+  </div>
+</div>
 
 <script>
   import maplibregl from 'maplibre-gl';
@@ -65,8 +48,6 @@ const sightingsJSON = JSON.stringify(sightings);
 
   // Altitude contours generated on the fly from free raster-DEM tiles
   // (AWS Mapzen "terrarium" elevation tiles, z0-14, no key required).
-  // maplibre-contour converts the DEM into vector contour lines client-side,
-  // matching the 20 m contour concept of the d3 POC.
   const demSource = new mlcontour.DemSource({
     url: 'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png',
     encoding: 'terrarium',
@@ -77,62 +58,47 @@ const sightingsJSON = JSON.stringify(sightings);
   });
   demSource.setupMaplibre(maplibregl);
 
-  // Palette lifted from the d3 POC (src/pages/en/d3-poc.astro): dark green
-  // hypsometric terrain, teal lakes/rivers, green-toned roads + accent trails.
+  // Dark green hypsometric terrain, teal lakes/rivers, green-toned roads +
+  // accent trails (the palette from the retired d3 POC).
   function applyPalette(map: maplibregl.Map) {
-    const paint = (layer: string, props: { [s: string]: unknown; } | ArrayLike<unknown>) => {
+    const paint = (layer: string, props: { [s: string]: unknown; }) => {
       if (map.getLayer(layer)) {
         Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v));
       }
     };
 
-    // terrain / background (d3 elevation ramp, lowest band)
     paint('background', { 'background-color': '#0e120b' });
     paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 });
     paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 });
     paint('landcover_ice_shelf', { 'fill-color': '#20291a' });
     paint('landcover_glacier', { 'fill-color': '#20291a' });
 
-    // hide parks and their dotted outlines entirely
     ['park', 'park_outline'].forEach((l) => {
       if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none');
     });
 
-    // water (d3 lake/river palette)
     paint('water', { 'fill-color': '#2a7d94' });
     paint('waterway', { 'line-color': '#2a6a80' });
-
-    // buildings
     paint('building', { 'fill-color': '#263222' });
 
-    // roads (d3 road palette: bright -> muted green)
     paint('highway_major_casing', { 'line-color': '#151a10' });
     paint('highway_major_inner', { 'line-color': '#d4f0d4' });
     paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 });
     paint('highway_motorway_casing', { 'line-color': '#151a10' });
     paint('highway_motorway_inner', { 'line-color': '#d4f0d4' });
     paint('highway_minor', { 'line-color': '#8fbf8f' });
-
-    // hiking trails (d3 mushroom accent)
     paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] });
 
-    // boundaries
     paint('boundary_state', { 'line-color': '#2d5a2d' });
     paint('boundary_country_z5-', { 'line-color': '#4a8f4a' });
 
-    // labels -> d3 bright road green, dark halo for legibility
     ['place_city_large', 'place_city', 'place_town', 'place_village', 'place_suburb', 'place_other',
       'highway_name_other', 'highway_name_motorway', 'water_name'].
       forEach((l) => paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }));
   }
 
-  // Hiking data/labels, all from the existing OpenMapTiles `openmaptiles`
-  // source already used by the fiord style (no new tile source or key).
-  // These layers are added BEFORE box-mask-fill so out-of-box features stay
-  // hidden behind the mask. Layers added after `place_*/highway_name_*` show
-  // above them; use "beforeId" to keep natural road/label ordering intact.
   function addHikingLayers(map: maplibregl.Map) {
-    const add = (id: string, type: string, beforeId: string, { sourceLayer, filter, layout = {}, paint = {}, minzoom, maxzoom }: { sourceLayer: string; filter: (string | (string | number | string[])[])[] | (string | (string | number | string[])[] | (string | boolean | string[])[])[] | (string | (string | (string | string[])[])[] | (string | boolean | string[])[])[]; layout: { 'icon-image': string; 'icon-size': (string | number | string[])[]; 'text-field': (string | (string | (string | string[])[])[])[]; 'text-font': string[]; 'text-size': number; 'text-anchor': string; 'text-offset': number[]; 'text-allow-overlap': boolean; } | { 'icon-image': string; 'icon-size': number; 'text-field': (string | string[])[]; 'text-font': string[]; 'text-size': number; 'text-anchor': string; 'text-offset': number[]; 'text-allow-overlap': boolean; } | { 'symbol-placement': string; 'text-field': (string | string[])[]; 'text-font': string[]; 'text-size': number; 'text-letter-spacing': number; 'symbol-spacing': number; 'text-rotation-alignment': string; }; paint: { 'text-color': string; 'text-halo-color': string; 'text-halo-width': number; } | { 'text-color': string; 'text-halo-color': string; 'text-halo-width': number; } | { 'text-color': string; 'text-halo-color': string; 'text-halo-width': number; }; minzoom?: number; }) => {
+    const add = (id: string, type: string, beforeId: string, { sourceLayer, filter, layout = {}, paint = {}, minzoom, maxzoom }: { sourceLayer: string; filter: any; layout: any; paint: any; minzoom?: number; maxzoom?: number; }) => {
       map.addLayer(
         {
           id,
@@ -180,9 +146,7 @@ const sightingsJSON = JSON.stringify(sightings);
     });
 
     // --- hiking POIs (shelters, guideposts, drinking water, viewpoints) ---
-    // POI data only exists in the tiles from z14, so these fade in on zoom.
-    const poiB4 = 'hiking-peak';
-    add('hiking-poi', 'symbol', poiB4, {
+    add('hiking-poi', 'symbol', 'hiking-peak', {
       sourceLayer: 'poi',
       minzoom: 14,
       filter: [
@@ -241,8 +205,6 @@ const sightingsJSON = JSON.stringify(sightings);
     });
   }
 
-  // Altitude contour lines (vector, generated from the demo DEM source).
-  // Minor lines use the d3-POC minor green, index/major lines a lighter green.
   function addContours(map: maplibregl.Map) {
     if (map.getSource('hiking-contours')) return;
 
@@ -265,9 +227,6 @@ const sightingsJSON = JSON.stringify(sightings);
       maxzoom: 15,
     });
 
-    // Draw contours right above land cover / terrain fills (background, water,
-    // landcover, landuse, park) but below waterway lines, buildings, roads and
-    // labels — a clean topographic look, like the d3 POC.
     const beforeId = (map.getLayer('waterway') && 'waterway') ||
       (map.getLayer('hiking-peak') && 'hiking-peak') ||
       undefined;
@@ -306,21 +265,27 @@ const sightingsJSON = JSON.stringify(sightings);
     );
   }
 
-  // Mushroom sightings pinned as accent dots + labels, from the data already
-  // embedded on the page (data-sightings). Added above all other data layers.
+  // Mushroom sightings pinned as accent dots + labels, from the data embedded
+  // on the page (data-sightings with a pre-resolved `name` in the active locale).
   function addSightings(map: maplibregl.Map, sightings: any[]) {
     if (map.getSource('sightings') || !sightings.length) return;
 
-    const features = sightings.map((s: { commonName: { de: any; en: any; }; species: any; location: { lng: any; lat: any; }; }) => ({
+    const features = sightings.map((s) => ({
       type: 'Feature',
       properties: {
-        name: s.commonName?.en ?? s.commonName?.de ?? s.species ?? '',
+        name: s.name ?? s.species ?? '',
         species: s.species ?? '',
+        imageUrl: s.imageUrl ?? '',
       },
       geometry: { type: 'Point', coordinates: [s.location.lng, s.location.lat] },
     }));
 
     map.addSource('sightings', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features },
+    });
+
+    map.addSource('sighting-hit', {
       type: 'geojson',
       data: { type: 'FeatureCollection', features },
     });
@@ -358,21 +323,58 @@ const sightingsJSON = JSON.stringify(sightings);
       },
       'sighting-label',
     );
+
+    map.addLayer(
+      {
+        id: 'sighting-hit',
+        type: 'circle',
+        source: 'sighting-hit',
+        paint: {
+          'circle-color': 'rgba(0,0,0,0)',
+          'circle-radius': 18,
+        },
+      },
+      'sighting-marker',
+    );
+
+    const popup = new maplibregl.Popup({ offset: 14, closeButton: false, className: 'tui-map-popup' });
+
+    map.on('click', 'sighting-hit', (e: any) => {
+      const f = e.features?.[0];
+      if (!f) return;
+      const p = f.properties;
+      const img = p.imageUrl
+        ? `<div class="tpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
+        : '';
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(
+          `<div class="tpopup">${img}<div class="tpopup__body">` +
+          `<div class="tpopup__species">${p.species ?? ''}</div>` +
+          `<div class="tpopup__name">${p.name ?? ''}</div>` +
+          `</div></div>`,
+        )
+        .addTo(map);
+    });
+
+    map.on('mouseenter', 'sighting-hit', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'sighting-hit', () => {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    });
   }
 
   function initMap() {
     const container = document.getElementById('map');
     if (!container) return;
 
-    // 15 km from center in each direction (30 km NS total), with the east-west
-    // extent derived to match the container's aspect ratio so the box is a
-    // rectangle matching the visible viewport.
-    // 1 deg lat ~ 111.32 km; 1 deg lon ~ 111.32 * cos(lat).
     const lat = 47.4917, lon = 11.0922;
     const ar = container.clientWidth / container.clientHeight;
 
-    const dLat = 15 / 111.32;                                 // 15 km NS
-    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180)); // EW keeps aspect ratio
+    const dLat = 15 / 111.32;
+    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180));
     const w = lon - dLon, e = lon + dLon;
     const s = lat - dLat, n = lat + dLat;
 
@@ -380,24 +382,15 @@ const sightingsJSON = JSON.stringify(sightings);
       container,
       style: STYLE_URL,
       center: [lon, lat],
-      bounds: [[w, s], [e, n]]
-      // No maxBounds / minZoom: the user can pan and zoom freely. Everything
-      // outside the 5 km box is simply hidden behind a mask polygon.
+      bounds: [[w, s], [e, n]],
     });
-
 
     map.on('load', () => {
       applyPalette(map);
-
-      // Add hiking data layers (peaks, POIs, trail labels), altitude contours,
-      // and mushroom sighting markers BEFORE the mask so anything outside the
-      // 15 km box stays hidden behind box-mask-fill.
       addHikingLayers(map);
       addContours(map);
       addSightings(map, JSON.parse(container.dataset.sightings || '[]'));
 
-      // Mask = a world fill with the box as a hole, so the area outside the
-      // 5 km box is hidden. The hole is defined with a reversed winding order.
       const mask = {
         type: 'FeatureCollection',
         features: [
@@ -422,8 +415,6 @@ const sightingsJSON = JSON.stringify(sightings);
         source: 'box-mask',
         paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
       });
-
-      // Outline of the 15 km box
       map.addLayer({
         id: 'box-mask-outline',
         type: 'line',
@@ -443,33 +434,31 @@ const sightingsJSON = JSON.stringify(sightings);
 </script>
 
 <style>
-  .poc {
-    padding-bottom: 1rem;
-  }
-
-  .poc__header {
-    margin-bottom: 1rem;
-  }
-
-  .poc__tag {
-    display: block;
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 1rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .poc__sub {
-    color: var(--fg-dim);
-    font-size: 0.8125rem;
-  }
-
-  .poc__frame {
+  .map-frame {
     border: 1px solid var(--border-char);
     background: var(--bg-surface);
   }
 
-  .poc__map {
+  .map-frame__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+    font-size: 0.8125rem;
+  }
+
+  .map-frame__title-text {
+    color: var(--fg-bright);
+    font-weight: 700;
+  }
+
+  .map-frame__title-coords {
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+  }
+
+  .map {
     width: 100%;
     height: 640px;
     cursor: grab;
@@ -477,55 +466,72 @@ const sightingsJSON = JSON.stringify(sightings);
     background: var(--bg-highlight);
   }
 
-  .poc__map:active {
+  .map:active {
     cursor: grabbing;
   }
 
-  .poc__attribution {
+  .map-frame__attribution {
     padding: 0.375rem 0.75rem;
     border-top: 1px solid var(--border-char);
     font-size: 0.6875rem;
     color: var(--fg-dim);
   }
 
-  .poc__note {
-    margin-top: 1rem;
-  }
-
-  .poc__note-tag {
-    display: block;
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.8125rem;
-    margin-bottom: 0.375rem;
-  }
-
-  .poc__note p {
-    color: var(--fg-dim);
-    font-size: 0.8125rem;
-    line-height: 1.7;
-    max-width: 720px;
-  }
-
-  .poc__note b {
-    color: var(--fg-bright);
-  }
-
-  .poc__note code {
-    color: var(--accent);
-  }
-
   :global(.maplibregl-map) {
     font-family: var(--font-mono);
   }
 
-  @media (max-width: 768px) {
-    .poc__map {
-      height: 420px;
-    }
-  }
-
   :global(.maplibregl-ctrl-attrib) {
     display: none;
+  }
+
+  :global(.tui-map-popup .maplibregl-popup-content) {
+    background: var(--bg-surface);
+    color: var(--fg);
+    border: 1px solid var(--border-char);
+    padding: 0;
+    box-shadow: none;
+  }
+
+  :global(.tui-map-popup .maplibregl-popup-tip) {
+    border-top-color: var(--border-char);
+  }
+
+  :global(.tpopup) {
+    min-width: 160px;
+  }
+
+  :global(.tpopup__img) {
+    border-bottom: 1px solid var(--border-char);
+    background: var(--bg-highlight);
+  }
+
+  :global(.tpopup__img img) {
+    display: block;
+    width: 100%;
+    height: 96px;
+    object-fit: cover;
+    filter: saturate(0.5) brightness(0.8);
+  }
+
+  :global(.tpopup__body) {
+    padding: 0.5rem 0.625rem;
+  }
+
+  :global(.tpopup__species) {
+    font-size: 0.625rem;
+    color: var(--accent-dim);
+  }
+
+  :global(.tpopup__name) {
+    font-size: 0.8125rem;
+    color: var(--fg-bright);
+    font-weight: 700;
+  }
+
+  @media (max-width: 768px) {
+    .map {
+      height: 420px;
+    }
   }
 </style>

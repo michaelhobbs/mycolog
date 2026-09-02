@@ -380,13 +380,29 @@ const sightingsJSON = JSON.stringify(clientSightings);
     const popup = new maplibregl.Popup({ offset: 14, closeButton: false, className: 'tui-map-popup' });
 
     // --- single marker popup ---
+    function openSinglePopup(p: any, lngLat: [number, number]) {
+      popup
+        .setLngLat(lngLat)
+        .setDOMContent(popupNode(p))
+        .addTo(map);
+    }
+
+    // marker dot -> popup
     map.on('click', 'sighting-hit', (e: any) => {
       const f = e.features?.[0];
       if (!f) return;
-      popup
-        .setLngLat(e.lngLat)
-        .setDOMContent(popupNode(f.properties))
-        .addTo(map);
+      openSinglePopup(f.properties, [e.lngLat.lng, e.lngLat.lat]);
+    });
+
+    // label text -> popup (so clicking a marker's name opens it too)
+    map.on('click', 'sighting-label', (e: any) => {
+      const f = e.features?.[0];
+      if (!f) return;
+      const geom = f.geometry?.coordinates;
+      openSinglePopup(
+        f.properties,
+        Array.isArray(geom) ? [geom[0], geom[1]] : [e.lngLat.lng, e.lngLat.lat],
+      );
     });
 
     // --- cluster popup with a carousel of all contained sightings ---
@@ -409,17 +425,14 @@ const sightingsJSON = JSON.stringify(clientSightings);
         .addTo(map);
     });
 
-    map.on('mouseenter', 'sighting-hit', () => {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'sighting-hit', () => {
-      map.getCanvas().style.cursor = '';
-    });
-    map.on('mouseenter', 'sighting-cluster', () => {
-      map.getCanvas().style.cursor = 'pointer';
-    });
-    map.on('mouseleave', 'sighting-cluster', () => {
-      map.getCanvas().style.cursor = '';
+    // Pointer cursor over any clickable sighting feature. Uses map-wide
+    // mousemove + queryRenderedFeatures so it works regardless of which layer
+    // sits visually on top (marker dot, its label, the hidden hit area, or a
+    // cluster).
+    const CLICKABLE = ['sighting-marker', 'sighting-hit', 'sighting-label', 'sighting-cluster'];
+    map.on('mousemove', (e) => {
+      const features = map.queryRenderedFeatures(e.point, { layers: CLICKABLE });
+      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
 
     // Build the single-sighting popup.

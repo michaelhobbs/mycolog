@@ -126,6 +126,9 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     margin-bottom: 1.25rem;
     white-space: pre;
     overflow-x: auto;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .hero__title {
@@ -262,7 +265,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
       font-size: 0.5rem;
     }
     .grid {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

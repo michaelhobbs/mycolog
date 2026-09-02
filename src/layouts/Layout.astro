@@ -31,8 +31,6 @@ function localizedPath(targetLocale: Locale): string {
     <title>{title}</title>
   </head>
   <body>
-    <div class="scanlines" aria-hidden="true"></div>
-
     <header class="header">
       <nav class="nav">
         <a href={`/${locale}`} class="nav__logo">
@@ -160,21 +158,6 @@ function localizedPath(targetLocale: Locale): string {
     display: flex;
     flex-direction: column;
     position: relative;
-  }
-
-  /* ─── CRT Scanlines ────────────────────────────── */
-  .scanlines {
-    pointer-events: none;
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.08) 2px,
-      rgba(0, 0, 0, 0.08) 4px
-    );
   }
 
   img { display: block; max-width: 100%; }

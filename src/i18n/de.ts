@@ -30,6 +30,10 @@ export default {
     allSightings: 'Alle Beobachtungen',
     determiningFeatures: 'Bestimmungsmerkmale',
     habitat: 'Lebensraum',
+    labels: {
+      date: 'datum',
+      loc: 'ort',
+    },
   },
   card: {
     features: 'Bestimmungsmerkmale',
@@ -71,5 +75,8 @@ export default {
       'Pilzbeobachtungen und Sammlertouren rund um Garmisch-Partenkirchen in den Bayerischen Alpen.',
     mapDescription:
       'Interaktive Karte der Pilzfunde rund um Garmisch-Partenkirchen.',
+    homeTitle: 'myco.log — pilzfunde',
+    mapTitle: 'karte — myco.log',
+    logTitle: 'protokoll — myco.log',
   },
 } as const;

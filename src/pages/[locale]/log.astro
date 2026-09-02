@@ -2,11 +2,15 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { getTranslations, formatDate } from '../../i18n';
+import { getTranslations, formatDate, locales } from '../../i18n';
 import { l10n } from '../../i18n/helpers';
 import type { Locale } from '../../i18n';
 
-const locale: Locale = 'en';
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
 
 const sightings = (await getCollection('sightings')).sort(
@@ -22,7 +26,7 @@ for (const s of sightings) {
 const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1));
 ---
 
-<Layout title="log — myco.log" locale={locale}>
+<Layout title={t.meta.logTitle} locale={locale}>
   <section class="log-page">
     <div class="page-header">
       <span class="page-header__tag">╔══ {t.log.title}</span>

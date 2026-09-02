@@ -2,11 +2,15 @@
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { getTranslations } from '../../../i18n';
+import { getTranslations, locales } from '../../../i18n';
 import { l10n } from '../../../i18n/helpers';
 import type { Locale } from '../../../i18n';
 
-const locale: Locale = 'en';
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
 
 const sightings = await getCollection('sightings');

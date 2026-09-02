@@ -2,11 +2,17 @@
 import Layout from '../../layouts/Layout.astro';
 import MushroomCard from '../../components/MushroomCard.astro';
 import { getCollection } from 'astro:content';
-import { getTranslations } from '../../i18n';
+import { getTranslations, locales } from '../../i18n';
 import type { Locale } from '../../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
-const locale: Locale = 'de';
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
+const mapUrl = getRelativeLocaleUrl(locale, 'map');
 
 const recentSightings = (await getCollection('sightings'))
   .sort(
@@ -16,7 +22,7 @@ const recentSightings = (await getCollection('sightings'))
   .slice(0, 6);
 ---
 
-<Layout title="myco.log — pilzfunde" locale={locale}>
+<Layout title={t.meta.homeTitle} locale={locale}>
   <section class="hero">
     <pre
       class="hero__ascii"
@@ -64,7 +70,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     <p class="hero__line">{'─'.repeat(50)}</p>
     <p class="hero__desc">{t.home.heroDescription}</p>
     <div class="hero__actions">
-      <a href="/de/map" class="tui-btn">
+      <a href={mapUrl} class="tui-btn">
         {'>'}
         {t.home.heroCta}
       </a>
@@ -86,7 +92,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     </div>
 
     <div class="section__footer">
-      <a href="/de/map" class="tui-link">
+      <a href={mapUrl} class="tui-link">
         {'>'}
         {t.home.viewAll}
       </a>

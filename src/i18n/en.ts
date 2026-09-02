@@ -30,6 +30,10 @@ export default {
     allSightings: 'All Sightings',
     determiningFeatures: 'Key Features',
     habitat: 'Habitat',
+    labels: {
+      date: 'date',
+      loc: 'loc',
+    },
   },
   card: {
     features: 'Key Features',
@@ -71,5 +75,8 @@ export default {
       'Mushroom sightings and foraging discoveries around Garmisch-Partenkirchen in the Bavarian Alps.',
     mapDescription:
       'Interactive map of mushroom sightings around Garmisch-Partenkirchen.',
+    homeTitle: 'myco.log — mushroom sightings',
+    mapTitle: 'map — myco.log',
+    logTitle: 'log — myco.log',
   },
 } as const;

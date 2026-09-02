@@ -2,19 +2,24 @@
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
-import { getTranslations } from '../../../i18n';
+import { getTranslations, formatDate, locales } from '../../../i18n';
 import { l10n } from '../../../i18n/helpers';
 import type { Locale } from '../../../i18n';
 
-export async function getStaticPaths() {
-  const sightings = await getCollection('sightings');
-  const ids = [...new Set(sightings.map((s) => s.data.id))].sort();
-  return ids.map((id) => ({ params: { name: id } }));
+export function getStaticPaths() {
+  return Promise.resolve(
+    (async () => {
+      const sightings = await getCollection('sightings');
+      const ids = [...new Set(sightings.map((s) => s.data.id))].sort();
+      return ids.flatMap((name) =>
+        locales.map((locale) => ({ params: { locale, name } })),
+      );
+    })(),
+  );
 }
 
-const locale: Locale = 'en';
+const { locale, name } = Astro.params as { locale: Locale; name: string };
 const t = getTranslations(locale);
-const { name } = Astro.params;
 
 const all = await getCollection('sightings');
 const entries = all
@@ -97,7 +102,7 @@ const features = entries[0]?.data.determiningFeatures ?? [];
                   )}
                   <div class="sighting__body">
                     <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__date">
-                      {new Date(sd.dateSpotted).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      {formatDate(sd.dateSpotted, locale)}
                     </a>
                     <span class="sighting__loc">@{l10n(sd.location.name, locale) || t.mushrooms.unknown}</span>
                   </div>

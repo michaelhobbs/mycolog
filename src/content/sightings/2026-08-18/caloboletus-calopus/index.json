@@ -4,8 +4,8 @@
   "commonName": { "en": "Bitter bolete", "de": "Schönfuß-Röhrling" },
   "dateSpotted": "2026-08-18",
   "location": {
-    "lat": 47.484825,
-    "lng": 11.154232,
+    "lat": 47.484829,
+    "lng": 11.154243,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
   "images": ["./images/IMG_4059.jpg", "./images/IMG_4062.jpg", "./images/IMG_4110.jpg"],

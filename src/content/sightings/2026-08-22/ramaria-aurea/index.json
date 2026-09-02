@@ -4,8 +4,8 @@
   "commonName": { "en": "Golden Coral", "de": "Goldgelbe Koralle" },
   "dateSpotted": "2026-08-22",
   "location": {
-    "lat": 47.474841,
-    "lng": 11.16065,
+    "lat": 47.484352,
+    "lng": 11.153002,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
   "images": ["./images/IMG_4193.jpg", "./images/IMG_4194.jpg", "./images/IMG_4196.jpg", "./images/IMG_4198.jpg"],

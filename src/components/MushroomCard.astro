@@ -76,6 +76,13 @@ const t = l10n;
         <span class="tui-card__val">{t(s.habitat, locale)}</span>
       </div>
     )}
+    {s.edibility && (
+      <div class="tui-card__row">
+        <span class="tui-card__label">edibility</span>
+        <span class="tui-card__sep-dots"></span>
+        <span class="tui-card__val">{t(s.edibility, locale)}</span>
+      </div>
+    )}
 
     <div class="tui-card__divider"></div>
 

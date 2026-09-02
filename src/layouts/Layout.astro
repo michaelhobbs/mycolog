@@ -100,12 +100,9 @@ function localizedPath(targetLocale: Locale): string {
 
     <footer class="footer">
       <div class="footer__inner">
-        <span class="footer__line" aria-hidden="true">{'─'.repeat(60)}</span>
-        <div class="footer__content">
+        <span class="footer__content">
           <span>{t.footer.copyright}</span>
-          <span class="footer__sep" aria-hidden="true">│</span>
-          <span class="footer__tagline">{t.footer.tagline}</span>
-        </div>
+        </span>
       </div>
     </footer>
 
@@ -328,26 +325,8 @@ function localizedPath(targetLocale: Locale): string {
     margin: 0 auto;
   }
 
-  .footer__line {
-    color: var(--fg-muted);
-    overflow: hidden;
-    display: block;
-    margin-bottom: 0.75rem;
-  }
-
   .footer__content {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
     color: var(--fg-dim);
-  }
-
-  .footer__sep {
-    color: var(--fg-muted);
-  }
-
-  .footer__tagline {
-    color: var(--fg-muted);
   }
 
   /* ─── Responsive ──────────────────────────────── */
@@ -355,7 +334,5 @@ function localizedPath(targetLocale: Locale): string {
     .nav__links, .nav__lang, .nav__sep { display: none; }
     .nav__mobile-toggle { display: block; }
     .main { padding: 1.5rem 1rem; }
-    .footer__content { flex-direction: column; }
-    .footer__sep { display: none; }
   }
 </style>

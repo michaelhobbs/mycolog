@@ -68,7 +68,6 @@ export default {
   },
   footer: {
     copyright: '© 2026 myco.log',
-    tagline: 'Sammele nur Pilze, die du genau kennst!',
   },
   meta: {
     homeDescription:

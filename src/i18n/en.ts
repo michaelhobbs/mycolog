@@ -68,7 +68,6 @@ export default {
   },
   footer: {
     copyright: '© 2026 myco.log',
-    tagline: 'Only forage mushrooms you can positively identify!',
   },
   meta: {
     homeDescription:

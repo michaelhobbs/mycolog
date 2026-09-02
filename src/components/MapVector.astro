@@ -267,33 +267,86 @@ const sightingsJSON = JSON.stringify(clientSightings);
 
   // Mushroom sightings pinned as accent dots + labels, from the data embedded
   // on the page (data-sightings with a pre-resolved `name` in the active locale).
+  // Overlapping points are clustered by MapLibre (supercluster): each cluster
+  // is drawn as a larger accent dot with a count badge, and clicking it opens a
+  // carousel popup that navigates every sighting it contains. Clustering stays
+  // enabled at every zoom, so points at identical coordinates always stay grouped
+  // (0 px apart can never leave the cluster radius), while points that only
+  // happen to overlap decluster once their on-screen distance exceeds the radius.
   function addSightings(map: maplibregl.Map, sightings: any[]) {
     if (map.getSource('sightings') || !sightings.length) return;
 
-    const features = sightings.map((s) => ({
-      type: 'Feature',
+    const features = sightings.map((s, i) => ({
+      type: 'Feature' as const,
+      id: i,
       properties: {
         name: s.name ?? s.species ?? '',
         species: s.species ?? '',
         imageUrl: s.imageUrl ?? '',
       },
-      geometry: { type: 'Point', coordinates: [s.location.lng, s.location.lat] },
+      geometry: { type: 'Point' as const, coordinates: [s.location.lng, s.location.lat] },
     }));
 
     map.addSource('sightings', {
       type: 'geojson',
       data: { type: 'FeatureCollection', features },
+      cluster: true,
+      clusterRadius: 44,
+    });
+    const source = map.getSource('sightings') as maplibregl.GeoJSONSource;
+
+    // --- cluster circle + count badge ---
+    map.addLayer({
+      id: 'sighting-cluster',
+      type: 'circle',
+      source: 'sightings',
+      filter: ['has', 'point_count'],
+      paint: {
+        'circle-color': '#33ff33',
+        'circle-radius': ['step', ['get', 'point_count'], 14, 10, 18, 30, 22],
+        'circle-stroke-color': '#0e120b',
+        'circle-stroke-width': 2,
+      },
     });
 
-    map.addSource('sighting-hit', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features },
+    map.addLayer({
+      id: 'sighting-cluster-count',
+      type: 'symbol',
+      source: 'sightings',
+      filter: ['has', 'point_count'],
+      layout: {
+        'text-field': ['get', 'point_count_abbreviated'],
+        'text-font': ['Noto Sans Bold'],
+        'text-size': 12,
+      },
+      paint: {
+        'text-color': '#0e120b',
+        'text-halo-color': '#33ff33',
+        'text-halo-width': 1,
+      },
     });
+
+    // --- individual marker + label (hidden when part of a cluster) ---
+    map.addLayer(
+      {
+        id: 'sighting-marker',
+        type: 'circle',
+        source: 'sightings',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': '#33ff33',
+          'circle-radius': 6,
+          'circle-stroke-color': '#0e120b',
+          'circle-stroke-width': 1.5,
+        },
+      },
+    );
 
     map.addLayer({
       id: 'sighting-label',
       type: 'symbol',
       source: 'sightings',
+      filter: ['!', ['has', 'point_count']],
       layout: {
         'text-field': ['coalesce', ['get', 'name'], ''],
         'text-font': ['Noto Sans Bold'],
@@ -309,26 +362,13 @@ const sightingsJSON = JSON.stringify(clientSightings);
       },
     });
 
-    map.addLayer(
-      {
-        id: 'sighting-marker',
-        type: 'circle',
-        source: 'sightings',
-        paint: {
-          'circle-color': '#33ff33',
-          'circle-radius': 6,
-          'circle-stroke-color': '#0e120b',
-          'circle-stroke-width': 1.5,
-        },
-      },
-      'sighting-label',
-    );
-
+    // Transparent hit layer over individual markers for easy clicking.
     map.addLayer(
       {
         id: 'sighting-hit',
         type: 'circle',
-        source: 'sighting-hit',
+        source: 'sightings',
+        filter: ['!', ['has', 'point_count']],
         paint: {
           'circle-color': 'rgba(0,0,0,0)',
           'circle-radius': 18,
@@ -339,21 +379,33 @@ const sightingsJSON = JSON.stringify(clientSightings);
 
     const popup = new maplibregl.Popup({ offset: 14, closeButton: false, className: 'tui-map-popup' });
 
+    // --- single marker popup ---
     map.on('click', 'sighting-hit', (e: any) => {
       const f = e.features?.[0];
       if (!f) return;
-      const p = f.properties;
-      const img = p.imageUrl
-        ? `<div class="tpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
-        : '';
       popup
         .setLngLat(e.lngLat)
-        .setHTML(
-          `<div class="tpopup">${img}<div class="tpopup__body">` +
-          `<div class="tpopup__species">${p.species ?? ''}</div>` +
-          `<div class="tpopup__name">${p.name ?? ''}</div>` +
-          `</div></div>`,
-        )
+        .setDOMContent(popupNode(f.properties))
+        .addTo(map);
+    });
+
+    // --- cluster popup with a carousel of all contained sightings ---
+    map.on('click', 'sighting-cluster', async (e: any) => {
+      const cluster = e.features?.[0];
+      if (!cluster) return;
+      const clusterId = cluster.properties.cluster_id;
+      // leaves = every sighting nested inside this cluster
+      let leaves: any[] = [];
+      try {
+        leaves = await source.getClusterLeaves(clusterId, Number.MAX_SAFE_INTEGER, 0);
+      } catch (err) {
+        console.error('[map] getClusterLeaves failed:', err);
+        return;
+      }
+      if (!leaves.length) return;
+      popup
+        .setLngLat(e.lngLat)
+        .setDOMContent(carouselNode(leaves))
         .addTo(map);
     });
 
@@ -362,8 +414,92 @@ const sightingsJSON = JSON.stringify(clientSightings);
     });
     map.on('mouseleave', 'sighting-hit', () => {
       map.getCanvas().style.cursor = '';
-      popup.remove();
     });
+    map.on('mouseenter', 'sighting-cluster', () => {
+      map.getCanvas().style.cursor = 'pointer';
+    });
+    map.on('mouseleave', 'sighting-cluster', () => {
+      map.getCanvas().style.cursor = '';
+    });
+
+    // Build the single-sighting popup.
+    function popupNode(p: any): HTMLElement {
+      const root = document.createElement('div');
+      root.className = 'tpopup';
+      const img = p.imageUrl
+        ? `<div class="tpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
+        : '';
+      root.innerHTML =
+        `${img}<div class="tpopup__body">` +
+        `<div class="tpopup__species">${escapeHtml(p.species ?? '')}</div>` +
+        `<div class="tpopup__name">${escapeHtml(p.name ?? '')}</div>` +
+        `</div>`;
+      return root;
+    }
+
+    // Build the carousel popup for a cluster of sightings.
+    function carouselNode(leaves: any[]): HTMLElement {
+      const root = document.createElement('div');
+      root.className = 'cpopup';
+      const count = leaves.length;
+
+      const slide = (i: number) => {
+        const p = leaves[i].properties;
+        const img = p.imageUrl
+          ? `<div class="cpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
+          : '';
+        body.innerHTML =
+          `${img}<div class="cpopup__body">` +
+          `<div class="cpopup__species">${escapeHtml(p.species ?? '')}</div>` +
+          `<div class="cpopup__name">${escapeHtml(p.name ?? '')}</div>` +
+          `</div>`;
+        idx.textContent = `${i + 1} / ${count}`;
+      };
+
+      const body = document.createElement('div');
+      body.className = 'cpopup__stage';
+
+      const nav = document.createElement('div');
+      nav.className = 'cpopup__nav';
+
+      const idx = document.createElement('span');
+      idx.className = 'cpopup__count';
+
+      const prev = document.createElement('button');
+      prev.className = 'cpopup__btn';
+      prev.type = 'button';
+      prev.textContent = '<';
+      prev.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        current = (current - 1 + count) % count;
+        slide(current);
+      });
+
+      const next = document.createElement('button');
+      next.className = 'cpopup__btn';
+      next.type = 'button';
+      next.textContent = '>';
+      next.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        current = (current + 1) % count;
+        slide(current);
+      });
+
+      nav.append(prev, idx, next);
+      root.append(body, nav);
+
+      let current = 0;
+      slide(current);
+      return root;
+    }
+
+    function escapeHtml(s: string): string {
+      return s
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
   }
 
   function initMap() {
@@ -389,8 +525,9 @@ const sightingsJSON = JSON.stringify(clientSightings);
       applyPalette(map);
       addHikingLayers(map);
       addContours(map);
-      addSightings(map, JSON.parse(container.dataset.sightings || '[]'));
 
+      // Mask first so the viewport is always framed, even if a later layer
+      // fails. Everything outside the 15 km box stays hidden behind it.
       const mask = {
         type: 'FeatureCollection',
         features: [
@@ -421,6 +558,16 @@ const sightingsJSON = JSON.stringify(clientSightings);
         source: 'box-mask',
         paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
       });
+
+      try {
+        addSightings(map, JSON.parse(container.dataset.sightings || '[]'));
+      } catch (err) {
+        console.error('[map] addSightings failed:', err);
+      }
+    });
+
+    map.on('error', (e: any) => {
+      console.error('[map] maplibre error:', e?.error);
     });
 
     map.addControl(
@@ -527,6 +674,78 @@ const sightingsJSON = JSON.stringify(clientSightings);
     font-size: 0.8125rem;
     color: var(--fg-bright);
     font-weight: 700;
+  }
+
+  /* ─── cluster carousel popup ───────────────────── */
+  :global(.cpopup) {
+    min-width: 180px;
+  }
+
+  :global(.cpopup__stage) {
+    position: relative;
+    min-height: 120px;
+  }
+
+  :global(.cpopup__img) {
+    border-bottom: 1px solid var(--border-char);
+    background: var(--bg-highlight);
+  }
+
+  :global(.cpopup__img img) {
+    display: block;
+    width: 100%;
+    height: 110px;
+    object-fit: cover;
+    filter: saturate(0.5) brightness(0.8);
+  }
+
+  :global(.cpopup__body) {
+    padding: 0.5rem 0.625rem;
+  }
+
+  :global(.cpopup__species) {
+    font-size: 0.625rem;
+    color: var(--accent-dim);
+  }
+
+  :global(.cpopup__name) {
+    font-size: 0.8125rem;
+    color: var(--fg-bright);
+    font-weight: 700;
+  }
+
+  :global(.cpopup__nav) {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.375rem 0.5rem;
+    border-top: 1px solid var(--border-char);
+  }
+
+  :global(.cpopup__count) {
+    flex: 1;
+    text-align: center;
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+  }
+
+  :global(.cpopup__btn) {
+    background: none;
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  :global(.cpopup__btn:hover) {
+    background: var(--accent);
+    color: var(--bg);
   }
 
   @media (max-width: 768px) {

@@ -10,7 +10,7 @@ const locale: Locale = 'de';
 const t = getTranslations(locale);
 
 const sightings = (await getCollection('sightings')).sort(
-  (a, b) => new Date(a.data.dateSpotted).getTime() - new Date(b.data.dateSpotted).getTime(),
+  (a, b) => new Date(b.data.dateSpotted).getTime() - new Date(a.data.dateSpotted).getTime(),
 );
 
 const byDate = new Map<string, typeof sightings>();
@@ -19,7 +19,7 @@ for (const s of sightings) {
   if (!byDate.has(d)) byDate.set(d, []);
   byDate.get(d)!.push(s);
 }
-const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? -1 : 1));
+const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1));
 ---
 
 <Layout title="protokoll — myco.log" locale={locale}>

@@ -3,7 +3,7 @@ import type { Locale } from '../i18n';
 import type { CollectionEntry } from 'astro:content';
 import { Image } from 'astro:assets';
 import { l10n } from '../i18n/helpers';
-import { formatDate } from '../i18n';
+import { formatDate, getTranslations } from '../i18n';
 
 interface Props {
   sighting: CollectionEntry<'sightings'>;
@@ -13,11 +13,13 @@ interface Props {
 const { sighting, locale } = Astro.props;
 const s = sighting.data;
 const t = l10n;
+const dict = getTranslations(locale);
 ---
 
 <div class="tui-card">
   <div class="tui-card__head">
-    <span class="tui-card__title">┌─ {t(s.commonName, locale)}</span>
+    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title">┌─ {t(s.commonName, locale)}</a>
+    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__more">{'>'}{dict.card.more}</a>
   </div>
 
   <div class="tui-card__carousel" data-carousel={s.images && s.images.length > 1 ? '' : undefined}>
@@ -121,11 +123,35 @@ const t = l10n;
   .tui-card__head {
     padding: 0.5rem 0.75rem 0;
     font-size: 0.75rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   .tui-card__title {
     color: var(--fg-bright);
     font-weight: 700;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tui-card__title:hover {
+    color: var(--accent);
+  }
+
+  .tui-card__more {
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.6875rem;
+    flex-shrink: 0;
+    transition: color 0.1s;
+  }
+
+  .tui-card__more:hover {
+    color: var(--accent);
   }
 
   .tui-card__carousel {

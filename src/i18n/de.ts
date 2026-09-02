@@ -37,6 +37,7 @@ export default {
   },
   card: {
     features: 'Bestimmungsmerkmale',
+    more: 'mehr Details',
   },
   log: {
     title: 'Fundprotokoll',

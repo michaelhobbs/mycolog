@@ -37,6 +37,7 @@ export default {
   },
   card: {
     features: 'Key Features',
+    more: 'more details',
   },
   log: {
     title: 'Field Log',

@@ -275,11 +275,15 @@ const sightingsJSON = JSON.stringify(clientSightings);
   // happen to overlap decluster once their on-screen distance exceeds the radius.
   function addSightings(map: maplibregl.Map, sightings: any[]) {
     if (map.getSource('sightings') || !sightings.length) return;
+    const locale = document.getElementById('map')?.dataset.locale ?? 'en';
+    const linkLabel = locale === 'de' ? 'Im Protokoll ansehen →' : 'See in log →';
 
     const features = sightings.map((s, i) => ({
       type: 'Feature' as const,
       id: i,
       properties: {
+        id: s.id ?? '',
+        dateSpotted: s.dateSpotted ?? '',
         name: s.name ?? s.species ?? '',
         species: s.species ?? '',
         imageUrl: s.imageUrl ?? '',
@@ -439,13 +443,15 @@ const sightingsJSON = JSON.stringify(clientSightings);
     function popupNode(p: any): HTMLElement {
       const root = document.createElement('div');
       root.className = 'tpopup';
+      const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`;
       const img = p.imageUrl
-        ? `<div class="tpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
+        ? `<a class="tpopup__img" href="${to}"><img src="${p.imageUrl}" alt="" /></a>`
         : '';
       root.innerHTML =
         `${img}<div class="tpopup__body">` +
-        `<div class="tpopup__species">${escapeHtml(p.species ?? '')}</div>` +
-        `<div class="tpopup__name">${escapeHtml(p.name ?? '')}</div>` +
+        `<a class="tpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
+        `<a class="tpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
+        `<a class="tpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>` +
         `</div>`;
       return root;
     }
@@ -458,13 +464,15 @@ const sightingsJSON = JSON.stringify(clientSightings);
 
       const slide = (i: number) => {
         const p = leaves[i].properties;
+        const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`;
         const img = p.imageUrl
-          ? `<div class="cpopup__img"><img src="${p.imageUrl}" alt="" /></div>`
+          ? `<a class="cpopup__img" href="${to}"><img src="${p.imageUrl}" alt="" /></a>`
           : '';
         body.innerHTML =
           `${img}<div class="cpopup__body">` +
-          `<div class="cpopup__species">${escapeHtml(p.species ?? '')}</div>` +
-          `<div class="cpopup__name">${escapeHtml(p.name ?? '')}</div>` +
+          `<a class="cpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
+          `<a class="cpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
+          `<a class="cpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>` +
           `</div>`;
         idx.textContent = `${i + 1} / ${count}`;
       };
@@ -662,8 +670,13 @@ const sightingsJSON = JSON.stringify(clientSightings);
   }
 
   :global(.tpopup__img) {
+    display: block;
     border-bottom: 1px solid var(--border-char);
     background: var(--bg-highlight);
+  }
+
+  :global(.tpopup__img:hover img) {
+    filter: saturate(0.7) brightness(0.9);
   }
 
   :global(.tpopup__img img) {
@@ -679,14 +692,43 @@ const sightingsJSON = JSON.stringify(clientSightings);
   }
 
   :global(.tpopup__species) {
+    display: block;
     font-size: 0.625rem;
     color: var(--accent-dim);
+    text-decoration: none;
+  }
+
+  :global(.tpopup__species:hover) {
+    color: var(--accent);
+    text-decoration: underline;
   }
 
   :global(.tpopup__name) {
+    display: block;
     font-size: 0.8125rem;
     color: var(--fg-bright);
     font-weight: 700;
+    text-decoration: none;
+  }
+
+  :global(.tpopup__name:hover) {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  :global(.tpopup__link),
+  :global(.cpopup__link) {
+    display: inline-block;
+    margin-top: 0.375rem;
+    color: var(--fg-muted);
+    font-size: 0.6875rem;
+    text-decoration: none;
+  }
+
+  :global(.tpopup__link:hover),
+  :global(.cpopup__link:hover) {
+    color: var(--fg-dim);
+    text-decoration: underline;
   }
 
   /* ─── cluster carousel popup ───────────────────── */
@@ -700,6 +742,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
   }
 
   :global(.cpopup__img) {
+    display: block;
     border-bottom: 1px solid var(--border-char);
     background: var(--bg-highlight);
   }
@@ -712,19 +755,37 @@ const sightingsJSON = JSON.stringify(clientSightings);
     filter: saturate(0.5) brightness(0.8);
   }
 
+  :global(.cpopup__img:hover img) {
+    filter: saturate(0.7) brightness(0.9);
+  }
+
   :global(.cpopup__body) {
     padding: 0.5rem 0.625rem;
   }
 
   :global(.cpopup__species) {
+    display: block;
     font-size: 0.625rem;
     color: var(--accent-dim);
+    text-decoration: none;
+  }
+
+  :global(.cpopup__species:hover) {
+    color: var(--accent);
+    text-decoration: underline;
   }
 
   :global(.cpopup__name) {
+    display: block;
     font-size: 0.8125rem;
     color: var(--fg-bright);
     font-weight: 700;
+    text-decoration: none;
+  }
+
+  :global(.cpopup__name:hover) {
+    color: var(--accent);
+    text-decoration: underline;
   }
 
   :global(.cpopup__nav) {

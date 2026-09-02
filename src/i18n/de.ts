@@ -12,6 +12,8 @@ export default {
     heroDescription:
       'Eine persönliche Sammlung von Pilzfunden in den Bergen und Wäldern rund um Garmisch-Partenkirchen. Jeder Eintrag enthält Artbestimmung, Merkmale, Standortdaten und Fotos.',
     heroCta: 'Auf der Karte ansehen',
+    heroLogCta: 'Funde durchlesen',
+    heroMushroomsCta: 'Alle Pilze durchstöbern',
     recentTitle: 'Letzte Beobachtungen',
     recentSubtitle: 'Die neuesten Funde aus unseren Wäldern',
     viewAll: 'Alle Funde auf der Karte ansehen →',

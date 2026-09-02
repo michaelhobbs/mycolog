@@ -13,6 +13,8 @@ export function getStaticPaths() {
 const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
 const mapUrl = getRelativeLocaleUrl(locale, 'map');
+const logUrl = getRelativeLocaleUrl(locale, 'log');
+const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms');
 
 const recentSightings = (await getCollection('sightings'))
   .sort(
@@ -77,6 +79,14 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
       <a href={mapUrl} class="tui-btn">
         {'>'}
         {t.home.heroCta}
+      </a>
+      <a href={logUrl} class="tui-btn">
+        {'>'}
+        {t.home.heroLogCta}
+      </a>
+      <a href={mushroomsUrl} class="tui-btn">
+        {'>'}
+        {t.home.heroMushroomsCta}
       </a>
     </div>
   </section>
@@ -167,6 +177,8 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
   .hero__actions {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
   }
 
   .tui-btn {
@@ -183,6 +195,16 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
 
   .tui-btn:hover {
     background: var(--accent);
+    color: var(--bg);
+  }
+
+  .tui-btn--dim {
+    border-color: var(--border-char);
+    color: var(--fg-dim);
+  }
+
+  .tui-btn--dim:hover {
+    background: var(--fg-dim);
     color: var(--bg);
   }
 

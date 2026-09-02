@@ -12,6 +12,8 @@ export default {
     heroDescription:
       'A personal collection of mushroom sightings documented in the mountains and forests around Garmisch-Partenkirchen. Each entry includes species identification, key features, location data, and photographs.',
     heroCta: 'View on map',
+    heroLogCta: 'Read the logs',
+    heroMushroomsCta: 'Browse all mushrooms',
     recentTitle: 'Recent Sightings',
     recentSubtitle: 'The latest finds from our forests',
     viewAll: 'View all sightings on the map →',

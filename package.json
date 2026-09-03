@@ -9,6 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "update-backlog": "node scripts/import-backlog-public.mjs",
     "astro": "astro"
   },
   "dependencies": {

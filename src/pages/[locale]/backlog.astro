@@ -28,13 +28,21 @@ const backlog = (await getCollection('backlog')).sort((a, b) =>
       {backlog.map((entry) => (
         <article class="backlog-item">
           <header class="backlog-item__head">
-            <a class="backlog-item__date" href={`/${locale}/backlog/${entry.id}`}>
-              {formatDate(entry.data.dateSpotted, locale)}
-            </a>
+            {import.meta.env.PROD ? (
+              <span class="backlog-item__date">
+                {formatDate(entry.data.dateSpotted, locale)}
+              </span>
+            ) : (
+              <a class="backlog-item__date" href={`/${locale}/backlog/${entry.id}`}>
+                {formatDate(entry.data.dateSpotted, locale)}
+              </a>
+            )}
             <span class="backlog-item__meta">{entry.data.images.length} {t.backlog.photos}</span>
-            <a class="backlog-item__edit" href={`/${locale}/backlog/${entry.id}`}>
-              {'>'} {t.backlog.identify}
-            </a>
+            {!import.meta.env.PROD && (
+              <a class="backlog-item__edit" href={`/${locale}/backlog/${entry.id}`}>
+                {'>'} {t.backlog.identify}
+              </a>
+            )}
           </header>
 
           <div class="backlog-item__images">

@@ -76,6 +76,15 @@ const entryJSON = JSON.stringify({
       <p class="dev-notice">{t.backlog.devOnly}</p>
 
       <fieldset>
+        <legend>{t.backlog.date}</legend>
+        <div class="field">
+          <label for="date-spotted">{t.backlog.dateHelp}</label>
+          <input id="date-spotted" name="dateSpotted" type="date" value={entry.data.dateSpotted} />
+          <input type="hidden" id="backlog-id" name="backlogId" value={entry.id} />
+        </div>
+      </fieldset>
+
+      <fieldset>
         <legend>{t.backlog.species}</legend>
         <select id="species-select" name="species" class="identify__select">
           <option value="">—</option>
@@ -140,6 +149,18 @@ const entryJSON = JSON.stringify({
         </div>
       </fieldset>
 
+      <fieldset>
+        <legend>{t.backlog.notes}</legend>
+        <div class="field">
+          <label for="notes-en">{t.backlog.notesEn}</label>
+          <textarea id="notes-en" name="notesEn" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label for="notes-de">{t.backlog.notesDe}</label>
+          <textarea id="notes-de" name="notesDe" rows="3"></textarea>
+        </div>
+      </fieldset>
+
       <div class="identify__actions">
         <button type="submit" id="submit-btn" class="identify__submit">
           {t.backlog.submit}
@@ -178,13 +199,19 @@ const entryJSON = JSON.stringify({
         status.dataset.state = 'error';
         return;
       }
-      let location;
-      try {
-        location = JSON.parse(locationInput.value || 'null');
-      } catch {
-        location = null;
+      const location = locationInput.value;
+      if (!location) {
+        status.textContent = t.missingLocation;
+        status.dataset.state = 'error';
+        return;
       }
-      if (!location || !location.lat || !location.lng) {
+      let locationParsed;
+      try {
+        locationParsed = JSON.parse(location || 'null');
+      } catch {
+        locationParsed = null;
+      }
+      if (!locationParsed || !locationParsed.lat || !locationParsed.lng) {
         status.textContent = t.missingLocation;
         status.dataset.state = 'error';
         return;
@@ -207,12 +234,23 @@ const entryJSON = JSON.stringify({
           }
         : { species };
 
+      const notesEn = document.getElementById('notes-en').value;
+      const notesDe = document.getElementById('notes-de').value;
+
+      const dateSpotted = document.getElementById('date-spotted').value;
+      if (!dateSpotted) {
+        status.textContent = t.missingDate;
+        status.dataset.state = 'error';
+        return;
+      }
+
       const payload = {
-        backlogId: entry.id,
-        dateSpotted: entry.dateSpotted,
-        location,
+        backlogId: document.getElementById('backlog-id').value,
+        dateSpotted,
+        location: locationParsed,
         ...(locationName ? { locationName } : {}),
         ...speciesPayload,
+        ...((notesEn.trim() || notesDe.trim()) ? { notes: { en: notesEn, de: notesDe } } : {}),
       };
 
       submitBtn.disabled = true;
@@ -231,10 +269,7 @@ const entryJSON = JSON.stringify({
         }
         status.textContent = t.success;
         status.dataset.state = 'ok';
-        submitBtn.textContent = '✓ Done';
-        setTimeout(() => {
-          window.location.href = `/${locale}/backlog`;
-        }, 800);
+        window.location.href = `/${locale}/backlog`;
       } catch (err) {
         console.error('[identify] submit failed:', err);
         status.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '');
@@ -328,13 +363,18 @@ const entryJSON = JSON.stringify({
     margin-bottom: 0.25rem;
   }
 
-  .field input {
+  .field input,
+  .field textarea {
     width: 100%;
     background: var(--bg-highlight);
     color: var(--fg);
     border: 1px solid var(--border-char);
     padding: 0.5rem;
     font-family: var(--font-mono);
+  }
+
+  .field textarea {
+    resize: vertical;
   }
 
   .field-hint {

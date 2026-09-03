@@ -44,7 +44,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.post('/api/sightings', async (req, res) => {
-  const { dateSpotted, location, species, newSpecies, backlogId, locationName } = req.body || {};
+  const { dateSpotted, location, species, newSpecies, backlogId, locationName, notes } = req.body || {};
 
   try {
     // 1. Validate core fields
@@ -123,6 +123,13 @@ app.post('/api/sightings', async (req, res) => {
       location: sightingLocation,
       images: imagePaths,
     };
+
+    const notesEn = notes?.en && String(notes.en).trim();
+    const notesDe = notes?.de && String(notes.de).trim();
+    if (notesEn || notesDe) {
+      sightingDoc.notes = { en: notesEn || '', de: notesDe || '' };
+    }
+
     await fs.writeFile(
       path.join(sightingDir, 'index.json'),
       JSON.stringify(sightingDoc, null, 2) + '\n',

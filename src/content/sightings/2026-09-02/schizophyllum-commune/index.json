@@ -1,0 +1,23 @@
+{
+  "species": "schizophyllum-commune",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.48277,
+    "lng": 11.14882,
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
+  },
+  "images": [
+    "./images/schizophyllum-commune1.jpg",
+    "./images/schizophyllum-commune2.jpg",
+    "./images/schizophyllum-commune3.jpg",
+    "./images/schizophyllum-commune4.jpg",
+    "./images/schizophyllum-commune5.jpg"
+  ],
+  "notes": {
+    "en": "dry",
+    "de": "trocken"
+  }
+}

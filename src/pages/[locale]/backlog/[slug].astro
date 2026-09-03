@@ -1,0 +1,397 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import { getTranslations, locales } from '../../../i18n';
+import { l10n } from '../../../i18n/helpers';
+import type { Locale, Translations } from '../../../i18n';
+import LocationPicker from '../../../components/LocationPicker.astro';
+
+export async function getStaticPaths() {
+  // Identification pages are a dev workflow — never generate them in a
+  // production build (they need the local Express API and editable content).
+  if (import.meta.env.PROD) return [];
+
+  const backlog = (await getCollection('backlog')).sort((a, b) =>
+    a.data.dateSpotted < b.data.dateSpotted ? -1 : 1,
+  );
+  return locales.flatMap((locale) =>
+    backlog.map((entry) => ({ params: { locale, slug: entry.id } })),
+  );
+}
+
+const { locale, slug } = Astro.params as { locale: Locale; slug: string };
+const t: Translations = getTranslations(locale);
+
+const entry = (await getCollection('backlog')).find((e) => e.id === slug);
+if (!entry) {
+  return Astro.redirect(`/${locale}/backlog`);
+}
+
+const species = await getCollection('species');
+const speciesJSON = JSON.stringify(
+  species.map((s) => ({
+    slug: s.id,
+    commonName: l10n(s.data.commonName, locale),
+    scientificName: s.data.scientificName,
+  })),
+);
+
+// Distinct location names already used across sightings, so the form can offer
+// them as a picklist (the user can still type a brand-new one).
+const knownLocations = [
+  ...new Set(
+    (await getCollection('sightings'))
+      .map((s) => s.data.location?.name)
+      .filter(Boolean)
+      .map((name) => (typeof name === 'string' ? name : (name as { en?: string }).en ?? ''))
+      .filter(Boolean),
+  ),
+].sort((a, b) => a.localeCompare(b));
+
+const entryJSON = JSON.stringify({
+  id: entry.id,
+  dateSpotted: entry.data.dateSpotted,
+  images: await Promise.all(
+    entry.data.images.map(async (img) => {
+      const resolved = await getImage({ src: img, width: 640 });
+      return resolved?.src ?? '';
+    }),
+  ),
+});
+---
+
+<Layout title={`${t.backlog.addTitle} — myco.log`} locale={locale}>
+  <section class="add-page">
+    <div class="add-nav">
+      <a class="add-nav__back" href={`/${locale}/backlog`}>{'<'} {t.backlog.backToList}</a>
+    </div>
+
+    <div class="add-head">
+      <h1 class="add-head__title">{t.backlog.addTitle}</h1>
+      <span class="add-head__meta">{t.backlog.item} #{entry.id} · {t.backlog.date} {entry.data.dateSpotted}</span>
+    </div>
+
+    <form id="identify-form" class="identify">
+      <p class="dev-notice">{t.backlog.devOnly}</p>
+
+      <fieldset>
+        <legend>{t.backlog.species}</legend>
+        <select id="species-select" name="species" class="identify__select">
+          <option value="">—</option>
+          {species.map((s) => (
+            <option value={s.id}>
+              {l10n(s.data.commonName, locale)}{s.data.scientificName ? ` (${s.data.scientificName})` : ''}
+            </option>
+          ))}
+          <option value="__new__">{t.backlog.newSpecies}…</option>
+        </select>
+
+        <div id="new-species" class="new-species" hidden>
+          <div class="field">
+            <label for="ns-scientific">{t.backlog.newSpeciesScientific}</label>
+            <input id="ns-scientific" name="newScientific" type="text" />
+          </div>
+          <div class="field">
+            <label for="ns-common-en">{t.backlog.newSpeciesCommonEn}</label>
+            <input id="ns-common-en" name="newCommonEn" type="text" />
+          </div>
+          <div class="field">
+            <label for="ns-common-de">{t.backlog.newSpeciesCommonDe}</label>
+            <input id="ns-common-de" name="newCommonDe" type="text" />
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>{t.backlog.location}</legend>
+
+        <div class="loc-name">
+          <label class="loc-name__label" for="loc-name-select">{t.backlog.locationName}</label>
+          <select id="loc-name-select" name="locationName" class="identify__select">
+            <option value="">—</option>
+            {knownLocations.map((name) => (
+              <option value={name}>{name}</option>
+            ))}
+            <option value="__new__">{t.backlog.newLocation}…</option>
+          </select>
+          <p class="field-hint">{t.backlog.locationNameHelp}</p>
+
+          <div id="new-location" class="new-species" hidden>
+            <div class="field">
+              <label for="loc-name-new">{t.backlog.newLocationName}</label>
+              <input id="loc-name-new" name="newLocationName" type="text" />
+            </div>
+          </div>
+        </div>
+
+        <p class="field-hint">{t.backlog.pickOnMap}</p>
+        <LocationPicker locale={locale} />
+      </fieldset>
+
+      <fieldset>
+        <legend>{entry.data.images.length} {t.backlog.photos}</legend>
+        <div class="gallery">
+          {entry.data.images.map((img, i) => (
+            <figure class="gallery__fig">
+              <Image src={img} alt={`#{entry.id} — ${i + 1}`} widths={[400, 800]} sizes="(min-width: 640px) 400px, 100vw" />
+            </figure>
+          ))}
+        </div>
+      </fieldset>
+
+      <div class="identify__actions">
+        <button type="submit" id="submit-btn" class="identify__submit">
+          {t.backlog.submit}
+        </button>
+        <span id="form-status" class="identify__status" role="status"></span>
+      </div>
+    </form>
+  </section>
+
+  <script is:inline define:vars={{ backlogT: t.backlog, speciesData: speciesJSON, entry: entryJSON, locale }}>
+    const t = backlogT;
+
+    const form = document.getElementById('identify-form');
+    const speciesSelect = document.getElementById('species-select');
+    const newSpecies = document.getElementById('new-species');
+    const locationInput = document.getElementById('picker-location');
+    const locationNameSelect = document.getElementById('loc-name-select');
+    const newLocation = document.getElementById('new-location');
+    const submitBtn = document.getElementById('submit-btn');
+    const status = document.getElementById('form-status');
+
+    speciesSelect.addEventListener('change', () => {
+      newSpecies.hidden = speciesSelect.value !== '__new__';
+    });
+
+    locationNameSelect.addEventListener('change', () => {
+      newLocation.hidden = locationNameSelect.value !== '__new__';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const species = speciesSelect.value;
+      if (!species) {
+        status.textContent = t.missingSpecies;
+        status.dataset.state = 'error';
+        return;
+      }
+      let location;
+      try {
+        location = JSON.parse(locationInput.value || 'null');
+      } catch {
+        location = null;
+      }
+      if (!location || !location.lat || !location.lng) {
+        status.textContent = t.missingLocation;
+        status.dataset.state = 'error';
+        return;
+      }
+
+      let locationName = locationNameSelect.value;
+      if (locationName === '__new__') {
+        locationName = document.getElementById('loc-name-new').value.trim();
+      }
+
+      const speciesPayload = (species === '__new__')
+        ? {
+            newSpecies: {
+              scientificName: document.getElementById('ns-scientific').value,
+              commonName: {
+                en: document.getElementById('ns-common-en').value,
+                de: document.getElementById('ns-common-de').value,
+              },
+            },
+          }
+        : { species };
+
+      const payload = {
+        backlogId: entry.id,
+        dateSpotted: entry.dateSpotted,
+        location,
+        ...(locationName ? { locationName } : {}),
+        ...speciesPayload,
+      };
+
+      submitBtn.disabled = true;
+      status.textContent = t.submitting;
+      status.dataset.state = 'pending';
+
+      try {
+        const res = await fetch('/myco/api/sightings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.error || 'HTTP ' + res.status);
+        }
+        status.textContent = t.success;
+        status.dataset.state = 'ok';
+        submitBtn.textContent = '✓ Done';
+        setTimeout(() => {
+          window.location.href = `/${locale}/backlog`;
+        }, 800);
+      } catch (err) {
+        console.error('[identify] submit failed:', err);
+        status.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '');
+        status.dataset.state = 'error';
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+  .add-page { padding-bottom: 3rem; }
+
+  .add-nav { margin-bottom: 1rem; }
+
+  .add-nav__back {
+    color: var(--accent);
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .add-nav__back:hover { color: var(--fg-bright); }
+
+  .add-head { margin-bottom: 1.25rem; }
+
+  .add-head__title {
+    font-size: 1.25rem;
+    color: var(--fg-bright);
+    margin: 0 0 0.25rem;
+  }
+
+  .add-head__meta {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .dev-notice {
+    border: 1px dashed var(--yellow);
+    color: var(--yellow);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .identify {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  fieldset {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 1rem;
+  }
+
+  legend {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    padding: 0 0.375rem;
+  }
+
+  .identify__select {
+    width: 100%;
+    background: var(--bg-highlight);
+    color: var(--fg);
+    border: 1px solid var(--border-char);
+    padding: 0.5rem;
+    font-family: var(--font-mono);
+  }
+
+  .loc-name {
+    margin-bottom: 0.75rem;
+  }
+
+  .loc-name__label {
+    display: block;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .field { margin-bottom: 0.75rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .field input {
+    width: 100%;
+    background: var(--bg-highlight);
+    color: var(--fg);
+    border: 1px solid var(--border-char);
+    padding: 0.5rem;
+    font-family: var(--font-mono);
+  }
+
+  .field-hint {
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .new-species {
+    margin-top: 0.75rem;
+    border-top: 1px dashed var(--border-char);
+    padding-top: 0.75rem;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .gallery__fig {
+    margin: 0;
+    border: 1px solid var(--bg-highlight);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bg-highlight);
+  }
+
+  .gallery__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .identify__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .identify__submit {
+    background: var(--bg-surface);
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 0.625rem 1.25rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+  }
+
+  .identify__submit:hover { background: var(--accent); color: var(--bg); }
+  .identify__submit:disabled { opacity: 0.5; cursor: wait; }
+
+  .identify__status { font-size: 0.8125rem; }
+  .identify__status[data-state="error"] { color: #ff7a7a; }
+  .identify__status[data-state="ok"] { color: var(--accent); }
+  .identify__status[data-state="pending"] { color: var(--fg-dim); }
+</style>

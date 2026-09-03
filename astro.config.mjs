@@ -10,4 +10,16 @@ export default defineConfig({
       prefixDefaultLocale: true,
     },
   },
+  vite: {
+    server: {
+      proxy: {
+        // Dev-only identify API (scripts/api.mjs). Not active in the static build.
+        '/myco/api': {
+          target: 'http://localhost:4322',
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/myco\/api/, '/api'),
+        },
+      },
+    },
+  },
 });

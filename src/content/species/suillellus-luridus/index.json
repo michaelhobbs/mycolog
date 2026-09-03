@@ -1,0 +1,12 @@
+{
+  "scientificName": "Suillellus luridus",
+  "commonName": { "en": "Lurid bolete", "de": "Netzstieliger Hexen-Röhrling" },
+  "determiningFeatures": [
+    { "en": "Olive-brown cap", "de": "Ockerbraune bis dunkelolive Hut" },
+    { "en": "Small orange pores", "de": "Kleine karminrote Poren" },
+    { "en": "Stains blue when bruised or cut", "de": "An Druckstellen dunkelblau" },
+    { "en": "Red network on stem", "de": "Dunkles, aderiges Netz am Stiel" }
+  ],
+  "habitat": { "en": "Broad-leaf forest", "de": "Laubwald" },
+  "edibility": { "en": "Edible but not recommended", "de": "Essbar aber nicht empfohlen" }
+}

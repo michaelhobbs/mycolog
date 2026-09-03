@@ -1,25 +1,10 @@
 {
-  "id": "caloboletus-calopus",
-  "species": "Caloboletus calopus",
-  "commonName": { "en": "Bitter bolete", "de": "Schönfuß-Röhrling" },
+  "species": "caloboletus-calopus",
   "dateSpotted": "2026-08-18",
   "location": {
     "lat": 47.484829,
     "lng": 11.154243,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
-  "images": ["./images/IMG_4059.jpg", "./images/IMG_4062.jpg", "./images/IMG_4110.jpg"],
-  "determiningFeatures": [
-    { "en": "Beige to olive cap", "de": "Hut: Lehmbraun bis milchkaffefarben" },
-    { "en": "Yellow pores", "de": "Gelbe Poren" },
-    { "en": "Yellow to pink-red stipe with straw-coloured network", "de": "Stiel mit hell- bis bräunlichgelben Netz bedeckt" },
-    { "en": "When mature: ochre-brown stipe", "de": "Bei Reife: ocherbrauner Stiel" },
-    { "en": "Stains blue when bruised or cut", "de": "An Druckstellen dunkelblau" }
-  ],
-  "notes": {
-    "en": "Extremely bitter taste; even small pieces can spoil an entire dish",
-    "de": "Extrem bitterer Geschmack; schon kleine Stücke verderben ein ganzes Gericht"
-  },
-  "habitat": { "en": "Coniferous and deciduous woodland esp. beech / oak", "de": "Nadel- und Laubwald" },
-  "edibility": { "en": "Poisonous", "de": "Giftig" }
+  "images": ["./images/IMG_4059.jpg", "./images/IMG_4062.jpg", "./images/IMG_4110.jpg"]
 }

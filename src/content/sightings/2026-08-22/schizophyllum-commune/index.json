@@ -1,25 +1,10 @@
 {
-  "id": "schizophyllum-commune",
-  "species": "Schizophyllum commune",
-  "commonName": { "en": "Common Split Gill", "de": "Gemeiner Spaltblättling" },
+  "species": "schizophyllum-commune",
   "dateSpotted": "2026-08-22",
   "location": {
     "lat": 47.483453,
     "lng": 11.149244,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
-  "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"],
-  "determiningFeatures": [
-    { "en": "Radiating \"split\" gills: each fertile fold is split lengthwise", "de": "Strahlig angeordnete gespaltene Blättchen; jedes fertile Blättchen der Länge nach gespalten" },
-    { "en": "Small, white to grey, densely hairy/fuzzy caps", "de": "Kleine, weißgraue, dicht filzig behaarte Hüte" },
-    { "en": "No stem", "de": "Ohne Stiel" },
-    { "en": "Fan- or semicircular shape", "de": "Fächer- oder halbkreisförmig" },
-    { "en": "Numerous fruit bodies forming a cluster along the branch", "de": "Zahlreiche Fruchtkörper in Gruppen am Ast" }
-  ],
-  "notes": {
-    "en": "When dry, the split edges of the folds curl inward to protect the spore-producing surface; when wet they open again.",
-    "de": "Trocken krümmen sich die Spaltkanten der Blättchen ein, um die Sporenoberfläche zu schützen; bei Feuchtigkeit öffnen sie sich wieder."
-  },
-  "habitat": { "en": "Dead/dying hardwood", "de": "Totes oder sterbendes Laubholz" },
-  "edibility": { "en": "Edible when young; small and tough", "de": "Jung essbar; klein und zäh" }
+  "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"]
 }

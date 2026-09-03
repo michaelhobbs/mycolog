@@ -1,0 +1,144 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { getTranslations, formatDate, locales } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }));
+}
+
+const { locale } = Astro.params as { locale: Locale };
+const t = getTranslations(locale);
+
+const backlog = (await getCollection('backlog')).sort((a, b) =>
+  a.data.dateSpotted < b.data.dateSpotted ? -1 : 1,
+);
+---
+
+<Layout title={t.meta.backlogTitle} locale={locale}>
+  <section class="backlog-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.backlog.title}</span>
+      <span class="page-header__sub">{t.backlog.subtitle} · {backlog.length} {t.backlog.items}</span>
+    </div>
+
+    <div class="backlog-list">
+      {backlog.map((entry) => (
+        <article class="backlog-item">
+          <header class="backlog-item__head">
+            <a class="backlog-item__date" href={`/${locale}/backlog/${entry.id}`}>
+              {formatDate(entry.data.dateSpotted, locale)}
+            </a>
+            <span class="backlog-item__meta">{entry.data.images.length} {t.backlog.photos}</span>
+            <a class="backlog-item__edit" href={`/${locale}/backlog/${entry.id}`}>
+              {'>'} {t.backlog.identify}
+            </a>
+          </header>
+
+          <div class="backlog-item__images">
+            {entry.data.images.map((img, i) => (
+              <figure class="backlog-item__fig">
+                <Image
+                  src={img}
+                  alt={`${t.backlog.item} ${entry.id} — ${i + 1}`}
+                  loading="lazy"
+                  widths={[400, 800]}
+                  sizes="(min-width: 640px) 400px, 100vw"
+                />
+              </figure>
+            ))}
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .backlog-page { padding-bottom: 2rem; }
+
+  .page-header { margin-bottom: 1.25rem; }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .backlog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .backlog-item {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+  }
+
+  .backlog-item__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-char);
+    margin-bottom: 0.75rem;
+  }
+
+  .backlog-item__date {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .backlog-item__date:hover {
+    color: var(--fg-bright);
+  }
+
+  .backlog-item__meta {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+
+  .backlog-item__edit {
+    margin-left: auto;
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .backlog-item__edit:hover {
+    color: var(--accent);
+  }
+
+  .backlog-item__images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .backlog-item__fig {
+    margin: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+    aspect-ratio: 4 / 3;
+  }
+
+  .backlog-item__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

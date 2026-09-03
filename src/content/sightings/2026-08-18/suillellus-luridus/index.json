@@ -1,7 +1,5 @@
 {
-  "id": "suillellus-luridus",
-  "species": "Suillellus luridus",
-  "commonName": { "en": "Lurid bolete", "de": "Netzstieliger Hexen-Röhrling" },
+  "species": "suillellus-luridus",
   "dateSpotted": "2026-08-18",
   "location": {
     "lat": 47.484825,
@@ -9,16 +7,8 @@
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
   "images": ["./images/IMG_4072.jpg", "./images/IMG_4075.jpg", "./images/IMG_4109.jpg"],
-  "determiningFeatures": [
-    { "en": "Olive-brown cap", "de": "Ockerbraune bis dunkelolive Hut" },
-    { "en": "Small orange pores", "de": "Kleine karminrote Poren" },
-    { "en": "Stains blue when bruised or cut", "de": "An Druckstellen dunkelblau" },
-    { "en": "Red network on stem", "de": "Dunkles, aderiges Netz am Stiel" }
-  ],
   "notes": {
     "en": "Found in floodplain forest",
     "de": "Gefunden in Auwald"
-  },
-  "habitat": { "en": "Broad-leaf forest", "de": "Laubwald" },
-  "edibility": { "en": "Edible but not recommended", "de": "Essbar aber nicht empfohlen" }
+  }
 }

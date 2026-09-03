@@ -1,23 +1,10 @@
 {
-  "id": "lycoperdon-perlatum",
-  "species": "Lycoperdon perlatum",
-  "commonName": { "en": "Common Puffball", "de": "Gemeiner Stäubling" },
+  "species": "lycoperdon-perlatum",
   "dateSpotted": "2026-08-30",
   "location": {
     "lat": 47.472858,
     "lng": 11.042881,
     "name": { "en": "Rappenweg (Grainau)", "de": "Rappenweg (Grainau)" }
   },
-  "images": ["./images/IMG_4431.jpg", "./images/IMG_4432.jpg", "./images/IMG_4476.jpg", "./images/IMG_4480.jpg"],
-  "determiningFeatures": [
-    { "en": "Round, pear-like fruit body covered in small pointed warts/spines", "de": "Runder, birnenförmiger Fruchtkörper mit kleinen spitzen Warzen/Stacheln" },
-    { "en": "White when young, turning tan/brownish with age", "de": "Jung weiß, mit zunehmendem Alter beige bis bräunlich" },
-    { "en": "Small opening (pore) at the top through which spores are released as a puff of dust", "de": "Kleine Öffnung (Pore) an der Spitze, durch die die Sporen als Staubwolke ausgestoßen werden" }
-  ],
-  "notes": {
-    "en": "The warts form a characteristic mosaic pattern on the cap. When ripe, tapping the puffball releases a cloud of olive-brown spores through the apical pore.",
-    "de": "Die Warzen bilden ein charakteristisches Mosaikmuster auf dem Hut. Bei Reife entlässt ein Klopfen auf den Stäubling eine Wolke olivbrauner Sporen durch die Scheitelpore."
-  },
-  "habitat": { "en": "Forest clearings and trails, on soil among leaf litter and moss", "de": "Waldlichtungen und Wegränder, auf dem Boden zwischen Laub und Moos" },
-  "edibility": { "en": "Edible when young and still pure white inside (must be firm throughout)", "de": "Jung essbar, solange das Fleisch innen reinweiß und fest ist" }
+  "images": ["./images/IMG_4431.jpg", "./images/IMG_4432.jpg", "./images/IMG_4476.jpg", "./images/IMG_4480.jpg"]
 }

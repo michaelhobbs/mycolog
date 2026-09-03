@@ -7,13 +7,23 @@ const localizedString = z.object({
   de: z.string(),
 });
 
+const species = defineCollection({
+  loader: glob({ base: './src/content/species', pattern: '**/index.json' }),
+  schema: z.object({
+    scientificName: z.string(),
+    commonName: localizedString,
+    determiningFeatures: z.array(localizedString),
+    notes: localizedString.optional(),
+    habitat: localizedString.optional(),
+    edibility: localizedString.optional(),
+  }),
+});
+
 const sightings = defineCollection({
   loader: glob({ base: './src/content/sightings', pattern: '**/index.json' }),
   schema: ({ image }) =>
     z.object({
-      id: z.string(),
       species: z.string(),
-      commonName: localizedString,
       dateSpotted: z.string(),
       location: z.object({
         lat: z.number(),
@@ -21,11 +31,17 @@ const sightings = defineCollection({
         name: localizedString.optional(),
       }),
       images: z.array(image()),
-      determiningFeatures: z.array(localizedString),
       notes: localizedString.optional(),
-      habitat: localizedString.optional(),
-      edibility: localizedString.optional(),
     }),
 });
 
-export const collections = { sightings };
+const backlog = defineCollection({
+  loader: glob({ base: './src/content/backlog', pattern: '**/index.json' }),
+  schema: ({ image }) =>
+    z.object({
+      dateSpotted: z.string(),
+      images: z.array(image()),
+    }),
+});
+
+export const collections = { species, sightings, backlog };

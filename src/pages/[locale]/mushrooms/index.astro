@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { enrichSightings } from '../../../lib/sightings';
 import { getTranslations, locales } from '../../../i18n';
 import { l10n } from '../../../i18n/helpers';
 import type { Locale } from '../../../i18n';
@@ -13,23 +14,29 @@ export function getStaticPaths() {
 const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
 
-const sightings = await getCollection('sightings');
+const [sightingEntries, speciesEntries] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+]);
+const sightings = enrichSightings(sightingEntries, speciesEntries);
 
-const bySpecies = new Map<string, typeof sightings>();
+const byId = new Map<string, typeof sightings>();
 for (const s of sightings) {
-  const id = s.data.id;
-  if (!bySpecies.has(id)) bySpecies.set(id, []);
-  bySpecies.get(id)!.push(s);
+  if (!byId.has(s.id)) byId.set(s.id, []);
+  byId.get(s.id)!.push(s);
 }
 
-const species = [...bySpecies.entries()]
-  .map(([id, list]) => ({
-    id,
-    commonName: list[0].data.commonName,
-    scientificName: list[0].data.species,
-    cover: list[0].data.images?.[0],
-    count: list.length,
-  }))
+const species = speciesEntries
+  .map((sp) => {
+    const list = byId.get(sp.id) ?? [];
+    return {
+      id: sp.id,
+      commonName: sp.data.commonName,
+      scientificName: sp.data.scientificName,
+      cover: list[0]?.images?.[0],
+      count: list.length,
+    };
+  })
   .sort((a, b) => a.id.localeCompare(b.id));
 ---
 

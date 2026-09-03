@@ -1,0 +1,16 @@
+{
+  "scientificName": "Rubroboletus satanas",
+  "commonName": { "en": "Satan's Bolete", "de": "Satans-Röhrling" },
+  "determiningFeatures": [
+    { "en": "Pale grey to whitish cap, often with olive tinges", "de": "Blassgrauer bis weißlicher Hut, oft mit olivfarbenen Tönen" },
+    { "en": "Bright red pores and a red, bulbous stem with a red network pattern", "de": "Leuchtend rote Röhrenmündungen und roter, bauchiger Stiel mit rotem Netz" },
+    { "en": "Flesh that turns bluish when cut or bruised", "de": "Fleisch verfärbt sich bei Verletzung oder Anschnitt bläulich" },
+    { "en": "Strong, unpleasant odour in older specimens", "de": "Bei älteren Exemplaren unangenehmer, strenger Geruch" }
+  ],
+  "notes": {
+    "en": "A striking and unmistakable red-pored bolete, and one of the few that is toxic. Its bold colours — grey-white cap, blood-red pores and red stem — stand out clearly on the forest floor.",
+    "de": "Ein auffälliger, unverkennbarer Röhrling mit roten Mündungen und einer der wenigen giftigen unter ihnen. Die kräftigen Farben — grauweißer Hut, blutrote Röhren und roter Stiel — heben ihn deutlich vom Waldboden ab."
+  },
+  "habitat": { "en": "Warm limestone beech forest, under oaks and beeches", "de": "Warmer Kalkbuchenwald, unter Eichen und Buchen" },
+  "edibility": { "en": "Poisonous / toxic — do not eat", "de": "Giftig — nicht verzehren" }
+}

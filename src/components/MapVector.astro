@@ -1,11 +1,11 @@
 ---
 import type { Locale } from '../i18n';
-import type { CollectionEntry } from 'astro:content';
+import type { EnrichedSighting } from '../lib/sightings';
 import { getImage } from 'astro:assets';
 import { l10n } from '../i18n/helpers';
 
 interface Props {
-  sightings: CollectionEntry<'sightings'>[];
+  sightings: EnrichedSighting[];
   locale: Locale;
   center?: [number, number];
 }
@@ -13,19 +13,20 @@ interface Props {
 const { sightings, locale, center = [47.4917, 11.0922] } = Astro.props;
 
 const clientSightings = await Promise.all(
-  sightings.map(async (entry) => {
-    const data = entry.data;
+  sightings.map(async (s) => {
     const resolvedImages = (await Promise.all(
-      (data.images ?? []).map(async (img) => {
+      (s.images ?? []).map(async (img) => {
         const resolved = await getImage({ src: img, width: 320 });
         return resolved?.src ?? '';
       }),
     )).filter(Boolean);
-    const { images: _images, ...rest } = data;
     return {
-      ...rest,
+      id: s.id,
+      dateSpotted: s.dateSpotted,
+      location: s.location,
       imageUrls: resolvedImages,
-      name: l10n(data.commonName, locale) ?? '',
+      name: l10n(s.species.commonName, locale) ?? '',
+      species: s.species.scientificName ?? '',
     };
   }),
 );

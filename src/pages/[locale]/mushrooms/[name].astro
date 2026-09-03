@@ -9,10 +9,9 @@ import type { Locale } from '../../../i18n';
 export function getStaticPaths() {
   return Promise.resolve(
     (async () => {
-      const sightings = await getCollection('sightings');
-      const ids = [...new Set(sightings.map((s) => s.data.id))].sort();
-      return ids.flatMap((name) =>
-        locales.map((locale) => ({ params: { locale, name } })),
+      const species = await getCollection('species');
+      return species.flatMap((sp) =>
+        locales.map((locale) => ({ params: { locale, name: sp.id } })),
       );
     })(),
   );
@@ -21,37 +20,42 @@ export function getStaticPaths() {
 const { locale, name } = Astro.params as { locale: Locale; name: string };
 const t = getTranslations(locale);
 
-const all = await getCollection('sightings');
+const [all, speciesList] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+]);
+const species = speciesList.find((sp) => sp.id === name);
+
 const entries = all
-  .filter((s) => s.data.id === name)
+  .filter((s) => s.data.species === name)
   .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1));
 
-const first = entries[0];
-const s = first?.data;
+const sp = species?.data;
 const allImages = entries.flatMap((e) => e.data.images);
 const notes = entries.map((e) => e.data.notes).find(Boolean);
-const habitat = entries.map((e) => e.data.habitat).find(Boolean);
-const edibility = entries.map((e) => e.data.edibility).find(Boolean);
-const features = entries[0]?.data.determiningFeatures ?? [];
+const sharedNotes = sp?.notes;
+const habitat = sp?.habitat;
+const edibility = sp?.edibility;
+const features = sp?.determiningFeatures ?? [];
 ---
 
-<Layout title={`${s ? l10n(s.commonName, locale) : name} — myco.log`} locale={locale}>
+<Layout title={`${species ? l10n(sp?.commonName, locale) : name} — myco.log`} locale={locale}>
   <section class="species-page">
     <div class="page-header">
-      <span class="page-header__tag">╔══ {s ? l10n(s.commonName, locale) : name}</span>
-      <span class="page-header__sub">{s?.species}</span>
+      <span class="page-header__tag">╔══ {sp ? l10n(sp.commonName, locale) : name}</span>
+      <span class="page-header__sub">{sp?.scientificName}</span>
     </div>
 
     <div class="back">
       <a href={`/${locale}/mushrooms`} class="tui-link">{'<'} {t.mushrooms.backToIndex}</a>
     </div>
 
-    {first && (
+    {species && (
       <>
         <div class="gallery">
           {allImages.map((img, i) => (
             <figure class="gallery__item">
-              <Image src={img} alt={`${l10n(s.commonName, locale)} — ${i + 1}`} loading="lazy" widths={[320, 640]} />
+              <Image src={img} alt={`${l10n(sp.commonName, locale)} — ${i + 1}`} loading="lazy" widths={[320, 640]} />
             </figure>
           ))}
         </div>
@@ -69,6 +73,13 @@ const features = entries[0]?.data.determiningFeatures ?? [];
           </div>
         </div>
 
+        {sharedNotes && (
+          <section class="block">
+            <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
+            <p class="block__notes">{l10n(sharedNotes, locale)}</p>
+          </section>
+        )}
+
         {features.length > 0 && (
           <section class="block">
             <div class="block__hdr">╔═ {t.mushrooms.features}</div>
@@ -77,13 +88,6 @@ const features = entries[0]?.data.determiningFeatures ?? [];
                 <li>▸ {l10n(f, locale)}</li>
               ))}
             </ul>
-          </section>
-        )}
-
-        {notes && (
-          <section class="block">
-            <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
-            <p class="block__notes">{l10n(notes, locale)}</p>
           </section>
         )}
 
@@ -97,7 +101,7 @@ const features = entries[0]?.data.determiningFeatures ?? [];
                 <li class="sighting">
                   {cover && (
                     <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__img">
-                      <Image src={cover} alt={l10n(sd.commonName, locale)} loading="lazy" width={96} />
+                      <Image src={cover} alt={l10n(sp.commonName, locale)} loading="lazy" width={96} />
                     </a>
                   )}
                   <div class="sighting__body">

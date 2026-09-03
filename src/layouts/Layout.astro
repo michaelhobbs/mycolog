@@ -57,6 +57,10 @@ function localizedPath(targetLocale: Locale): string {
             href={`/${locale}/map`}
             class:list={['nav__link', { 'nav__link--active': currentPath.includes('/map') }]}
           >[{t.nav.map}]</a>
+          <a
+            href={`/${locale}/backlog`}
+            class:list={['nav__link', { 'nav__link--active': currentPath.includes('/backlog') }]}
+          >[{t.nav.backlog}]</a>
         </div>
 
         <div class="nav__lang">
@@ -81,6 +85,7 @@ function localizedPath(targetLocale: Locale): string {
         <a href={`/${locale}/log`} class="nav__mobile-link">{'>'} {t.nav.log}</a>
         <a href={`/${locale}/mushrooms`} class="nav__mobile-link">{'>'} {t.nav.mushrooms}</a>
         <a href={`/${locale}/map`} class="nav__mobile-link">{'>'} {t.nav.map}</a>
+        <a href={`/${locale}/backlog`} class="nav__mobile-link">{'>'} {t.nav.backlog}</a>
         <div class="nav__mobile-lang">
           {locales.map((loc) => (
             <a

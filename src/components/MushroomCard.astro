@@ -1,24 +1,24 @@
 ---
 import type { Locale } from '../i18n';
-import type { CollectionEntry } from 'astro:content';
+import type { EnrichedSighting } from '../lib/sightings';
 import { Image } from 'astro:assets';
 import { l10n } from '../i18n/helpers';
 import { formatDate, getTranslations } from '../i18n';
 
 interface Props {
-  sighting: CollectionEntry<'sightings'>;
+  sighting: EnrichedSighting;
   locale: Locale;
 }
 
 const { sighting, locale } = Astro.props;
-const s = sighting.data;
+const s = sighting;
 const t = l10n;
 const dict = getTranslations(locale);
 ---
 
 <div class="tui-card">
   <div class="tui-card__head">
-    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title">┌─ {t(s.commonName, locale)}</a>
+    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title">┌─ {t(s.species.commonName, locale)}</a>
     <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__more">{'>'}{dict.card.more}</a>
   </div>
 
@@ -27,7 +27,7 @@ const dict = getTranslations(locale);
       <div class="tui-card__slide" data-active={i === 0 ? '' : undefined}>
         <Image
           src={img}
-          alt={t(s.commonName, locale)}
+          alt={t(s.species.commonName, locale)}
           loading="lazy"
           widths={[640, 320]}
           sizes="(min-width: 640px) 320px, 100vw"
@@ -64,34 +64,34 @@ const dict = getTranslations(locale);
     <div class="tui-card__row">
       <span class="tui-card__label">species</span>
       <span class="tui-card__sep-dots"></span>
-      <span class="tui-card__val">{s.species}</span>
+      <span class="tui-card__val">{s.species.scientificName}</span>
     </div>
     <div class="tui-card__row">
       <span class="tui-card__label">location</span>
       <span class="tui-card__sep-dots"></span>
       <span class="tui-card__val">{t(s.location.name, locale)}</span>
     </div>
-    {s.habitat && (
+    {s.species.habitat && (
       <div class="tui-card__row">
         <span class="tui-card__label">habitat</span>
         <span class="tui-card__sep-dots"></span>
-        <span class="tui-card__val">{t(s.habitat, locale)}</span>
+        <span class="tui-card__val">{t(s.species.habitat, locale)}</span>
       </div>
     )}
-    {s.edibility && (
+    {s.species.edibility && (
       <div class="tui-card__row">
         <span class="tui-card__label">edibility</span>
         <span class="tui-card__sep-dots"></span>
-        <span class="tui-card__val">{t(s.edibility, locale)}</span>
+        <span class="tui-card__val">{t(s.species.edibility, locale)}</span>
       </div>
     )}
 
     <div class="tui-card__divider"></div>
 
     <div class="tui-card__features">
-      <span class="tui-card__features-hdr">├─ {t(s.determiningFeatures[0], locale) ? 'features:' : ''}</span>
+      <span class="tui-card__features-hdr">├─ {t(s.species.determiningFeatures[0], locale) ? 'features:' : ''}</span>
       <ul>
-        {s.determiningFeatures.map((f) => (
+        {s.species.determiningFeatures.map((f) => (
           <li>│  <span class="tui-card__bullet">▸</span> {t(f, locale)}</li>
         ))}
       </ul>

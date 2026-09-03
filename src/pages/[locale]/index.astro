@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import MushroomCard from '../../components/MushroomCard.astro';
 import { getCollection } from 'astro:content';
+import { enrichSightings } from '../../lib/sightings';
 import { getTranslations, locales } from '../../i18n';
 import type { Locale } from '../../i18n';
 import { getRelativeLocaleUrl } from 'astro:i18n';
@@ -16,10 +17,15 @@ const mapUrl = getRelativeLocaleUrl(locale, 'map');
 const logUrl = getRelativeLocaleUrl(locale, 'log');
 const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms');
 
-const recentSightings = (await getCollection('sightings'))
+const [sightings, species] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+]);
+
+const recentSightings = enrichSightings(sightings, species)
   .sort(
     (a, b) =>
-      new Date(b.data.dateSpotted).getTime() - new Date(a.data.dateSpotted).getTime(),
+      new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime(),
   )
   .slice(0, 6);
 ---

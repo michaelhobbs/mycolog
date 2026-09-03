@@ -1,24 +1,10 @@
 {
-  "id": "ramaria-aurea",
-  "species": "Ramaria aurea",
-  "commonName": { "en": "Golden Coral", "de": "Goldgelbe Koralle" },
+  "species": "ramaria-aurea",
   "dateSpotted": "2026-08-22",
   "location": {
     "lat": 47.484352,
     "lng": 11.153002,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
-  "images": ["./images/IMG_4193.jpg", "./images/IMG_4194.jpg", "./images/IMG_4196.jpg", "./images/IMG_4198.jpg"],
-  "determiningFeatures": [
-    { "en": "Bright golden-yellow to orange coral-shaped fruit body with many upright branches", "de": "Leuchtend goldgelb bis orange gefärbter, korallenförmiger Fruchtkörper mit zahlreichen aufrechten Ästen" },
-    { "en": "Densely branching, like branching stag's horn", "de": "Dicht verzweigt, wie ein Hirschgeweih" },
-    { "en": "Branch tips often darker yellow-orange", "de": "Äste an den Spitzen oft dunkler gelb-orange" },
-    { "en": "Stout, fleshy base connecting the branches", "de": "Kräftige, fleischige Basis, aus der die Äste entspringen" }
-  ],
-  "notes": {
-    "en": "A coral fungus that stands out vividly against the forest floor. It grows in coniferous forest, usually on the ground among needle litter.",
-    "de": "Ein Korallenpilz, der sich leuchtend vom Waldboden abhebt. Wächst im Nadelwald, meist am Boden zwischen Nadelstreu."
-  },
-  "habitat": { "en": "Coniferous forest, on the ground among needle litter", "de": "Nadelwald, am Boden zwischen Nadelstreu" },
-  "edibility": { "en": "Edible when young; similar species can be bitter or toxic — identify with care", "de": "Jung essbar; ähnliche Arten können bitter oder giftig sein — Bestimmung mit Vorsicht" }
+  "images": ["./images/IMG_4193.jpg", "./images/IMG_4194.jpg", "./images/IMG_4196.jpg", "./images/IMG_4198.jpg"]
 }

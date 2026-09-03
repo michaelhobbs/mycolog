@@ -1,0 +1,17 @@
+{
+  "scientificName": "Russula delica",
+  "commonName": { "en": "Milk-white brittlegill", "de": "Weißer Täubling" },
+  "determiningFeatures": [
+    { "en": "Pure white to ivory convex cap that becomes funnel-shaped with age", "de": "Reinweiße bis elfenbeinfarbene, erst gewölbte, später trichterförmig vertiefte Hüte" },
+    { "en": "Firm white flesh that stains ochre-brown, especially towards the base", "de": "Festes weißes Fleisch, zur Stielbasis hin oft ockerbräunlich verfärbt" },
+    { "en": "Decurrent, crowded cream-white gills", "de": "Weit herablaufende, engstehende cremeweiße Lamellen" },
+    { "en": "Short, stout, often buried base", "de": "Kurzer, gedrungener, oft im Boden steckender Stiel" },
+    { "en": "Faint, oily or fishy odour", "de": "Schwacher, öliger bis fischartiger Geruch" }
+  ],
+  "notes": {
+    "en": "One of the largest and most robust brittlegills, often growing partly buried in moss and pine litter, making it easy to overlook until the cap breaks the surface.",
+    "de": "Einer der größten und kräftigsten Täublinge; wächst oft halb im Boden vergraben zwischen Moos und Nadelstreu, sodass er leicht zu übersehen ist, bis der Hut die Oberfläche durchbricht."
+  },
+  "habitat": { "en": "Coniferous and mixed forest, often under pines; in moss and needle litter", "de": "Nadel- und Mischwald, oft unter Kiefern; in Moos und Nadelstreu" },
+  "edibility": { "en": "Edible after thorough cooking", "de": "Nach gründlichem Garen essbar" }
+}

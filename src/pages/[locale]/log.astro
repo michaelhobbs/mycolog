@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { enrichSightings } from '../../lib/sightings';
 import { getTranslations, formatDate, locales } from '../../i18n';
 import { l10n } from '../../i18n/helpers';
 import type { Locale } from '../../i18n';
@@ -13,13 +14,17 @@ export function getStaticPaths() {
 const { locale } = Astro.params as { locale: Locale };
 const t = getTranslations(locale);
 
-const sightings = (await getCollection('sightings')).sort(
-  (a, b) => new Date(b.data.dateSpotted).getTime() - new Date(a.data.dateSpotted).getTime(),
+const [sightingEntries, speciesEntries] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+]);
+const sightings = enrichSightings(sightingEntries, speciesEntries).sort(
+  (a, b) => new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime(),
 );
 
 const byDate = new Map<string, typeof sightings>();
 for (const s of sightings) {
-  const d = s.data.dateSpotted;
+  const d = s.dateSpotted;
   if (!byDate.has(d)) byDate.set(d, []);
   byDate.get(d)!.push(s);
 }
@@ -42,19 +47,18 @@ const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1));
           </header>
 
           <ul class="day__list">
-            {list.map((entry) => {
-              const s = entry.data;
+            {list.map((s) => {
               const cover = s.images?.[0];
               return (
                 <li class="day-item">
                   {cover && (
                     <a href={`/${locale}/log/${date}`} class="day-item__img" aria-hidden="true">
-                      <Image src={cover} alt={l10n(s.commonName, locale)} loading="lazy" width={96} />
+                      <Image src={cover} alt={l10n(s.species.commonName, locale)} loading="lazy" width={96} />
                     </a>
                   )}
                   <div class="day-item__body">
-                    <span class="day-item__species">{s.species}</span>
-                    <a href={`/${locale}/mushrooms/${s.id}`} class="day-item__name">{l10n(s.commonName, locale)}</a>
+                    <span class="day-item__species">{s.species.scientificName}</span>
+                    <a href={`/${locale}/mushrooms/${s.id}`} class="day-item__name">{l10n(s.species.commonName, locale)}</a>
                     <span class="day-item__loc">@{l10n(s.location.name, locale) || t.mushrooms.unknown}</span>
                   </div>
                 </li>

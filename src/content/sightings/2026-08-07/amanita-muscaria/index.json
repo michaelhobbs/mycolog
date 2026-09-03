@@ -1,7 +1,5 @@
 {
-  "id": "amanita-muscaria",
-  "species": "Amanita muscaria",
-  "commonName": { "en": "Fly Agaric", "de": "Fliegenpilz" },
+  "species": "amanita-muscaria",
   "dateSpotted": "2026-08-07",
   "location": {
     "lat": 47.580148,
@@ -9,16 +7,8 @@
     "name": { "en": "Brunnenkopf", "de": "Brunnenkopf" }
   },
   "images": ["./images/amanita-muscaria1.jpg", "./images/amanita-muscaria2.jpg"],
-  "determiningFeatures": [
-    { "en": "Bright red (occ. orange/yellow) cap with white spots", "de": "Leuchtend roten (geleg. orangen/gelben) Hut mit weißen Punkten" },
-    { "en": "White gills and stem", "de": "Weiße Lamellen und Stiel" },
-    { "en": "Ring on stem", "de": "Am Stiel befindlicher Ring" },
-    { "en": "Bulbous base", "de": "Knollige Basis" }
-  ],
   "notes": {
     "en": "Classic fairy-tale mushroom found near spruce trees",
     "de": "Klassischer Märchenpilz, gefunden bei Fichten"
-  },
-  "habitat": { "en": "Birch and coniferous forest", "de": "Nadel- und Laubwald" },
-  "edibility": { "en": "Psychoactive", "de": "Psychoaktive" }
+  }
 }

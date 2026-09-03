@@ -1,0 +1,16 @@
+{
+  "scientificName": "Coprinopsis pseudonivea",
+  "commonName": { "en": "Dung-loving inkcap", "de": "Kotliebender Tintling" },
+  "determiningFeatures": [
+    { "en": "Young pink/cream cap", "de": "Jung rosa bis cremefarbener Hut" },
+    { "en": "Cowpat habitat", "de": "Wächst auf Kuhfladen" },
+    { "en": "Heavy white cottony veil", "de": "Dichter weißer watteartiger Schleier" },
+    { "en": "White stem", "de": "Weißer Stiel" }
+  ],
+  "notes": {
+    "en": "Cap deliquesces (auto-digests) quickly after spore release; difficult to find in good condition",
+    "de": "Hut autodigestiert nach der Sporenreifung sehr schnell; schwer in gutem Zustand zu finden"
+  },
+  "habitat": { "en": "Decaying matter", "de": "Faulendes Material" },
+  "edibility": { "en": "Technically edible", "de": "Theoretisch essbar" }
+}

@@ -1,0 +1,17 @@
+{
+  "scientificName": "Caloboletus calopus",
+  "commonName": { "en": "Bitter bolete", "de": "Schönfuß-Röhrling" },
+  "determiningFeatures": [
+    { "en": "Beige to olive cap", "de": "Hut: Lehmbraun bis milchkaffefarben" },
+    { "en": "Yellow pores", "de": "Gelbe Poren" },
+    { "en": "Yellow to pink-red stipe with straw-coloured network", "de": "Stiel mit hell- bis bräunlichgelben Netz bedeckt" },
+    { "en": "When mature: ochre-brown stipe", "de": "Bei Reife: ocherbrauner Stiel" },
+    { "en": "Stains blue when bruised or cut", "de": "An Druckstellen dunkelblau" }
+  ],
+  "notes": {
+    "en": "Extremely bitter taste; even small pieces can spoil an entire dish",
+    "de": "Extrem bitterer Geschmack; schon kleine Stücke verderben ein ganzes Gericht"
+  },
+  "habitat": { "en": "Coniferous and deciduous woodland esp. beech / oak", "de": "Nadel- und Laubwald" },
+  "edibility": { "en": "Poisonous", "de": "Giftig" }
+}

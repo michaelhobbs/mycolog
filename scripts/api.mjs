@@ -96,7 +96,9 @@ app.post('/api/sightings', async (req, res) => {
     }
 
     // 4. Create the sighting entry (+ copy images)
-    const sightingDir = path.join(SIGHTINGS_DIR, dateSpotted, speciesSlug);
+    const dateDir = path.join(SIGHTINGS_DIR, dateSpotted);
+    const sightingSlug = await uniqueSlug(speciesSlug, dateDir);
+    const sightingDir = path.join(dateDir, sightingSlug);
     const imagesDir = path.join(sightingDir, 'images');
     await fs.mkdir(imagesDir, { recursive: true });
 
@@ -141,7 +143,7 @@ app.post('/api/sightings', async (req, res) => {
     return res.json({
       ok: true,
       species: speciesSlug,
-      sighting: `${dateSpotted}/${speciesSlug}`,
+      sighting: `${dateSpotted}/${sightingSlug}`,
       createdNewSpecies: Boolean(newSpecies),
     });
   } catch (err) {

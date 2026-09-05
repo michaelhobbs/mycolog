@@ -2,9 +2,12 @@ import en from './en'
 import de from './de'
 
 export type Locale = 'en' | 'de'
-export type Translations = typeof en
 
-const translations = { en, de } as const
+type Widen<T> = T extends string ? string : T extends object ? { [K in keyof T]: Widen<T[K]> } : T
+
+export type Translations = Widen<typeof en>
+
+const translations: Record<Locale, Translations> = { en, de }
 
 export const locales: Locale[] = ['en', 'de']
 export const defaultLocale: Locale = 'en'

@@ -389,7 +389,7 @@ const dict = getTranslations(locale)
     if (slides.length <= 1) return
     let active = 0
 
-    function show(i) {
+    function show(i: number) {
       slides[active].removeAttribute('data-active')
       active = (i + slides.length) % slides.length
       slides[active].setAttribute('data-active', '')

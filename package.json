@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "update-backlog": "node scripts/import-backlog-public.mjs",
+    "typecheck": "astro check",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "astro": "astro",

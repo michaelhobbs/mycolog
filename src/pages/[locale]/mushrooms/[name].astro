@@ -27,7 +27,6 @@ const entries = all
 
 const sp = species?.data
 const allImages = entries.flatMap((e) => e.data.images)
-const notes = entries.map((e) => e.data.notes).find(Boolean)
 const sharedNotes = sp?.notes
 const habitat = sp?.habitat
 const edibility = sp?.edibility
@@ -46,7 +45,7 @@ const features = sp?.determiningFeatures ?? []
     </div>
 
     {
-      species && (
+      sp && (
         <>
           <div class="gallery">
             {allImages.map((img, i) => (

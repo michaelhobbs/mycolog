@@ -1,4 +1,4 @@
-import type { Locale } from './i18n'
+import type { Locale } from './index'
 import type { LocalizedString } from '../types/mushroom'
 
 export function l10n(value: LocalizedString | undefined, locale: Locale): string {

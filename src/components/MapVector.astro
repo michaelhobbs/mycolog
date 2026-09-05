@@ -125,8 +125,8 @@ const sightingsJSON = JSON.stringify(clientSightings)
   function addHikingLayers(map: maplibregl.Map) {
     const add = (
       id: string,
-      type: string,
-      beforeId: string,
+      type: 'symbol' | 'line',
+      beforeId: string | undefined,
       {
         sourceLayer,
         filter,
@@ -154,7 +154,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
           paint,
           ...(minzoom !== undefined ? { minzoom } : {}),
           ...(maxzoom !== undefined ? { maxzoom } : {}),
-        },
+        } as maplibregl.AddLayerObject,
         beforeId,
       )
     }
@@ -706,13 +706,13 @@ const sightingsJSON = JSON.stringify(clientSightings)
       // Mask first so the viewport is always framed, even if a later layer
       // fails. Everything outside the 15 km box stays hidden behind it.
       const mask = {
-        type: 'FeatureCollection',
+        type: 'FeatureCollection' as const,
         features: [
           {
-            type: 'Feature',
+            type: 'Feature' as const,
             properties: {},
             geometry: {
-              type: 'Polygon',
+              type: 'Polygon' as const,
               coordinates: [
                 [
                   [-180, -90],

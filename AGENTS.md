@@ -15,6 +15,10 @@ All code must follow the Prettier rules (`semi: false`, `singleQuote: true`,
 `npm run format` (or at minimum verify with `npm run format:check`) before
 finishing.
 
+TypeScript must compile: run `npm run typecheck` (`astro check`) and keep it at
+0 errors. The pre-commit hook enforces both typecheck and Prettier
+(`.husky/pre-commit`).
+
 ## Backlog identification workflow (dev only)
 
 The backlog identification page (`/{locale}/backlog/{slug}`) lets you promote an

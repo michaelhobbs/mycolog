@@ -1,11 +1,11 @@
-import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
-import { z } from 'astro/zod';
+import { defineCollection } from 'astro:content'
+import { glob } from 'astro/loaders'
+import { z } from 'astro/zod'
 
 const localizedString = z.object({
   en: z.string(),
   de: z.string(),
-});
+})
 
 const species = defineCollection({
   loader: glob({ base: './src/content/species', pattern: '**/index.json' }),
@@ -17,7 +17,7 @@ const species = defineCollection({
     habitat: localizedString.optional(),
     edibility: localizedString.optional(),
   }),
-});
+})
 
 const sightings = defineCollection({
   loader: glob({ base: './src/content/sightings', pattern: '**/index.json' }),
@@ -33,7 +33,7 @@ const sightings = defineCollection({
       images: z.array(image()),
       notes: localizedString.optional(),
     }),
-});
+})
 
 const backlog = defineCollection({
   loader: glob({ base: './src/content/backlog', pattern: '**/index.json' }),
@@ -42,6 +42,6 @@ const backlog = defineCollection({
       dateSpotted: z.string(),
       images: z.array(image()),
     }),
-});
+})
 
-export const collections = { species, sightings, backlog };
+export const collections = { species, sightings, backlog }

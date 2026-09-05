@@ -115,11 +115,10 @@ export default {
   meta: {
     homeDescription:
       'Pilzbeobachtungen und Sammlertouren rund um Garmisch-Partenkirchen in den Bayerischen Alpen.',
-    mapDescription:
-      'Interaktive Karte der Pilzfunde rund um Garmisch-Partenkirchen.',
+    mapDescription: 'Interaktive Karte der Pilzfunde rund um Garmisch-Partenkirchen.',
     homeTitle: 'myco.log — pilzfunde',
     mapTitle: 'karte — myco.log',
     logTitle: 'protokoll — myco.log',
     backlogTitle: 'rückstand — myco.log',
   },
-} as const;
+} as const

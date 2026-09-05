@@ -1,7 +1,7 @@
-import type { Locale } from './i18n';
-import type { LocalizedString } from '../types/mushroom';
+import type { Locale } from './i18n'
+import type { LocalizedString } from '../types/mushroom'
 
 export function l10n(value: LocalizedString | undefined, locale: Locale): string {
-  if (!value) return '';
-  return value[locale] ?? value.en ?? '';
+  if (!value) return ''
+  return value[locale] ?? value.en ?? ''
 }

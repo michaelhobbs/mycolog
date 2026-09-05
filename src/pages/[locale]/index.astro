@@ -1,33 +1,30 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import MushroomCard from '../../components/MushroomCard.astro';
-import { getCollection } from 'astro:content';
-import { enrichSightings } from '../../lib/sightings';
-import { getTranslations, locales } from '../../i18n';
-import type { Locale } from '../../i18n';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import Layout from '../../layouts/Layout.astro'
+import MushroomCard from '../../components/MushroomCard.astro'
+import { getCollection } from 'astro:content'
+import { enrichSightings } from '../../lib/sightings'
+import { getTranslations, locales } from '../../i18n'
+import type { Locale } from '../../i18n'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 export function getStaticPaths() {
-  return locales.map((locale) => ({ params: { locale } }));
+  return locales.map((locale) => ({ params: { locale } }))
 }
 
-const { locale } = Astro.params as { locale: Locale };
-const t = getTranslations(locale);
-const mapUrl = getRelativeLocaleUrl(locale, 'map');
-const logUrl = getRelativeLocaleUrl(locale, 'log');
-const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms');
+const { locale } = Astro.params as { locale: Locale }
+const t = getTranslations(locale)
+const mapUrl = getRelativeLocaleUrl(locale, 'map')
+const logUrl = getRelativeLocaleUrl(locale, 'log')
+const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms')
 
 const [sightings, species] = await Promise.all([
   getCollection('sightings'),
   getCollection('species'),
-]);
+])
 
 const recentSightings = enrichSightings(sightings, species)
-  .sort(
-    (a, b) =>
-      new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime(),
-  )
-  .slice(0, 6);
+  .sort((a, b) => new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime())
+  .slice(0, 6)
 ---
 
 <Layout title={t.meta.homeTitle} locale={locale}>
@@ -104,11 +101,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     </div>
 
     <div class="grid">
-      {
-        recentSightings.map((sighting) => (
-          <MushroomCard sighting={sighting} locale={locale} />
-        ))
-      }
+      {recentSightings.map((sighting) => <MushroomCard sighting={sighting} locale={locale} />)}
     </div>
 
     <div class="section__footer">

@@ -1,22 +1,20 @@
 ---
-import type { Locale } from '../i18n';
-import { getTranslations, locales, defaultLocale } from '../i18n';
-import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../i18n'
+import { getTranslations, locales, defaultLocale } from '../i18n'
+import { getRelativeLocaleUrl } from 'astro:i18n'
 
 interface Props {
-  title: string;
-  locale?: Locale;
+  title: string
+  locale?: Locale
 }
 
-const { title, locale = defaultLocale } = Astro.props;
-const t = getTranslations(locale);
-const currentPath = Astro.url.pathname;
+const { title, locale = defaultLocale } = Astro.props
+const t = getTranslations(locale)
+const currentPath = Astro.url.pathname
 
 function localizedPath(targetLocale: Locale): string {
-  const subPath = currentPath
-    .replace(/^\/(en|de)(\/|$)/, '/')
-    .replace(/^\/$/, '');
-  return getRelativeLocaleUrl(targetLocale, subPath);
+  const subPath = currentPath.replace(/^\/(en|de)(\/|$)/, '/').replace(/^\/$/, '')
+  return getRelativeLocaleUrl(targetLocale, subPath)
 }
 ---
 
@@ -43,36 +41,53 @@ function localizedPath(targetLocale: Locale): string {
         <div class="nav__links">
           <a
             href={`/${locale}`}
-            class:list={['nav__link', { 'nav__link--active': currentPath === `/${locale}` || currentPath === `/${locale}/` }]}
-          >[{t.nav.home}]</a>
+            class:list={[
+              'nav__link',
+              {
+                'nav__link--active': currentPath === `/${locale}` || currentPath === `/${locale}/`,
+              },
+            ]}>[{t.nav.home}]</a
+          >
           <a
             href={`/${locale}/log`}
             class:list={['nav__link', { 'nav__link--active': currentPath.includes('/log') }]}
-          >[{t.nav.log}]</a>
+            >[{t.nav.log}]</a
+          >
           <a
             href={`/${locale}/mushrooms`}
             class:list={['nav__link', { 'nav__link--active': currentPath.includes('/mushrooms') }]}
-          >[{t.nav.mushrooms}]</a>
+            >[{t.nav.mushrooms}]</a
+          >
           <a
             href={`/${locale}/map`}
             class:list={['nav__link', { 'nav__link--active': currentPath.includes('/map') }]}
-          >[{t.nav.map}]</a>
+            >[{t.nav.map}]</a
+          >
           <a
             href={`/${locale}/backlog`}
             class:list={['nav__link', { 'nav__link--active': currentPath.includes('/backlog') }]}
-          >[{t.nav.backlog}]</a>
+            >[{t.nav.backlog}]</a
+          >
         </div>
 
         <div class="nav__lang">
-          {locales.map((loc, i) => (
-            <>
-              {i > 0 && <span class="nav__lang-sep" aria-hidden="true">/</span>}
-              <a
-                href={localizedPath(loc)}
-                class:list={['nav__lang-btn', { 'nav__lang-btn--active': loc === locale }]}
-              >{loc}</a>
-            </>
-          ))}
+          {
+            locales.map((loc, i) => (
+              <>
+                {i > 0 && (
+                  <span class="nav__lang-sep" aria-hidden="true">
+                    /
+                  </span>
+                )}
+                <a
+                  href={localizedPath(loc)}
+                  class:list={['nav__lang-btn', { 'nav__lang-btn--active': loc === locale }]}
+                >
+                  {loc}
+                </a>
+              </>
+            ))
+          }
         </div>
 
         <button class="nav__mobile-toggle" aria-label="Menu" data-mobile-toggle>
@@ -87,12 +102,16 @@ function localizedPath(targetLocale: Locale): string {
         <a href={`/${locale}/map`} class="nav__mobile-link">{'>'} {t.nav.map}</a>
         <a href={`/${locale}/backlog`} class="nav__mobile-link">{'>'} {t.nav.backlog}</a>
         <div class="nav__mobile-lang">
-          {locales.map((loc) => (
-            <a
-              href={localizedPath(loc)}
-              class:list={['nav__lang-btn', { 'nav__lang-btn--active': loc === locale }]}
-            >{loc}</a>
-          ))}
+          {
+            locales.map((loc) => (
+              <a
+                href={localizedPath(loc)}
+                class:list={['nav__lang-btn', { 'nav__lang-btn--active': loc === locale }]}
+              >
+                {loc}
+              </a>
+            ))
+          }
         </div>
       </div>
     </header>
@@ -111,20 +130,22 @@ function localizedPath(targetLocale: Locale): string {
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const toggle = document.querySelector('[data-mobile-toggle]');
-        const menu = document.querySelector('[data-mobile-menu]');
-        if (!toggle || !menu) return;
+        const toggle = document.querySelector('[data-mobile-toggle]')
+        const menu = document.querySelector('[data-mobile-menu]')
+        if (!toggle || !menu) return
         toggle.addEventListener('click', () => {
-          menu.classList.toggle('nav__mobile-menu--open');
-        });
-      });
+          menu.classList.toggle('nav__mobile-menu--open')
+        })
+      })
     </script>
   </body>
 </html>
 
 <style is:global>
   /* ─── Reset ────────────────────────────────────── */
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -165,8 +186,13 @@ function localizedPath(targetLocale: Locale): string {
     position: relative;
   }
 
-  img { display: block; max-width: 100%; }
-  a { color: inherit; }
+  img {
+    display: block;
+    max-width: 100%;
+  }
+  a {
+    color: inherit;
+  }
 
   /* ─── Header / Nav ────────────────────────────── */
   .header {
@@ -276,7 +302,9 @@ function localizedPath(targetLocale: Locale): string {
     border-bottom: 1px solid var(--border-char);
   }
 
-  .nav__mobile-menu--open { display: flex; }
+  .nav__mobile-menu--open {
+    display: flex;
+  }
 
   .nav__mobile-link {
     color: var(--fg-dim);
@@ -319,8 +347,16 @@ function localizedPath(targetLocale: Locale): string {
 
   /* ─── Responsive ──────────────────────────────── */
   @media (max-width: 768px) {
-    .nav__links, .nav__lang, .nav__sep { display: none; }
-    .nav__mobile-toggle { display: block; }
-    .main { padding: 1.5rem 1rem; }
+    .nav__links,
+    .nav__lang,
+    .nav__sep {
+      display: none;
+    }
+    .nav__mobile-toggle {
+      display: block;
+    }
+    .main {
+      padding: 1.5rem 1rem;
+    }
   }
 </style>

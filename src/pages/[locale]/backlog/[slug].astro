@@ -1,41 +1,41 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import { Image, getImage } from 'astro:assets';
-import { getTranslations, locales } from '../../../i18n';
-import { l10n } from '../../../i18n/helpers';
-import type { Locale, Translations } from '../../../i18n';
-import LocationPicker from '../../../components/LocationPicker.astro';
+import Layout from '../../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { Image, getImage } from 'astro:assets'
+import { getTranslations, locales } from '../../../i18n'
+import { l10n } from '../../../i18n/helpers'
+import type { Locale, Translations } from '../../../i18n'
+import LocationPicker from '../../../components/LocationPicker.astro'
 
 export async function getStaticPaths() {
   // Identification pages are a dev workflow — never generate them in a
   // production build (they need the local Express API and editable content).
-  if (import.meta.env.PROD) return [];
+  if (import.meta.env.PROD) return []
 
   const backlog = (await getCollection('backlog')).sort((a, b) =>
     a.data.dateSpotted < b.data.dateSpotted ? -1 : 1,
-  );
+  )
   return locales.flatMap((locale) =>
     backlog.map((entry) => ({ params: { locale, slug: entry.id } })),
-  );
+  )
 }
 
-const { locale, slug } = Astro.params as { locale: Locale; slug: string };
-const t: Translations = getTranslations(locale);
+const { locale, slug } = Astro.params as { locale: Locale; slug: string }
+const t: Translations = getTranslations(locale)
 
-const entry = (await getCollection('backlog')).find((e) => e.id === slug);
+const entry = (await getCollection('backlog')).find((e) => e.id === slug)
 if (!entry) {
-  return Astro.redirect(`/${locale}/backlog`);
+  return Astro.redirect(`/${locale}/backlog`)
 }
 
-const species = await getCollection('species');
+const species = await getCollection('species')
 const speciesJSON = JSON.stringify(
   species.map((s) => ({
     slug: s.id,
     commonName: l10n(s.data.commonName, locale),
     scientificName: s.data.scientificName,
   })),
-);
+)
 
 // Distinct location names already used across sightings, so the form can offer
 // them as a picklist (the user can still type a brand-new one).
@@ -44,21 +44,21 @@ const knownLocations = [
     (await getCollection('sightings'))
       .map((s) => s.data.location?.name)
       .filter(Boolean)
-      .map((name) => (typeof name === 'string' ? name : (name as { en?: string }).en ?? ''))
+      .map((name) => (typeof name === 'string' ? name : ((name as { en?: string }).en ?? '')))
       .filter(Boolean),
   ),
-].sort((a, b) => a.localeCompare(b));
+].sort((a, b) => a.localeCompare(b))
 
 const entryJSON = JSON.stringify({
   id: entry.id,
   dateSpotted: entry.data.dateSpotted,
   images: await Promise.all(
     entry.data.images.map(async (img) => {
-      const resolved = await getImage({ src: img, width: 640 });
-      return resolved?.src ?? '';
+      const resolved = await getImage({ src: img, width: 640 })
+      return resolved?.src ?? ''
     }),
   ),
-});
+})
 ---
 
 <Layout title={`${t.backlog.addTitle} — myco.log`} locale={locale}>
@@ -69,7 +69,9 @@ const entryJSON = JSON.stringify({
 
     <div class="add-head">
       <h1 class="add-head__title">{t.backlog.addTitle}</h1>
-      <span class="add-head__meta">{t.backlog.item} #{entry.id} · {t.backlog.date} {entry.data.dateSpotted}</span>
+      <span class="add-head__meta"
+        >{t.backlog.item} #{entry.id} · {t.backlog.date} {entry.data.dateSpotted}</span
+      >
     </div>
 
     <form id="identify-form" class="identify">
@@ -88,11 +90,14 @@ const entryJSON = JSON.stringify({
         <legend>{t.backlog.species}</legend>
         <select id="species-select" name="species" class="identify__select">
           <option value="">—</option>
-          {species.map((s) => (
-            <option value={s.id}>
-              {l10n(s.data.commonName, locale)}{s.data.scientificName ? ` (${s.data.scientificName})` : ''}
-            </option>
-          ))}
+          {
+            species.map((s) => (
+              <option value={s.id}>
+                {l10n(s.data.commonName, locale)}
+                {s.data.scientificName ? ` (${s.data.scientificName})` : ''}
+              </option>
+            ))
+          }
           <option value="__new__">{t.backlog.newSpecies}…</option>
         </select>
 
@@ -119,9 +124,7 @@ const entryJSON = JSON.stringify({
           <label class="loc-name__label" for="loc-name-select">{t.backlog.locationName}</label>
           <select id="loc-name-select" name="locationName" class="identify__select">
             <option value="">—</option>
-            {knownLocations.map((name) => (
-              <option value={name}>{name}</option>
-            ))}
+            {knownLocations.map((name) => <option value={name}>{name}</option>)}
             <option value="__new__">{t.backlog.newLocation}…</option>
           </select>
           <p class="field-hint">{t.backlog.locationNameHelp}</p>
@@ -141,11 +144,18 @@ const entryJSON = JSON.stringify({
       <fieldset>
         <legend>{entry.data.images.length} {t.backlog.photos}</legend>
         <div class="gallery">
-          {entry.data.images.map((img, i) => (
-            <figure class="gallery__fig">
-              <Image src={img} alt={`#{entry.id} — ${i + 1}`} widths={[400, 800]} sizes="(min-width: 640px) 400px, 100vw" />
-            </figure>
-          ))}
+          {
+            entry.data.images.map((img, i) => (
+              <figure class="gallery__fig">
+                <Image
+                  src={img}
+                  alt={`#{entry.id} — ${i + 1}`}
+                  widths={[400, 800]}
+                  sizes="(min-width: 640px) 400px, 100vw"
+                />
+              </figure>
+            ))
+          }
         </div>
       </fieldset>
 
@@ -170,78 +180,82 @@ const entryJSON = JSON.stringify({
     </form>
   </section>
 
-  <script is:inline define:vars={{ backlogT: t.backlog, speciesData: speciesJSON, entry: entryJSON, locale }}>
-    const t = backlogT;
+  <script
+    is:inline
+    define:vars={{ backlogT: t.backlog, speciesData: speciesJSON, entry: entryJSON, locale }}
+  >
+    const t = backlogT
 
-    const form = document.getElementById('identify-form');
-    const speciesSelect = document.getElementById('species-select');
-    const newSpecies = document.getElementById('new-species');
-    const locationInput = document.getElementById('picker-location');
-    const locationNameSelect = document.getElementById('loc-name-select');
-    const newLocation = document.getElementById('new-location');
-    const submitBtn = document.getElementById('submit-btn');
-    const status = document.getElementById('form-status');
+    const form = document.getElementById('identify-form')
+    const speciesSelect = document.getElementById('species-select')
+    const newSpecies = document.getElementById('new-species')
+    const locationInput = document.getElementById('picker-location')
+    const locationNameSelect = document.getElementById('loc-name-select')
+    const newLocation = document.getElementById('new-location')
+    const submitBtn = document.getElementById('submit-btn')
+    const status = document.getElementById('form-status')
 
     speciesSelect.addEventListener('change', () => {
-      newSpecies.hidden = speciesSelect.value !== '__new__';
-    });
+      newSpecies.hidden = speciesSelect.value !== '__new__'
+    })
 
     locationNameSelect.addEventListener('change', () => {
-      newLocation.hidden = locationNameSelect.value !== '__new__';
-    });
+      newLocation.hidden = locationNameSelect.value !== '__new__'
+    })
 
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+      e.preventDefault()
 
-      const species = speciesSelect.value;
+      const species = speciesSelect.value
       if (!species) {
-        status.textContent = t.missingSpecies;
-        status.dataset.state = 'error';
-        return;
+        status.textContent = t.missingSpecies
+        status.dataset.state = 'error'
+        return
       }
-      const location = locationInput.value;
+      const location = locationInput.value
       if (!location) {
-        status.textContent = t.missingLocation;
-        status.dataset.state = 'error';
-        return;
+        status.textContent = t.missingLocation
+        status.dataset.state = 'error'
+        return
       }
-      let locationParsed;
+      let locationParsed
       try {
-        locationParsed = JSON.parse(location || 'null');
+        locationParsed = JSON.parse(location || 'null')
       } catch {
-        locationParsed = null;
+        locationParsed = null
       }
       if (!locationParsed || !locationParsed.lat || !locationParsed.lng) {
-        status.textContent = t.missingLocation;
-        status.dataset.state = 'error';
-        return;
+        status.textContent = t.missingLocation
+        status.dataset.state = 'error'
+        return
       }
 
-      let locationName = locationNameSelect.value;
+      let locationName = locationNameSelect.value
       if (locationName === '__new__') {
-        locationName = document.getElementById('loc-name-new').value.trim();
+        locationName = document.getElementById('loc-name-new').value.trim()
       }
 
-      const speciesPayload = (species === '__new__')
-        ? {
-            newSpecies: {
-              scientificName: document.getElementById('ns-scientific').value,
-              commonName: {
-                en: document.getElementById('ns-common-en').value,
-                de: document.getElementById('ns-common-de').value,
+      const speciesPayload =
+        species === '__new__'
+          ? {
+              newSpecies: {
+                scientificName: document.getElementById('ns-scientific').value,
+                commonName: {
+                  en: document.getElementById('ns-common-en').value,
+                  de: document.getElementById('ns-common-de').value,
+                },
               },
-            },
-          }
-        : { species };
+            }
+          : { species }
 
-      const notesEn = document.getElementById('notes-en').value;
-      const notesDe = document.getElementById('notes-de').value;
+      const notesEn = document.getElementById('notes-en').value
+      const notesDe = document.getElementById('notes-de').value
 
-      const dateSpotted = document.getElementById('date-spotted').value;
+      const dateSpotted = document.getElementById('date-spotted').value
       if (!dateSpotted) {
-        status.textContent = t.missingDate;
-        status.dataset.state = 'error';
-        return;
+        status.textContent = t.missingDate
+        status.dataset.state = 'error'
+        return
       }
 
       const payload = {
@@ -250,40 +264,44 @@ const entryJSON = JSON.stringify({
         location: locationParsed,
         ...(locationName ? { locationName } : {}),
         ...speciesPayload,
-        ...((notesEn.trim() || notesDe.trim()) ? { notes: { en: notesEn, de: notesDe } } : {}),
-      };
+        ...(notesEn.trim() || notesDe.trim() ? { notes: { en: notesEn, de: notesDe } } : {}),
+      }
 
-      submitBtn.disabled = true;
-      status.textContent = t.submitting;
-      status.dataset.state = 'pending';
+      submitBtn.disabled = true
+      status.textContent = t.submitting
+      status.dataset.state = 'pending'
 
       try {
         const res = await fetch('/myco/api/sightings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-        });
+        })
         if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'HTTP ' + res.status);
+          const err = await res.json().catch(() => ({}))
+          throw new Error(err.error || 'HTTP ' + res.status)
         }
-        status.textContent = t.success;
-        status.dataset.state = 'ok';
-        window.location.href = `/${locale}/backlog`;
+        status.textContent = t.success
+        status.dataset.state = 'ok'
+        window.location.href = `/${locale}/backlog`
       } catch (err) {
-        console.error('[identify] submit failed:', err);
-        status.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '');
-        status.dataset.state = 'error';
-        submitBtn.disabled = false;
+        console.error('[identify] submit failed:', err)
+        status.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '')
+        status.dataset.state = 'error'
+        submitBtn.disabled = false
       }
-    });
+    })
   </script>
 </Layout>
 
 <style>
-  .add-page { padding-bottom: 3rem; }
+  .add-page {
+    padding-bottom: 3rem;
+  }
 
-  .add-nav { margin-bottom: 1rem; }
+  .add-nav {
+    margin-bottom: 1rem;
+  }
 
   .add-nav__back {
     color: var(--accent);
@@ -291,9 +309,13 @@ const entryJSON = JSON.stringify({
     text-decoration: none;
   }
 
-  .add-nav__back:hover { color: var(--fg-bright); }
+  .add-nav__back:hover {
+    color: var(--fg-bright);
+  }
 
-  .add-head { margin-bottom: 1.25rem; }
+  .add-head {
+    margin-bottom: 1.25rem;
+  }
 
   .add-head__title {
     font-size: 1.25rem;
@@ -353,8 +375,12 @@ const entryJSON = JSON.stringify({
     margin-bottom: 0.25rem;
   }
 
-  .field { margin-bottom: 0.75rem; }
-  .field:last-child { margin-bottom: 0; }
+  .field {
+    margin-bottom: 0.75rem;
+  }
+  .field:last-child {
+    margin-bottom: 0;
+  }
 
   .field label {
     display: block;
@@ -424,14 +450,30 @@ const entryJSON = JSON.stringify({
     font-weight: 700;
     font-size: 0.875rem;
     cursor: pointer;
-    transition: background 0.1s, color 0.1s;
+    transition:
+      background 0.1s,
+      color 0.1s;
   }
 
-  .identify__submit:hover { background: var(--accent); color: var(--bg); }
-  .identify__submit:disabled { opacity: 0.5; cursor: wait; }
+  .identify__submit:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .identify__submit:disabled {
+    opacity: 0.5;
+    cursor: wait;
+  }
 
-  .identify__status { font-size: 0.8125rem; }
-  .identify__status[data-state="error"] { color: #ff7a7a; }
-  .identify__status[data-state="ok"] { color: var(--accent); }
-  .identify__status[data-state="pending"] { color: var(--fg-dim); }
+  .identify__status {
+    font-size: 0.8125rem;
+  }
+  .identify__status[data-state='error'] {
+    color: #ff7a7a;
+  }
+  .identify__status[data-state='ok'] {
+    color: var(--accent);
+  }
+  .identify__status[data-state='pending'] {
+    color: var(--fg-dim);
+  }
 </style>

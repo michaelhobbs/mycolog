@@ -1,25 +1,27 @@
 ---
-import type { Locale } from '../i18n';
-import type { EnrichedSighting } from '../lib/sightings';
-import { getImage } from 'astro:assets';
-import { l10n } from '../i18n/helpers';
+import type { Locale } from '../i18n'
+import type { EnrichedSighting } from '../lib/sightings'
+import { getImage } from 'astro:assets'
+import { l10n } from '../i18n/helpers'
 
 interface Props {
-  sightings: EnrichedSighting[];
-  locale: Locale;
-  center?: [number, number];
+  sightings: EnrichedSighting[]
+  locale: Locale
+  center?: [number, number]
 }
 
-const { sightings, locale, center = [47.4917, 11.0922] } = Astro.props;
+const { sightings, locale, center = [47.4917, 11.0922] } = Astro.props
 
 const clientSightings = await Promise.all(
   sightings.map(async (s) => {
-    const resolvedImages = (await Promise.all(
-      (s.images ?? []).map(async (img) => {
-        const resolved = await getImage({ src: img, width: 320 });
-        return resolved?.src ?? '';
-      }),
-    )).filter(Boolean);
+    const resolvedImages = (
+      await Promise.all(
+        (s.images ?? []).map(async (img) => {
+          const resolved = await getImage({ src: img, width: 320 })
+          return resolved?.src ?? ''
+        }),
+      )
+    ).filter(Boolean)
     return {
       id: s.id,
       dateSpotted: s.dateSpotted,
@@ -27,11 +29,11 @@ const clientSightings = await Promise.all(
       imageUrls: resolvedImages,
       name: l10n(s.species.commonName, locale) ?? '',
       species: s.species.scientificName ?? '',
-    };
+    }
   }),
-);
+)
 
-const sightingsJSON = JSON.stringify(clientSightings);
+const sightingsJSON = JSON.stringify(clientSightings)
 ---
 
 <div class="map-frame">
@@ -39,18 +41,25 @@ const sightingsJSON = JSON.stringify(clientSightings);
     <span class="map-frame__title-text">[ map ]</span>
     <span class="map-frame__title-coords">{center[0].toFixed(4)}°N {center[1].toFixed(4)}°E</span>
   </div>
-  <div id="map" class="map" data-sightings={sightingsJSON} data-center={JSON.stringify(center)} data-locale={locale}></div>
+  <div
+    id="map"
+    class="map"
+    data-sightings={sightingsJSON}
+    data-center={JSON.stringify(center)}
+    data-locale={locale}
+  >
+  </div>
   <div class="map-frame__attribution">
     <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
   </div>
 </div>
 
 <script>
-  import maplibregl from 'maplibre-gl';
-  import 'maplibre-gl/dist/maplibre-gl.css';
-  import mlcontour from 'maplibre-contour';
+  import maplibregl from 'maplibre-gl'
+  import 'maplibre-gl/dist/maplibre-gl.css'
+  import mlcontour from 'maplibre-contour'
 
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord';
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
 
   // Altitude contours generated on the fly from free raster-DEM tiles
   // (AWS Mapzen "terrarium" elevation tiles, z0-14, no key required).
@@ -61,50 +70,79 @@ const sightingsJSON = JSON.stringify(clientSightings);
     worker: false,
     cacheSize: 50,
     timeoutMs: 10_000,
-  });
-  demSource.setupMaplibre(maplibregl);
+  })
+  demSource.setupMaplibre(maplibregl)
 
   // Dark green hypsometric terrain, teal lakes/rivers, green-toned roads +
   // accent trails (the palette from the retired d3 POC).
   function applyPalette(map: maplibregl.Map) {
-    const paint = (layer: string, props: { [s: string]: unknown; }) => {
+    const paint = (layer: string, props: { [s: string]: unknown }) => {
       if (map.getLayer(layer)) {
-        Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v));
+        Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v))
       }
-    };
+    }
 
-    paint('background', { 'background-color': '#0e120b' });
-    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 });
-    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 });
-    paint('landcover_ice_shelf', { 'fill-color': '#20291a' });
-    paint('landcover_glacier', { 'fill-color': '#20291a' });
+    paint('background', { 'background-color': '#0e120b' })
+    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
+    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
+    paint('landcover_ice_shelf', { 'fill-color': '#20291a' })
+    paint('landcover_glacier', { 'fill-color': '#20291a' })
 
-    ['park', 'park_outline'].forEach((l) => {
-      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none');
-    });
+    ;['park', 'park_outline'].forEach((l) => {
+      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none')
+    })
 
-    paint('water', { 'fill-color': '#2a7d94' });
-    paint('waterway', { 'line-color': '#2a6a80' });
-    paint('building', { 'fill-color': '#263222' });
+    paint('water', { 'fill-color': '#2a7d94' })
+    paint('waterway', { 'line-color': '#2a6a80' })
+    paint('building', { 'fill-color': '#263222' })
 
-    paint('highway_major_casing', { 'line-color': '#151a10' });
-    paint('highway_major_inner', { 'line-color': '#d4f0d4' });
-    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 });
-    paint('highway_motorway_casing', { 'line-color': '#151a10' });
-    paint('highway_motorway_inner', { 'line-color': '#d4f0d4' });
-    paint('highway_minor', { 'line-color': '#8fbf8f' });
-    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] });
+    paint('highway_major_casing', { 'line-color': '#151a10' })
+    paint('highway_major_inner', { 'line-color': '#d4f0d4' })
+    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 })
+    paint('highway_motorway_casing', { 'line-color': '#151a10' })
+    paint('highway_motorway_inner', { 'line-color': '#d4f0d4' })
+    paint('highway_minor', { 'line-color': '#8fbf8f' })
+    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
 
-    paint('boundary_state', { 'line-color': '#2d5a2d' });
-    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' });
+    paint('boundary_state', { 'line-color': '#2d5a2d' })
+    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' })
 
-    ['place_city_large', 'place_city', 'place_town', 'place_village', 'place_suburb', 'place_other',
-      'highway_name_other', 'highway_name_motorway', 'water_name'].
-      forEach((l) => paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }));
+    ;[
+      'place_city_large',
+      'place_city',
+      'place_town',
+      'place_village',
+      'place_suburb',
+      'place_other',
+      'highway_name_other',
+      'highway_name_motorway',
+      'water_name',
+    ].forEach((l) =>
+      paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }),
+    )
   }
 
   function addHikingLayers(map: maplibregl.Map) {
-    const add = (id: string, type: string, beforeId: string, { sourceLayer, filter, layout = {}, paint = {}, minzoom, maxzoom }: { sourceLayer: string; filter: any; layout: any; paint: any; minzoom?: number; maxzoom?: number; }) => {
+    const add = (
+      id: string,
+      type: string,
+      beforeId: string,
+      {
+        sourceLayer,
+        filter,
+        layout = {},
+        paint = {},
+        minzoom,
+        maxzoom,
+      }: {
+        sourceLayer: string
+        filter: any
+        layout: any
+        paint: any
+        minzoom?: number
+        maxzoom?: number
+      },
+    ) => {
       map.addLayer(
         {
           id,
@@ -118,11 +156,11 @@ const sightingsJSON = JSON.stringify(clientSightings);
           ...(maxzoom !== undefined ? { maxzoom } : {}),
         },
         beforeId,
-      );
-    };
+      )
+    }
 
-    const base = map.getStyle().layers.find((l: { id: string; }) => l.id === 'boundary_state');
-    const b4 = base ? base.id : undefined;
+    const base = map.getStyle().layers.find((l: { id: string }) => l.id === 'boundary_state')
+    const b4 = base ? base.id : undefined
 
     // --- mountain peaks (summits with name + elevation) ---
     add('hiking-peak', 'symbol', b4, {
@@ -149,7 +187,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'text-halo-color': '#0e120b',
         'text-halo-width': 1.5,
       },
-    });
+    })
 
     // --- hiking POIs (shelters, guideposts, drinking water, viewpoints) ---
     add('hiking-poi', 'symbol', 'hiking-peak', {
@@ -161,7 +199,16 @@ const sightingsJSON = JSON.stringify(clientSightings);
         [
           'match',
           ['get', 'subclass'],
-          ['shelter', 'guidepost', 'map', 'viewpoint', 'drinking_water', 'alpine_hut', 'hostel', 'spring'],
+          [
+            'shelter',
+            'guidepost',
+            'map',
+            'viewpoint',
+            'drinking_water',
+            'alpine_hut',
+            'hostel',
+            'spring',
+          ],
           true,
           false,
         ],
@@ -182,7 +229,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'text-halo-color': '#0e120b',
         'text-halo-width': 1.2,
       },
-    });
+    })
 
     // --- named hiking trail labels (from transportation_name) ---
     add('hiking-trail-label', 'symbol', b4, {
@@ -208,11 +255,11 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'text-halo-color': '#0e120b',
         'text-halo-width': 1.4,
       },
-    });
+    })
   }
 
   function addContours(map: maplibregl.Map) {
-    if (map.getSource('hiking-contours')) return;
+    if (map.getSource('hiking-contours')) return
 
     map.addSource('hiking-contours', {
       type: 'vector',
@@ -231,11 +278,12 @@ const sightingsJSON = JSON.stringify(clientSightings);
         }),
       ],
       maxzoom: 15,
-    });
+    })
 
-    const beforeId = (map.getLayer('waterway') && 'waterway') ||
+    const beforeId =
+      (map.getLayer('waterway') && 'waterway') ||
       (map.getLayer('hiking-peak') && 'hiking-peak') ||
-      undefined;
+      undefined
     map.addLayer(
       {
         id: 'hiking-contour-minor',
@@ -251,7 +299,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         },
       },
       beforeId,
-    );
+    )
 
     map.addLayer(
       {
@@ -268,7 +316,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         },
       },
       beforeId,
-    );
+    )
   }
 
   // Mushroom sightings pinned as accent dots + labels, from the data embedded
@@ -280,9 +328,9 @@ const sightingsJSON = JSON.stringify(clientSightings);
   // (0 px apart can never leave the cluster radius), while points that only
   // happen to overlap decluster once their on-screen distance exceeds the radius.
   function addSightings(map: maplibregl.Map, sightings: any[]) {
-    if (map.getSource('sightings') || !sightings.length) return;
-    const locale = document.getElementById('map')?.dataset.locale ?? 'en';
-    const linkLabel = locale === 'de' ? 'Im Protokoll ansehen →' : 'See in log →';
+    if (map.getSource('sightings') || !sightings.length) return
+    const locale = document.getElementById('map')?.dataset.locale ?? 'en'
+    const linkLabel = locale === 'de' ? 'Im Protokoll ansehen →' : 'See in log →'
 
     const features = sightings.map((s, i) => ({
       type: 'Feature' as const,
@@ -295,15 +343,15 @@ const sightingsJSON = JSON.stringify(clientSightings);
         imageUrls: JSON.stringify(s.imageUrls ?? []),
       },
       geometry: { type: 'Point' as const, coordinates: [s.location.lng, s.location.lat] },
-    }));
+    }))
 
     map.addSource('sightings', {
       type: 'geojson',
       data: { type: 'FeatureCollection', features },
       cluster: true,
       clusterRadius: 44,
-    });
-    const source = map.getSource('sightings') as maplibregl.GeoJSONSource;
+    })
+    const source = map.getSource('sightings') as maplibregl.GeoJSONSource
 
     // --- cluster circle + count badge ---
     map.addLayer({
@@ -317,7 +365,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'circle-stroke-color': '#0e120b',
         'circle-stroke-width': 2,
       },
-    });
+    })
 
     map.addLayer({
       id: 'sighting-cluster-count',
@@ -334,23 +382,21 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'text-halo-color': '#33ff33',
         'text-halo-width': 1,
       },
-    });
+    })
 
     // --- individual marker + label (hidden when part of a cluster) ---
-    map.addLayer(
-      {
-        id: 'sighting-marker',
-        type: 'circle',
-        source: 'sightings',
-        filter: ['!', ['has', 'point_count']],
-        paint: {
-          'circle-color': '#33ff33',
-          'circle-radius': 6,
-          'circle-stroke-color': '#0e120b',
-          'circle-stroke-width': 1.5,
-        },
+    map.addLayer({
+      id: 'sighting-marker',
+      type: 'circle',
+      source: 'sightings',
+      filter: ['!', ['has', 'point_count']],
+      paint: {
+        'circle-color': '#33ff33',
+        'circle-radius': 6,
+        'circle-stroke-color': '#0e120b',
+        'circle-stroke-width': 1.5,
       },
-    );
+    })
 
     map.addLayer({
       id: 'sighting-label',
@@ -370,7 +416,7 @@ const sightingsJSON = JSON.stringify(clientSightings);
         'text-halo-color': '#0e120b',
         'text-halo-width': 1.4,
       },
-    });
+    })
 
     // Transparent hit layer over individual markers for easy clicking.
     map.addLayer(
@@ -385,231 +431,237 @@ const sightingsJSON = JSON.stringify(clientSightings);
         },
       },
       'sighting-marker',
-    );
+    )
 
-    const popup = new maplibregl.Popup({ offset: 14, closeButton: false, className: 'tui-map-popup' });
+    const popup = new maplibregl.Popup({
+      offset: 14,
+      closeButton: false,
+      className: 'tui-map-popup',
+    })
 
     // --- single marker popup ---
     function openSinglePopup(p: any, lngLat: [number, number]) {
-      popup
-        .setLngLat(lngLat)
-        .setDOMContent(popupNode(p))
-        .addTo(map);
+      popup.setLngLat(lngLat).setDOMContent(popupNode(p)).addTo(map)
     }
 
     // marker dot -> popup
     map.on('click', 'sighting-hit', (e: any) => {
-      const f = e.features?.[0];
-      if (!f) return;
-      openSinglePopup(f.properties, [e.lngLat.lng, e.lngLat.lat]);
-    });
+      const f = e.features?.[0]
+      if (!f) return
+      openSinglePopup(f.properties, [e.lngLat.lng, e.lngLat.lat])
+    })
 
     // label text -> popup (so clicking a marker's name opens it too)
     map.on('click', 'sighting-label', (e: any) => {
-      const f = e.features?.[0];
-      if (!f) return;
-      const geom = f.geometry?.coordinates;
+      const f = e.features?.[0]
+      if (!f) return
+      const geom = f.geometry?.coordinates
       openSinglePopup(
         f.properties,
         Array.isArray(geom) ? [geom[0], geom[1]] : [e.lngLat.lng, e.lngLat.lat],
-      );
-    });
+      )
+    })
 
     // --- cluster popup with a carousel of all contained sightings ---
     map.on('click', 'sighting-cluster', async (e: any) => {
-      const cluster = e.features?.[0];
-      if (!cluster) return;
-      const clusterId = cluster.properties.cluster_id;
+      const cluster = e.features?.[0]
+      if (!cluster) return
+      const clusterId = cluster.properties.cluster_id
       // leaves = every sighting nested inside this cluster
-      let leaves: any[] = [];
+      let leaves: any[] = []
       try {
-        leaves = await source.getClusterLeaves(clusterId, Number.MAX_SAFE_INTEGER, 0);
+        leaves = await source.getClusterLeaves(clusterId, Number.MAX_SAFE_INTEGER, 0)
       } catch (err) {
-        console.error('[map] getClusterLeaves failed:', err);
-        return;
+        console.error('[map] getClusterLeaves failed:', err)
+        return
       }
-      if (!leaves.length) return;
-      popup
-        .setLngLat(e.lngLat)
-        .setDOMContent(carouselNode(leaves))
-        .addTo(map);
-    });
+      if (!leaves.length) return
+      popup.setLngLat(e.lngLat).setDOMContent(carouselNode(leaves)).addTo(map)
+    })
 
     // Pointer cursor over any clickable sighting feature. Uses map-wide
     // mousemove + queryRenderedFeatures so it works regardless of which layer
     // sits visually on top (marker dot, its label, the hidden hit area, or a
     // cluster).
-    const CLICKABLE = ['sighting-marker', 'sighting-hit', 'sighting-label', 'sighting-cluster'];
+    const CLICKABLE = ['sighting-marker', 'sighting-hit', 'sighting-label', 'sighting-cluster']
     map.on('mousemove', (e) => {
-      const features = map.queryRenderedFeatures(e.point, { layers: CLICKABLE });
-      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-    });
+      const features = map.queryRenderedFeatures(e.point, { layers: CLICKABLE })
+      map.getCanvas().style.cursor = features.length ? 'pointer' : ''
+    })
 
     // Build the single-sighting popup.
     function popupNode(p: any): HTMLElement {
-      const root = document.createElement('div');
-      root.className = 'tpopup';
-      const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`;
+      const root = document.createElement('div')
+      root.className = 'tpopup'
+      const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`
 
-      let images: string[] = [];
-      try { images = JSON.parse(p.imageUrls || '[]'); } catch { /* ignore */ }
-      if (!images.length) images = p.imageUrl ? [p.imageUrl] : [];
+      let images: string[] = []
+      try {
+        images = JSON.parse(p.imageUrls || '[]')
+      } catch {
+        /* ignore */
+      }
+      if (!images.length) images = p.imageUrl ? [p.imageUrl] : []
 
       if (images.length) {
-        const imgwrap = document.createElement('div');
-        imgwrap.className = 'tpopup__imgwrap';
+        const imgwrap = document.createElement('div')
+        imgwrap.className = 'tpopup__imgwrap'
 
-        const link = document.createElement('a');
-        link.className = 'tpopup__img';
-        link.href = to;
-        const img = document.createElement('img');
-        img.src = images[0];
-        img.alt = '';
-        link.appendChild(img);
-        imgwrap.appendChild(link);
+        const link = document.createElement('a')
+        link.className = 'tpopup__img'
+        link.href = to
+        const img = document.createElement('img')
+        img.src = images[0]
+        img.alt = ''
+        link.appendChild(img)
+        imgwrap.appendChild(link)
 
         if (images.length > 1) {
-          let imgIdx = 0;
-          const prev = document.createElement('button');
-          prev.className = 'tpopup__arrow tpopup__arrow--prev';
-          prev.type = 'button';
-          prev.textContent = '<';
+          let imgIdx = 0
+          const prev = document.createElement('button')
+          prev.className = 'tpopup__arrow tpopup__arrow--prev'
+          prev.type = 'button'
+          prev.textContent = '<'
           prev.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            imgIdx = (imgIdx - 1 + images.length) % images.length;
-            img.src = images[imgIdx];
-          });
-          const next = document.createElement('button');
-          next.className = 'tpopup__arrow tpopup__arrow--next';
-          next.type = 'button';
-          next.textContent = '>';
+            ev.stopPropagation()
+            imgIdx = (imgIdx - 1 + images.length) % images.length
+            img.src = images[imgIdx]
+          })
+          const next = document.createElement('button')
+          next.className = 'tpopup__arrow tpopup__arrow--next'
+          next.type = 'button'
+          next.textContent = '>'
           next.addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            imgIdx = (imgIdx + 1) % images.length;
-            img.src = images[imgIdx];
-          });
-          imgwrap.appendChild(prev);
-          imgwrap.appendChild(next);
+            ev.stopPropagation()
+            imgIdx = (imgIdx + 1) % images.length
+            img.src = images[imgIdx]
+          })
+          imgwrap.appendChild(prev)
+          imgwrap.appendChild(next)
         }
 
-        root.appendChild(imgwrap);
+        root.appendChild(imgwrap)
       }
 
-      const body = document.createElement('div');
-      body.className = 'tpopup__body';
+      const body = document.createElement('div')
+      body.className = 'tpopup__body'
       body.innerHTML =
         `<a class="tpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
         `<a class="tpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
-        `<a class="tpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`;
-      root.appendChild(body);
+        `<a class="tpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`
+      root.appendChild(body)
 
-      return root;
+      return root
     }
 
     // Build the carousel popup for a cluster of sightings.
     function carouselNode(leaves: any[]): HTMLElement {
-      const root = document.createElement('div');
-      root.className = 'cpopup';
-      const count = leaves.length;
+      const root = document.createElement('div')
+      root.className = 'cpopup'
+      const count = leaves.length
 
       const slide = (i: number) => {
-        const p = leaves[i].properties;
-        const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`;
+        const p = leaves[i].properties
+        const to = `/${locale}/mushrooms/${encodeURIComponent(p.id ?? '')}`
 
-        const stage = document.createElement('div');
-        stage.className = 'cpopup__stage';
+        const stage = document.createElement('div')
+        stage.className = 'cpopup__stage'
 
-        let images: string[] = [];
-        try { images = JSON.parse(p.imageUrls || '[]'); } catch { /* ignore */ }
-        if (!images.length) images = p.imageUrl ? [p.imageUrl] : [];
+        let images: string[] = []
+        try {
+          images = JSON.parse(p.imageUrls || '[]')
+        } catch {
+          /* ignore */
+        }
+        if (!images.length) images = p.imageUrl ? [p.imageUrl] : []
 
         if (images.length) {
-          const imgwrap = document.createElement('div');
-          imgwrap.className = 'cpopup__imgwrap';
+          const imgwrap = document.createElement('div')
+          imgwrap.className = 'cpopup__imgwrap'
 
-          const link = document.createElement('a');
-          link.className = 'cpopup__img';
-          link.href = to;
-          const img = document.createElement('img');
-          img.src = images[0];
-          img.alt = '';
-          link.appendChild(img);
-          imgwrap.appendChild(link);
+          const link = document.createElement('a')
+          link.className = 'cpopup__img'
+          link.href = to
+          const img = document.createElement('img')
+          img.src = images[0]
+          img.alt = ''
+          link.appendChild(img)
+          imgwrap.appendChild(link)
 
           if (images.length > 1) {
-            let imgIdx = 0;
-            const prev = document.createElement('button');
-            prev.className = 'cpopup__arrow cpopup__arrow--prev';
-            prev.type = 'button';
-            prev.textContent = '<';
+            let imgIdx = 0
+            const prev = document.createElement('button')
+            prev.className = 'cpopup__arrow cpopup__arrow--prev'
+            prev.type = 'button'
+            prev.textContent = '<'
             prev.addEventListener('click', (ev) => {
-              ev.stopPropagation();
-              imgIdx = (imgIdx - 1 + images.length) % images.length;
-              img.src = images[imgIdx];
-            });
-            const next = document.createElement('button');
-            next.className = 'cpopup__arrow cpopup__arrow--next';
-            next.type = 'button';
-            next.textContent = '>';
+              ev.stopPropagation()
+              imgIdx = (imgIdx - 1 + images.length) % images.length
+              img.src = images[imgIdx]
+            })
+            const next = document.createElement('button')
+            next.className = 'cpopup__arrow cpopup__arrow--next'
+            next.type = 'button'
+            next.textContent = '>'
             next.addEventListener('click', (ev) => {
-              ev.stopPropagation();
-              imgIdx = (imgIdx + 1) % images.length;
-              img.src = images[imgIdx];
-            });
-            imgwrap.appendChild(prev);
-            imgwrap.appendChild(next);
+              ev.stopPropagation()
+              imgIdx = (imgIdx + 1) % images.length
+              img.src = images[imgIdx]
+            })
+            imgwrap.appendChild(prev)
+            imgwrap.appendChild(next)
           }
 
-          stage.appendChild(imgwrap);
+          stage.appendChild(imgwrap)
         }
 
-        const body = document.createElement('div');
-        body.className = 'cpopup__body';
+        const body = document.createElement('div')
+        body.className = 'cpopup__body'
         body.innerHTML =
           `<a class="cpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
           `<a class="cpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
-          `<a class="cpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`;
-        stage.appendChild(body);
+          `<a class="cpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`
+        stage.appendChild(body)
 
-        stageRoot.replaceChildren(stage);
-        idx.textContent = `${i + 1} / ${count}`;
-      };
+        stageRoot.replaceChildren(stage)
+        idx.textContent = `${i + 1} / ${count}`
+      }
 
-      const stageRoot = document.createElement('div');
-      stageRoot.className = 'cpopup__stageroot';
+      const stageRoot = document.createElement('div')
+      stageRoot.className = 'cpopup__stageroot'
 
-      const nav = document.createElement('div');
-      nav.className = 'cpopup__nav';
+      const nav = document.createElement('div')
+      nav.className = 'cpopup__nav'
 
-      const idx = document.createElement('span');
-      idx.className = 'cpopup__count';
+      const idx = document.createElement('span')
+      idx.className = 'cpopup__count'
 
-      const prev = document.createElement('button');
-      prev.className = 'cpopup__btn';
-      prev.type = 'button';
-      prev.textContent = '<';
+      const prev = document.createElement('button')
+      prev.className = 'cpopup__btn'
+      prev.type = 'button'
+      prev.textContent = '<'
       prev.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        current = (current - 1 + count) % count;
-        slide(current);
-      });
+        ev.stopPropagation()
+        current = (current - 1 + count) % count
+        slide(current)
+      })
 
-      const next = document.createElement('button');
-      next.className = 'cpopup__btn';
-      next.type = 'button';
-      next.textContent = '>';
+      const next = document.createElement('button')
+      next.className = 'cpopup__btn'
+      next.type = 'button'
+      next.textContent = '>'
       next.addEventListener('click', (ev) => {
-        ev.stopPropagation();
-        current = (current + 1) % count;
-        slide(current);
-      });
+        ev.stopPropagation()
+        current = (current + 1) % count
+        slide(current)
+      })
 
-      nav.append(prev, idx, next);
-      root.append(stageRoot, nav);
+      nav.append(prev, idx, next)
+      root.append(stageRoot, nav)
 
-      let current = 0;
-      slide(current);
-      return root;
+      let current = 0
+      slide(current)
+      return root
     }
 
     function escapeHtml(s: string): string {
@@ -617,33 +669,39 @@ const sightingsJSON = JSON.stringify(clientSightings);
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
     }
   }
 
   function initMap() {
-    const container = document.getElementById('map');
-    if (!container) return;
+    const container = document.getElementById('map')
+    if (!container) return
 
-    const lat = 47.4917, lon = 11.0922;
-    const ar = container.clientWidth / container.clientHeight;
+    const lat = 47.4917,
+      lon = 11.0922
+    const ar = container.clientWidth / container.clientHeight
 
-    const dLat = 15 / 111.32;
-    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180));
-    const w = lon - dLon, e = lon + dLon;
-    const s = lat - dLat, n = lat + dLat;
+    const dLat = 15 / 111.32
+    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180))
+    const w = lon - dLon,
+      e = lon + dLon
+    const s = lat - dLat,
+      n = lat + dLat
 
     const map = new maplibregl.Map({
       container,
       style: STYLE_URL,
       center: [lon, lat],
-      bounds: [[w, s], [e, n]],
-    });
+      bounds: [
+        [w, s],
+        [e, n],
+      ],
+    })
 
     map.on('load', () => {
-      applyPalette(map);
-      addHikingLayers(map);
-      addContours(map);
+      applyPalette(map)
+      addHikingLayers(map)
+      addContours(map)
 
       // Mask first so the viewport is always framed, even if a later layer
       // fails. Everything outside the 15 km box stays hidden behind it.
@@ -656,47 +714,56 @@ const sightingsJSON = JSON.stringify(clientSightings);
             geometry: {
               type: 'Polygon',
               coordinates: [
-                [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]],
-                [[w, s], [w, n], [e, n], [e, s], [w, s]],
+                [
+                  [-180, -90],
+                  [180, -90],
+                  [180, 90],
+                  [-180, 90],
+                  [-180, -90],
+                ],
+                [
+                  [w, s],
+                  [w, n],
+                  [e, n],
+                  [e, s],
+                  [w, s],
+                ],
               ],
             },
           },
         ],
-      };
+      }
 
-      map.addSource('box-mask', { type: 'geojson', data: mask });
+      map.addSource('box-mask', { type: 'geojson', data: mask })
       map.addLayer({
         id: 'box-mask-fill',
         type: 'fill',
         source: 'box-mask',
         paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
-      });
+      })
       map.addLayer({
         id: 'box-mask-outline',
         type: 'line',
         source: 'box-mask',
         paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
-      });
+      })
 
       try {
-        addSightings(map, JSON.parse(container.dataset.sightings || '[]'));
+        addSightings(map, JSON.parse(container.dataset.sightings || '[]'))
       } catch (err) {
-        console.error('[map] addSightings failed:', err);
+        console.error('[map] addSightings failed:', err)
       }
-    });
+    })
 
     map.on('error', (e: any) => {
-      console.error('[map] maplibre error:', e?.error);
-    });
+      console.error('[map] maplibre error:', e?.error)
+    })
 
-    map.addControl(
-      new maplibregl.NavigationControl({ showCompass: false }),
-      'bottom-right',
-    );
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
   }
 
-  if (document.readyState !== 'loading') initMap();
-  else document.addEventListener('DOMContentLoaded', initMap);
+  if (document.readyState !== 'loading') initMap()
+  else document.addEventListener('DOMContentLoaded', initMap)
 </script>
 
 <style>

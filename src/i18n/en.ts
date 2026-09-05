@@ -115,11 +115,10 @@ export default {
   meta: {
     homeDescription:
       'Mushroom sightings and foraging discoveries around Garmisch-Partenkirchen in the Bavarian Alps.',
-    mapDescription:
-      'Interactive map of mushroom sightings around Garmisch-Partenkirchen.',
+    mapDescription: 'Interactive map of mushroom sightings around Garmisch-Partenkirchen.',
     homeTitle: 'myco.log — mushroom sightings',
     mapTitle: 'map — myco.log',
     logTitle: 'log — myco.log',
     backlogTitle: 'backlog — myco.log',
   },
-} as const;
+} as const

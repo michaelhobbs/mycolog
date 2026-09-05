@@ -1,64 +1,82 @@
 ---
-import type { Locale } from '../i18n';
-import type { EnrichedSighting } from '../lib/sightings';
-import { Image } from 'astro:assets';
-import { l10n } from '../i18n/helpers';
-import { formatDate, getTranslations } from '../i18n';
+import type { Locale } from '../i18n'
+import type { EnrichedSighting } from '../lib/sightings'
+import { Image } from 'astro:assets'
+import { l10n } from '../i18n/helpers'
+import { formatDate, getTranslations } from '../i18n'
 
 interface Props {
-  sighting: EnrichedSighting;
-  locale: Locale;
+  sighting: EnrichedSighting
+  locale: Locale
 }
 
-const { sighting, locale } = Astro.props;
-const s = sighting;
-const t = l10n;
-const dict = getTranslations(locale);
+const { sighting, locale } = Astro.props
+const s = sighting
+const t = l10n
+const dict = getTranslations(locale)
 ---
 
 <div class="tui-card">
   <div class="tui-card__head">
-    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title">┌─ {t(s.species.commonName, locale)}</a>
+    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title"
+      >┌─ {t(s.species.commonName, locale)}</a
+    >
     <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__more">{'>'}{dict.card.more}</a>
   </div>
 
   <div class="tui-card__carousel" data-carousel={s.images && s.images.length > 1 ? '' : undefined}>
-    {s.images?.map((img, i) => (
-      <div class="tui-card__slide" data-active={i === 0 ? '' : undefined}>
-        <Image
-          src={img}
-          alt={t(s.species.commonName, locale)}
-          loading="lazy"
-          widths={[640, 320]}
-          sizes="(min-width: 640px) 320px, 100vw"
-        />
-      </div>
-    ))}
+    {
+      s.images?.map((img, i) => (
+        <div class="tui-card__slide" data-active={i === 0 ? '' : undefined}>
+          <Image
+            src={img}
+            alt={t(s.species.commonName, locale)}
+            loading="lazy"
+            widths={[640, 320]}
+            sizes="(min-width: 640px) 320px, 100vw"
+          />
+        </div>
+      ))
+    }
     <div class="tui-card__overlay">
       <span class="tui-card__date">{formatDate(s.dateSpotted, locale)}</span>
     </div>
-    {(s.images?.length ?? 0) > 1 && (
-      <button class="tui-card__arrow tui-card__arrow--prev" data-arrow="prev" aria-label="Previous">‹</button>
-      <button class="tui-card__arrow tui-card__arrow--next" data-arrow="next" aria-label="Next">›</button>
-    )}
+    {
+      (s.images?.length ?? 0) > 1 && (
+        <>
+          <button
+            class="tui-card__arrow tui-card__arrow--prev"
+            data-arrow="prev"
+            aria-label="Previous"
+          >
+            ‹
+          </button>
+          <button class="tui-card__arrow tui-card__arrow--next" data-arrow="next" aria-label="Next">
+            ›
+          </button>
+        </>
+      )
+    }
   </div>
 
-  {(s.images?.length ?? 0) > 1 && (
-    <div class="tui-card__thumbs">
-      {s.images.map((img, i) => (
-        <button
-          class="tui-card__thumb"
-          type="button"
-          data-thumb
-          data-index={i}
-          aria-label={`${i + 1}`}
-        >
-          <Image src={img} alt="" loading="lazy" width={96} />
-          <span class="tui-card__thumb-idx">{i + 1}</span>
-        </button>
-      ))}
-    </div>
-  )}
+  {
+    (s.images?.length ?? 0) > 1 && (
+      <div class="tui-card__thumbs">
+        {s.images.map((img, i) => (
+          <button
+            class="tui-card__thumb"
+            type="button"
+            data-thumb
+            data-index={i}
+            aria-label={`${i + 1}`}
+          >
+            <Image src={img} alt="" loading="lazy" width={96} />
+            <span class="tui-card__thumb-idx">{i + 1}</span>
+          </button>
+        ))}
+      </div>
+    )
+  }
 
   <div class="tui-card__body">
     <div class="tui-card__row">
@@ -71,40 +89,52 @@ const dict = getTranslations(locale);
       <span class="tui-card__sep-dots"></span>
       <span class="tui-card__val">{t(s.location.name, locale)}</span>
     </div>
-    {s.species.habitat && (
-      <div class="tui-card__row">
-        <span class="tui-card__label">habitat</span>
-        <span class="tui-card__sep-dots"></span>
-        <span class="tui-card__val">{t(s.species.habitat, locale)}</span>
-      </div>
-    )}
-    {s.species.edibility && (
-      <div class="tui-card__row">
-        <span class="tui-card__label">edibility</span>
-        <span class="tui-card__sep-dots"></span>
-        <span class="tui-card__val">{t(s.species.edibility, locale)}</span>
-      </div>
-    )}
+    {
+      s.species.habitat && (
+        <div class="tui-card__row">
+          <span class="tui-card__label">habitat</span>
+          <span class="tui-card__sep-dots" />
+          <span class="tui-card__val">{t(s.species.habitat, locale)}</span>
+        </div>
+      )
+    }
+    {
+      s.species.edibility && (
+        <div class="tui-card__row">
+          <span class="tui-card__label">edibility</span>
+          <span class="tui-card__sep-dots" />
+          <span class="tui-card__val">{t(s.species.edibility, locale)}</span>
+        </div>
+      )
+    }
 
     <div class="tui-card__divider"></div>
 
     <div class="tui-card__features">
-      <span class="tui-card__features-hdr">├─ {t(s.species.determiningFeatures[0], locale) ? 'features:' : ''}</span>
+      <span class="tui-card__features-hdr"
+        >├─ {t(s.species.determiningFeatures[0], locale) ? 'features:' : ''}</span
+      >
       <ul>
-        {s.species.determiningFeatures.map((f) => (
-          <li>│  <span class="tui-card__bullet">▸</span> {t(f, locale)}</li>
-        ))}
+        {
+          s.species.determiningFeatures.map((f) => (
+            <li>
+              │ <span class="tui-card__bullet">▸</span> {t(f, locale)}
+            </li>
+          ))
+        }
       </ul>
     </div>
 
-    {s.notes && (
-      <>
-        <div class="tui-card__divider"></div>
-        <div class="tui-card__notes">
-          └─ <span class="tui-card__note-text">{t(s.notes, locale)}</span>
-        </div>
-      </>
-    )}
+    {
+      s.notes && (
+        <>
+          <div class="tui-card__divider" />
+          <div class="tui-card__notes">
+            └─ <span class="tui-card__note-text">{t(s.notes, locale)}</span>
+          </div>
+        </>
+      )
+    }
   </div>
 </div>
 
@@ -352,25 +382,25 @@ const dict = getTranslations(locale);
 </style>
 
 <script>
-    document.querySelectorAll('.tui-card__carousel[data-carousel]').forEach((carousel) => {
-      const slides = [...carousel.querySelectorAll('.tui-card__slide')];
-      const card = carousel.closest('.tui-card');
-      const thumbs = [...(card?.querySelectorAll('[data-thumb]') ?? [])];
-      if (slides.length <= 1) return;
-      let active = 0;
+  document.querySelectorAll('.tui-card__carousel[data-carousel]').forEach((carousel) => {
+    const slides = [...carousel.querySelectorAll('.tui-card__slide')]
+    const card = carousel.closest('.tui-card')
+    const thumbs = [...(card?.querySelectorAll('[data-thumb]') ?? [])]
+    if (slides.length <= 1) return
+    let active = 0
 
-      function show(i) {
-        slides[active].removeAttribute('data-active');
-        active = (i + slides.length) % slides.length;
-        slides[active].setAttribute('data-active', '');
-        thumbs.forEach((thumb, thumbIndex) => {
-          if (thumbIndex === active) thumb.setAttribute('data-active', '');
-          else thumb.removeAttribute('data-active');
-        });
-      }
+    function show(i) {
+      slides[active].removeAttribute('data-active')
+      active = (i + slides.length) % slides.length
+      slides[active].setAttribute('data-active', '')
+      thumbs.forEach((thumb, thumbIndex) => {
+        if (thumbIndex === active) thumb.setAttribute('data-active', '')
+        else thumb.removeAttribute('data-active')
+      })
+    }
 
-      carousel.querySelector('[data-arrow="prev"]')?.addEventListener('click', () => show(active - 1));
-      carousel.querySelector('[data-arrow="next"]')?.addEventListener('click', () => show(active + 1));
-      thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => show(i)));
-    });
-  </script>
+    carousel.querySelector('[data-arrow="prev"]')?.addEventListener('click', () => show(active - 1))
+    carousel.querySelector('[data-arrow="next"]')?.addEventListener('click', () => show(active + 1))
+    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => show(i)))
+  })
+</script>

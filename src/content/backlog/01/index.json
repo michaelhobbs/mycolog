@@ -1,7 +1,4 @@
 {
   "dateSpotted": "2026-08-22",
-  "images": [
-    "./images/01.jpg",
-    "./images/02.jpg"
-  ]
+  "images": ["./images/01.jpg", "./images/02.jpg"]
 }

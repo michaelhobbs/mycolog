@@ -1,14 +1,17 @@
 ---
 interface Props {
-  locale: string;
+  locale: string
 }
-const { locale } = Astro.props as { locale: 'en' | 'de' };
+const { locale } = Astro.props as { locale: 'en' | 'de' }
 ---
 
 <div class="map-frame">
   <div class="map-frame__title">
-    <span class="map-frame__title-text">[ {locale === 'de' ? 'Ort wählen' : 'pick location'} ]</span>
-    <span class="map-frame__coords" id="picker-coords">{locale === 'de' ? 'noch kein Ort' : 'no location'}</span>
+    <span class="map-frame__title-text">[ {locale === 'de' ? 'Ort wählen' : 'pick location'} ]</span
+    >
+    <span class="map-frame__coords" id="picker-coords"
+      >{locale === 'de' ? 'noch kein Ort' : 'no location'}</span
+    >
   </div>
   <div id="picker-map" class="picker-map" data-locale={locale}></div>
   <div class="map-frame__attribution">
@@ -17,75 +20,73 @@ const { locale } = Astro.props as { locale: 'en' | 'de' };
 </div>
 
 <script>
-  import maplibregl from 'maplibre-gl';
-  import 'maplibre-gl/dist/maplibre-gl.css';
+  import maplibregl from 'maplibre-gl'
+  import 'maplibre-gl/dist/maplibre-gl.css'
 
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord';
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
 
   function init() {
-    const container = document.getElementById('picker-map');
-    if (!container) return;
+    const container = document.getElementById('picker-map')
+    if (!container) return
 
     const map = new maplibregl.Map({
       container,
       style: STYLE_URL,
       center: [11.0922, 47.4917],
       zoom: 11,
-    });
+    })
 
-    const coordsEl = document.getElementById('picker-coords');
-    let marker: maplibregl.Marker | null = null;
+    const coordsEl = document.getElementById('picker-coords')
+    let marker: maplibregl.Marker | null = null
 
     function paintPalette() {
       const paint = (layer: string, props: { [s: string]: unknown }) => {
         if (map.getLayer(layer)) {
-          Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v));
+          Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v))
         }
-      };
-      paint('background', { 'background-color': '#0e120b' });
-      paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 });
-      paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 });
-      paint('water', { 'fill-color': '#2a7d94' });
-      paint('waterway', { 'line-color': '#2a6a80' });
-      ['highway_major_casing', 'highway_motorway_casing'].forEach((l) =>
+      }
+      paint('background', { 'background-color': '#0e120b' })
+      paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
+      paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
+      paint('water', { 'fill-color': '#2a7d94' })
+      paint('waterway', { 'line-color': '#2a6a80' })
+      ;['highway_major_casing', 'highway_motorway_casing'].forEach((l) =>
         paint(l, { 'line-color': '#151a10' }),
-      );
-      paint('highway_major_inner', { 'line-color': '#d4f0d4' });
-      paint('highway_minor', { 'line-color': '#8fbf8f' });
-      paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] });
+      )
+      paint('highway_major_inner', { 'line-color': '#d4f0d4' })
+      paint('highway_minor', { 'line-color': '#8fbf8f' })
+      paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
     }
 
     function updatePin(lngLat: maplibregl.LngLat) {
-      const el = document.createElement('div');
-      el.className = 'picker-pin';
-      el.innerHTML = '';
-      if (marker) marker.remove();
-      marker = new maplibregl.Marker({ element: el })
-        .setLngLat(lngLat)
-        .addTo(map);
+      const el = document.createElement('div')
+      el.className = 'picker-pin'
+      el.innerHTML = ''
+      if (marker) marker.remove()
+      marker = new maplibregl.Marker({ element: el }).setLngLat(lngLat).addTo(map)
 
-      const lat = lngLat.lat.toFixed(5);
-      const lng = lngLat.lng.toFixed(5);
-      if (coordsEl) coordsEl.textContent = `${lat}°N ${lng}°E`;
+      const lat = lngLat.lat.toFixed(5)
+      const lng = lngLat.lng.toFixed(5)
+      if (coordsEl) coordsEl.textContent = `${lat}°N ${lng}°E`
 
-      const input = document.getElementById('picker-location') as HTMLInputElement | null;
-      if (input) input.value = JSON.stringify({ lat: Number(lat), lng: Number(lng) });
+      const input = document.getElementById('picker-location') as HTMLInputElement | null
+      if (input) input.value = JSON.stringify({ lat: Number(lat), lng: Number(lng) })
     }
 
     map.on('load', () => {
-      paintPalette();
+      paintPalette()
       map.on('click', (e) => {
-        updatePin(e.lngLat);
-        map.getCanvas().style.cursor = 'crosshair';
-      });
+        updatePin(e.lngLat)
+        map.getCanvas().style.cursor = 'crosshair'
+      })
       map.on('mousemove', () => {
-        map.getCanvas().style.cursor = 'crosshair';
-      });
-    });
+        map.getCanvas().style.cursor = 'crosshair'
+      })
+    })
   }
 
-  if (document.readyState !== 'loading') init();
-  else document.addEventListener('DOMContentLoaded', init);
+  if (document.readyState !== 'loading') init()
+  else document.addEventListener('DOMContentLoaded', init)
 </script>
 
 <input type="hidden" id="picker-location" name="location" value="" />

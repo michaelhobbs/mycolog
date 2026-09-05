@@ -2,7 +2,10 @@
   "scientificName": "Amanita muscaria",
   "commonName": { "en": "Fly Agaric", "de": "Fliegenpilz" },
   "determiningFeatures": [
-    { "en": "Bright red (occ. orange/yellow) cap with white spots", "de": "Leuchtend roten (geleg. orangen/gelben) Hut mit weißen Punkten" },
+    {
+      "en": "Bright red (occ. orange/yellow) cap with white spots",
+      "de": "Leuchtend roten (geleg. orangen/gelben) Hut mit weißen Punkten"
+    },
     { "en": "White gills and stem", "de": "Weiße Lamellen und Stiel" },
     { "en": "Ring on stem", "de": "Am Stiel befindlicher Ring" },
     { "en": "Bulbous base", "de": "Knollige Basis" }

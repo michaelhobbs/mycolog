@@ -1,42 +1,37 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
-import { getTranslations, formatDate, locales } from '../../../i18n';
-import { l10n } from '../../../i18n/helpers';
-import type { Locale } from '../../../i18n';
+import Layout from '../../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
+import { getTranslations, formatDate, locales } from '../../../i18n'
+import { l10n } from '../../../i18n/helpers'
+import type { Locale } from '../../../i18n'
 
 export function getStaticPaths() {
   return Promise.resolve(
     (async () => {
-      const species = await getCollection('species');
-      return species.flatMap((sp) =>
-        locales.map((locale) => ({ params: { locale, name: sp.id } })),
-      );
+      const species = await getCollection('species')
+      return species.flatMap((sp) => locales.map((locale) => ({ params: { locale, name: sp.id } })))
     })(),
-  );
+  )
 }
 
-const { locale, name } = Astro.params as { locale: Locale; name: string };
-const t = getTranslations(locale);
+const { locale, name } = Astro.params as { locale: Locale; name: string }
+const t = getTranslations(locale)
 
-const [all, speciesList] = await Promise.all([
-  getCollection('sightings'),
-  getCollection('species'),
-]);
-const species = speciesList.find((sp) => sp.id === name);
+const [all, speciesList] = await Promise.all([getCollection('sightings'), getCollection('species')])
+const species = speciesList.find((sp) => sp.id === name)
 
 const entries = all
   .filter((s) => s.data.species === name)
-  .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1));
+  .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1))
 
-const sp = species?.data;
-const allImages = entries.flatMap((e) => e.data.images);
-const notes = entries.map((e) => e.data.notes).find(Boolean);
-const sharedNotes = sp?.notes;
-const habitat = sp?.habitat;
-const edibility = sp?.edibility;
-const features = sp?.determiningFeatures ?? [];
+const sp = species?.data
+const allImages = entries.flatMap((e) => e.data.images)
+const notes = entries.map((e) => e.data.notes).find(Boolean)
+const sharedNotes = sp?.notes
+const habitat = sp?.habitat
+const edibility = sp?.edibility
+const features = sp?.determiningFeatures ?? []
 ---
 
 <Layout title={`${species ? l10n(sp?.commonName, locale) : name} — myco.log`} locale={locale}>
@@ -50,80 +45,100 @@ const features = sp?.determiningFeatures ?? [];
       <a href={`/${locale}/mushrooms`} class="tui-link">{'<'} {t.mushrooms.backToIndex}</a>
     </div>
 
-    {species && (
-      <>
-        <div class="gallery">
-          {allImages.map((img, i) => (
-            <figure class="gallery__item">
-              <Image src={img} alt={`${l10n(sp.commonName, locale)} — ${i + 1}`} loading="lazy" widths={[320, 640]} />
-            </figure>
-          ))}
-        </div>
-
-        <div class="facts">
-          <div class="fact-row">
-            <span class="fact-lbl">{t.mushrooms.edibility}</span>
-            <span class="fact-dot"></span>
-            <span class="fact-val">{edibility ? l10n(edibility, locale) : '—'}</span>
+    {
+      species && (
+        <>
+          <div class="gallery">
+            {allImages.map((img, i) => (
+              <figure class="gallery__item">
+                <Image
+                  src={img}
+                  alt={`${l10n(sp.commonName, locale)} — ${i + 1}`}
+                  loading="lazy"
+                  widths={[320, 640]}
+                />
+              </figure>
+            ))}
           </div>
-          <div class="fact-row">
-            <span class="fact-lbl">{t.mushrooms.habitat}</span>
-            <span class="fact-dot"></span>
-            <span class="fact-val">{habitat ? l10n(habitat, locale) : '—'}</span>
+
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-lbl">{t.mushrooms.edibility}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">{edibility ? l10n(edibility, locale) : '—'}</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-lbl">{t.mushrooms.habitat}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">{habitat ? l10n(habitat, locale) : '—'}</span>
+            </div>
           </div>
-        </div>
 
-        {sharedNotes && (
-          <section class="block">
-            <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
-            <p class="block__notes">{l10n(sharedNotes, locale)}</p>
-          </section>
-        )}
+          {sharedNotes && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
+              <p class="block__notes">{l10n(sharedNotes, locale)}</p>
+            </section>
+          )}
 
-        {features.length > 0 && (
+          {features.length > 0 && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.features}</div>
+              <ul class="block__list">
+                {features.map((f) => (
+                  <li>▸ {l10n(f, locale)}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
           <section class="block">
-            <div class="block__hdr">╔═ {t.mushrooms.features}</div>
-            <ul class="block__list">
-              {features.map((f) => (
-                <li>▸ {l10n(f, locale)}</li>
-              ))}
+            <div class="block__hdr">
+              ╔═ {t.mushrooms.sightings} ({entries.length})
+            </div>
+            <ul class="block__sightings">
+              {entries.map((e) => {
+                const sd = e.data
+                const cover = sd.images?.[0]
+                return (
+                  <li class="sighting">
+                    {cover && (
+                      <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__img">
+                        <Image
+                          src={cover}
+                          alt={l10n(sp.commonName, locale)}
+                          loading="lazy"
+                          width={96}
+                        />
+                      </a>
+                    )}
+                    <div class="sighting__body">
+                      <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__date">
+                        {formatDate(sd.dateSpotted, locale)}
+                      </a>
+                      <span class="sighting__loc">
+                        @{l10n(sd.location.name, locale) || t.mushrooms.unknown}
+                      </span>
+                    </div>
+                  </li>
+                )
+              })}
             </ul>
           </section>
-        )}
-
-        <section class="block">
-          <div class="block__hdr">╔═ {t.mushrooms.sightings} ({entries.length})</div>
-          <ul class="block__sightings">
-            {entries.map((e) => {
-              const sd = e.data;
-              const cover = sd.images?.[0];
-              return (
-                <li class="sighting">
-                  {cover && (
-                    <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__img">
-                      <Image src={cover} alt={l10n(sp.commonName, locale)} loading="lazy" width={96} />
-                    </a>
-                  )}
-                  <div class="sighting__body">
-                    <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__date">
-                      {formatDate(sd.dateSpotted, locale)}
-                    </a>
-                    <span class="sighting__loc">@{l10n(sd.location.name, locale) || t.mushrooms.unknown}</span>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      </>
-    )}
+        </>
+      )
+    }
   </section>
 </Layout>
 
 <style>
-  .species-page { padding-bottom: 2rem; }
+  .species-page {
+    padding-bottom: 2rem;
+  }
 
-  .page-header { margin-bottom: 1rem; }
+  .page-header {
+    margin-bottom: 1rem;
+  }
 
   .page-header__tag {
     display: block;
@@ -138,7 +153,9 @@ const features = sp?.determiningFeatures ?? [];
     font-size: 0.8125rem;
   }
 
-  .back { margin-bottom: 1.25rem; }
+  .back {
+    margin-bottom: 1.25rem;
+  }
 
   .tui-link {
     color: var(--accent-dim);

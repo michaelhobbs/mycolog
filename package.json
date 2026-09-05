@@ -10,7 +10,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "update-backlog": "node scripts/import-backlog-public.mjs",
-    "astro": "astro"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "astro": "astro",
+    "prepare": "husky"
   },
   "dependencies": {
     "astro": "^7.2.6",
@@ -20,9 +23,16 @@
   "allowScripts": {
     "esbuild": true
   },
+  "lint-staged": {
+    "*.{astro,js,mjs,ts,json,md}": "prettier --write"
+  },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "express": "^5.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3"
   }
 }

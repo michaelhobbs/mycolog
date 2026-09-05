@@ -2,10 +2,22 @@
   "scientificName": "Hydnellum peckii",
   "commonName": { "en": "Devil's tooth", "de": "Scharfe Korkstacheling" },
   "determiningFeatures": [
-    { "en": "White to pinkish-brown velvety cap exuding red droplets when young", "de": "Weißlicher bis bräunlich-rosa samtiger Hut, jung mit roten Tropfen" },
-    { "en": "Teeth/spines underneath instead of pores or gills", "de": "Zähnchen statt Poren oder Lamellen" },
-    { "en": "Irregular, tough, fan-shaped fruit body", "de": "Unregelmäßiger, zäher, fanschelförmiger Fruchtkörper" },
-    { "en": "Found growing on ground among moss in coniferous forest", "de": "Wächst am Boden zwischen Moos im Nadelwald" }
+    {
+      "en": "White to pinkish-brown velvety cap exuding red droplets when young",
+      "de": "Weißlicher bis bräunlich-rosa samtiger Hut, jung mit roten Tropfen"
+    },
+    {
+      "en": "Teeth/spines underneath instead of pores or gills",
+      "de": "Zähnchen statt Poren oder Lamellen"
+    },
+    {
+      "en": "Irregular, tough, fan-shaped fruit body",
+      "de": "Unregelmäßiger, zäher, fanschelförmiger Fruchtkörper"
+    },
+    {
+      "en": "Found growing on ground among moss in coniferous forest",
+      "de": "Wächst am Boden zwischen Moos im Nadelwald"
+    }
   ],
   "notes": {
     "en": "Exudes bright red droplets when young, giving it a \"bleeding\" appearance; turns brown and tough with age",

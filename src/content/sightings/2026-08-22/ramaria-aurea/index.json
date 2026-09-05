@@ -6,5 +6,10 @@
     "lng": 11.153002,
     "name": { "en": "Kankerbach", "de": "Kankerbach" }
   },
-  "images": ["./images/IMG_4193.jpg", "./images/IMG_4194.jpg", "./images/IMG_4196.jpg", "./images/IMG_4198.jpg"]
+  "images": [
+    "./images/IMG_4193.jpg",
+    "./images/IMG_4194.jpg",
+    "./images/IMG_4196.jpg",
+    "./images/IMG_4198.jpg"
+  ]
 }

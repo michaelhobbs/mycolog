@@ -8,6 +8,13 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Formatting
+
+All code must follow the Prettier rules (`semi: false`, `singleQuote: true`,
+`printWidth: 100`) defined in `prettier.config.ts`. After any change, run
+`npm run format` (or at minimum verify with `npm run format:check`) before
+finishing.
+
 ## Backlog identification workflow (dev only)
 
 The backlog identification page (`/{locale}/backlog/{slug}`) lets you promote an

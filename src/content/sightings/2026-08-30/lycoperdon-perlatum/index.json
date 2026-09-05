@@ -6,5 +6,10 @@
     "lng": 11.042881,
     "name": { "en": "Rappenweg (Grainau)", "de": "Rappenweg (Grainau)" }
   },
-  "images": ["./images/IMG_4431.jpg", "./images/IMG_4432.jpg", "./images/IMG_4476.jpg", "./images/IMG_4480.jpg"]
+  "images": [
+    "./images/IMG_4431.jpg",
+    "./images/IMG_4432.jpg",
+    "./images/IMG_4476.jpg",
+    "./images/IMG_4480.jpg"
+  ]
 }

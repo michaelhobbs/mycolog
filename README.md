@@ -58,14 +58,14 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 
 ### Key commands
 
-| Command                      | Action                                        |
-| :--------------------------- | :-------------------------------------------- |
-| `npm install`                | Install dependencies                          |
-| `npm run dev`                | Start dev server at `http://localhost:4321`   |
-| `npm run build`              | Build the static site into `./dist/`          |
-| `npm run preview`            | Preview the production build                  |
-| `npm run update-backlog`     | Import `public/images/*` into the backlog     |
-| `node scripts/api.mjs`       | Start the identify API (`:4322`; dev workflows) |
+| Command                  | Action                                          |
+| :----------------------- | :---------------------------------------------- |
+| `npm install`            | Install dependencies                            |
+| `npm run dev`            | Start dev server at `http://localhost:4321`     |
+| `npm run build`          | Build the static site into `./dist/`            |
+| `npm run preview`        | Preview the production build                    |
+| `npm run update-backlog` | Import `public/images/*` into the backlog       |
+| `node scripts/api.mjs`   | Start the identify API (`:4322`; dev workflows) |
 
 Dev server + identify API are managed with background mode:
 
@@ -80,7 +80,7 @@ node scripts/api.mjs        # runs the API in the foreground
 ## Content Collections
 
 `src/content.config.ts` defines three collections. All text that must render in
-both languages is stored as a *localized string* object:
+both languages is stored as a _localized string_ object:
 
 ```ts
 { "en": "English text", "de": "Deutscher Text" }
@@ -97,11 +97,11 @@ Sightings reference a species **only by slug**; the shared data lives here once.
   "scientificName": "Amanita muscaria",
   "commonName": { "en": "Fly Agaric", "de": "Fliegenpilz" },
   "determiningFeatures": [
-    { "en": "Bright red cap with white spots", "de": "Leuchtend roter Hut mit weißen Punkten" }
+    { "en": "Bright red cap with white spots", "de": "Leuchtend roter Hut mit weißen Punkten" },
   ],
-  "notes":   { "en": "…", "de": "…" },        // optional
+  "notes": { "en": "…", "de": "…" }, // optional
   "habitat": { "en": "Birch forest", "de": "Birkenwald" }, // optional
-  "edibility": { "en": "Psychoactive", "de": "Psychoaktiv" } // optional
+  "edibility": { "en": "Psychoactive", "de": "Psychoaktiv" }, // optional
 }
 ```
 
@@ -111,15 +111,15 @@ Location: `src/content/sightings/{DATE}/{species-slug}/index.json`
 
 ```jsonc
 {
-  "species": "schizophyllum-commune",   // references a species slug
-  "dateSpotted": "2026-08-22",          // YYYY-MM-DD
+  "species": "schizophyllum-commune", // references a species slug
+  "dateSpotted": "2026-08-22", // YYYY-MM-DD
   "location": {
     "lat": 47.483453,
     "lng": 11.149244,
-    "name": { "en": "Kankerbach", "de": "Kankerbach" } // optional, localized
+    "name": { "en": "Kankerbach", "de": "Kankerbach" }, // optional, localized
   },
   "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"], // relative to this folder
-  "notes": { "en": "…", "de": "…" }     // optional
+  "notes": { "en": "…", "de": "…" }, // optional
 }
 ```
 
@@ -131,8 +131,8 @@ Location: `src/content/backlog/{NN}/index.json` (numeric slug, e.g. `01`, `30`)
 
 ```jsonc
 {
-  "dateSpotted": "2026-08-22",   // YYYY-MM-DD (taken from the photo's EXIF date)
-  "images": ["./images/01.jpg", "./images/02.jpg"]  // converted to JPG
+  "dateSpotted": "2026-08-22", // YYYY-MM-DD (taken from the photo's EXIF date)
+  "images": ["./images/01.jpg", "./images/02.jpg"], // converted to JPG
 }
 ```
 

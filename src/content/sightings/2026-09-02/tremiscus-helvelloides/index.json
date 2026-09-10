@@ -1,0 +1,17 @@
+{
+  "species": "tremiscus-helvelloides",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.48428,
+    "lng": 11.15272,
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
+  },
+  "images": [
+    "./images/tremiscus-helvelloides1.jpg",
+    "./images/tremiscus-helvelloides2.jpg",
+    "./images/tremiscus-helvelloides3.jpg"
+  ]
+}

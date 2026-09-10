@@ -1,0 +1,18 @@
+{
+  "species": "laccaria-amethystina",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.48439,
+    "lng": 11.15379,
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
+  },
+  "images": [
+    "./images/laccaria-amethystina1.jpg",
+    "./images/laccaria-amethystina2.jpg",
+    "./images/laccaria-amethystina3.jpg",
+    "./images/laccaria-amethystina4.jpg"
+  ]
+}

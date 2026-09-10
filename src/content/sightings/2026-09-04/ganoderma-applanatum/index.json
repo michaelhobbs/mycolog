@@ -1,0 +1,17 @@
+{
+  "species": "ganoderma-applanatum",
+  "dateSpotted": "2026-09-04",
+  "location": {
+    "lat": 47.45414,
+    "lng": 10.98314,
+    "name": {
+      "en": "Eibsee",
+      "de": "Eibsee"
+    }
+  },
+  "images": ["./images/ganoderma-applanatum1.jpg", "./images/ganoderma-applanatum2.jpg"],
+  "notes": {
+    "en": "Test for artist's bracket: try to draw on the white pores, they should darken where bruised.",
+    "de": ""
+  }
+}

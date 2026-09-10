@@ -1,0 +1,17 @@
+{
+  "species": "auricularia-auricula-judae",
+  "dateSpotted": "2026-09-10",
+  "location": {
+    "lat": 47.50844,
+    "lng": 11.11202,
+    "name": {
+      "en": "Schweinbach",
+      "de": "Schweinbach"
+    }
+  },
+  "images": [
+    "./images/auricularia-auricula-judae1.jpg",
+    "./images/auricularia-auricula-judae2.jpg",
+    "./images/auricularia-auricula-judae3.jpg"
+  ]
+}

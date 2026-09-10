@@ -1,0 +1,21 @@
+{
+  "species": "caloboletus-radicans",
+  "dateSpotted": "2026-08-24",
+  "location": {
+    "lat": 47.47862,
+    "lng": 11.07537,
+    "name": {
+      "en": "Katzenstein",
+      "de": "Katzenstein"
+    }
+  },
+  "images": [
+    "./images/caloboletus-radicans1.jpg",
+    "./images/caloboletus-radicans2.jpg",
+    "./images/caloboletus-radicans3.jpg",
+    "./images/caloboletus-radicans4.jpg",
+    "./images/caloboletus-radicans5.jpg",
+    "./images/caloboletus-radicans6.jpg",
+    "./images/caloboletus-radicans7.jpg"
+  ]
+}

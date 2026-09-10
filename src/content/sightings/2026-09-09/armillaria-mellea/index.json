@@ -1,0 +1,23 @@
+{
+  "species": "armillaria-mellea",
+  "dateSpotted": "2026-09-09",
+  "location": {
+    "lat": 47.49239,
+    "lng": 11.12332,
+    "name": {
+      "en": "Schöne Aussicht (Auf der Lache)",
+      "de": "Schöne Aussicht (Auf der Lache)"
+    }
+  },
+  "images": [
+    "./images/armillaria-mellea1.jpg",
+    "./images/armillaria-mellea2.jpg",
+    "./images/armillaria-mellea3.jpg",
+    "./images/armillaria-mellea4.jpg",
+    "./images/armillaria-mellea5.jpg"
+  ],
+  "notes": {
+    "en": "Aka Boot-lace fungus - under bark find long dark cords (rhizomorphs) resembling bootlaces",
+    "de": ""
+  }
+}

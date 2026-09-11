@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro'
+import Notice from '../../components/Notice.astro'
 import { getTranslations, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
@@ -82,17 +83,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     </div>
   </section>
 
-  <section class="info-grid">
-    <div class="tui-box tui-box--warn">
-      <div class="tui-box__title">╔═ ⚠ {t.home.warningTitle}</div>
-      <div class="tui-box__body">{t.home.warningText}</div>
-    </div>
-
-    <div class="tui-box tui-box--nature">
-      <div class="tui-box__title">╔═ 🌲 {t.home.forestsTitle}</div>
-      <div class="tui-box__body">{t.home.forestsText}</div>
-    </div>
-  </section>
+  <Notice margin={false} title={t.home.warningTitle} body={t.home.warningText} />
 </Layout>
 
 <style>
@@ -175,46 +166,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
   .tui-btn--dim:hover {
     background: var(--fg-dim);
     color: var(--bg);
-  }
-
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1rem;
-    margin-top: 2.5rem;
-  }
-
-  .tui-box {
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    font-size: 0.8125rem;
-  }
-
-  .tui-box--warn {
-    border-color: var(--red);
-  }
-  .tui-box--warn .tui-box__title {
-    color: var(--red);
-  }
-
-  .tui-box--nature {
-    border-color: var(--accent-dim);
-  }
-  .tui-box--nature .tui-box__title {
-    color: var(--accent);
-  }
-
-  .tui-box__title {
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px dashed var(--border-char);
-    font-weight: 700;
-    font-size: 0.8125rem;
-  }
-
-  .tui-box__body {
-    padding: 0.75rem;
-    color: var(--fg-dim);
-    line-height: 1.7;
   }
 
   @media (max-width: 640px) {

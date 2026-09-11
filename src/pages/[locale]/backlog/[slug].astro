@@ -6,6 +6,7 @@ import { getTranslations, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import type { Locale, Translations } from '../../../i18n'
 import LocationPicker from '../../../components/LocationPicker.astro'
+import Notice from '../../../components/Notice.astro'
 
 export async function getStaticPaths() {
   // Identification pages are a dev workflow — never generate them in a
@@ -75,7 +76,7 @@ const entryJSON = JSON.stringify({
     </div>
 
     <form id="identify-form" class="identify">
-      <p class="dev-notice">{t.backlog.devOnly}</p>
+      <Notice body={t.backlog.devOnly} />
 
       <fieldset>
         <legend>{t.backlog.date}</legend>
@@ -326,14 +327,6 @@ const entryJSON = JSON.stringify({
   .add-head__meta {
     color: var(--fg-dim);
     font-size: 0.8125rem;
-  }
-
-  .dev-notice {
-    border: 1px dashed var(--yellow);
-    color: var(--yellow);
-    padding: 0.5rem 0.75rem;
-    font-size: 0.75rem;
-    margin-bottom: 1.25rem;
   }
 
   .identify {

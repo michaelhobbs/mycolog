@@ -17,10 +17,7 @@ export default {
     heroMushroomsCta: 'Alle Pilze durchstöbern',
     warningTitle: 'Wichtiger Hinweis',
     warningText:
-      'Sammelt nur Pilze, die ihr genau kennt! Im Zweifel lieber den Pilz stehen lassen. Viele giftige Arten sehen essbaren Pilzen zum Verwechseln ähnlich.',
-    forestsTitle: 'Unsere Wälder',
-    forestsText:
-      'Der Raum Garmisch-Partenkirchen bietet eine Vielfalt an Lebensräumen: von Fichtenwäldern bis zu Buchenmischwäldern, von Wiesen bis zu alpinen Lagen.',
+      'Die Angaben auf dieser Seite sind ohne Gewähr und können Fehler enthalten. Sammelt nur Pilze, die ihr selbst sicher bestimmen könnt — verlasst euch nicht allein auf diese Informationen.',
   },
   map: {
     title: 'Fundkarte',

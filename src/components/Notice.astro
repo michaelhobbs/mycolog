@@ -1,0 +1,38 @@
+---
+interface Props {
+  title?: string
+  body?: string
+  margin?: boolean
+}
+const { title, body, margin = true } = Astro.props
+---
+
+<p class:list={['notice', margin === false && 'notice--flush']}>
+  {title && <span class="notice__title">⚠ {title}</span>}
+  {body && <span class="notice__body">{body}</span>}
+</p>
+
+<style>
+  .notice {
+    border: 1px dashed var(--yellow);
+    color: var(--yellow);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+
+  .notice--flush {
+    margin-bottom: 0;
+  }
+
+  .notice__title {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .notice__body {
+    display: block;
+  }
+</style>

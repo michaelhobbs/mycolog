@@ -17,10 +17,7 @@ export default {
     heroMushroomsCta: 'Browse all mushrooms',
     warningTitle: 'Foraging Warning',
     warningText:
-      'Never consume a mushroom unless you are 100% certain of its identity. Many poisonous species closely resemble edible ones. When in doubt, leave it be.',
-    forestsTitle: 'Our Forests',
-    forestsText:
-      'The Garmisch-Partenkirchen region offers diverse habitats — from dense spruce forests to beech groves, alpine meadows to forest edges, each hosting its own variety of fungal life.',
+      "The information on this site may not be accurate. Only forage mushrooms you can independently identify — don't rely on these pages alone.",
   },
   map: {
     title: 'Sighting Map',

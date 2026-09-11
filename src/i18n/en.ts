@@ -24,7 +24,6 @@ export default {
     subtitle: 'All documented finds at a glance',
     legend: 'Legend',
     legendHint: 'Click a marker for details',
-    allSightings: 'All Sightings',
     determiningFeatures: 'Key Features',
     habitat: 'Habitat',
     labels: {

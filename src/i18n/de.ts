@@ -24,7 +24,6 @@ export default {
     subtitle: 'Alle Beobachtungen auf einen Blick',
     legend: 'Legende',
     legendHint: 'Auf Marker klicken für Details',
-    allSightings: 'Alle Beobachtungen',
     determiningFeatures: 'Bestimmungsmerkmale',
     habitat: 'Lebensraum',
     labels: {

@@ -2,10 +2,8 @@
 import Layout from '../../layouts/Layout.astro'
 import MapVector from '../../components/MapVector.astro'
 import { getCollection } from 'astro:content'
-import { Image } from 'astro:assets'
 import { enrichSightings } from '../../lib/sightings'
-import { getTranslations, formatDate, locales } from '../../i18n'
-import { l10n } from '../../i18n/helpers'
+import { getTranslations, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 
 export function getStaticPaths() {
@@ -35,55 +33,6 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
       <span>@@</span>
       <span class="legend__text">{t.map.legendHint}</span>
     </div>
-
-    <section class="list">
-      <div class="list__header">
-        <span class="list__title">╠══ {t.map.allSightings} ({sightings.length})</span>
-      </div>
-      <div class="list__grid">
-        {
-          sightings.map((sighting) => {
-            const date = formatDate(sighting.dateSpotted, locale)
-            const name =
-              l10n(sighting.location.name, locale) ||
-              `${sighting.location.lat.toFixed(4)}°N ${sighting.location.lng.toFixed(4)}°E`
-            return (
-              <div class="list-item">
-                <div class="list-item__img">
-                  {sighting.images?.[0] && (
-                    <Image
-                      src={sighting.images[0]}
-                      alt={l10n(sighting.species.commonName, locale)}
-                      loading="lazy"
-                      width={96}
-                    />
-                  )}
-                </div>
-                <div class="list-item__body">
-                  <span class="list-item__species">{sighting.species.scientificName}</span>
-                  <h3 class="list-item__name">{l10n(sighting.species.commonName, locale)}</h3>
-                  <div class="list-item__meta">
-                    <span class="list-item__lbl">{t.map.labels.date}</span>
-                    <span class="list-item__dot" />
-                    <span>{date}</span>
-                  </div>
-                  <div class="list-item__meta">
-                    <span class="list-item__lbl">{t.map.labels.loc}</span>
-                    <span class="list-item__dot" />
-                    <span>{name}</span>
-                  </div>
-                  {sighting.species.habitat && (
-                    <span class="list-item__habitat">
-                      └─ {l10n(sighting.species.habitat, locale)}
-                    </span>
-                  )}
-                </div>
-              </div>
-            )
-          })
-        }
-      </div>
-    </section>
   </section>
 </Layout>
 
@@ -123,109 +72,5 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
 
   .legend__text {
     color: var(--fg-dim);
-  }
-
-  .list {
-    margin-top: 2rem;
-  }
-
-  .list__header {
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-char);
-    margin-bottom: 1rem;
-  }
-
-  .list__title {
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.9375rem;
-  }
-
-  .list__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 0.75rem;
-  }
-
-  .list-item {
-    display: flex;
-    gap: 0.75rem;
-    padding: 0.625rem;
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    font-size: 0.8125rem;
-    transition: border-color 0.1s;
-  }
-
-  .list-item:hover {
-    border-color: var(--accent-dim);
-  }
-
-  .list-item__img {
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    border: 1px solid var(--fg-muted);
-    overflow: hidden;
-    background: var(--bg-highlight);
-  }
-
-  .list-item__img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .list-item__body {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .list-item__species {
-    font-size: 0.6875rem;
-    color: var(--accent-dim);
-  }
-
-  .list-item__name {
-    color: var(--fg-bright);
-    font-size: 0.875rem;
-    font-weight: 700;
-    margin: 0.125rem 0 0.25rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .list-item__meta {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    font-size: 0.75rem;
-    line-height: 1.6;
-  }
-
-  .list-item__lbl {
-    color: var(--fg-muted);
-    flex-shrink: 0;
-  }
-
-  .list-item__dot {
-    flex: 1;
-    border-bottom: 1px dotted var(--fg-muted);
-    min-width: 0.5rem;
-    margin-bottom: 0.2em;
-  }
-
-  .list-item__habitat {
-    display: block;
-    margin-top: 0.25rem;
-    font-size: 0.75rem;
-    color: var(--fg-dim);
-  }
-
-  @media (max-width: 640px) {
-    .list__grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>

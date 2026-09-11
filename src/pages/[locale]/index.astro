@@ -1,8 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import MushroomCard from '../../components/MushroomCard.astro'
-import { getCollection } from 'astro:content'
-import { enrichSightings } from '../../lib/sightings'
 import { getTranslations, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
@@ -16,15 +13,6 @@ const t = getTranslations(locale)
 const mapUrl = getRelativeLocaleUrl(locale, 'map')
 const logUrl = getRelativeLocaleUrl(locale, 'log')
 const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms')
-
-const [sightings, species] = await Promise.all([
-  getCollection('sightings'),
-  getCollection('species'),
-])
-
-const recentSightings = enrichSightings(sightings, species)
-  .sort((a, b) => new Date(b.dateSpotted).getTime() - new Date(a.dateSpotted).getTime())
-  .slice(0, 6)
 ---
 
 <Layout title={t.meta.homeTitle} locale={locale}>
@@ -90,24 +78,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
       <a href={mushroomsUrl} class="tui-btn">
         {'>'}
         {t.home.heroMushroomsCta}
-      </a>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="section__header">
-      <span class="section__tag">╔══ {t.home.recentTitle}</span>
-      <span class="section__sub">{t.home.recentSubtitle}</span>
-    </div>
-
-    <div class="grid">
-      {recentSightings.map((sighting) => <MushroomCard sighting={sighting} locale={locale} />)}
-    </div>
-
-    <div class="section__footer">
-      <a href={mapUrl} class="tui-link">
-        {'>'}
-        {t.home.viewAll}
       </a>
     </div>
   </section>
@@ -207,48 +177,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     color: var(--bg);
   }
 
-  .section {
-    margin-top: 1.5rem;
-  }
-
-  .section__header {
-    margin-bottom: 1.25rem;
-  }
-
-  .section__tag {
-    display: block;
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.9375rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .section__sub {
-    color: var(--fg-dim);
-    font-size: 0.8125rem;
-  }
-
-  .section__footer {
-    margin-top: 1.25rem;
-  }
-
-  .tui-link {
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-    transition: color 0.1s;
-  }
-
-  .tui-link:hover {
-    color: var(--accent);
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-  }
-
   .info-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -292,9 +220,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
   @media (max-width: 640px) {
     .hero {
       padding: 1.5rem 0 2rem;
-    }
-    .grid {
-      grid-template-columns: minmax(0, 1fr);
     }
   }
 </style>

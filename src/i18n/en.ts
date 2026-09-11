@@ -15,9 +15,6 @@ export default {
     heroCta: 'View on map',
     heroLogCta: 'Read the logs',
     heroMushroomsCta: 'Browse all mushrooms',
-    recentTitle: 'Recent Sightings',
-    recentSubtitle: 'The latest finds from our forests',
-    viewAll: 'View all sightings on the map →',
     warningTitle: 'Foraging Warning',
     warningText:
       'Never consume a mushroom unless you are 100% certain of its identity. Many poisonous species closely resemble edible ones. When in doubt, leave it be.',

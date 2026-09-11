@@ -15,9 +15,6 @@ export default {
     heroCta: 'Auf der Karte ansehen',
     heroLogCta: 'Funde durchlesen',
     heroMushroomsCta: 'Alle Pilze durchstöbern',
-    recentTitle: 'Letzte Beobachtungen',
-    recentSubtitle: 'Die neuesten Funde aus unseren Wäldern',
-    viewAll: 'Alle Funde auf der Karte ansehen →',
     warningTitle: 'Wichtiger Hinweis',
     warningText:
       'Sammelt nur Pilze, die ihr genau kennt! Im Zweifel lieber den Pilz stehen lassen. Viele giftige Arten sehen essbaren Pilzen zum Verwechseln ähnlich.',

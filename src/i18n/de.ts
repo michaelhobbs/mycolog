@@ -47,6 +47,8 @@ export default {
     species: 'Art',
     location: 'Ort',
     habitat: 'Lebensraum',
+    speciesNotes: 'Allgemeine Notiz (Art)',
+    sightingNotes: 'Notiz (dieser Fund)',
   },
   mushrooms: {
     title: 'Pilzarten',

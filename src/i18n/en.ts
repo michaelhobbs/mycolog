@@ -47,6 +47,8 @@ export default {
     species: 'species',
     location: 'location',
     habitat: 'habitat',
+    speciesNotes: 'General note (species)',
+    sightingNotes: 'Note (this sighting)',
   },
   mushrooms: {
     title: 'Mushroom Species',

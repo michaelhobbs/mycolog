@@ -80,6 +80,20 @@ const list = enrichSightings(all, species)
                     <li>▸ {l10n(f, locale)}</li>
                   ))}
                 </ul>
+
+                {s.species.notes && (
+                  <div class="entry__note">
+                    <span class="entry__note-lbl">▸ {t.log.speciesNotes}</span>
+                    <p class="entry__note-text">{l10n(s.species.notes, locale)}</p>
+                  </div>
+                )}
+
+                {s.notes && (
+                  <div class="entry__note entry__note--sighting">
+                    <span class="entry__note-lbl">▸ {t.log.sightingNotes}</span>
+                    <p class="entry__note-text">{l10n(s.notes, locale)}</p>
+                  </div>
+                )}
               </div>
             </article>
           )
@@ -217,6 +231,31 @@ const list = enrichSightings(all, species)
   .entry__features li {
     color: var(--fg);
     line-height: 1.7;
+  }
+
+  .entry__note {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed var(--fg-muted);
+  }
+
+  .entry__note-lbl {
+    display: block;
+    color: var(--accent-dim);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .entry__note--sighting .entry__note-lbl {
+    color: var(--yellow);
+  }
+
+  .entry__note-text {
+    color: var(--fg);
+    font-style: italic;
+    line-height: 1.7;
+    margin: 0;
   }
 
   @media (max-width: 640px) {

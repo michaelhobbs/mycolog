@@ -1,8 +1,34 @@
 {
   "scientificName": "Tremiscus helvelloides",
-  "commonName": {
-    "en": "Salmon salad",
-    "de": "Rötliche"
+  "commonName": { "en": "Apricot jelly", "de": "Rötlicher Gallerttrichter" },
+  "determiningFeatures": [
+    {
+      "en": "Salmon- to flesh-pink, funnel- or trumpet-shaped gelatinous fruit body",
+      "de": "Lachs- bis fleischroter, trichter- bis trompetenförmiger Gallertpilz"
+    },
+    {
+      "en": "Lobed, wavy, often rolled-back margin",
+      "de": "Gelappter, welliger, oft zurückgeschlagener Rand"
+    },
+    {
+      "en": "Inner surface with fine veins or grooves",
+      "de": "Innenseite mit feinen Adern und Rillen"
+    },
+    {
+      "en": "With age, a whitish spore powder coats the outside",
+      "de": "Bei Reife überzieht weißliches Sporenpulver die Außenseite"
+    }
+  ],
+  "notes": {
+    "en": "Also known as salmon salad; the glistening salmon-pink funnels are unmistakable in damp woodland.",
+    "de": "Auch als ›Salmon Salad‹ bekannt; die glänzenden lachsfarbenen Trichter sind in feuchten Wäldern unverwechselbar."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "On soil in damp places: paths, ditches, stream banks, shady slopes",
+    "de": "Auf dem Boden an feuchten Orten: Wege, Gräben, Bachufer, schattige Hänge"
+  },
+  "edibility": {
+    "en": "Edible, very little flavour",
+    "de": "Essbar, fast ohne eigenen Geschmack"
+  }
 }

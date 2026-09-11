@@ -1,8 +1,34 @@
 {
   "scientificName": "Rubroboletus rhodoxanthus",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "commonName": { "en": "Ruddy bolete", "de": "Blasshütiger Purpurröhrling" },
+  "determiningFeatures": [
+    {
+      "en": "Pale cream-grey cap with pinkish to rose shades, especially towards the margin",
+      "de": "Blass creme-grauer Hut mit rosa bis rosafarbenen Tönen, besonders zum Rand hin"
+    },
+    {
+      "en": "Fine pores, yellow when young, soon blood-red",
+      "de": "Feine Poren, jung gelb, bald blutrot"
+    },
+    {
+      "en": "Thick, bulbous stem with a fine pink-red network, yellow at the top",
+      "de": "Dickbauchiger Stiel mit feinem rosarotem Netz, an der Spitze gelb"
+    },
+    {
+      "en": "Flesh turning blue on cutting, especially in the cap",
+      "de": "Fleisch im Schnitt blauend, besonders im Hut"
+    }
+  ],
+  "notes": {
+    "en": "A striking red-pored bolete of warm, lime-rich forest. Like its close relative Satan's Bolete, it is toxic and should only be admired.",
+    "de": "Auffälliger Röhrling mit roten Mündungen warmer, kalkhaltiger Wälder. Wie sein naher Verwandter, der Satans-Röhrling, ist er giftig und nur zum Anschauen da."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Warm, calcareous deciduous woodland, under oaks and beeches",
+    "de": "Warme, kalkhaltige Laubwälder, unter Eichen und Buchen"
+  },
+  "edibility": {
+    "en": "Poisonous — do not eat",
+    "de": "Giftig — nicht verzehren"
+  }
 }

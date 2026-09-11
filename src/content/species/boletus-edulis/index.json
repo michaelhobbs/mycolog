@@ -1,8 +1,34 @@
 {
   "scientificName": "Boletus edulis",
-  "commonName": {
-    "en": "Cep",
-    "de": ""
+  "commonName": { "en": "Cep", "de": "Steinpilz" },
+  "determiningFeatures": [
+    {
+      "en": "Brown cap, greasy when damp, paler margin",
+      "de": "Brauner Hut, feucht schmierig, hellerer Rand"
+    },
+    {
+      "en": "Firm white flesh that never stains blue",
+      "de": "Festes weißes Fleisch, das nie blaut"
+    },
+    {
+      "en": "Young: white pores that turn olive-yellow with age",
+      "de": "Junge Röhrenmündungen weiß, später olivgelb"
+    },
+    {
+      "en": "Thick pale stem with a fine white network (reticulum)",
+      "de": "Dicker heller Stiel mit feinem weißem Netz"
+    }
+  ],
+  "notes": {
+    "en": "The celebrated 'stone mushroom' of central Europe and one of the most sought-after edible fungi; its nutty flavour intensifies when dried.",
+    "de": "Der berühmte Steinpilz Mitteleuropas und einer der begehrtesten Speisepilze; getrocknet wird sein nussiges Aroma noch intensiver."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Mycorrhizal with spruce, pine, beech and oak",
+    "de": "Mykorrhiza-Partner von Fichte, Kiefer, Buche und Eiche"
+  },
+  "edibility": {
+    "en": "Excellent edible mushroom",
+    "de": "Ausgezeichneter Speisepilz"
+  }
 }

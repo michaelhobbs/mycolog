@@ -1,8 +1,34 @@
 {
   "scientificName": "Coprinus comatus",
-  "commonName": {
-    "en": "Shaggy ink cap",
-    "de": ""
+  "commonName": { "en": "Shaggy ink cap", "de": "Schopftintling" },
+  "determiningFeatures": [
+    {
+      "en": "Tall cylindrical white cap covered in shaggy, upturned scales",
+      "de": "Hoher zylindrischer weißer Hut mit struppigen, aufgebogenen Schuppen"
+    },
+    {
+      "en": "White, free gills that turn black and liquefy from the margin once mature",
+      "de": "Weiße, freie Lamellen, die bei Reife von der Kante her schwarz zerfließen"
+    },
+    {
+      "en": "Hollow white stem with a loose, movable ring",
+      "de": "Hohler weißer Stiel mit lockerem, verschiebbarem Ring"
+    },
+    {
+      "en": "Cap dissolves into black, spore-laden 'ink' shortly after sporulation",
+      "de": "Der Hut zerfließt kurz nach der Sporenreife zu schwarzer, sporenreicher „Tinte“"
+    }
+  ],
+  "notes": {
+    "en": "One of the most distinctive mushrooms of late summer; the blackening process (deliquescence) happens within hours, so pick young specimens while the cap is still firm and white.",
+    "de": "Einer der markantesten Pilze des Spätsommers; das Zerfließen (Autodigestion) passiert innerhalb weniger Stunden, daher nur junge Exemplare mit festem weißem Hut sammeln."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Disturbed ground: roadsides, paths, meadows, parks",
+    "de": "Störstellen: Wegränder, Wege, Wiesen, Parks"
+  },
+  "edibility": {
+    "en": "Edible when young, before the gills blacken",
+    "de": "Jung essbar, solange die Lamellen noch weiß sind"
+  }
 }

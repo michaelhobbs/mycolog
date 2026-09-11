@@ -1,8 +1,34 @@
 {
   "scientificName": "Armillaria mellea",
-  "commonName": {
-    "en": "Honey fungus",
-    "de": ""
+  "commonName": { "en": "Honey fungus", "de": "Hallimasch" },
+  "determiningFeatures": [
+    {
+      "en": "Honey-coloured to olive-brown caps growing in dense clusters at the base of trees",
+      "de": "Honigfarbene bis olivbraune Hüte, die in dichten Büscheln an Stammfüßen wachsen"
+    },
+    {
+      "en": "White to cream decurrent gills",
+      "de": "Weißliche bis cremefarbene, am Stiel herablaufende Lamellen"
+    },
+    {
+      "en": "Zigzag ring or ring zone on the upper stem",
+      "de": "Zickzackförmiger Ring bzw. Ringzone am oberen Stiel"
+    },
+    {
+      "en": "Dark, dense scales in the middle of the cap",
+      "de": "Dunkle, dicht stehende Schüppchen in der Hutmitte"
+    }
+  ],
+  "notes": {
+    "en": "A weakly parasitic fungus whose black, bootlace-like rhizomorphs spread through the soil and can kill trees — the mycelium of a single colony can rank among the largest living organisms on Earth.",
+    "de": "Schwach parasitischer Pilz, dessen schwarze, schnurartige Rhizomorphen sich im Boden ausbreiten und Bäume schädigen können — das Myzel einer einzelnen Kolonie zählt zu den größten Lebewesen der Erde."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "At the base of living and dead trees, stumps and roots of broadleaves and conifers",
+    "de": "An Stammfüßen lebender und abgestorbener Bäume, an Stümpfen und Wurzeln von Laub- und Nadelholz"
+  },
+  "edibility": {
+    "en": "Edible only after thorough cooking; some people are intolerant to it",
+    "de": "Nur gut durchgegart essbar; manche Menschen vertragen ihn nicht"
+  }
 }

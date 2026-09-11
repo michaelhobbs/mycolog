@@ -1,8 +1,34 @@
 {
   "scientificName": "Laccaria amethystina",
-  "commonName": {
-    "en": "Amethyst deceiver",
-    "de": ""
+  "commonName": { "en": "Amethyst deceiver", "de": "Violetter Lacktrichterling" },
+  "determiningFeatures": [
+    {
+      "en": "Intense violet colour over the whole fruit body when fresh",
+      "de": "Frisch leuchtend violett gefärbter Fruchtkörper"
+    },
+    {
+      "en": "Waxy, widely spaced thick gills",
+      "de": "Wachsige, weitständige dicke Lamellen"
+    },
+    {
+      "en": "Fibrous, tough stem",
+      "de": "Faseriger, zäher Stiel"
+    },
+    {
+      "en": "Colour fades quickly to pale tan as it ages or dries",
+      "de": "Farbe verblasst beim Altern und Trocknen schnell zu blassem Beige"
+    }
+  ],
+  "notes": {
+    "en": "The common name refers to how easily the violet colour 'deceives' — once faded, the mushroom blends into the forest floor and is easy to overlook.",
+    "de": "Der Name spielt darauf an, wie leicht die violette Farbe täuscht — ist sie erst verblasst, verschwindet der Pilz optisch im Waldboden und wird leicht übersehen."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Broadleaf and coniferous forest, often with beech and oak, in troops",
+    "de": "Laub- und Nadelwald, oft bei Buche und Eiche, gesellig in Gruppen"
+  },
+  "edibility": {
+    "en": "Edible but insignificant; watch for poisonous lookalikes (e.g. violet Cortinarius species)",
+    "de": "Essbar, aber geschmacklich unbedeutend; Vorsicht vor giftigen Verwechslungspartnern (z. B. violetten Schleierlingen)"
+  }
 }

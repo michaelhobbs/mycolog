@@ -1,8 +1,34 @@
 {
   "scientificName": "Pseudohydnum gelatinosum",
-  "commonName": {
-    "en": "Jelly tooth",
-    "de": ""
+  "commonName": { "en": "Jelly tooth", "de": "Gallertiger Zitterzahn" },
+  "determiningFeatures": [
+    {
+      "en": "Gelatinous, tongue- to fan-shaped fruit body",
+      "de": "Gallertiger, zungen- bis fächerförmiger Fruchtkörper"
+    },
+    {
+      "en": "Underside covered with soft, hanging teeth (spines)",
+      "de": "Unterseite mit weichen, herabhängenden Stacheln besetzt"
+    },
+    {
+      "en": "Translucent whitish to grey-brown, jelly-firm flesh",
+      "de": "Durchscheinend weißliches bis graubraunes, gallertartig-festes Fleisch"
+    },
+    {
+      "en": "Short lateral stem, sometimes missing entirely",
+      "de": "Kurzer seitlicher Stiel, manchmal ganz fehlend"
+    }
+  ],
+  "notes": {
+    "en": "Looks like a jelly fungus but bears soft spines like a hedgehog fungus — hence the name. Edible, though it tastes of almost nothing.",
+    "de": "Sieht aus wie ein Zitterling, trägt aber weiche Stacheln wie ein Stachelpilz — daher der Name. Essbar, schmeckt aber nach fast nichts."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "On strongly decayed, damp conifer stumps (spruce, pine); rarely on hardwood",
+    "de": "Auf stark morschen, feuchten Nadelholzstümpfen (Fichte, Kiefer); selten an Laubholz"
+  },
+  "edibility": {
+    "en": "Edible but of no culinary value",
+    "de": "Essbar, aber ohne kulinarischen Wert"
+  }
 }

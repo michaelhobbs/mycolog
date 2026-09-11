@@ -1,8 +1,34 @@
 {
   "scientificName": "Inocybe sindonia",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "commonName": { "en": "Beige Fibrecap", "de": "Wollfädiger Risspilz" },
+  "determiningFeatures": [
+    {
+      "en": "Silky-fibrillose cap in pale beige, later reddish-brown, becoming radially cracked",
+      "de": "Seidig-faseriger Hut in blassem Beige, später rötlichbraun, radial aufreißend"
+    },
+    {
+      "en": "Conical to bell-shaped at first, later with a fleshy knob",
+      "de": "Jung kegelig-glockig, später mit fleischigem Buckel"
+    },
+    {
+      "en": "Cream to pale brown, adnate gills",
+      "de": "Cremeweiße bis blassbraune, angewachsene Lamellen"
+    },
+    {
+      "en": "Slender fibrous stem without a ring",
+      "de": "Schlanker, faseriger Stiel ohne Ring"
+    }
+  ],
+  "notes": {
+    "en": "Contains the toxin muscarine. Many members of the genus Inocybe look alike and are easily confused, so members of this genus should never be collected for the pot.",
+    "de": "Enthält den Giftstoff Muscarin. Viele Risspilz-Arten sehen sich zum Verwechseln ähnlich; Pilze dieser Gattung sollten deshalb nie gesammelt und gegessen werden."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Broadleaf and coniferous forest floor, often on calcareous or sandy soils",
+    "de": "Laub- und Nadelwaldboden, oft auf kalkhaltigen oder sandigen Böden"
+  },
+  "edibility": {
+    "en": "Poisonous — do not eat",
+    "de": "Giftig — nicht verzehren"
+  }
 }

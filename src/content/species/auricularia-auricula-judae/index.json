@@ -1,8 +1,34 @@
 {
   "scientificName": "Auricularia auricula-judae",
-  "commonName": {
-    "en": "Jelly ear",
-    "de": ""
+  "commonName": { "en": "Jelly ear", "de": "Judasohr" },
+  "determiningFeatures": [
+    {
+      "en": "Ear- or shell-shaped, translucent gelatinous fruit body",
+      "de": "Ohren- bis muschelförmiger, durchscheinend gallertiger Fruchtkörper"
+    },
+    {
+      "en": "Smooth inner surface, veins and folds on the outside",
+      "de": "Innenseite glatt, Außenseite geädert und faltig"
+    },
+    {
+      "en": "Nut-brown to greyish-olive, rubbery when wet, hard and brittle when dry",
+      "de": "Nussbraun bis grauoliv, feucht gummiartig, trocken hart und brüchig"
+    },
+    {
+      "en": "Grows solitary or in rows on dead wood",
+      "de": "Wächst einzeln oder reihenweise auf Totholz"
+    }
+  ],
+  "notes": {
+    "en": "Known as wood ear in Asian cooking; when soaked in water it swells back to a gelatinous state and is used in soups and stir-fries.",
+    "de": "In der asiatischen Küche als Mu-Err bekannt; eingeweicht quillt er wieder zu gallertiger Konsistenz auf und wird für Suppen und Pfannengerichte verwendet."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Dead and dying elder (rarely other hardwoods)",
+    "de": "Totes oder absterbendes Holz von Holunder (selten anderen Laubhölzern)"
+  },
+  "edibility": {
+    "en": "Edible, though it has very little flavour of its own",
+    "de": "Essbar, fast ohne eigenen Geschmack"
+  }
 }

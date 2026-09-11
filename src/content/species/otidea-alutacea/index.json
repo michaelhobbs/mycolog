@@ -1,8 +1,34 @@
 {
   "scientificName": "Otidea alutacea",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "commonName": { "en": "Tan Ear", "de": "Ledergelber Öhrling" },
+  "determiningFeatures": [
+    {
+      "en": "Ear- to cup-shaped fruit body, split down one side to the base",
+      "de": "Ohren- bis becherförmiger Fruchtkörper, auf einer Seite bis zum Grund eingeschnitten"
+    },
+    {
+      "en": "Clay- to leather-yellow (tan) colour, paler on the outside",
+      "de": "Lehm- bis ledergelbe (hellbraune) Farbe, außen heller"
+    },
+    {
+      "en": "Smooth spore-bearing inner surface, outer surface minutely powdered",
+      "de": "Glatte Innenseite als Sporenlager, Außenseite fein bereift"
+    },
+    {
+      "en": "Grows on the ground, often in clusters",
+      "de": "Wächst auf dem Boden, oft in Gruppen"
+    }
+  ],
+  "notes": {
+    "en": "A relative of the cup fungi (Peziza); one of the commonest 'Öhrlinge' and typical of damp, mossy woodland paths.",
+    "de": "Verwandt mit den Becherlingen (Peziza); einer der häufigsten Öhrlinge und typisch für feuchte, moosige Waldwege."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "On soil in broadleaf and mixed forest, along woodland paths",
+    "de": "Auf dem Boden in Laub- und Mischwäldern, entlang von Waldwegen"
+  },
+  "edibility": {
+    "en": "Inedible — of no culinary value",
+    "de": "Ungenießbar — ohne Speisewert"
+  }
 }

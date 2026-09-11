@@ -1,8 +1,34 @@
 {
   "scientificName": "Ganoderma applanatum",
-  "commonName": {
-    "en": "Artist's bracket",
-    "de": ""
+  "commonName": { "en": "Artist's bracket", "de": "Flacher Lackporling" },
+  "determiningFeatures": [
+    {
+      "en": "Large, flat grey-brown bracket with a dull, crusty top surface",
+      "de": "Großer, abgeflachter graubrauner Porling mit matter, krustiger Oberseite"
+    },
+    {
+      "en": "White pore surface that turns brown permanently when scratched",
+      "de": "Weiße Porenschicht, die bei Kratzern dauerhaft braun wird"
+    },
+    {
+      "en": "Concentric growth zones on the upper surface",
+      "de": "Konzentrische Zuwachszonen auf der Oberseite"
+    },
+    {
+      "en": "Woody, hard, perennial fruit body",
+      "de": "Holzartig harter, mehrjähriger Fruchtkörper"
+    }
+  ],
+  "notes": {
+    "en": "Being totally woody, it can last for years. Draw on the fresh white underside with a stick and the picture remains permanently — origin of the name Artist's Bracket.",
+    "de": "Völlig holzig, kann er jahrelang erhalten bleiben. Ritzt man die frische weiße Unterseite mit einem Stock an, bleibt das Bild dauerhaft erhalten — daher auch der Name Malerpilz."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "On stumps and trunks of deciduous trees, especially beech; rarely conifers",
+    "de": "An Stümpfen und Stämmen von Laubbäumen, besonders Buche; selten an Nadelholz"
+  },
+  "edibility": {
+    "en": "Inedible — woody and tough",
+    "de": "Ungenießbar — holzig und zäh"
+  }
 }

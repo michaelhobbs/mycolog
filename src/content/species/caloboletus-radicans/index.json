@@ -1,8 +1,34 @@
 {
   "scientificName": "Caloboletus radicans",
-  "commonName": {
-    "en": "Rooting bolete",
-    "de": ""
+  "commonName": { "en": "Rooting bolete", "de": "Wurzelnder Bitterröhrling" },
+  "determiningFeatures": [
+    {
+      "en": "Pale grey to buff-brown cap",
+      "de": "Blassgrauer bis hellbrauner Hut"
+    },
+    {
+      "en": "Lemon-yellow pores that stain blue rapidly when touched",
+      "de": "Zitronengelbe Poren, die bei Berührung sofort blauen"
+    },
+    {
+      "en": "Thick yellow stem with a faint net, tapering into a rooting, often buried base",
+      "de": "Dicker gelber Stiel mit oft dezentem Netz, in eine wurzelnde, häufig eingesenkte Basis übergehend"
+    },
+    {
+      "en": "Flesh turning blue on cutting; bitter taste",
+      "de": "Fleisch im Schnitt blauend; bitterer Geschmack"
+    }
+  ],
+  "notes": {
+    "en": "Despite the bitter, inedible flesh, the large pale caps make it a striking find along warm woodland margins.",
+    "de": "Trotz des bitteren, ungenießbaren Fleisches ist der große blasse Hut ein auffälliger Fund an warmen Waldsäumen."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Warm deciduous and mixed woodland, parks, under oak, beech and linden",
+    "de": "Warme Laub- und Mischwälder, Parks, unter Eiche, Buche und Linde"
+  },
+  "edibility": {
+    "en": "Inedible — intensely bitter, considered mildly toxic",
+    "de": "Ungenießbar — intensiv bitter, gilt als schwach giftig"
+  }
 }

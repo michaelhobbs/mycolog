@@ -101,6 +101,8 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     </div>
   </section>
 
+  <Notice margin={false} title={t.home.warningTitle} body={t.home.warningText} />
+
   {
     latest.length > 0 && (
       <section class="news">
@@ -122,8 +124,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
       </section>
     )
   }
-
-  <Notice margin={false} title={t.home.warningTitle} body={t.home.warningText} />
 </Layout>
 
 <style>
@@ -210,6 +210,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
 
   .news {
     margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
   }
 
   .news__head {

@@ -1,10 +1,14 @@
 {
+  "dateIdentified": "2026-09-02",
   "species": "ramaria-aurea",
   "dateSpotted": "2026-08-22",
   "location": {
     "lat": 47.484352,
     "lng": 11.153002,
-    "name": { "en": "Kankerbach", "de": "Kankerbach" }
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
   },
   "images": [
     "./images/IMG_4193.jpg",

@@ -4,6 +4,7 @@ export default {
     home: 'Home',
     map: 'Map',
     log: 'Log',
+    identifications: 'Identifications',
     mushrooms: 'Mushrooms',
     backlog: 'Backlog',
   },
@@ -15,6 +16,8 @@ export default {
     heroCta: 'View on map',
     heroLogCta: 'Read the logs',
     heroMushroomsCta: 'Browse all mushrooms',
+    newsTitle: 'Latest identifications',
+    newsAll: 'All identifications',
     warningTitle: 'Foraging Warning',
     warningText:
       "The information on this site may not be accurate. Only forage mushrooms you can independently identify — don't rely on these pages alone.",
@@ -48,6 +51,11 @@ export default {
     habitat: 'habitat',
     speciesNotes: 'General note (species)',
     sightingNotes: 'Note (this sighting)',
+  },
+  identifications: {
+    title: 'Identifications',
+    subtitle:
+      'Peruse, review and check the latest developments in determining the identities of the sightings from the backlog.',
   },
   mushrooms: {
     title: 'Mushroom Species',
@@ -114,6 +122,7 @@ export default {
     homeTitle: 'myco.log — mushroom sightings',
     mapTitle: 'map — myco.log',
     logTitle: 'log — myco.log',
+    identificationsTitle: 'identifications — myco.log',
     backlogTitle: 'backlog — myco.log',
   },
 } as const

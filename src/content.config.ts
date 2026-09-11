@@ -25,6 +25,7 @@ const sightings = defineCollection({
     z.object({
       species: z.string(),
       dateSpotted: z.string(),
+      dateIdentified: z.string().optional(),
       location: z.object({
         lat: z.number(),
         lng: z.number(),

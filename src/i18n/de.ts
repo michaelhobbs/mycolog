@@ -1,11 +1,12 @@
 export default {
   lang: 'de',
   nav: {
-    home: 'Startseite',
+    home: 'Start',
     map: 'Karte',
-    log: 'Protokoll',
+    log: 'Log',
+    identifications: 'Bestimmungen',
     mushrooms: 'Pilze',
-    backlog: 'Rückstand',
+    backlog: 'Backlog',
   },
   home: {
     heroTitle: 'Pilze rund um Garmisch-Partenkirchen',
@@ -15,6 +16,8 @@ export default {
     heroCta: 'Auf der Karte ansehen',
     heroLogCta: 'Funde durchlesen',
     heroMushroomsCta: 'Alle Pilze durchstöbern',
+    newsTitle: 'Neueste Bestimmungen',
+    newsAll: 'Alle Bestimmungen',
     warningTitle: 'Wichtiger Hinweis',
     warningText:
       'Die Angaben auf dieser Seite sind ohne Gewähr und können Fehler enthalten. Sammelt nur Pilze, die ihr selbst sicher bestimmen könnt — verlasst euch nicht allein auf diese Informationen.',
@@ -48,6 +51,11 @@ export default {
     habitat: 'Lebensraum',
     speciesNotes: 'Allgemeine Notiz (Art)',
     sightingNotes: 'Notiz (dieser Fund)',
+  },
+  identifications: {
+    title: 'Bestimmungen',
+    subtitle:
+      'Durchstöbern, begutachten und prüfen Sie die neuesten Entwicklungen bei der Bestimmung der Funde aus dem Backlog.',
   },
   mushrooms: {
     title: 'Pilzarten',
@@ -114,6 +122,7 @@ export default {
     homeTitle: 'myco.log — pilzfunde',
     mapTitle: 'karte — myco.log',
     logTitle: 'protokoll — myco.log',
+    identificationsTitle: 'bestimmungen — myco.log',
     backlogTitle: 'rückstand — myco.log',
   },
 } as const

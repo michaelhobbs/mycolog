@@ -1,10 +1,14 @@
 {
+  "dateIdentified": "2026-09-02",
   "species": "rubroboletus-satanas",
   "dateSpotted": "2026-08-24",
   "location": {
     "lat": 47.476174,
     "lng": 11.072933,
-    "name": { "en": "Katzenstein", "de": "Katzenstein" }
+    "name": {
+      "en": "Katzenstein",
+      "de": "Katzenstein"
+    }
   },
   "images": [
     "./images/IMG_4264.jpg",

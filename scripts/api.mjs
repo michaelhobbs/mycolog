@@ -123,6 +123,7 @@ app.post('/api/sightings', async (req, res) => {
     const sightingDoc = {
       species: speciesSlug,
       dateSpotted,
+      dateIdentified: new Date().toISOString().slice(0, 10),
       location: sightingLocation,
       images: imagePaths,
     }

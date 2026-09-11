@@ -1,0 +1,132 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import MushroomCard from '../../components/MushroomCard.astro'
+import { getCollection } from 'astro:content'
+import { enrichSightings, identificationDate } from '../../lib/sightings'
+import { getTranslations, formatDate, locales } from '../../i18n'
+import type { Locale } from '../../i18n'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }))
+}
+
+const { locale } = Astro.params as { locale: Locale }
+const t = getTranslations(locale)
+
+const [sightingEntries, speciesEntries] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+])
+const sightings = enrichSightings(sightingEntries, speciesEntries)
+
+const bySession = new Map<string, typeof sightings>()
+for (const s of sightings) {
+  const d = identificationDate(s)
+  if (!bySession.has(d)) bySession.set(d, [])
+  bySession.get(d)!.push(s)
+}
+const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
+---
+
+<Layout title={t.meta.identificationsTitle} locale={locale}>
+  <section class="identifications-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.identifications.title}</span>
+      <span class="page-header__sub">{t.identifications.subtitle}</span>
+    </div>
+
+    <div class="days">
+      {
+        sessions.map(([date, list]) => (
+          <article class="day">
+            <header class="day__head">
+              <a href={`/${locale}/log/${date}`} class="day__date">
+                {formatDate(date, locale)}
+              </a>
+              <span class="day__meta">
+                ({list.length} {t.log.sightingsCount})
+              </span>
+            </header>
+
+            <div class="day__grid">
+              {list.map((sighting) => (
+                <MushroomCard sighting={sighting} locale={locale} />
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .identifications-page {
+    padding-bottom: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .day {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .day__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+  }
+
+  .day__date {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .day__date:hover {
+    color: var(--fg-bright);
+  }
+
+  .day__meta {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+
+  .day__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+  }
+
+  @media (max-width: 640px) {
+    .day__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

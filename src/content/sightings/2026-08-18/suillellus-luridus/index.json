@@ -1,10 +1,14 @@
 {
+  "dateIdentified": "2026-09-01",
   "species": "suillellus-luridus",
   "dateSpotted": "2026-08-18",
   "location": {
     "lat": 47.484825,
     "lng": 11.154232,
-    "name": { "en": "Kankerbach", "de": "Kankerbach" }
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
   },
   "images": ["./images/IMG_4072.jpg", "./images/IMG_4075.jpg", "./images/IMG_4109.jpg"],
   "notes": {

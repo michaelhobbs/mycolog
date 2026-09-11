@@ -1,10 +1,14 @@
 {
+  "dateIdentified": "2026-09-02",
   "species": "lycoperdon-perlatum",
   "dateSpotted": "2026-08-30",
   "location": {
     "lat": 47.472858,
     "lng": 11.042881,
-    "name": { "en": "Rappenweg (Grainau)", "de": "Rappenweg (Grainau)" }
+    "name": {
+      "en": "Rappenweg (Grainau)",
+      "de": "Rappenweg (Grainau)"
+    }
   },
   "images": [
     "./images/IMG_4431.jpg",

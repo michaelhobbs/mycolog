@@ -6,10 +6,15 @@ export type SightingEntry = CollectionEntry<'sightings'>
 export interface EnrichedSighting {
   id: string
   dateSpotted: string
+  dateIdentified: string
   location: SightingEntry['data']['location']
   images: SightingEntry['data']['images']
   notes: SightingEntry['data']['notes']
   species: SpeciesEntry['data']
+}
+
+export function identificationDate(s: EnrichedSighting): string {
+  return s.dateIdentified || s.dateSpotted
 }
 
 export function buildSpeciesMap(species: SpeciesEntry[]): Map<string, SpeciesEntry['data']> {
@@ -24,6 +29,7 @@ export function enrichSighting(
   return {
     id: sighting.data.species,
     dateSpotted: sighting.data.dateSpotted,
+    dateIdentified: sighting.data.dateIdentified || sighting.data.dateSpotted,
     location: sighting.data.location,
     images: sighting.data.images,
     notes: sighting.data.notes,

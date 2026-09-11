@@ -54,8 +54,7 @@ export default {
   },
   identifications: {
     title: 'Bestimmungen',
-    subtitle:
-      'Durchstöbern, begutachten und prüfen Sie die neuesten Entwicklungen bei der Bestimmung der Funde aus dem Backlog.',
+    subtitle: 'Bestimmungen aus dem Backlog — keine neuen Funde verpassen.',
   },
   mushrooms: {
     title: 'Pilzarten',

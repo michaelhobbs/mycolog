@@ -54,8 +54,7 @@ export default {
   },
   identifications: {
     title: 'Identifications',
-    subtitle:
-      'Peruse, review and check the latest developments in determining the identities of the sightings from the backlog.',
+    subtitle: 'Identifications from the backlog — catch new sightings as they appear.',
   },
   mushrooms: {
     title: 'Mushroom Species',

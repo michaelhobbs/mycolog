@@ -119,9 +119,8 @@ const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
 
   .day__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1rem;
-    padding: 1rem 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+    padding: 0;
   }
 
   @media (max-width: 640px) {

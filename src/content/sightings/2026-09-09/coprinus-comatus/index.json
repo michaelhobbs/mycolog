@@ -16,5 +16,6 @@
     "./images/coprinus-comatus3.jpg",
     "./images/coprinus-comatus4.jpg",
     "./images/coprinus-comatus5.jpg"
-  ]
+  ],
+  "authors": ["michael"]
 }

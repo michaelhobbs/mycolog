@@ -10,5 +10,6 @@
       "de": "Hammersbach"
     }
   },
-  "images": ["./images/Coprinopsis-pseudonivea.jpg"]
+  "images": ["./images/Coprinopsis-pseudonivea.jpg"],
+  "authors": ["michael"]
 }

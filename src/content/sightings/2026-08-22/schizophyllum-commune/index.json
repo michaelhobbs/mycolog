@@ -10,5 +10,6 @@
       "de": "Kankerbach"
     }
   },
-  "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"]
+  "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"],
+  "authors": ["michael"]
 }

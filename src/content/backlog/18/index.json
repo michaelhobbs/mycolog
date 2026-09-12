@@ -6,5 +6,6 @@
     "./images/03.jpg",
     "./images/04.jpg",
     "./images/05.jpg"
-  ]
+  ],
+  "authors": ["michael"]
 }

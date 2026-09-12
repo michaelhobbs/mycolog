@@ -10,5 +10,6 @@
       "de": "Brunnenkopf"
     }
   },
-  "images": ["./images/hydnellum-peckii.jpg"]
+  "images": ["./images/hydnellum-peckii.jpg"],
+  "authors": ["michael"]
 }

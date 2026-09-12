@@ -10,5 +10,6 @@
       "de": "Lauterbach"
     }
   },
-  "images": ["./images/IMG_4217.jpg", "./images/IMG_4220.jpg"]
+  "images": ["./images/IMG_4217.jpg", "./images/IMG_4220.jpg"],
+  "authors": ["michael"]
 }

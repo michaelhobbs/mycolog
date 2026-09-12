@@ -9,6 +9,7 @@ const CONTENT = path.join(ROOT, 'src', 'content')
 const BACKLOG_DIR = path.join(CONTENT, 'backlog')
 const SIGHTINGS_DIR = path.join(CONTENT, 'sightings')
 const SPECIES_DIR = path.join(CONTENT, 'species')
+const AUTHORS_DIR = path.join(CONTENT, 'authors')
 
 const PORT = Number(process.env.PORT || 4322)
 
@@ -39,13 +40,35 @@ async function uniqueSlug(base, dir) {
   }
 }
 
+// Create (if missing) a content entry for an author name and return its slug.
+async function ensureAuthor(name) {
+  const slug = slugify(name) || 'unknown'
+  const file = path.join(AUTHORS_DIR, slug, 'index.json')
+  try {
+    await fs.access(file)
+  } catch {
+    await fs.mkdir(path.dirname(file), { recursive: true })
+    await fs.writeFile(file, JSON.stringify({ name }, null, 2) + '\n')
+  }
+  return slug
+}
+
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true })
 })
 
 app.post('/api/sightings', async (req, res) => {
-  const { dateSpotted, location, species, newSpecies, backlogId, locationName, notes } =
-    req.body || {}
+  const {
+    dateSpotted,
+    location,
+    species,
+    newSpecies,
+    backlogId,
+    locationName,
+    notes,
+    extraAuthors,
+    newAuthors,
+  } = req.body || {}
 
   try {
     // 1. Validate core fields
@@ -75,6 +98,26 @@ app.post('/api/sightings', async (req, res) => {
     if (!backlogImages.length) {
       return res.status(404).json({ error: `No images in backlog entry ${backlogId}` })
     }
+
+    // Backlog authors (from import) + any selected/new authors supplied by the form.
+    let backlogAuthors = []
+    try {
+      const meta = JSON.parse(await fs.readFile(path.join(backlogEntryDir, 'index.json'), 'utf8'))
+      backlogAuthors = Array.isArray(meta.authors)
+        ? meta.authors.filter((a) => typeof a === 'string')
+        : []
+    } catch {}
+    const chosenExtras = Array.isArray(extraAuthors)
+      ? extraAuthors.filter((a) => typeof a === 'string')
+      : []
+    const chosenNews = []
+    if (Array.isArray(newAuthors)) {
+      for (const name of newAuthors) {
+        if (typeof name !== 'string' || !name.trim()) continue
+        chosenNews.push(await ensureAuthor(name.trim()))
+      }
+    }
+    const authors = [...new Set([...backlogAuthors, ...chosenExtras, ...chosenNews])]
 
     // 3. Resolve / create species slug
     let speciesSlug = species
@@ -122,6 +165,7 @@ app.post('/api/sightings', async (req, res) => {
 
     const sightingDoc = {
       species: speciesSlug,
+      authors,
       dateSpotted,
       dateIdentified: new Date().toISOString().slice(0, 10),
       location: sightingLocation,

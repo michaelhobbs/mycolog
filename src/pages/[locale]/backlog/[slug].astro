@@ -38,6 +38,12 @@ const speciesJSON = JSON.stringify(
   })),
 )
 
+const authors = (await getCollection('authors')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name),
+)
+const authorsJSON = JSON.stringify(authors.map((a) => ({ slug: a.id, name: a.data.name })))
+const entryAuthors = entry.data.authors
+
 // Distinct location names already used across sightings, so the form can offer
 // them as a picklist (the user can still type a brand-new one).
 const knownLocations = [
@@ -119,6 +125,30 @@ const entryJSON = JSON.stringify({
       </fieldset>
 
       <fieldset>
+        <legend>{t.backlog.authors}</legend>
+        <select
+          id="author-select"
+          name="authors"
+          class="identify__select"
+          multiple
+          size={Math.min(authors.length + 1, 8)}
+        >
+          {
+            authors.map((a) => (
+              <option value={a.id} selected={entryAuthors.includes(a.id)}>
+                {a.data.name}
+              </option>
+            ))
+          }
+        </select>
+        <p class="field-hint">{t.backlog.newAuthorsHelp}</p>
+        <div class="field">
+          <label for="new-authors">{t.backlog.addAuthors}</label>
+          <input id="new-authors" name="newAuthors" type="text" />
+        </div>
+      </fieldset>
+
+      <fieldset>
         <legend>{t.backlog.location}</legend>
 
         <div class="loc-name">
@@ -183,13 +213,20 @@ const entryJSON = JSON.stringify({
 
   <script
     is:inline
-    define:vars={{ backlogT: t.backlog, speciesData: speciesJSON, entry: entryJSON, locale }}
+    define:vars={{
+      backlogT: t.backlog,
+      speciesData: speciesJSON,
+      authorsData: authorsJSON,
+      entry: entryJSON,
+      locale,
+    }}
   >
     const t = backlogT
 
     const form = document.getElementById('identify-form')
     const speciesSelect = document.getElementById('species-select')
     const newSpecies = document.getElementById('new-species')
+    const authorSelect = document.getElementById('author-select')
     const locationInput = document.getElementById('picker-location')
     const locationNameSelect = document.getElementById('loc-name-select')
     const newLocation = document.getElementById('new-location')
@@ -259,10 +296,19 @@ const entryJSON = JSON.stringify({
         return
       }
 
+      const extraAuthors = [...authorSelect.selectedOptions].map((o) => o.value)
+      const newAuthors = document
+        .getElementById('new-authors')
+        .value.split(';')
+        .map((s) => s.trim())
+        .filter(Boolean)
+
       const payload = {
         backlogId: document.getElementById('backlog-id').value,
         dateSpotted,
         location: locationParsed,
+        extraAuthors,
+        ...(newAuthors.length ? { newAuthors } : {}),
         ...(locationName ? { locationName } : {}),
         ...speciesPayload,
         ...(notesEn.trim() || notesDe.trim() ? { notes: { en: notesEn, de: notesDe } } : {}),

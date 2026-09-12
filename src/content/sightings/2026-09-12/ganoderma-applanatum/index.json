@@ -1,0 +1,22 @@
+{
+  "species": "ganoderma-applanatum",
+  "dateSpotted": "2026-09-12",
+  "location": {
+    "lat": 47.51159,
+    "lng": 11.11375,
+    "name": {
+      "en": "Schweinbach",
+      "de": "Schweinbach"
+    }
+  },
+  "images": [
+    "./images/ganoderma-applanatum1.jpg",
+    "./images/ganoderma-applanatum2.jpg",
+    "./images/ganoderma-applanatum3.jpg"
+  ],
+  "notes": {
+    "en": "This time drew something (\"M\") on it. It lives up to its name.",
+    "de": ""
+  },
+  "authors": ["michael"]
+}

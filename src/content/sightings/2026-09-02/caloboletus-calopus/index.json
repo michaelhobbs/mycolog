@@ -1,0 +1,20 @@
+{
+  "species": "caloboletus-calopus",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.50986,
+    "lng": 11.11283,
+    "name": {
+      "en": "Schweinbach",
+      "de": "Schweinbach"
+    }
+  },
+  "images": [
+    "./images/caloboletus-calopus1.jpg",
+    "./images/caloboletus-calopus2.jpg",
+    "./images/caloboletus-calopus3.jpg",
+    "./images/caloboletus-calopus4.jpg",
+    "./images/caloboletus-calopus5.jpg"
+  ],
+  "authors": ["michael"]
+}

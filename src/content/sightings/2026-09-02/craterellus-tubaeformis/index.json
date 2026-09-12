@@ -1,0 +1,19 @@
+{
+  "species": "craterellus-tubaeformis",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.48438,
+    "lng": 11.15389,
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
+  },
+  "images": [
+    "./images/craterellus-tubaeformis1.jpg",
+    "./images/craterellus-tubaeformis2.jpg",
+    "./images/craterellus-tubaeformis3.jpg",
+    "./images/craterellus-tubaeformis4.jpg"
+  ],
+  "authors": ["michael"]
+}

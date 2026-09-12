@@ -1,0 +1,23 @@
+{
+  "species": "cantharellus-cibarius",
+  "dateSpotted": "2026-09-12",
+  "location": {
+    "lat": 47.51074,
+    "lng": 11.11389,
+    "name": {
+      "en": "Schweinbach",
+      "de": "Schweinbach"
+    }
+  },
+  "images": [
+    "./images/cantharellus-cibarius1.jpg",
+    "./images/cantharellus-cibarius2.jpg",
+    "./images/cantharellus-cibarius3.jpg",
+    "./images/cantharellus-cibarius4.jpg"
+  ],
+  "notes": {
+    "en": "Fair number of mushrooms alongside trumpet chanterelles and other interesting mushrooms.",
+    "de": ""
+  },
+  "authors": ["michael"]
+}

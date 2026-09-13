@@ -14,7 +14,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "astro": "astro",
-    "prepare": "husky"
+    "prepare": "husky",
+    "api": "node scripts/api.mjs"
   },
   "dependencies": {
     "astro": "^7.2.6",

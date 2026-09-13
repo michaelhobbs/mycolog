@@ -1,0 +1,20 @@
+{
+  "species": "cudoniella-acicularis",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-09-13",
+  "location": {
+    "lat": 47.51146,
+    "lng": 11.11444,
+    "name": {
+      "en": "Schweinbach",
+      "de": "Schweinbach"
+    }
+  },
+  "images": [
+    "./images/cudoniella-acicularis1.jpg",
+    "./images/cudoniella-acicularis2.jpg",
+    "./images/cudoniella-acicularis3.jpg",
+    "./images/cudoniella-acicularis4.jpg"
+  ]
+}

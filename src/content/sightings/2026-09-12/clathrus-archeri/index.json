@@ -1,0 +1,15 @@
+{
+  "species": "clathrus-archeri",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-09-13",
+  "location": {
+    "lat": 47.49347,
+    "lng": 11.12064,
+    "name": {
+      "en": "Schöne Aussicht (Auf der Lache)",
+      "de": "Schöne Aussicht (Auf der Lache)"
+    }
+  },
+  "images": ["./images/clathrus-archeri1.jpg"]
+}

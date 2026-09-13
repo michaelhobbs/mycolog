@@ -1,0 +1,16 @@
+{
+  "species": "butyriboletus-appendiculatus",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-09-13",
+  "location": {
+    "lat": 47.48852,
+    "lng": 11.17469
+  },
+  "images": [
+    "./images/butyriboletus-appendiculatus1.jpg",
+    "./images/butyriboletus-appendiculatus2.jpg",
+    "./images/butyriboletus-appendiculatus3.jpg",
+    "./images/butyriboletus-appendiculatus4.jpg"
+  ]
+}

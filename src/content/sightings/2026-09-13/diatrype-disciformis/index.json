@@ -1,0 +1,19 @@
+{
+  "species": "diatrype-disciformis",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-09-13",
+  "location": {
+    "lat": 47.48267,
+    "lng": 11.15027,
+    "name": {
+      "en": "Kankerbach",
+      "de": "Kankerbach"
+    }
+  },
+  "images": ["./images/diatrype-disciformis1.jpg", "./images/diatrype-disciformis2.jpg"],
+  "notes": {
+    "en": "Other option: diatrype bullata - if on dead willow. (we assumed beech)",
+    "de": ""
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "species": "sarcondon-imbricatus",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-09-13",
+  "location": {
+    "lat": 47.49215,
+    "lng": 11.15466,
+    "name": {
+      "en": "Schlattan",
+      "de": "Schlattan"
+    }
+  },
+  "images": [
+    "./images/sarcondon-imbricatus1.jpg",
+    "./images/sarcondon-imbricatus2.jpg",
+    "./images/sarcondon-imbricatus3.jpg",
+    "./images/sarcondon-imbricatus4.jpg",
+    "./images/sarcondon-imbricatus5.jpg"
+  ]
+}

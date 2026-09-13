@@ -79,9 +79,9 @@ for (const author of authorDirs) {
 
   for (const folder of folders) {
     const srcDir = path.join(authorDir, folder)
-    const files = (await fs.readdir(srcDir)).filter((f) => /\.heic$/i.test(f)).sort()
+    const files = (await fs.readdir(srcDir)).filter((f) => /\.(heic|jpe?g)$/i.test(f)).sort()
     if (files.length === 0) {
-      console.error(`!! no HEIC files in ${author}/${folder}`)
+      console.error(`!! no photos in ${author}/${folder}`)
       continue
     }
 
@@ -100,14 +100,19 @@ for (const author of authorDirs) {
     await fs.mkdir(imagesDir, { recursive: true })
 
     const images = []
-    files.forEach((f, i) => {
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i]
       const n = String(i + 1).padStart(2, '0')
       const out = path.join(imagesDir, `${n}.jpg`)
-      execFileSync('sips', ['-s', 'format', 'jpeg', path.join(srcDir, f), '--out', out], {
-        stdio: 'ignore',
-      })
+      if (/\.jpe?g$/i.test(f)) {
+        await fs.copyFile(path.join(srcDir, f), out)
+      } else {
+        execFileSync('sips', ['-s', 'format', 'jpeg', path.join(srcDir, f), '--out', out], {
+          stdio: 'ignore',
+        })
+      }
       images.push(`./images/${n}.jpg`)
-    })
+    }
 
     const entry = { authors: [authorSlug], dateSpotted: date, images }
     if (location) entry.location = location

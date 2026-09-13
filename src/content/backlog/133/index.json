@@ -1,0 +1,9 @@
+{
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "images": ["./images/01.jpg"],
+  "location": {
+    "lat": 47.4957,
+    "lng": 11.1476
+  }
+}

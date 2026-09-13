@@ -1,8 +1,34 @@
 {
   "scientificName": "Cudoniella acicularis",
-  "commonName": {
-    "en": "Oak pin",
-    "de": ""
+  "commonName": { "en": "Oak pin", "de": "Dünnstieliges Kreislingchen" },
+  "determiningFeatures": [
+    {
+      "en": "Small, slender, whitish to pale beige pin- and cup-shaped fruit bodies only a few mm tall",
+      "de": "Kleine, schlanke, weißliche bis blass beige Stift- und Becherfruchtkörper von nur wenigen mm Höhe"
+    },
+    {
+      "en": "Spore-bearing disc at the tip",
+      "de": "Sporenbildende Scheibe an der Spitze"
+    },
+    {
+      "en": "Grows in clusters on bare, dead wood, often beech and oak",
+      "de": "Wächst büschelig auf entrindetem Totholz, oft an Buche und Eiche"
+    },
+    {
+      "en": "Inconspicuous and easy to overlook",
+      "de": "Unscheinbar und leicht zu übersehen"
+    }
+  ],
+  "notes": {
+    "en": "A tiny ascomycete that only catches the eye when you deliberately search damp, lying hardwood.",
+    "de": "Ein winziger Schlauchpilz, der nur auffällt, wenn man gezielt feuchtes, liegendes Laubholz absucht."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Damp dead hardwood, especially beech and oak twigs and trunks",
+    "de": "Feuchtes Totholz von Laubbäumen, besonders Buchen- und Eichenzweige sowie -stämme"
+  },
+  "edibility": {
+    "en": "Inedible — too small and insignificant",
+    "de": "Ungenießbar — zu klein und unbedeutend"
+  }
 }

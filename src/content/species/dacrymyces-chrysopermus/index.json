@@ -1,8 +1,34 @@
 {
-  "scientificName": "Dacrymyces chrysopermus",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "scientificName": "Dacrymyces chrysospermus",
+  "commonName": { "en": "Orange jelly spot", "de": "Riesen-Gallertträne" },
+  "determiningFeatures": [
+    {
+      "en": "Bright orange-yellow, gelatinous fruit bodies, cushion- to disc-shaped",
+      "de": "Leuchtend orangegelbe, geleeartige Fruchtkörper, kissen- bis scheibenförmig"
+    },
+    {
+      "en": "Several centimetres wide, limp and slimy",
+      "de": "Mehrere Zentimeter breit, schlaff und schleimig"
+    },
+    {
+      "en": "Grows on dead conifer wood, often in large clusters",
+      "de": "Wächst an totem Nadelholz, oft in großen Ansammlungen"
+    },
+    {
+      "en": "Dries out to a reddish-brown, horny film",
+      "de": "Trocknet zu einem rötlich braunen, hornartigen Häutchen ein"
+    }
+  ],
+  "notes": {
+    "en": "In Europe the Dacrymyces jelly fungi grow mainly on conifer wood and can be confused with the yellow witch's butter (Tremella mesenterica) found on hardwoods.",
+    "de": "Die Gallerttränen (Dacrymyces) wachsen in Europa vor allem an Nadelholz und können mit dem Goldgelben Zitterling (Tremella mesenterica) an Laubholz verwechselt werden."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Dead conifer wood, especially spruce",
+    "de": "Totes Nadelholz, besonders Fichte"
+  },
+  "edibility": {
+    "en": "Inedible — no culinary value",
+    "de": "Ungenießbar — ohne kulinarischen Wert"
+  }
 }

@@ -1,8 +1,34 @@
 {
   "scientificName": "Butyriboletus appendiculatus",
-  "commonName": {
-    "en": "Oak bolete",
-    "de": ""
+  "commonName": { "en": "Oak bolete", "de": "Anhängsel-Röhrling" },
+  "determiningFeatures": [
+    {
+      "en": "Brown, convex cap, finely velvety when young",
+      "de": "Brauner, halbkugeliger Hut, anfangs fein samtig"
+    },
+    {
+      "en": "Yellow pores that turn slightly blue-green when bruised, then fade again",
+      "de": "Gelbe Röhren, bei Druck leicht blaugrünend, später wieder verblassend"
+    },
+    {
+      "en": "Yellow stem with a fine red-brown network",
+      "de": "Gelber Stiel mit feinem rotbraunem Netz"
+    },
+    {
+      "en": "Pale yellow flesh, faintly blue in the cap, reddish at the stem base",
+      "de": "Blassgelbes Fleisch, im Hut wenig blauend, an der Stielbasis rötlich"
+    }
+  ],
+  "notes": {
+    "en": "A rare, warmth-loving species; in Germany it is protected and must not be collected.",
+    "de": "Seltene, wärmeliebende Art; in Deutschland geschützt und darf nicht gesammelt werden."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Thermophilic oak and beech woodland, often on calcareous soil",
+    "de": "Wärmeliebende Laubwälder mit Eiche und Buche, häufig auf Kalk"
+  },
+  "edibility": {
+    "en": "Good edible, but protected in Germany",
+    "de": "Guter Speisepilz, aber in Deutschland geschützt"
+  }
 }

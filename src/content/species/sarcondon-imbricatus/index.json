@@ -1,8 +1,34 @@
 {
-  "scientificName": "Sarcondon imbricatus",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "scientificName": "Sarcodon imbricatus",
+  "commonName": { "en": "Shingled hedgehog", "de": "Habichtspilz" },
+  "determiningFeatures": [
+    {
+      "en": "Large brown cap covered with coarse, dark brown, roof-shingle-like scales",
+      "de": "Großer brauner Hut mit groben, dunkelbraunen, dachziegelartigen Schuppen"
+    },
+    {
+      "en": "Grey-brown, brittle teeth instead of gills under the cap",
+      "de": "Graubraune, brechbare Stacheln statt Lamellen unter dem Hut"
+    },
+    {
+      "en": "Becomes broadly funnel-shaped with age, sometimes with greenish zones",
+      "de": "Wird mit zunehmendem Alter weit trichterförmig, teils mit grünlichen Zonen"
+    },
+    {
+      "en": "Stout, grey-brown stem",
+      "de": "Kräftiger, graubrauner Stiel"
+    }
+  ],
+  "notes": {
+    "en": "Often deeply bitter; cooking does not remove the bitter taste, making most finds unusable.",
+    "de": "Häufig stark bitter; der bittere Geschmack lässt sich durch Kochen nicht entfernen, sodass die meisten Funde unbrauchbar sind."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Coniferous forest, mycorrhizal with spruce and pine",
+    "de": "Nadelwälder, Mykorrhiza-Partner von Fichte und Kiefer"
+  },
+  "edibility": {
+    "en": "Edible when young, but often bitter",
+    "de": "Jung genießbar, aber oft bitter"
+  }
 }

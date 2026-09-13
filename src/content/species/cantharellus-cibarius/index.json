@@ -1,8 +1,34 @@
 {
   "scientificName": "Cantharellus cibarius",
-  "commonName": {
-    "en": "Chanterelle",
-    "de": ""
+  "commonName": { "en": "Chanterelle", "de": "Pfifferling" },
+  "determiningFeatures": [
+    {
+      "en": "Golden-yellow, funnel-shaped cap with a wavy, irregular margin",
+      "de": "Goldgelber, trichterförmiger Hut mit welligem, unregelmäßigem Rand"
+    },
+    {
+      "en": "Blunt, forked ridges (no true gills) running down the stem",
+      "de": "Stumpfe, gabelige Leisten (keine echten Lamellen), die am Stiel herablaufen"
+    },
+    {
+      "en": "Pale yellow to whitish, firm flesh",
+      "de": "Helles gelb-weißes, festes Fleisch"
+    },
+    {
+      "en": "Pleasant fruity smell of apricots",
+      "de": "Angenehm fruchtiger, aprikosenartiger Geruch"
+    }
+  ],
+  "notes": {
+    "en": "One of the most sought-after wild mushrooms in Europe; a great choice for drying.",
+    "de": "Einer der begehrtesten Wildpilze Europas; hervorragend zum Trocknen geeignet."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Mycorrhizal with beech, birch, spruce and pine",
+    "de": "Mykorrhiza-Partner von Buche, Birke, Fichte und Kiefer"
+  },
+  "edibility": {
+    "en": "Excellent edible mushroom",
+    "de": "Ausgezeichneter Speisepilz"
+  }
 }

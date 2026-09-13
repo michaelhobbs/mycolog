@@ -1,8 +1,34 @@
 {
   "scientificName": "Amanita pantherina",
-  "commonName": {
-    "en": "Panthercap",
-    "de": ""
+  "commonName": { "en": "Panthercap", "de": "Pantherpilz" },
+  "determiningFeatures": [
+    {
+      "en": "Brown cap densely covered with white warts",
+      "de": "Brauner Hut, dicht mit weißen Warzen besetzt"
+    },
+    {
+      "en": "White gills and a white stem",
+      "de": "Weiße Lamellen und weißer Stiel"
+    },
+    {
+      "en": "Thin white ring placed high on the stem, grooved on top",
+      "de": "Zarter weißer Ring weit oben am Stiel, oberseits gerieft"
+    },
+    {
+      "en": "Rounded bulbous base with a collar-like volva, no separate sac",
+      "de": "Abgesetzte rundliche Knolle mit krausem Ringwulst statt freiem Scheidensack"
+    }
+  ],
+  "notes": {
+    "en": "Easily confused with the blusher (Amanita rubescens), but its flesh never stains pink.",
+    "de": "Kann mit dem Perlpilz (Amanita rubescens) verwechselt werden, dessen Fleisch sich jedoch rosarot verfärbt."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Deciduous and coniferous forests, especially under beech and spruce",
+    "de": "Laub- und Nadelwälder, besonders unter Buche und Fichte"
+  },
+  "edibility": {
+    "en": "Highly toxic — contains ibotenic acid and muscimol",
+    "de": "Stark giftig — enthält Ibotensäure und Muscimol"
+  }
 }

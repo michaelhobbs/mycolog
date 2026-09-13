@@ -1,8 +1,34 @@
 {
   "scientificName": "Diatrype disciformis",
-  "commonName": {
-    "en": "Beech barkspot",
-    "de": ""
+  "commonName": { "en": "Beech barkspot", "de": "Buchen-Eckenscheibchen" },
+  "determiningFeatures": [
+    {
+      "en": "Small, cushion-shaped to flattened, black crust fruit bodies in bark cracks",
+      "de": "Kleine, kissen- bis scheibenförmige, schwarze Rindenkrusten in Rissen der Borke"
+    },
+    {
+      "en": "Angular outline, bursting through the bark",
+      "de": "Eckiger Umriss, durch die Rinde brechend"
+    },
+    {
+      "en": "Often arranged in rows following the bark fissures",
+      "de": "Oft in Reihen entlang der Rindenrisse angeordnet"
+    },
+    {
+      "en": "Tiny spore chambers (perithecia) opening through minute raised pores",
+      "de": "Winzige Sporenkammern (Perithezien), die sich durch feine Poren öffnen"
+    }
+  ],
+  "notes": {
+    "en": "A very common bark fungus of beech that looks like small black cushions and is easy to overlook.",
+    "de": "Ein sehr häufiger Buchen-Rindenpilz, der wie kleine schwarze Polster wirkt und leicht übersehen wird."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Dead branches and trunks of beech, rarely other hardwoods",
+    "de": "Abgestorbene Zweige und Stämme der Buche, seltener andere Laubbäume"
+  },
+  "edibility": {
+    "en": "Inedible — hard, woody crust",
+    "de": "Ungenießbar — harte, holzige Kruste"
+  }
 }

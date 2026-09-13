@@ -1,8 +1,34 @@
 {
   "scientificName": "Clathrus archeri",
-  "commonName": {
-    "en": "Devil's fingers",
-    "de": ""
+  "commonName": { "en": "Devil's fingers", "de": "Tintenfischpilz" },
+  "determiningFeatures": [
+    {
+      "en": "Starts as a whitish, leathery 'egg' at the base",
+      "de": "Beginnt als weißliches, ledriges „Ei\" an der Basis"
+    },
+    {
+      "en": "Opens into 4–6 (rarely 8) bright red, tentacle-like arms",
+      "de": "Entfaltet 4–6 (selten 8) leuchtend rote, tentakelartige Arme"
+    },
+    {
+      "en": "Inner surfaces covered with a dark, olive-brown spore mass (gleba)",
+      "de": "Innenseiten mit dunkelolivbrauner Sporenmasse (Gleba) bedeckt"
+    },
+    {
+      "en": "Strong smell of rotting flesh",
+      "de": "Kräftiger Geruch nach verrottendem Fleisch"
+    }
+  ],
+  "notes": {
+    "en": "Originally from Australasia, now a widespread invasive species across Europe; the odour attracts flies that disperse the spores.",
+    "de": "Stammt ursprünglich aus Australasien, heute in Europa weit verbreitete Neobiota; der Geruch lockt Fliegen an, die die Sporen verbreiten."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Gardens, wood-chip mulch and disturbed ground, also broadleaf woodland",
+    "de": "Gärten, Holzhäcksel und gestörte Standorte, auch Laubwälder"
+  },
+  "edibility": {
+    "en": "Inedible — foul smell",
+    "de": "Ungenießbar — Fäulnisgeruch"
+  }
 }

@@ -1,8 +1,34 @@
 {
   "scientificName": "Craterellus tubaeformis",
-  "commonName": {
-    "en": "Trumpet chanterelle",
-    "de": ""
+  "commonName": { "en": "Trumpet chanterelle", "de": "Trompetenpfifferling" },
+  "determiningFeatures": [
+    {
+      "en": "Hollow, trumpet-shaped cap, grey-brown to brown",
+      "de": "Hohler, trompetenförmiger Hut, graubraun bis braun"
+    },
+    {
+      "en": "Grey, wrinkled veins (no true gills) under the cap",
+      "de": "Graue, runzelige Adern statt echter Lamellen unter dem Hut"
+    },
+    {
+      "en": "Hollow, yellowish-brown stem widening towards the base",
+      "de": "Hohler, gelbbrauner Stiel, zur Basis hin erweitert"
+    },
+    {
+      "en": "Often grows in crowded groups in mossy spots",
+      "de": "Wächst oft büschelig in moosigen Flecken"
+    }
+  ],
+  "notes": {
+    "en": "Fruits late in the season; develops a fine flavour when dried.",
+    "de": "Erscheint spät in der Saison; getrocknet entwickelt er ein feines Aroma."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Mossy coniferous forest, especially spruce",
+    "de": "Moosige Nadelwälder, besonders unter Fichte"
+  },
+  "edibility": {
+    "en": "Good edible mushroom",
+    "de": "Guter Speisepilz"
+  }
 }

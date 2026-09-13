@@ -1,8 +1,12 @@
 ---
 interface Props {
   locale: string
+  initial?: { lat: number; lng: number } | null
 }
-const { locale } = Astro.props as { locale: 'en' | 'de' }
+const { locale, initial = null } = Astro.props as {
+  locale: 'en' | 'de'
+  initial?: { lat: number; lng: number } | null
+}
 ---
 
 <div class="map-frame">
@@ -13,7 +17,13 @@ const { locale } = Astro.props as { locale: 'en' | 'de' }
       >{locale === 'de' ? 'noch kein Ort' : 'no location'}</span
     >
   </div>
-  <div id="picker-map" class="picker-map" data-locale={locale}></div>
+  <div
+    id="picker-map"
+    class="picker-map"
+    data-locale={locale}
+    data-initial={initial ? JSON.stringify(initial) : ''}
+  >
+  </div>
   <div class="map-frame__attribution">
     <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
   </div>
@@ -29,10 +39,26 @@ const { locale } = Astro.props as { locale: 'en' | 'de' }
     const container = document.getElementById('picker-map')
     if (!container) return
 
+    let initial: { lat: number; lng: number } | null = null
+    try {
+      const parsed = JSON.parse(container.dataset.initial || 'null')
+      if (
+        parsed &&
+        typeof parsed.lat === 'number' &&
+        typeof parsed.lng === 'number' &&
+        Number.isFinite(parsed.lat) &&
+        Number.isFinite(parsed.lng)
+      ) {
+        initial = { lat: parsed.lat, lng: parsed.lng }
+      }
+    } catch {}
+
+    const center = initial ? [initial.lng, initial.lat] : [11.0922, 47.4917]
+
     const map = new maplibregl.Map({
       container,
       style: STYLE_URL,
-      center: [11.0922, 47.4917],
+      center: center as [number, number],
       zoom: 11,
     })
 
@@ -75,6 +101,7 @@ const { locale } = Astro.props as { locale: 'en' | 'de' }
 
     map.on('load', () => {
       paintPalette()
+      if (initial) updatePin(new maplibregl.LngLat(initial.lng, initial.lat))
       map.on('click', (e) => {
         updatePin(e.lngLat)
         map.getCanvas().style.cursor = 'crosshair'

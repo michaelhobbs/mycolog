@@ -59,6 +59,7 @@ const knownLocations = [
 const entryJSON = JSON.stringify({
   id: entry.id,
   dateSpotted: entry.data.dateSpotted,
+  location: entry.data.location ?? null,
   images: await Promise.all(
     entry.data.images.map(async (img) => {
       const resolved = await getImage({ src: img, width: 640 })
@@ -169,7 +170,7 @@ const entryJSON = JSON.stringify({
         </div>
 
         <p class="field-hint">{t.backlog.pickOnMap}</p>
-        <LocationPicker locale={locale} />
+        <LocationPicker locale={locale} initial={entry.data.location} />
       </fieldset>
 
       <fieldset>

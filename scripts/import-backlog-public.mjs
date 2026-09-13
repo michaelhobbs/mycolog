@@ -27,6 +27,24 @@ function exifDate(file) {
   return match[1]
 }
 
+// mdls returns a decimal string like "47.4917" or "(null)" when the photo has
+// no GPS tag. Only treat the file as geocoded when both axes parse as numbers.
+function mdlsFloat(name, file) {
+  const out = execFileSync('mdls', ['-raw', '-name', name, file], { encoding: 'utf8' }).trim()
+  if (!out || out === '(null)') return null
+  const n = Number(out)
+  return Number.isFinite(n) ? n : null
+}
+
+// Derive lat/lng from the photo's EXIF GPS tags, rounded to 5 decimals to match
+// the coordinate precision used on the identify page.
+function exifLocation(file) {
+  const lat = mdlsFloat('kMDItemLatitude', file)
+  const lng = mdlsFloat('kMDItemLongitude', file)
+  if (lat === null || lng === null) return null
+  return { lat: Number(lat.toFixed(5)), lng: Number(lng.toFixed(5)) }
+}
+
 // Ensure a content entry exists for the given author (slugs match folder names).
 async function ensureAuthor(name) {
   const slug = slugify(name) || 'unknown'
@@ -69,6 +87,14 @@ for (const author of authorDirs) {
 
     const date = exifDate(path.join(srcDir, files[0]))
 
+    // Use the first photo in the folder that carries GPS coordinates (falling
+    // back to files[0], matching the date, when none do).
+    let location = null
+    for (const f of files) {
+      location = exifLocation(path.join(srcDir, f))
+      if (location) break
+    }
+
     const itemDir = path.join(BACKLOG, String(slug).padStart(2, '0'))
     const imagesDir = path.join(itemDir, 'images')
     await fs.mkdir(imagesDir, { recursive: true })
@@ -83,12 +109,15 @@ for (const author of authorDirs) {
       images.push(`./images/${n}.jpg`)
     })
 
-    await fs.writeFile(
-      path.join(itemDir, 'index.json'),
-      JSON.stringify({ authors: [authorSlug], dateSpotted: date, images }, null, 2) + '\n',
-    )
+    const entry = { authors: [authorSlug], dateSpotted: date, images }
+    if (location) entry.location = location
 
-    console.log(`created ${itemDir} (${author}/${folder}, ${date}, ${images.length} images)`)
+    await fs.writeFile(path.join(itemDir, 'index.json'), JSON.stringify(entry, null, 2) + '\n')
+
+    const loc = location ? `, ${location.lat}, ${location.lng}` : ''
+    console.log(
+      `created ${itemDir} (${author}/${folder}, ${date}${loc || ', no GPS'}, ${images.length} images)`,
+    )
     slug++
   }
 }

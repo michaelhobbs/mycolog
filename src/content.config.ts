@@ -51,6 +51,7 @@ const backlog = defineCollection({
       authors: z.array(z.string()).min(1),
       dateSpotted: z.string(),
       images: z.array(image()),
+      location: z.object({ lat: z.number(), lng: z.number() }).optional(),
     }),
 })
 

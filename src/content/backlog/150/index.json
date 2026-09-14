@@ -1,0 +1,9 @@
+{
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "images": ["./images/01.jpg", "./images/02.jpg"],
+  "location": {
+    "lat": 47.52058,
+    "lng": 11.08309
+  }
+}

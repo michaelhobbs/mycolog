@@ -13,7 +13,7 @@ const { locale } = Astro.params as { locale: Locale }
 const t = getTranslations(locale)
 
 const backlog = (await getCollection('backlog')).sort((a, b) =>
-  a.data.dateSpotted < b.data.dateSpotted ? -1 : 1,
+  a.data.dateSpotted < b.data.dateSpotted ? 1 : -1,
 )
 ---
 

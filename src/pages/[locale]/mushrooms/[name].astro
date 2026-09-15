@@ -1,7 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
-import { Image } from 'astro:assets'
+import { Image, getImage } from 'astro:assets'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import type { Locale } from '../../../i18n'
@@ -31,6 +31,9 @@ const sharedNotes = sp?.notes
 const habitat = sp?.habitat
 const edibility = sp?.edibility
 const features = sp?.determiningFeatures ?? []
+const fullSrcs = await Promise.all(
+  allImages.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
+)
 ---
 
 <Layout title={`${species ? l10n(sp?.commonName, locale) : name} — myco.log`} locale={locale}>
@@ -47,15 +50,25 @@ const features = sp?.determiningFeatures ?? []
     {
       sp && (
         <>
-          <div class="gallery">
+          <div class="gallery" data-lightbox-group>
             {allImages.map((img, i) => (
-              <figure class="gallery__item">
+              <figure class="gallery__item" data-lightbox-src={fullSrcs[i]}>
                 <Image
                   src={img}
                   alt={`${l10n(sp.commonName, locale)} — ${i + 1}`}
                   loading="lazy"
                   widths={[320, 640]}
                 />
+                <button
+                  type="button"
+                  class="gallery__full"
+                  data-lightbox-trigger
+                  data-index={i}
+                  aria-label={`${t.mushrooms.fullscreen} ${i + 1}`}
+                  title={t.mushrooms.fullscreen}
+                >
+                  ⛶
+                </button>
               </figure>
             ))}
           </div>
@@ -179,6 +192,7 @@ const features = sp?.determiningFeatures ?? []
     overflow: hidden;
     background: var(--bg-highlight);
     aspect-ratio: 4 / 3;
+    position: relative;
   }
 
   .gallery__item img {
@@ -186,6 +200,41 @@ const features = sp?.determiningFeatures ?? []
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .gallery__full {
+    position: absolute;
+    top: 0.25rem;
+    left: 0.25rem;
+    background: rgba(14, 18, 11, 0.75);
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      background 0.1s,
+      color 0.1s,
+      opacity 0.15s;
+  }
+
+  .gallery__item:hover .gallery__full,
+  .gallery__full:focus-visible {
+    opacity: 1;
+  }
+
+  .gallery__full:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  @media (hover: none) {
+    .gallery__full {
+      opacity: 1;
+    }
   }
 
   .facts {

@@ -37,6 +37,7 @@ export default {
   card: {
     features: 'Key Features',
     more: 'more details',
+    fullscreen: 'open fullscreen',
   },
   log: {
     title: 'Field Log',
@@ -73,6 +74,7 @@ export default {
     updating: 'Updating…',
     mainUpdated: 'Main photo updated',
     error: 'Something went wrong',
+    fullscreen: 'open fullscreen',
   },
   mushrooms: {
     title: 'Mushroom Species',
@@ -85,6 +87,7 @@ export default {
     edibility: 'Edibility',
     sightings: 'Sightings',
     backToIndex: 'All species',
+    fullscreen: 'open fullscreen',
     spottedIn: 'Spotted in',
     onDate: 'on',
     at: 'at',
@@ -103,6 +106,7 @@ export default {
     dateHelp: 'Date the mushrooms were found (pre-filled from the photo)',
     missingDate: 'Please set a date',
     identify: 'identify',
+    fullscreen: 'open fullscreen',
     backToList: 'All backlog items',
     addTitle: 'Identify backlog item',
     species: 'species',

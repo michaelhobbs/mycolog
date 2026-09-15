@@ -1,7 +1,7 @@
 ---
 import type { Locale } from '../i18n'
 import type { EnrichedSighting } from '../lib/sightings'
-import { Image } from 'astro:assets'
+import { Image, getImage } from 'astro:assets'
 import { l10n } from '../i18n/helpers'
 import { formatDate, getTranslations } from '../i18n'
 
@@ -14,6 +14,13 @@ const { sighting, locale } = Astro.props
 const s = sighting
 const t = l10n
 const dict = getTranslations(locale)
+
+const fullUrls = await Promise.all(
+  (s.images ?? []).map(async (img) => {
+    const resolved = await getImage({ src: img, width: 1600 })
+    return resolved?.src ?? ''
+  }),
+)
 ---
 
 <div class="tui-card">
@@ -24,10 +31,18 @@ const dict = getTranslations(locale)
     <a href={`/${locale}/log/${s.slug}`} class="tui-card__more">{'>'}{dict.card.more}</a>
   </div>
 
-  <div class="tui-card__carousel" data-carousel={s.images && s.images.length > 1 ? '' : undefined}>
+  <div
+    class="tui-card__carousel"
+    data-carousel={s.images && s.images.length > 1 ? '' : undefined}
+    data-lightbox-group
+  >
     {
       s.images?.map((img, i) => (
-        <div class="tui-card__slide" data-active={i === 0 ? '' : undefined}>
+        <div
+          class="tui-card__slide"
+          data-active={i === 0 ? '' : undefined}
+          data-lightbox-src={fullUrls[i]}
+        >
           <a href={`/${locale}/log/${s.slug}`} class="tui-card__slide-link">
             <Image
               src={img}
@@ -41,6 +56,15 @@ const dict = getTranslations(locale)
       ))
     }
     <div class="tui-card__overlay">
+      <button
+        class="tui-card__full"
+        type="button"
+        data-lightbox-trigger
+        aria-label={dict.card.fullscreen}
+        title={dict.card.fullscreen}
+      >
+        ⛶
+      </button>
       <a href={`/${locale}/log/${s.slug}`} class="tui-card__date"
         >{formatDate(s.dateSpotted, locale)}</a
       >
@@ -259,11 +283,49 @@ const dict = getTranslations(locale)
   .tui-card__overlay {
     position: absolute;
     top: 0;
+    left: 0;
     right: 0;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .tui-card__full {
+    pointer-events: auto;
+    background: var(--bg);
+    border: 1px solid var(--border-char);
+    border-top: none;
+    border-right: none;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1;
+    color: var(--accent);
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      background 0.1s,
+      color 0.1s,
+      opacity 0.15s;
+  }
+
+  .tui-card__carousel:hover .tui-card__full {
+    opacity: 1;
+  }
+
+  .tui-card__full:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  @media (hover: none) {
+    .tui-card__full {
+      opacity: 1;
+    }
   }
 
   .tui-card__date {
     display: inline-block;
+    pointer-events: auto;
     background: var(--bg);
     border: 1px solid var(--border-char);
     border-top: none;
@@ -393,7 +455,8 @@ const dict = getTranslations(locale)
 </style>
 
 <script>
-  document.querySelectorAll('.tui-card__carousel[data-carousel]').forEach((carousel) => {
+  document.querySelectorAll('.tui-card__carousel[data-carousel]').forEach((el) => {
+    const carousel = el as HTMLElement
     const slides = [...carousel.querySelectorAll('.tui-card__slide')]
     const card = carousel.closest('.tui-card')
     const thumbs = [...(card?.querySelectorAll('[data-thumb]') ?? [])]
@@ -404,11 +467,14 @@ const dict = getTranslations(locale)
       slides[active].removeAttribute('data-active')
       active = (i + slides.length) % slides.length
       slides[active].setAttribute('data-active', '')
+      carousel.dataset.index = String(active)
       thumbs.forEach((thumb, thumbIndex) => {
         if (thumbIndex === active) thumb.setAttribute('data-active', '')
         else thumb.removeAttribute('data-active')
       })
     }
+
+    carousel.dataset.index = String(active)
 
     carousel.querySelector('[data-arrow="prev"]')?.addEventListener('click', () => show(active - 1))
     carousel.querySelector('[data-arrow="next"]')?.addEventListener('click', () => show(active + 1))

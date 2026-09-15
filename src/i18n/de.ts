@@ -37,6 +37,7 @@ export default {
   card: {
     features: 'Bestimmungsmerkmale',
     more: 'mehr Details',
+    fullscreen: 'Vollbild öffnen',
   },
   log: {
     title: 'Fundprotokoll',
@@ -73,6 +74,7 @@ export default {
     updating: 'Aktualisiere…',
     mainUpdated: 'Hauptfoto aktualisiert',
     error: 'Etwas ist schiefgelaufen',
+    fullscreen: 'Vollbild öffnen',
   },
   mushrooms: {
     title: 'Pilzarten',
@@ -85,6 +87,7 @@ export default {
     edibility: 'Genießbarkeit',
     sightings: 'Beobachtungen',
     backToIndex: 'Alle Arten',
+    fullscreen: 'Vollbild öffnen',
     spottedIn: 'Gesehen in',
     onDate: 'am',
     at: 'bei',
@@ -103,6 +106,7 @@ export default {
     dateHelp: 'Datum, an dem die Pilze gefunden wurden (vom Foto vorausgefüllt)',
     missingDate: 'Bitte setze ein Datum',
     identify: 'bestimmen',
+    fullscreen: 'Vollbild öffnen',
     backToList: 'Alle Rückstand-Einträge',
     addTitle: 'Rückstand-Eintrag bestimmen',
     species: 'Art',

@@ -1,0 +1,206 @@
+---
+// Fullscreen photo viewer ("lightroom" modal). Works with any gallery marked
+// with `data-lightbox-group` that contains per-image sources via
+// `data-lightbox-src`, opened by buttons marked `data-lightbox-trigger`
+// (optionally carrying a `data-index`). If no `data-lightbox-src` elements
+// exist, the group's <img> elements are used as sources.
+---
+
+<aside class="lightbox" data-lightbox-modal hidden aria-hidden="true">
+  <figure class="lightbox__frame">
+    <img class="lightbox__img" data-lightbox-img alt="" />
+    <figcaption class="lightbox__caption" data-lightbox-caption></figcaption>
+  </figure>
+
+  <button class="lightbox__btn lightbox__btn--close" data-lightbox-close aria-label="close">
+    [×]
+  </button>
+  <button class="lightbox__btn lightbox__btn--prev" data-lightbox-prev aria-label="previous">
+    ‹
+  </button>
+  <button class="lightbox__btn lightbox__btn--next" data-lightbox-next aria-label="next">
+    ›
+  </button>
+
+  <div class="lightbox__count" data-lightbox-count aria-hidden="true"></div>
+</aside>
+
+<script is:inline>
+  const modal = document.querySelector('[data-lightbox-modal]')
+  if (modal) {
+    const imgEl = modal.querySelector('[data-lightbox-img]')
+    const captionEl = modal.querySelector('[data-lightbox-caption]')
+    const countEl = modal.querySelector('[data-lightbox-count]')
+    const closeBtn = modal.querySelector('[data-lightbox-close]')
+
+    let sources = []
+    let captions = []
+    let index = 0
+
+    function sourcesOf(group) {
+      const els = Array.from(group.querySelectorAll('[data-lightbox-src]'))
+      if (els.length) return els.map((el) => el.dataset.lightboxSrc ?? '')
+      return Array.from(group.querySelectorAll('img')).map((i) => i.currentSrc || i.src || '')
+    }
+
+    function captionsOf(group) {
+      return Array.from(group.querySelectorAll('img')).map((i) => i.alt ?? '')
+    }
+
+    function update() {
+      if (!sources.length) return
+      imgEl.src = sources[index]
+      imgEl.alt = captions[index] ?? ''
+      captionEl.textContent = captions[index] ?? ''
+      countEl.textContent = `${index + 1} / ${sources.length}`
+    }
+
+    function open(group, start) {
+      sources = sourcesOf(group)
+      captions = captionsOf(group)
+      index = Math.max(0, Math.min(start || 0, sources.length - 1))
+      document.body.style.overflow = 'hidden'
+      modal.hidden = false
+      modal.setAttribute('aria-hidden', 'false')
+      update()
+      closeBtn.focus()
+    }
+
+    function close() {
+      modal.hidden = true
+      modal.setAttribute('aria-hidden', 'true')
+      document.body.style.overflow = ''
+      imgEl.removeAttribute('src')
+    }
+
+    function go(step) {
+      if (sources.length < 2) return
+      index = (index + step + sources.length) % sources.length
+      update()
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-lightbox-trigger]')
+      if (!btn) return
+      const group = btn.closest('[data-lightbox-group]')
+      if (!group) return
+      e.preventDefault()
+      e.stopPropagation()
+      const idx =
+        btn.dataset.index !== undefined
+          ? Number(btn.dataset.index)
+          : Number(group.dataset.index || 0)
+      open(group, Number.isFinite(idx) ? idx : 0)
+    })
+
+    closeBtn.addEventListener('click', close)
+    modal.querySelector('[data-lightbox-prev]').addEventListener('click', (e) => {
+      e.stopPropagation()
+      go(-1)
+    })
+    modal.querySelector('[data-lightbox-next]').addEventListener('click', (e) => {
+      e.stopPropagation()
+      go(1)
+    })
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) close()
+    })
+    document.addEventListener('keydown', (e) => {
+      if (modal.hidden) return
+      if (e.key === 'Escape') close()
+      else if (e.key === 'ArrowLeft') {
+        e.preventDefault()
+        go(-1)
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault()
+        go(1)
+      }
+    })
+  }
+</script>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(8, 10, 8, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox__frame {
+    max-width: 92vw;
+    max-height: 92vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .lightbox__img {
+    max-width: 92vw;
+    max-height: 88vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: 1px solid var(--border-char);
+  }
+
+  .lightbox__caption {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
+  .lightbox__btn {
+    position: fixed;
+    z-index: 1001;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    padding: 0.5rem 0.875rem;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  .lightbox__btn:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .lightbox__btn--close {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .lightbox__btn--prev {
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox__btn--next {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .lightbox__count {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+</style>

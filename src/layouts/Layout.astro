@@ -2,6 +2,7 @@
 import type { Locale } from '../i18n'
 import { getTranslations, locales, defaultLocale } from '../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
+import Lightbox from '../components/Lightbox.astro'
 
 interface Props {
   title: string
@@ -138,6 +139,8 @@ function localizedPath(targetLocale: Locale): string {
         </span>
       </div>
     </footer>
+
+    <Lightbox />
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {

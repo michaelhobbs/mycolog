@@ -1,21 +1,19 @@
 ---
 interface Props {
-  lat: number
-  lng: number
-  label?: string
+  points: { lat: number; lng: number; label?: string }[]
 }
 
-const { lat, lng, label = '' } = Astro.props
-const coords = `${lat.toFixed(4)}°N ${lng.toFixed(4)}°E`
-const marker = JSON.stringify({
+const { points } = Astro.props
+const count = points.length
+const center = points.reduce((acc, p) => [acc[0] + p.lng / count, acc[1] + p.lat / count], [0, 0])
+const coords = `${center[1].toFixed(4)}°N ${center[0].toFixed(4)}°E`
+const data = JSON.stringify({
   type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Feature',
-      properties: { label },
-      geometry: { type: 'Point', coordinates: [lng, lat] },
-    },
-  ],
+  features: points.map((p) => ({
+    type: 'Feature',
+    properties: { label: p.label ?? '' },
+    geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
+  })),
 })
 ---
 
@@ -24,7 +22,7 @@ const marker = JSON.stringify({
     <span class="mini-map-frame__title-text">[ map ]</span>
     <span class="mini-map-frame__title-coords">{coords}</span>
   </div>
-  <div id="minimap" class="mini-map-frame__map" data-marker={marker}></div>
+  <div id="minimap" class="mini-map-frame__map" data-points={data}></div>
   <div class="mini-map-frame__attribution">
     <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
   </div>
@@ -86,13 +84,87 @@ const marker = JSON.stringify({
   }
 
   const container = document.getElementById('minimap')
-  const marker = JSON.parse(container?.dataset.marker || '{"features":[]}')
-  const point = marker.features[0]?.geometry?.coordinates as [number, number] | undefined
+  const pts = JSON.parse(container?.dataset.points || '{"features":[]}')
+  const features = pts.features as {
+    properties: { label?: string }
+    geometry: { coordinates: [number, number] }
+  }[]
+  const center = features
+    .reduce(
+      (acc, f) => {
+        const [lng, lat] = f.geometry.coordinates
+        return [acc[0] + lng, acc[1] + lat]
+      },
+      [0, 0],
+    )
+    .map((v) => v / Math.max(features.length, 1))
 
-  function addMarker(map: maplibregl.Map) {
-    if (!marker.features.length) return
+  // Fixed 15 km "hunting box" around the center, same geographic extent as the
+  // big map's box-mask (MapVector). The box is container-size independent, so
+  // the shown area is identical regardless of the map's dimensions. The map is
+  // framed to this exact box and everything outside it is masked.
+  function maskBox(lat: number, lng: number): [number, number, number, number] {
+    const dLat = 15 / 111.32
+    const dLon = 15 / (111.32 * Math.cos((lat * Math.PI) / 180))
+    const w = lng - dLon
+    const e = lng + dLon
+    const s = lat - dLat
+    const n = lat + dLat
+    return [w, s, e, n]
+  }
 
-    map.addSource('sighting', { type: 'geojson', data: marker })
+  // Masks everything outside the 15 km box (MapVector's box-mask).
+  function addMask(map: maplibregl.Map, [w, s, e, n]: [number, number, number, number]) {
+    if (map.getSource('mini-mask')) return
+
+    const mask = {
+      type: 'FeatureCollection' as const,
+      features: [
+        {
+          type: 'Feature' as const,
+          properties: {},
+          geometry: {
+            type: 'Polygon' as const,
+            coordinates: [
+              [
+                [-180, -90],
+                [180, -90],
+                [180, 90],
+                [-180, 90],
+                [-180, -90],
+              ],
+              [
+                [w, s],
+                [w, n],
+                [e, n],
+                [e, s],
+                [w, s],
+              ],
+            ],
+          },
+        },
+      ],
+    }
+
+    map.addSource('mini-mask', { type: 'geojson', data: mask })
+    map.addLayer({
+      id: 'mini-mask-fill',
+      type: 'fill',
+      source: 'mini-mask',
+      paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
+    })
+    map.addLayer({
+      id: 'mini-mask-outline',
+      type: 'line',
+      source: 'mini-mask',
+      paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
+    })
+  }
+
+  function addMarkers(map: maplibregl.Map) {
+    if (!features.length) return
+
+    map.addSource('sighting', { type: 'geojson', data: pts })
     map.addLayer({
       id: 'sighting-dot',
       type: 'circle',
@@ -105,13 +177,13 @@ const marker = JSON.stringify({
       },
     })
 
-    if (marker.features[0].properties?.label) {
+    if (features.some((f) => f.properties?.label)) {
       map.addLayer({
         id: 'sighting-label',
         type: 'symbol',
         source: 'sighting',
         layout: {
-          'text-field': ['get', 'label'],
+          'text-field': ['coalesce', ['get', 'label'], ''],
           'text-font': ['Noto Sans Bold'],
           'text-size': 11,
           'text-anchor': 'left',
@@ -128,23 +200,28 @@ const marker = JSON.stringify({
   }
 
   function initMap() {
-    if (!container || !point) return
+    if (!container || !features.length) return
 
-    const [lng, lat] = point
+    const [clng, clat] = center
+    const [w, s, e, n] = maskBox(clat, clng)
 
     const map = new maplibregl.Map({
       container,
       style: STYLE_URL,
-      center: [lng, lat],
-      zoom: 14,
+      center: [clng, clat],
+      bounds: [
+        [w, s],
+        [e, n],
+      ],
     })
 
     map.on('load', () => {
       applyPalette(map)
+      addMask(map, [w, s, e, n])
       try {
-        addMarker(map)
+        addMarkers(map)
       } catch (err) {
-        console.error('[minimap] addMarker failed:', err)
+        console.error('[minimap] addMarkers failed:', err)
       }
     })
 

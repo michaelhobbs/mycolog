@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
+import MiniMap from '../../../components/MiniMap.astro'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import type { Locale } from '../../../i18n'
@@ -85,6 +86,16 @@ const fullSrcs = await Promise.all(
               <span class="fact-val">{habitat ? l10n(habitat, locale) : '—'}</span>
             </div>
           </div>
+
+          {entries.length > 0 && (
+            <MiniMap
+              points={entries.map((e) => ({
+                lat: e.data.location.lat,
+                lng: e.data.location.lng,
+                label: l10n(e.data.location.name, locale),
+              }))}
+            />
+          )}
 
           {sharedNotes && (
             <section class="block">

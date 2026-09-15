@@ -681,10 +681,12 @@ const sightingsJSON = JSON.stringify(clientSightings)
 
     const lat = 47.4917,
       lon = 11.0922
-    const ar = container.clientWidth / container.clientHeight
 
+    // Fixed 15 km half-extent box, independent of the container size, so the
+    // same geographical boundary is shown regardless of viewport dimensions.
+    // Kept in sync with MiniMap's maskBox.
     const dLat = 15 / 111.32
-    const dLon = (15 * ar) / (111.32 * Math.cos((lat * Math.PI) / 180))
+    const dLon = 15 / (111.32 * Math.cos((lat * Math.PI) / 180))
     const w = lon - dLon,
       e = lon + dLon
     const s = lat - dLat,

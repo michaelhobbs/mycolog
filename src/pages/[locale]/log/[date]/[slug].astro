@@ -108,9 +108,13 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
           {dev && <span id="cover-status" class="cover-status" role="status" />}
 
           <MiniMap
-            lat={sighting.location.lat}
-            lng={sighting.location.lng}
-            label={l10n(sighting.location.name, locale)}
+            points={[
+              {
+                lat: sighting.location.lat,
+                lng: sighting.location.lng,
+                label: l10n(sighting.location.name, locale),
+              },
+            ]}
           />
 
           <div class="facts">

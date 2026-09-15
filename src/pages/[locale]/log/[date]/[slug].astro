@@ -3,6 +3,7 @@ import Layout from '../../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import Notice from '../../../../components/Notice.astro'
+import MiniMap from '../../../../components/MiniMap.astro'
 import { enrichSighting, buildSpeciesMap } from '../../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../../i18n'
 import { l10n } from '../../../../i18n/helpers'
@@ -105,6 +106,12 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
           </div>
 
           {dev && <span id="cover-status" class="cover-status" role="status" />}
+
+          <MiniMap
+            lat={sighting.location.lat}
+            lng={sighting.location.lng}
+            label={l10n(sighting.location.name, locale)}
+          />
 
           <div class="facts">
             <div class="fact-row">

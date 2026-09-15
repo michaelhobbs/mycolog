@@ -1,0 +1,214 @@
+---
+interface Props {
+  lat: number
+  lng: number
+  label?: string
+}
+
+const { lat, lng, label = '' } = Astro.props
+const coords = `${lat.toFixed(4)}°N ${lng.toFixed(4)}°E`
+const marker = JSON.stringify({
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: { label },
+      geometry: { type: 'Point', coordinates: [lng, lat] },
+    },
+  ],
+})
+---
+
+<div class="mini-map-frame">
+  <div class="mini-map-frame__title">
+    <span class="mini-map-frame__title-text">[ map ]</span>
+    <span class="mini-map-frame__title-coords">{coords}</span>
+  </div>
+  <div id="minimap" class="mini-map-frame__map" data-marker={marker}></div>
+  <div class="mini-map-frame__attribution">
+    <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
+  </div>
+</div>
+
+<script>
+  import maplibregl from 'maplibre-gl'
+  import 'maplibre-gl/dist/maplibre-gl.css'
+
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
+
+  // Same dark terrain palette as the full map (/map), trimmed to the layers
+  // relevant at thumbnail zoom. Kept in sync with MapVector.applyPalette.
+  function applyPalette(map: maplibregl.Map) {
+    const paint = (layer: string, props: { [s: string]: unknown }) => {
+      if (map.getLayer(layer)) {
+        Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v))
+      }
+    }
+
+    paint('background', { 'background-color': '#0e120b' })
+    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
+    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
+    paint('landcover_ice_shelf', { 'fill-color': '#20291a' })
+    paint('landcover_glacier', { 'fill-color': '#20291a' })
+
+    ;['park', 'park_outline'].forEach((l) => {
+      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none')
+    })
+
+    paint('water', { 'fill-color': '#2a7d94' })
+    paint('waterway', { 'line-color': '#2a6a80' })
+    paint('building', { 'fill-color': '#263222' })
+
+    paint('highway_major_casing', { 'line-color': '#151a10' })
+    paint('highway_major_inner', { 'line-color': '#d4f0d4' })
+    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 })
+    paint('highway_motorway_casing', { 'line-color': '#151a10' })
+    paint('highway_motorway_inner', { 'line-color': '#d4f0d4' })
+    paint('highway_minor', { 'line-color': '#8fbf8f' })
+    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
+
+    paint('boundary_state', { 'line-color': '#2d5a2d' })
+    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' })
+
+    ;[
+      'place_city_large',
+      'place_city',
+      'place_town',
+      'place_village',
+      'place_suburb',
+      'place_other',
+      'highway_name_other',
+      'highway_name_motorway',
+      'water_name',
+    ].forEach((l) =>
+      paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }),
+    )
+  }
+
+  const container = document.getElementById('minimap')
+  const marker = JSON.parse(container?.dataset.marker || '{"features":[]}')
+  const point = marker.features[0]?.geometry?.coordinates as [number, number] | undefined
+
+  function addMarker(map: maplibregl.Map) {
+    if (!marker.features.length) return
+
+    map.addSource('sighting', { type: 'geojson', data: marker })
+    map.addLayer({
+      id: 'sighting-dot',
+      type: 'circle',
+      source: 'sighting',
+      paint: {
+        'circle-color': '#33ff33',
+        'circle-radius': 6,
+        'circle-stroke-color': '#0e120b',
+        'circle-stroke-width': 1.5,
+      },
+    })
+
+    if (marker.features[0].properties?.label) {
+      map.addLayer({
+        id: 'sighting-label',
+        type: 'symbol',
+        source: 'sighting',
+        layout: {
+          'text-field': ['get', 'label'],
+          'text-font': ['Noto Sans Bold'],
+          'text-size': 11,
+          'text-anchor': 'left',
+          'text-offset': [1.1, 0],
+          'text-allow-overlap': false,
+        },
+        paint: {
+          'text-color': '#33ff33',
+          'text-halo-color': '#0e120b',
+          'text-halo-width': 1.4,
+        },
+      })
+    }
+  }
+
+  function initMap() {
+    if (!container || !point) return
+
+    const [lng, lat] = point
+
+    const map = new maplibregl.Map({
+      container,
+      style: STYLE_URL,
+      center: [lng, lat],
+      zoom: 14,
+    })
+
+    map.on('load', () => {
+      applyPalette(map)
+      try {
+        addMarker(map)
+      } catch (err) {
+        console.error('[minimap] addMarker failed:', err)
+      }
+    })
+
+    map.on('error', (e: any) => {
+      console.error('[minimap] maplibre error:', e?.error)
+    })
+  }
+
+  if (document.readyState !== 'loading') initMap()
+  else document.addEventListener('DOMContentLoaded', initMap)
+</script>
+
+<style>
+  .mini-map-frame {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    margin-bottom: 1.25rem;
+  }
+
+  .mini-map-frame__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+    font-size: 0.8125rem;
+  }
+
+  .mini-map-frame__title-text {
+    color: var(--fg-bright);
+    font-weight: 700;
+  }
+
+  .mini-map-frame__title-coords {
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+  }
+
+  .mini-map-frame__map {
+    width: 100%;
+    height: 320px;
+    cursor: grab;
+    touch-action: none;
+    background: var(--bg-highlight);
+  }
+
+  .mini-map-frame__attribution {
+    padding: 0.375rem 0.75rem;
+    border-top: 1px solid var(--border-char);
+    font-size: 0.6875rem;
+    color: var(--fg-dim);
+  }
+
+  :global(.maplibregl-map) {
+    font-family: var(--font-mono);
+  }
+
+  :global(.maplibregl-ctrl-attrib) {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mini-map-frame__map {
+      height: 240px;
+    }
+  }
+</style>

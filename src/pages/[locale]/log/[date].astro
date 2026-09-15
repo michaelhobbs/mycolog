@@ -46,7 +46,7 @@ const list = enrichSightings(all, species)
           return (
             <article class="entry">
               {cover && (
-                <a href={`/${locale}/mushrooms/${s.id}`} class="entry__img">
+                <a href={`/${locale}/log/${s.slug}`} class="entry__img">
                   <Image
                     src={cover}
                     alt={l10n(s.species.commonName, locale)}
@@ -58,7 +58,7 @@ const list = enrichSightings(all, species)
 
               <div class="entry__body">
                 <span class="entry__species">{s.species.scientificName}</span>
-                <a href={`/${locale}/mushrooms/${s.id}`} class="entry__name">
+                <a href={`/${locale}/log/${s.slug}`} class="entry__name">
                   {l10n(s.species.commonName, locale)}
                 </a>
 

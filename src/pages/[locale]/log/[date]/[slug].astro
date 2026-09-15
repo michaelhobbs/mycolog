@@ -1,0 +1,278 @@
+---
+import Layout from '../../../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { Image } from 'astro:assets'
+import { enrichSighting, buildSpeciesMap } from '../../../../lib/sightings'
+import { getTranslations, formatDate, locales } from '../../../../i18n'
+import { l10n } from '../../../../i18n/helpers'
+import type { Locale } from '../../../../i18n'
+
+export function getStaticPaths() {
+  return Promise.resolve(
+    (async () => {
+      const sightings = await getCollection('sightings')
+      return sightings.flatMap((s) => {
+        const [date, slug] = s.id.split('/')
+        return locales.map((locale) => ({ params: { locale, date, slug } }))
+      })
+    })(),
+  )
+}
+
+const { locale, date, slug } = Astro.params as { locale: Locale; date: string; slug: string }
+const t = getTranslations(locale)
+const sightingId = `${date}/${slug}`
+
+const [all, species, authors] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+  getCollection('authors'),
+])
+const entry = all.find((s) => s.id === sightingId)
+const sighting = entry ? enrichSighting(entry, buildSpeciesMap(species)) : undefined
+const authorNames = new Map(authors.map((a) => [a.id, a.data.name]))
+
+const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — myco.log` : 'myco.log'
+---
+
+<Layout title={pageTitle} locale={locale}>
+  <section class="sighting-page">
+    <div class="page-header">
+      <span class="page-header__tag"
+        >╔══ {sighting ? l10n(sighting.species.commonName, locale) : t.sighting.missing}</span
+      >
+      <span class="page-header__sub">{sighting?.species.scientificName}</span>
+    </div>
+
+    <div class="back">
+      <a href={`/${locale}/log/${date}`} class="tui-link">{'<'} {t.sighting.day}</a>
+      <span class="back__sep">·</span>
+      <a href={`/${locale}/mushrooms/${sighting?.id}`} class="tui-link">{t.sighting.species}</a>
+    </div>
+
+    {
+      sighting && (
+        <>
+          <div class="gallery">
+            {sighting.images.map((img, i) => (
+              <figure class="gallery__item">
+                <Image
+                  src={img}
+                  alt={`${l10n(sighting.species.commonName, locale)} — ${i + 1}`}
+                  loading="lazy"
+                  widths={[320, 640]}
+                />
+              </figure>
+            ))}
+          </div>
+
+          <div class="facts">
+            <div class="fact-row">
+              <span class="fact-lbl">{t.sighting.location}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">
+                {l10n(sighting.location.name, locale) || t.mushrooms.unknown}
+              </span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-lbl">{t.sighting.coordinates}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">
+                {sighting.location.lat.toFixed(5)}°N {sighting.location.lng.toFixed(5)}°E
+              </span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-lbl">{t.sighting.spotted}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">{formatDate(sighting.dateSpotted, locale)}</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-lbl">{t.sighting.identified}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">{formatDate(sighting.dateIdentified, locale)}</span>
+            </div>
+            <div class="fact-row">
+              <span class="fact-lbl">{t.sighting.authors}</span>
+              <span class="fact-dot" />
+              <span class="fact-val">
+                {(sighting.authors ?? []).map((a) => authorNames.get(a) ?? a).join(', ')}
+              </span>
+            </div>
+          </div>
+
+          {sighting.notes && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.sighting.sightingNotes}</div>
+              <p class="block__notes">{l10n(sighting.notes, locale)}</p>
+            </section>
+          )}
+
+          {sighting.species.habitat && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.habitat}</div>
+              <p class="block__notes">{l10n(sighting.species.habitat, locale)}</p>
+            </section>
+          )}
+
+          {sighting.species.edibility && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.edibility}</div>
+              <p class="block__notes">{l10n(sighting.species.edibility, locale)}</p>
+            </section>
+          )}
+
+          {sighting.species.determiningFeatures.length > 0 && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.features}</div>
+              <ul class="block__list">
+                {sighting.species.determiningFeatures.map((f) => (
+                  <li>▸ {l10n(f, locale)}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {sighting.species.notes && (
+            <section class="block">
+              <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
+              <p class="block__notes">{l10n(sighting.species.notes, locale)}</p>
+            </section>
+          )}
+        </>
+      )
+    }
+  </section>
+</Layout>
+
+<style>
+  .sighting-page {
+    padding-bottom: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 1rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--accent-dim);
+    font-size: 0.8125rem;
+  }
+
+  .back {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .back__sep {
+    color: var(--fg-muted);
+  }
+
+  .tui-link {
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .tui-link:hover {
+    color: var(--accent);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .gallery__item {
+    margin: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+    aspect-ratio: 4 / 3;
+  }
+
+  .gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .facts {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .fact-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.8;
+  }
+
+  .fact-lbl {
+    color: var(--fg-dim);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .fact-dot {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 0.5rem;
+    margin-bottom: 0.2em;
+  }
+
+  .fact-val {
+    color: var(--fg-bright);
+    text-align: right;
+  }
+
+  .block {
+    margin-bottom: 1.25rem;
+  }
+
+  .block__hdr {
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .block__list {
+    list-style: none;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+  }
+
+  .block__list li {
+    color: var(--fg);
+    line-height: 1.9;
+    font-size: 0.8125rem;
+  }
+
+  .block__notes {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+    color: var(--fg);
+    font-style: italic;
+    line-height: 1.7;
+    font-size: 0.8125rem;
+  }
+</style>

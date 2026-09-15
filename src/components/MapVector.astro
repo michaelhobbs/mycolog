@@ -24,6 +24,7 @@ const clientSightings = await Promise.all(
     ).filter(Boolean)
     return {
       id: s.id,
+      slug: s.slug,
       dateSpotted: s.dateSpotted,
       location: s.location,
       imageUrls: resolvedImages,
@@ -337,6 +338,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
       id: i,
       properties: {
         id: s.id ?? '',
+        slug: s.slug ?? '',
         dateSpotted: s.dateSpotted ?? '',
         name: s.name ?? s.species ?? '',
         species: s.species ?? '',
@@ -548,7 +550,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
       body.innerHTML =
         `<a class="tpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
         `<a class="tpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
-        `<a class="tpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`
+        `<a class="tpopup__link" href="/${locale}/log/${p.slug ?? ''}">${escapeHtml(linkLabel)}</a>`
       root.appendChild(body)
 
       return root
@@ -620,7 +622,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
         body.innerHTML =
           `<a class="cpopup__species" href="${to}">${escapeHtml(p.species ?? '')}</a>` +
           `<a class="cpopup__name" href="${to}">${escapeHtml(p.name ?? '')}</a>` +
-          `<a class="cpopup__link" href="/${locale}/log/${encodeURIComponent(p.dateSpotted ?? '')}">${escapeHtml(linkLabel)}</a>`
+          `<a class="cpopup__link" href="/${locale}/log/${p.slug ?? ''}">${escapeHtml(linkLabel)}</a>`
         stage.appendChild(body)
 
         stageRoot.replaceChildren(stage)

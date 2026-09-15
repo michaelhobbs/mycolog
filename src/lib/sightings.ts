@@ -5,6 +5,7 @@ export type SightingEntry = CollectionEntry<'sightings'>
 
 export interface EnrichedSighting {
   id: string
+  slug: string
   authors: string[]
   dateSpotted: string
   dateIdentified: string
@@ -29,6 +30,7 @@ export function enrichSighting(
   const speciesData = speciesMap.get(sighting.data.species)
   return {
     id: sighting.data.species,
+    slug: sighting.id,
     authors: sighting.data.authors,
     dateSpotted: sighting.data.dateSpotted,
     dateIdentified: sighting.data.dateIdentified || sighting.data.dateSpotted,

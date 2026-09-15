@@ -102,7 +102,7 @@ const features = sp?.determiningFeatures ?? []
                 return (
                   <li class="sighting">
                     {cover && (
-                      <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__img">
+                      <a href={`/${locale}/log/${e.id}`} class="sighting__img">
                         <Image
                           src={cover}
                           alt={l10n(sp.commonName, locale)}
@@ -112,7 +112,7 @@ const features = sp?.determiningFeatures ?? []
                       </a>
                     )}
                     <div class="sighting__body">
-                      <a href={`/${locale}/log/${sd.dateSpotted}`} class="sighting__date">
+                      <a href={`/${locale}/log/${e.id}`} class="sighting__date">
                         {formatDate(sd.dateSpotted, locale)}
                       </a>
                       <span class="sighting__loc">

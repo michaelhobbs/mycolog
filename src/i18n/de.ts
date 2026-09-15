@@ -56,6 +56,17 @@ export default {
     title: 'Bestimmungen',
     subtitle: 'Bestimmungen aus dem Backlog — keine neuen Funde verpassen.',
   },
+  sighting: {
+    missing: 'Fund nicht gefunden',
+    day: 'dieser Tag',
+    species: 'Artseite',
+    location: 'Ort',
+    coordinates: 'Koordinaten',
+    spotted: 'gesehen am',
+    identified: 'bestimmt am',
+    authors: 'Autoren',
+    sightingNotes: 'Fundnotiz',
+  },
   mushrooms: {
     title: 'Pilzarten',
     subtitle: 'Alle bisher dokumentierten Arten',

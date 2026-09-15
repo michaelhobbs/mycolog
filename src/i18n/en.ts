@@ -56,6 +56,17 @@ export default {
     title: 'Identifications',
     subtitle: 'Identifications from the backlog — catch new sightings as they appear.',
   },
+  sighting: {
+    missing: 'Sighting not found',
+    day: 'this day',
+    species: 'species page',
+    location: 'location',
+    coordinates: 'coordinates',
+    spotted: 'spotted on',
+    identified: 'identified on',
+    authors: 'authors',
+    sightingNotes: 'sighting note',
+  },
   mushrooms: {
     title: 'Mushroom Species',
     subtitle: 'All species documented so far',

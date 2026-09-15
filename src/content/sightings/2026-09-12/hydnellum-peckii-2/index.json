@@ -12,10 +12,10 @@
     }
   },
   "images": [
+    "./images/hydnellum-peckii4.jpg",
     "./images/hydnellum-peckii1.jpg",
     "./images/hydnellum-peckii2.jpg",
-    "./images/hydnellum-peckii3.jpg",
-    "./images/hydnellum-peckii4.jpg"
+    "./images/hydnellum-peckii3.jpg"
   ],
   "notes": {
     "en": "Old specimen where red jelly has gone.",

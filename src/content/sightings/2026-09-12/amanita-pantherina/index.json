@@ -12,8 +12,8 @@
     }
   },
   "images": [
-    "./images/amanita-pantherina1.jpg",
     "./images/amanita-pantherina2.jpg",
+    "./images/amanita-pantherina1.jpg",
     "./images/amanita-pantherina3.jpg"
   ]
 }

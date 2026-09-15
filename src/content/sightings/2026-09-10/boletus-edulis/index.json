@@ -11,8 +11,8 @@
     }
   },
   "images": [
-    "./images/boletus-edulis1.jpg",
     "./images/boletus-edulis2.jpg",
+    "./images/boletus-edulis1.jpg",
     "./images/boletus-edulis3.jpg"
   ],
   "notes": {

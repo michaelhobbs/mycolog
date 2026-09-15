@@ -11,6 +11,7 @@
     }
   },
   "images": [
+    "./images/pseudohydnum-gelatinosum9.jpg",
     "./images/pseudohydnum-gelatinosum1.jpg",
     "./images/pseudohydnum-gelatinosum2.jpg",
     "./images/pseudohydnum-gelatinosum3.jpg",
@@ -18,8 +19,7 @@
     "./images/pseudohydnum-gelatinosum5.jpg",
     "./images/pseudohydnum-gelatinosum6.jpg",
     "./images/pseudohydnum-gelatinosum7.jpg",
-    "./images/pseudohydnum-gelatinosum8.jpg",
-    "./images/pseudohydnum-gelatinosum9.jpg"
+    "./images/pseudohydnum-gelatinosum8.jpg"
   ],
   "authors": ["michael"]
 }

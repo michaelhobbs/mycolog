@@ -10,8 +10,8 @@
     }
   },
   "images": [
-    "./images/amanita-muscaria1.jpg",
     "./images/amanita-muscaria2.jpg",
+    "./images/amanita-muscaria1.jpg",
     "./images/amanita-muscaria3.jpg"
   ],
   "notes": {

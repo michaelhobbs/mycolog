@@ -12,8 +12,8 @@
     }
   },
   "images": [
-    "./images/armillaria-mellea1.jpg",
     "./images/armillaria-mellea2.jpg",
+    "./images/armillaria-mellea1.jpg",
     "./images/armillaria-mellea3.jpg",
     "./images/armillaria-mellea4.jpg"
   ]

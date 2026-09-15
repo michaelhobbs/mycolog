@@ -10,8 +10,8 @@
     }
   },
   "images": [
-    "./images/craterellus-tubaeformis1.jpg",
     "./images/craterellus-tubaeformis2.jpg",
+    "./images/craterellus-tubaeformis1.jpg",
     "./images/craterellus-tubaeformis3.jpg",
     "./images/craterellus-tubaeformis4.jpg"
   ],

@@ -198,6 +198,55 @@ app.post('/api/sightings', async (req, res) => {
   }
 })
 
+app.post('/api/sightings/cover', async (req, res) => {
+  const { date, slug, image } = req.body || {}
+
+  try {
+    // The main photo is simply images[0]; the map popup and the log both use
+    // the first image as the cover. This endpoint moves a photo to the front.
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      return res.status(400).json({ error: 'Invalid date' })
+    }
+    if (!slug || typeof slug !== 'string' || !/^[a-z0-9-]+$/.test(slug)) {
+      return res.status(400).json({ error: 'Invalid slug' })
+    }
+    if (!image || typeof image !== 'string') {
+      return res.status(400).json({ error: 'Invalid image' })
+    }
+
+    const dir = path.join(SIGHTINGS_DIR, date, slug)
+    const file = path.join(dir, 'index.json')
+    let doc
+    try {
+      doc = JSON.parse(await fs.readFile(file, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Sighting not found: ${date}/${slug}` })
+    }
+
+    const images = Array.isArray(doc.images) ? doc.images.filter((x) => typeof x === 'string') : []
+    // The frontend sends the resolved ImageMetadata src (e.g. a dev-mode
+    // /@fs/.../images/xxx.jpg?origWidth=... URL). Match on the bare filename.
+    const targetBase = path.basename(String(image).split('?')[0]).toLowerCase()
+    const idx = images.findIndex((rel) => path.basename(rel).toLowerCase() === targetBase)
+    if (idx === -1) {
+      return res.status(400).json({ error: 'Image is not part of this sighting' })
+    }
+    if (idx === 0) {
+      return res.json({ ok: true, images })
+    }
+
+    const [chosen] = images.splice(idx, 1)
+    images.unshift(chosen)
+    doc.images = images
+
+    await fs.writeFile(file, JSON.stringify(doc, null, 2) + '\n')
+    return res.json({ ok: true, images })
+  } catch (err) {
+    console.error('[api] error:', err)
+    return res.status(500).json({ error: String(err?.message || err) })
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`[myco] identify API listening on http://localhost:${PORT}`)
 })

@@ -66,6 +66,13 @@ export default {
     identified: 'bestimmt am',
     authors: 'Autoren',
     sightingNotes: 'Fundnotiz',
+    devOnly:
+      'nur dev — ein Foto unten anklicken, um es als Hauptfoto zu setzen (wird in den Karten-Popups und im Log verwendet)',
+    mainPhoto: 'Hauptfoto',
+    setMainPhoto: 'als Hauptfoto setzen',
+    updating: 'Aktualisiere…',
+    mainUpdated: 'Hauptfoto aktualisiert',
+    error: 'Etwas ist schiefgelaufen',
   },
   mushrooms: {
     title: 'Pilzarten',

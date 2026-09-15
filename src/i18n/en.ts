@@ -66,6 +66,13 @@ export default {
     identified: 'identified on',
     authors: 'authors',
     sightingNotes: 'sighting note',
+    devOnly:
+      'dev only — clicking a photo below sets it as the main photo (used in the map popups and the log)',
+    mainPhoto: 'main photo',
+    setMainPhoto: 'set as main photo',
+    updating: 'Updating…',
+    mainUpdated: 'Main photo updated',
+    error: 'Something went wrong',
   },
   mushrooms: {
     title: 'Mushroom Species',

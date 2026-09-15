@@ -2,6 +2,7 @@
 import Layout from '../../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
+import Notice from '../../../../components/Notice.astro'
 import { enrichSighting, buildSpeciesMap } from '../../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../../i18n'
 import { l10n } from '../../../../i18n/helpers'
@@ -32,6 +33,9 @@ const entry = all.find((s) => s.id === sightingId)
 const sighting = entry ? enrichSighting(entry, buildSpeciesMap(species)) : undefined
 const authorNames = new Map(authors.map((a) => [a.id, a.data.name]))
 
+// Re-ordering the gallery (choosing the main photo) is a dev-only workflow.
+const dev = import.meta.env.DEV
+
 const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — myco.log` : 'myco.log'
 ---
 
@@ -53,18 +57,36 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
     {
       sighting && (
         <>
+          {dev && <Notice margin={false} body={t.sighting.devOnly} />}
+
           <div class="gallery">
             {sighting.images.map((img, i) => (
-              <figure class="gallery__item">
+              <figure class:list={['gallery__item', dev && i === 0 && 'gallery__item--cover']}>
                 <Image
                   src={img}
                   alt={`${l10n(sighting.species.commonName, locale)} — ${i + 1}`}
                   loading="lazy"
                   widths={[320, 640]}
                 />
+                {dev && (
+                  <button
+                    type="button"
+                    class="gallery__cover"
+                    data-cover
+                    data-date={date}
+                    data-slug={slug}
+                    data-image={img.src}
+                    disabled={i === 0}
+                    title={i === 0 ? t.sighting.mainPhoto : t.sighting.setMainPhoto}
+                  >
+                    {i === 0 ? t.sighting.mainPhoto : t.sighting.setMainPhoto}
+                  </button>
+                )}
               </figure>
             ))}
           </div>
+
+          {dev && <span id="cover-status" class="cover-status" role="status" />}
 
           <div class="facts">
             <div class="fact-row">
@@ -142,6 +164,62 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
       )
     }
   </section>
+
+  <script
+    is:inline
+    define:vars={{
+      coverEnabled: dev,
+      coverT: {
+        updating: t.sighting.updating,
+        updated: t.sighting.mainUpdated,
+        error: t.sighting.error,
+      },
+    }}
+  >
+    if (!coverEnabled) {
+      // noop in the production build (buttons aren't rendered there either)
+    } else {
+      const statusEl = document.getElementById('cover-status')
+      document.querySelectorAll('[data-cover]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const payload = {
+            date: btn.dataset.date,
+            slug: btn.dataset.slug,
+            image: btn.dataset.image,
+          }
+          btn.disabled = true
+          if (statusEl) {
+            statusEl.textContent = coverT.updating
+            statusEl.dataset.state = 'pending'
+          }
+          try {
+            const res = await fetch('/myco/api/sightings/cover', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}))
+              throw new Error(err.error || 'HTTP ' + res.status)
+            }
+            if (statusEl) {
+              statusEl.textContent = coverT.updated
+              statusEl.dataset.state = 'ok'
+            }
+            window.location.reload()
+          } catch (err) {
+            console.error('[cover] failed:', err)
+            if (statusEl) {
+              statusEl.textContent =
+                coverT.error + (err instanceof Error ? ' — ' + err.message : '')
+              statusEl.dataset.state = 'error'
+            }
+            btn.disabled = false
+          }
+        })
+      })
+    }
+  </script>
 </Layout>
 
 <style>
@@ -200,6 +278,11 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
     overflow: hidden;
     background: var(--bg-highlight);
     aspect-ratio: 4 / 3;
+    position: relative;
+  }
+
+  .gallery__item.gallery__item--cover {
+    border-color: var(--accent);
   }
 
   .gallery__item img {
@@ -207,6 +290,52 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  .gallery__cover {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(14, 18, 11, 0.75);
+    border: none;
+    border-top: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  .gallery__cover:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .gallery__cover:disabled {
+    color: var(--yellow);
+    cursor: default;
+  }
+
+  .cover-status {
+    display: block;
+    margin: -0.25rem 0 1.25rem;
+    font-size: 0.75rem;
+  }
+
+  .cover-status[data-state='error'] {
+    color: var(--red);
+  }
+
+  .cover-status[data-state='ok'] {
+    color: var(--accent);
+  }
+
+  .cover-status[data-state='pending'] {
+    color: var(--fg-dim);
   }
 
   .facts {

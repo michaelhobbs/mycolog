@@ -21,6 +21,15 @@ const data = JSON.stringify({
   <div class="mini-map-frame__title">
     <span class="mini-map-frame__title-text">[ map ]</span>
     <span class="mini-map-frame__title-coords">{coords}</span>
+    <button
+      type="button"
+      class="mini-map-frame__full"
+      data-minimap-full
+      title="fullscreen"
+      aria-label="fullscreen"
+    >
+      ⛶
+    </button>
   </div>
   <div id="minimap" class="mini-map-frame__map" data-points={data}></div>
   <div class="mini-map-frame__attribution">
@@ -84,6 +93,8 @@ const data = JSON.stringify({
   }
 
   const container = document.getElementById('minimap')
+  const frame = container?.closest('.mini-map-frame') as HTMLElement | null
+  const fullBtn = frame?.querySelector('[data-minimap-full]') as HTMLButtonElement | null
   const pts = JSON.parse(container?.dataset.points || '{"features":[]}')
   const features = pts.features as {
     properties: { label?: string }
@@ -228,6 +239,29 @@ const data = JSON.stringify({
     map.on('error', (e: any) => {
       console.error('[minimap] maplibre error:', e?.error)
     })
+
+    fullBtn?.addEventListener('click', async () => {
+      if (!frame) return
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen()
+        } else {
+          await frame.requestFullscreen()
+        }
+      } catch (err) {
+        console.error('[minimap] fullscreen failed:', err)
+      }
+    })
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!frame) return
+      if (document.fullscreenElement === frame) {
+        frame.dataset.fullscreen = 'true'
+      } else {
+        delete frame?.dataset.fullscreen
+      }
+      map.resize()
+    })
   }
 
   if (document.readyState !== 'loading') initMap()
@@ -241,10 +275,19 @@ const data = JSON.stringify({
     margin-bottom: 1.25rem;
   }
 
+  .mini-map-frame:fullscreen {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+
   .mini-map-frame__title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     border-bottom: 1px solid var(--border-char);
     font-size: 0.8125rem;
@@ -258,6 +301,26 @@ const data = JSON.stringify({
   .mini-map-frame__title-coords {
     color: var(--fg-dim);
     font-size: 0.6875rem;
+    margin-left: auto;
+  }
+
+  .mini-map-frame__full {
+    background: rgba(14, 18, 11, 0.75);
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  .mini-map-frame__full:hover {
+    background: var(--accent);
+    color: var(--bg);
   }
 
   .mini-map-frame__map {
@@ -266,6 +329,11 @@ const data = JSON.stringify({
     cursor: grab;
     touch-action: none;
     background: var(--bg-highlight);
+  }
+
+  .mini-map-frame:fullscreen .mini-map-frame__map {
+    flex: 1;
+    height: auto;
   }
 
   .mini-map-frame__attribution {

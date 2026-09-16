@@ -41,6 +41,15 @@ const sightingsJSON = JSON.stringify(clientSightings)
   <div class="map-frame__title">
     <span class="map-frame__title-text">[ map ]</span>
     <span class="map-frame__title-coords">{center[0].toFixed(4)}°N {center[1].toFixed(4)}°E</span>
+    <button
+      type="button"
+      class="map-frame__full"
+      data-map-full
+      title="fullscreen"
+      aria-label="fullscreen"
+    >
+      ⛶
+    </button>
   </div>
   <div
     id="map"
@@ -764,6 +773,29 @@ const sightingsJSON = JSON.stringify(clientSightings)
     })
 
     map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'bottom-right')
+
+    // ── fullscreen toggle ─────────────────────────────────────────────
+    const frame = container.closest('.map-frame') as HTMLElement | null
+    const fullBtn = frame?.querySelector('[data-map-full]') as HTMLButtonElement | null
+    fullBtn?.addEventListener('click', async () => {
+      if (!frame) return
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen()
+        } else {
+          await frame.requestFullscreen()
+        }
+      } catch (err) {
+        console.error('[map] fullscreen failed:', err)
+      }
+    })
+    document.addEventListener('fullscreenchange', () => {
+      if (frame) {
+        if (document.fullscreenElement === frame) frame.dataset.fullscreen = 'true'
+        else delete frame.dataset.fullscreen
+      }
+      map.resize()
+    })
   }
 
   if (document.readyState !== 'loading') initMap()
@@ -776,10 +808,18 @@ const sightingsJSON = JSON.stringify(clientSightings)
     background: var(--bg-surface);
   }
 
+  .map-frame:fullscreen {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+  }
+
   .map-frame__title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0.75rem;
     border-bottom: 1px solid var(--border-char);
     font-size: 0.8125rem;
@@ -793,6 +833,26 @@ const sightingsJSON = JSON.stringify(clientSightings)
   .map-frame__title-coords {
     color: var(--fg-dim);
     font-size: 0.6875rem;
+    margin-left: auto;
+  }
+
+  .map-frame__full {
+    background: rgba(14, 18, 11, 0.75);
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  .map-frame__full:hover {
+    background: var(--accent);
+    color: var(--bg);
   }
 
   .map {
@@ -801,6 +861,11 @@ const sightingsJSON = JSON.stringify(clientSightings)
     cursor: grab;
     touch-action: none;
     background: var(--bg-highlight);
+  }
+
+  .map-frame:fullscreen .map {
+    flex: 1;
+    height: auto;
   }
 
   .map:active {

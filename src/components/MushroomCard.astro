@@ -65,7 +65,7 @@ const fullUrls = await Promise.all(
       >
         ⛶
       </button>
-      <a href={`/${locale}/log/${s.slug}`} class="tui-card__date"
+      <a href={`/${locale}/log/${s.slug.split('/')[0]}`} class="tui-card__date"
         >{formatDate(s.dateSpotted, locale)}</a
       >
     </div>

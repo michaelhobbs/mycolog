@@ -40,9 +40,7 @@ const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
         sessions.map(([date, list]) => (
           <article class="day">
             <header class="day__head">
-              <a href={`/${locale}/log/${date}`} class="day__date">
-                {formatDate(date, locale)}
-              </a>
+              <span class="day__date">{formatDate(date, locale)}</span>
               <span class="day__meta">
                 ({list.length} {t.log.sightingsCount})
               </span>
@@ -106,10 +104,7 @@ const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
     font-weight: 700;
     font-size: 0.875rem;
     text-decoration: none;
-  }
-
-  .day__date:hover {
-    color: var(--fg-bright);
+    cursor: default;
   }
 
   .day__meta {

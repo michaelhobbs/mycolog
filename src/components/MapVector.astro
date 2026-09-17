@@ -777,8 +777,23 @@ const sightingsJSON = JSON.stringify(clientSightings)
     // ── fullscreen toggle ─────────────────────────────────────────────
     const frame = container.closest('.map-frame') as HTMLElement | null
     const fullBtn = frame?.querySelector('[data-map-full]') as HTMLButtonElement | null
+    // iOS Safari (iPhone/iPad) has no element Fullscreen API, so the ⛶ button
+    // emulates fullscreen there by pinning the frame as a fixed overlay.
+    const canFullscreen =
+      typeof document.documentElement.requestFullscreen === 'function' &&
+      typeof document.exitFullscreen === 'function'
+    function setExpanded(on: boolean) {
+      if (!frame) return
+      if (on) frame.dataset.expanded = 'true'
+      else delete frame.dataset.expanded
+    }
     fullBtn?.addEventListener('click', async () => {
       if (!frame) return
+      if (!canFullscreen) {
+        setExpanded(!frame.hasAttribute('data-expanded'))
+        map.resize()
+        return
+      }
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen()
@@ -813,6 +828,16 @@ const sightingsJSON = JSON.stringify(clientSightings)
     flex-direction: column;
     width: 100vw;
     height: 100vh;
+  }
+
+  .map-frame[data-expanded] {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: var(--bg);
   }
 
   .map-frame__title {
@@ -863,7 +888,8 @@ const sightingsJSON = JSON.stringify(clientSightings)
     background: var(--bg-highlight);
   }
 
-  .map-frame:fullscreen .map {
+  .map-frame:fullscreen .map,
+  .map-frame[data-expanded] .map {
     flex: 1;
     height: auto;
   }

@@ -301,8 +301,24 @@ const regionData = region ? JSON.stringify(region) : ''
       console.error('[minimap] maplibre error:', e?.error)
     })
 
+    // iOS Safari (iPhone/iPad) has no element Fullscreen API, so the ⛶ button
+    // emulates fullscreen there by pinning the frame as a fixed overlay.
+    const canFullscreen =
+      typeof document.documentElement.requestFullscreen === 'function' &&
+      typeof document.exitFullscreen === 'function'
+    function setExpanded(on: boolean) {
+      if (!frame) return
+      if (on) frame.dataset.expanded = 'true'
+      else delete frame.dataset.expanded
+    }
+
     fullBtn?.addEventListener('click', async () => {
       if (!frame) return
+      if (!canFullscreen) {
+        setExpanded(!frame.hasAttribute('data-expanded'))
+        map.resize()
+        return
+      }
       try {
         if (document.fullscreenElement) {
           await document.exitFullscreen()
@@ -342,6 +358,16 @@ const regionData = region ? JSON.stringify(region) : ''
     width: 100vw;
     height: 100vh;
     margin: 0;
+  }
+
+  .mini-map-frame[data-expanded] {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    background: var(--bg);
   }
 
   .mini-map-frame__title {
@@ -392,7 +418,8 @@ const regionData = region ? JSON.stringify(region) : ''
     background: var(--bg-highlight);
   }
 
-  .mini-map-frame:fullscreen .mini-map-frame__map {
+  .mini-map-frame:fullscreen .mini-map-frame__map,
+  .mini-map-frame[data-expanded] .mini-map-frame__map {
     flex: 1;
     height: auto;
   }

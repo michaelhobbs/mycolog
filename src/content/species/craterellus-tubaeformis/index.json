@@ -1,6 +1,9 @@
 {
   "scientificName": "Craterellus tubaeformis",
-  "commonName": { "en": "Trumpet chanterelle", "de": "Trompetenpfifferling" },
+  "commonName": {
+    "en": "Trumpet chanterelle",
+    "de": "Trompetenpfifferling"
+  },
   "determiningFeatures": [
     {
       "en": "Hollow, trumpet-shaped cap, grey-brown to brown",
@@ -30,5 +33,9 @@
   "edibility": {
     "en": "Good edible mushroom",
     "de": "Guter Speisepilz"
+  },
+  "cover": {
+    "sighting": "2026-09-02/craterellus-tubaeformis",
+    "index": 3
   }
 }

@@ -1,15 +1,37 @@
 {
   "scientificName": "Amanita muscaria",
-  "commonName": { "en": "Fly Agaric", "de": "Fliegenpilz" },
+  "commonName": {
+    "en": "Fly Agaric",
+    "de": "Fliegenpilz"
+  },
   "determiningFeatures": [
     {
       "en": "Bright red (occ. orange/yellow) cap with white spots",
       "de": "Leuchtend roten (geleg. orangen/gelben) Hut mit weißen Punkten"
     },
-    { "en": "White gills and stem", "de": "Weiße Lamellen und Stiel" },
-    { "en": "Ring on stem", "de": "Am Stiel befindlicher Ring" },
-    { "en": "Bulbous base", "de": "Knollige Basis" }
+    {
+      "en": "White gills and stem",
+      "de": "Weiße Lamellen und Stiel"
+    },
+    {
+      "en": "Ring on stem",
+      "de": "Am Stiel befindlicher Ring"
+    },
+    {
+      "en": "Bulbous base",
+      "de": "Knollige Basis"
+    }
   ],
-  "habitat": { "en": "Birch and coniferous forest", "de": "Nadel- und Laubwald" },
-  "edibility": { "en": "Psychoactive", "de": "Psychoaktive" }
+  "habitat": {
+    "en": "Birch and coniferous forest",
+    "de": "Nadel- und Laubwald"
+  },
+  "edibility": {
+    "en": "Psychoactive",
+    "de": "Psychoaktive"
+  },
+  "cover": {
+    "sighting": "2026-09-12/amanita-muscaria-2",
+    "index": 0
+  }
 }

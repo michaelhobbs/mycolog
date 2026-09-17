@@ -1,6 +1,9 @@
 {
   "scientificName": "Sarcodon imbricatus",
-  "commonName": { "en": "Shingled hedgehog", "de": "Habichtspilz" },
+  "commonName": {
+    "en": "Shingled hedgehog",
+    "de": "Habichtspilz"
+  },
   "determiningFeatures": [
     {
       "en": "Large brown cap covered with coarse, dark brown, roof-shingle-like scales",
@@ -30,5 +33,9 @@
   "edibility": {
     "en": "Edible when young, but often bitter",
     "de": "Jung genießbar, aber oft bitter"
+  },
+  "cover": {
+    "sighting": "2026-09-12/sarcondon-imbricatus-2",
+    "index": 0
   }
 }

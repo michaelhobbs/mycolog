@@ -279,6 +279,59 @@ app.post('/api/sightings/cover', async (req, res) => {
   }
 })
 
+app.post('/api/species/:slug/cover', async (req, res) => {
+  const slug = String(req.params?.slug || '')
+  const { sighting, index } = req.body || {}
+
+  try {
+    // Species don't own images; the main photo is a reference to one image of a
+    // sighting of that species ({ sighting: "date/slug", index }). The species
+    // index page falls back to the first sighting's first image if unset.
+    if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
+      return res.status(400).json({ error: 'Invalid species slug' })
+    }
+    if (typeof sighting !== 'string' || !/^\d{4}-\d{2}-\d{2}\/[a-z0-9-]+$/.test(sighting)) {
+      return res.status(400).json({ error: 'Invalid sighting reference' })
+    }
+    if (!Number.isInteger(index) || index < 0) {
+      return res.status(400).json({ error: 'Invalid image index' })
+    }
+
+    const file = path.join(SPECIES_DIR, slug, 'index.json')
+    let doc
+    try {
+      doc = JSON.parse(await fs.readFile(file, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Species not found: ${slug}` })
+    }
+
+    const [date, sslug] = sighting.split('/')
+    const sightingFile = path.join(SIGHTINGS_DIR, date, sslug, 'index.json')
+    let sdoc
+    try {
+      sdoc = JSON.parse(await fs.readFile(sightingFile, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Sighting not found: ${sighting}` })
+    }
+    if (sdoc.species !== slug) {
+      return res.status(400).json({ error: 'Image is not part of this species' })
+    }
+    const images = Array.isArray(sdoc.images)
+      ? sdoc.images.filter((x) => typeof x === 'string')
+      : []
+    if (!images[index]) {
+      return res.status(400).json({ error: 'Image index out of range' })
+    }
+
+    doc.cover = { sighting, index }
+    await writeJson(file, doc)
+    return res.json({ ok: true, cover: doc.cover })
+  } catch (err) {
+    console.error('[api] error:', err)
+    return res.status(500).json({ error: String(err?.message || err) })
+  }
+})
+
 app.post('/api/backlog/:id/location', async (req, res) => {
   const id = String(req.params?.id || '')
   const { location } = req.body || {}

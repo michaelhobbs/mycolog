@@ -26,14 +26,19 @@ for (const s of sightings) {
   byId.get(s.id)!.push(s)
 }
 
+const imagesBySighting = new Map(sightings.map((s) => [s.slug, s.images ?? []]))
+
 const species = speciesEntries
   .map((sp) => {
     const list = byId.get(sp.id) ?? []
+    const cover =
+      (sp.data.cover && imagesBySighting.get(sp.data.cover.sighting)?.[sp.data.cover.index]) ??
+      list[0]?.images?.[0]
     return {
       id: sp.id,
       commonName: sp.data.commonName,
       scientificName: sp.data.scientificName,
-      cover: list[0]?.images?.[0],
+      cover,
       count: list.length,
     }
   })

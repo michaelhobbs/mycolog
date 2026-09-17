@@ -16,6 +16,12 @@ const species = defineCollection({
     notes: localizedString.optional(),
     habitat: localizedString.optional(),
     edibility: localizedString.optional(),
+    cover: z
+      .object({
+        sighting: z.string(),
+        index: z.number().int().nonnegative(),
+      })
+      .optional(),
   }),
 })
 

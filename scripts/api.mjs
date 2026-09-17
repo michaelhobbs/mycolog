@@ -2,6 +2,7 @@ import express from 'express'
 import { promises as fs } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { format } from 'prettier'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -39,6 +40,17 @@ async function uniqueSlug(base, dir) {
     candidate = `${base}-${i}`
     i++
   }
+}
+
+// Write content JSON formatted to the repo's Prettier rules (the pre-commit
+// hook checks format, incl. single-element arrays kept inline).
+async function writeJson(file, doc) {
+  const text = await format(JSON.stringify(doc, null, 2) + '\n', {
+    parser: 'json',
+    semi: false,
+    printWidth: 100,
+  })
+  await fs.writeFile(file, text)
 }
 
 // Create (if missing) a content entry for an author name and return its slug.
@@ -261,6 +273,55 @@ app.post('/api/sightings/cover', async (req, res) => {
 
     await fs.writeFile(file, JSON.stringify(doc, null, 2) + '\n')
     return res.json({ ok: true, images })
+  } catch (err) {
+    console.error('[api] error:', err)
+    return res.status(500).json({ error: String(err?.message || err) })
+  }
+})
+
+app.post('/api/backlog/:id/location', async (req, res) => {
+  const id = String(req.params?.id || '')
+  const { location } = req.body || {}
+
+  try {
+    if (!id || !/^\d+$/.test(id)) {
+      return res.status(400).json({ error: 'Invalid backlog id' })
+    }
+    if (location !== null && (typeof location !== 'object' || location === null)) {
+      return res.status(400).json({ error: 'Invalid location' })
+    }
+    if (location) {
+      if (
+        typeof location.lat !== 'number' ||
+        typeof location.lng !== 'number' ||
+        !Number.isFinite(location.lat) ||
+        !Number.isFinite(location.lng) ||
+        location.lat < -90 ||
+        location.lat > 90 ||
+        location.lng < -180 ||
+        location.lng > 180
+      ) {
+        return res.status(400).json({ error: 'Invalid lat/lng' })
+      }
+    }
+
+    const entryDir = path.join(BACKLOG_DIR, id)
+    const file = path.join(entryDir, 'index.json')
+    let doc
+    try {
+      doc = JSON.parse(await fs.readFile(file, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Backlog entry not found: ${id}` })
+    }
+
+    if (location) {
+      doc.location = { lat: location.lat, lng: location.lng }
+    } else {
+      delete doc.location
+    }
+
+    await writeJson(file, doc)
+    return res.json({ ok: true, location: doc.location ?? null })
   } catch (err) {
     console.error('[api] error:', err)
     return res.status(500).json({ error: String(err?.message || err) })

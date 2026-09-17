@@ -169,6 +169,13 @@ const fullSrcs = await Promise.all(
 
         <p class="field-hint">{t.backlog.pickOnMap}</p>
         <LocationPicker locale={locale} initial={entry.data.location} />
+
+        <div class="loc-save">
+          <button type="button" id="save-location-btn" class="identify__submit">
+            {t.backlog.saveLocation}
+          </button>
+          <span id="loc-status" class="identify__status" role="status"></span>
+        </div>
       </fieldset>
 
       <fieldset>
@@ -241,6 +248,8 @@ const fullSrcs = await Promise.all(
     const newLocation = document.getElementById('new-location')
     const submitBtn = document.getElementById('submit-btn')
     const status = document.getElementById('form-status')
+    const saveLocationBtn = document.getElementById('save-location-btn')
+    const locStatus = document.getElementById('loc-status')
 
     speciesSelect.addEventListener('change', () => {
       newSpecies.hidden = speciesSelect.value !== '__new__'
@@ -248,6 +257,44 @@ const fullSrcs = await Promise.all(
 
     locationNameSelect.addEventListener('change', () => {
       newLocation.hidden = locationNameSelect.value !== '__new__'
+    })
+
+    saveLocationBtn.addEventListener('click', async () => {
+      let parsed = null
+      try {
+        parsed = JSON.parse(locationInput.value || 'null')
+      } catch {}
+      if (!parsed || !Number.isFinite(parsed.lat) || !Number.isFinite(parsed.lng)) {
+        locStatus.textContent = t.missingLocation
+        locStatus.dataset.state = 'error'
+        return
+      }
+
+      saveLocationBtn.disabled = true
+      locStatus.textContent = t.savingLocation
+      locStatus.dataset.state = 'pending'
+      try {
+        const res = await fetch(
+          `/myco/api/backlog/${document.getElementById('backlog-id').value}/location`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ location: parsed }),
+          },
+        )
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}))
+          throw new Error(err.error || 'HTTP ' + res.status)
+        }
+        locStatus.textContent = t.locationSaved
+        locStatus.dataset.state = 'ok'
+      } catch (err) {
+        console.error('[backlog] save location failed:', err)
+        locStatus.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '')
+        locStatus.dataset.state = 'error'
+      } finally {
+        saveLocationBtn.disabled = false
+      }
     })
 
     form.addEventListener('submit', async (e) => {
@@ -517,6 +564,13 @@ const fullSrcs = await Promise.all(
     .gallery__full {
       opacity: 1;
     }
+  }
+
+  .loc-save {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
   }
 
   .identify__actions {

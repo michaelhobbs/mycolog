@@ -9,5 +9,9 @@
     "./images/06.jpg",
     "./images/07.jpg"
   ],
-  "authors": ["michael"]
+  "authors": ["michael"],
+  "location": {
+    "lat": 47.50969,
+    "lng": 11.11181
+  }
 }

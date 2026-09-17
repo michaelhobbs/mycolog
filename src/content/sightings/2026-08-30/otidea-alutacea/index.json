@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "otidea-alutacea",
+  "locationSlug": "rappenweg-grainau",
   "dateSpotted": "2026-08-30",
   "location": {
     "lat": 47.47341,
-    "lng": 11.04474,
-    "name": {
-      "en": "Rappenweg (Grainau)",
-      "de": "Rappenweg (Grainau)"
-    }
+    "lng": 11.04474
   },
   "images": [
     "./images/otidea-alutacea1.jpg",

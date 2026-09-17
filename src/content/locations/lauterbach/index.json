@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Lauterbach",
+    "de": "Lauterbach"
+  },
+  "description": {
+    "en": "Small-stream meadow and copse margins along the Lauterbach; damp broadleaf litter under alder and ash by the run of water, calcareous meadow soil.",
+    "de": "Bachwiesen- und Feldgehölze am Lauterbach; feuchte Laubstreu unter Erle und Esche am Wasserlauf, kalkhaltiger Wiesensoden."
+  },
+  "forestType": {
+    "en": "Alder–ash brook margin",
+    "de": "Erlen-Eschen-Bachsaum"
+  },
+  "soilType": {
+    "en": "Alluvial calcareous meadow",
+    "de": "Alluvialer Kalkwiesensoden"
+  },
+  "center": {
+    "lat": 47.5608,
+    "lng": 11.1591
+  }
+}

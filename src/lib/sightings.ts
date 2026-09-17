@@ -1,7 +1,11 @@
 import type { CollectionEntry } from 'astro:content'
+import type { Locale } from '../i18n'
+import { l10n } from '../i18n/helpers'
 
 export type SpeciesEntry = CollectionEntry<'species'>
 export type SightingEntry = CollectionEntry<'sightings'>
+export type LocationEntry = CollectionEntry<'locations'>
+export type LocationMap = Map<string, LocationEntry['data']>
 
 export interface EnrichedSighting {
   id: string
@@ -9,6 +13,7 @@ export interface EnrichedSighting {
   authors: string[]
   dateSpotted: string
   dateIdentified: string
+  locationSlug: string
   location: SightingEntry['data']['location']
   images: SightingEntry['data']['images']
   notes: SightingEntry['data']['notes']
@@ -23,6 +28,14 @@ export function buildSpeciesMap(species: SpeciesEntry[]): Map<string, SpeciesEnt
   return new Map(species.map((s) => [s.id, s.data]))
 }
 
+export function buildLocationMap(locations: LocationEntry[]): LocationMap {
+  return new Map(locations.map((l) => [l.id, l.data]))
+}
+
+export function locationName(locations: LocationMap, slug: string, locale: Locale): string {
+  return l10n(locations.get(slug)?.name, locale) || slug
+}
+
 export function enrichSighting(
   sighting: SightingEntry,
   speciesMap: Map<string, SpeciesEntry['data']>,
@@ -34,6 +47,7 @@ export function enrichSighting(
     authors: sighting.data.authors,
     dateSpotted: sighting.data.dateSpotted,
     dateIdentified: sighting.data.dateIdentified || sighting.data.dateSpotted,
+    locationSlug: sighting.data.locationSlug,
     location: sighting.data.location,
     images: sighting.data.images,
     notes: sighting.data.notes,

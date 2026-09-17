@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-01",
   "species": "coprinopsis-pseudonivea",
+  "locationSlug": "hammersbach",
   "dateSpotted": "2026-08-21",
   "location": {
     "lat": 47.4666497,
-    "lng": 11.040687,
-    "name": {
-      "en": "Hammersbach",
-      "de": "Hammersbach"
-    }
+    "lng": 11.040687
   },
   "images": ["./images/Coprinopsis-pseudonivea.jpg"],
   "authors": ["michael"]

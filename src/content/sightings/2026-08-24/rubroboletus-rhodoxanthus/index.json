@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "rubroboletus-rhodoxanthus",
+  "locationSlug": "katzenstein",
   "dateSpotted": "2026-08-24",
   "location": {
     "lat": 47.47819,
-    "lng": 11.07463,
-    "name": {
-      "en": "Katzenstein",
-      "de": "Katzenstein"
-    }
+    "lng": 11.07463
   },
   "images": [
     "./images/rubroboletus-rhodoxanthus4.jpg",

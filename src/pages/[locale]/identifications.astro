@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro'
 import MushroomCard from '../../components/MushroomCard.astro'
 import { getCollection } from 'astro:content'
-import { enrichSightings, identificationDate } from '../../lib/sightings'
+import { enrichSightings, identificationDate, buildLocationMap } from '../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 
@@ -13,11 +13,13 @@ export function getStaticPaths() {
 const { locale } = Astro.params as { locale: Locale }
 const t = getTranslations(locale)
 
-const [sightingEntries, speciesEntries] = await Promise.all([
+const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
   getCollection('sightings'),
   getCollection('species'),
+  getCollection('locations'),
 ])
 const sightings = enrichSightings(sightingEntries, speciesEntries)
+const locations = buildLocationMap(locationEntries)
 
 const bySession = new Map<string, typeof sightings>()
 for (const s of sightings) {
@@ -48,7 +50,7 @@ const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
 
             <div class="day__grid">
               {list.map((sighting) => (
-                <MushroomCard sighting={sighting} locale={locale} />
+                <MushroomCard sighting={sighting} locale={locale} locations={locations} />
               ))}
             </div>
           </article>

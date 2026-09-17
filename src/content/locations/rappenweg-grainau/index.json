@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Rappenweg (Grainau)",
+    "de": "Rappenweg (Grainau)"
+  },
+  "description": {
+    "en": "Way-side strip and hedgerow on the forest track near Grainau; grass–fern field margin with calcareous brown earth, a few planted spruce and larch.",
+    "de": "Wegsrain- und Heckensaum am Forstweg bei Grainau; gras-farnreicher Feldrandsoden auf kalkhaltiger Braunerde, einzelne gepflanzte Fichten und Lärchen."
+  },
+  "forestType": {
+    "en": "Way-side / hedgerow (spruce–larch)",
+    "de": "Wegsrain / Hecke (Fichte–Lärche)"
+  },
+  "soilType": {
+    "en": "Calcareous brown earth",
+    "de": "Kalkhaltige Braunerde"
+  },
+  "center": {
+    "lat": 47.4731,
+    "lng": 11.0438
+  }
+}

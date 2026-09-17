@@ -19,6 +19,17 @@ const species = defineCollection({
   }),
 })
 
+const locations = defineCollection({
+  loader: glob({ base: './src/content/locations', pattern: '**/index.json' }),
+  schema: z.object({
+    name: localizedString,
+    description: localizedString.optional(),
+    forestType: localizedString.optional(),
+    soilType: localizedString.optional(),
+    center: z.object({ lat: z.number(), lng: z.number() }).optional(),
+  }),
+})
+
 const authors = defineCollection({
   loader: glob({ base: './src/content/authors', pattern: '**/index.json' }),
   schema: z.object({
@@ -31,13 +42,13 @@ const sightings = defineCollection({
   schema: ({ image }) =>
     z.object({
       species: z.string(),
+      locationSlug: z.string(),
       authors: z.array(z.string()).min(1),
       dateSpotted: z.string(),
       dateIdentified: z.string().optional(),
       location: z.object({
         lat: z.number(),
         lng: z.number(),
-        name: localizedString.optional(),
       }),
       images: z.array(image()),
       notes: localizedString.optional(),
@@ -55,4 +66,4 @@ const backlog = defineCollection({
     }),
 })
 
-export const collections = { species, sightings, backlog, authors }
+export const collections = { species, locations, sightings, backlog, authors }

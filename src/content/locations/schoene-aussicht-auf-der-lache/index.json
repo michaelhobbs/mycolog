@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Schöne Aussicht (Auf der Lache)",
+    "de": "Schöne Aussicht (Auf der Lache)"
+  },
+  "description": {
+    "en": "Scenic beech–spruce margin on the terrace 'Auf der Lache' above the lake; damp broadleaf litter under ancient beeches and scattered spruce, calcareous trough soil in the hollows.",
+    "de": "Buchenreicher Fichtenrand auf der Terrasse 'Auf der Lache' über dem See; feuchte Laubstreu unter alten Buchen und einzelnen Fichten, kalkhaltige Mulden mit Trockental."
+  },
+  "forestType": {
+    "en": "Beech–spruce mixed margin",
+    "de": "Buchen-Fichten-überrand"
+  },
+  "soilType": {
+    "en": "Calcareous trough / brown earth",
+    "de": "Kalkhaltige Mulden-/Braunerde"
+  },
+  "center": {
+    "lat": 47.4919,
+    "lng": 11.1227
+  }
+}

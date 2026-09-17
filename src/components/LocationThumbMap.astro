@@ -1,0 +1,197 @@
+---
+interface Props {
+  region: { lat: number; lng: number; radiusKm?: number }
+  points?: { lat: number; lng: number }[]
+}
+
+const { region, points = [] } = Astro.props
+const regionData = JSON.stringify(region)
+const pointsData = JSON.stringify({
+  type: 'FeatureCollection',
+  features: points.map((p) => ({
+    type: 'Feature',
+    properties: {},
+    geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
+  })),
+})
+---
+
+<div class="thumb-map">
+  <div class="thumb-map__canvas" data-thumb-map data-region={regionData} data-points={pointsData}>
+  </div>
+</div>
+
+<script>
+  import maplibregl from 'maplibre-gl'
+  import 'maplibre-gl/dist/maplibre-gl.css'
+
+  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
+
+  // Same dark terrain palette as MiniMap / MapVector. Kept in sync with
+  // MiniMap.applyPalette.
+  function applyPalette(map: maplibregl.Map) {
+    const paint = (layer: string, props: { [s: string]: unknown }) => {
+      if (map.getLayer(layer)) {
+        Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v))
+      }
+    }
+
+    paint('background', { 'background-color': '#0e120b' })
+    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
+    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
+    paint('landcover_ice_shelf', { 'fill-color': '#20291a' })
+    paint('landcover_glacier', { 'fill-color': '#20291a' })
+
+    ;['park', 'park_outline'].forEach((l) => {
+      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none')
+    })
+
+    paint('water', { 'fill-color': '#2a7d94' })
+    paint('waterway', { 'line-color': '#2a6a80' })
+    paint('building', { 'fill-color': '#263222' })
+
+    paint('highway_major_casing', { 'line-color': '#151a10' })
+    paint('highway_major_inner', { 'line-color': '#d4f0d4' })
+    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 })
+    paint('highway_minor', { 'line-color': '#8fbf8f' })
+    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
+
+    paint('boundary_state', { 'line-color': '#2d5a2d' })
+    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' })
+  }
+
+  function buildCircleRing(lat: number, lng: number, radiusM: number, segments = 96): number[][] {
+    const dLat = radiusM / 110574
+    const dLon = radiusM / (111320 * Math.cos((lat * Math.PI) / 180))
+    const coords: number[][] = []
+    for (let i = 0; i < segments; i++) {
+      const a = (i / segments) * 2 * Math.PI
+      coords.push([lng + dLon * Math.sin(a), lat + dLat * Math.cos(a)])
+    }
+    coords.push(coords[0])
+    return coords
+  }
+
+  function init(el: HTMLElement) {
+    const region = JSON.parse(el.dataset.region || 'null') as {
+      lat: number
+      lng: number
+      radiusKm?: number
+    } | null
+    if (!region) return
+
+    const pts = JSON.parse(el.dataset.points || '{"features":[]}')
+    const features = pts.features as { geometry: { coordinates: [number, number] } }[]
+
+    const radiusM = (region.radiusKm ?? 1) * 1000
+    // View box slightly larger than the circle so it fits with a margin.
+    const half = radiusM * 1.45
+    const dLat = half / 111320
+    const dLon = half / (111320 * Math.cos((region.lat * Math.PI) / 180))
+    const bounds: [[number, number], [number, number]] = [
+      [region.lng - dLon, region.lat - dLat],
+      [region.lng + dLon, region.lat + dLat],
+    ]
+
+    const map = new maplibregl.Map({
+      container: el,
+      style: STYLE_URL,
+      attributionControl: false,
+      dragPan: false,
+      scrollZoom: false,
+      boxZoom: false,
+      doubleClickZoom: false,
+      touchZoomRotate: false,
+      touchPitch: false,
+      keyboard: false,
+      bounds,
+      fitBoundsOptions: { padding: 12, maxZoom: 16 },
+    })
+
+    map.on('load', () => {
+      applyPalette(map)
+
+      const circle = {
+        type: 'Polygon',
+        coordinates: [buildCircleRing(region.lat, region.lng, radiusM)],
+      }
+      const regionSource = {
+        type: 'FeatureCollection',
+        features: [{ type: 'Feature', properties: {}, geometry: circle }],
+      }
+      map.addSource('thumb-region', { type: 'geojson', data: regionSource as any })
+      map.addLayer({
+        id: 'thumb-region-fill',
+        type: 'fill',
+        source: 'thumb-region',
+        paint: { 'fill-color': '#33ff33', 'fill-opacity': 0.12 },
+      })
+      map.addLayer({
+        id: 'thumb-region-line',
+        type: 'line',
+        source: 'thumb-region',
+        paint: {
+          'line-color': '#33ff33',
+          'line-width': 1.5,
+          'line-opacity': 0.9,
+          'line-dasharray': [3, 2],
+        },
+      })
+
+      if (features.length) {
+        map.addSource('thumb-sightings', { type: 'geojson', data: pts })
+        map.addLayer({
+          id: 'thumb-sighting-dot',
+          type: 'circle',
+          source: 'thumb-sightings',
+          paint: {
+            'circle-color': '#33ff33',
+            'circle-radius': 4,
+            'circle-stroke-color': '#0e120b',
+            'circle-stroke-width': 1,
+          },
+        })
+      }
+    })
+
+    map.on('error', (e: any) => {
+      console.error('[thumb-map] maplibre error:', e?.error)
+    })
+
+    const ro = new ResizeObserver(() => {
+      map.resize()
+      map.fitBounds(bounds, { padding: 12, maxZoom: 16 })
+    })
+    ro.observe(el)
+  }
+
+  function initAll() {
+    document.querySelectorAll<HTMLElement>('[data-thumb-map]').forEach((el) => {
+      try {
+        init(el)
+      } catch (err) {
+        console.error('[thumb-map] init failed:', err)
+      }
+    })
+  }
+
+  if (document.readyState !== 'loading') initAll()
+  else document.addEventListener('DOMContentLoaded', initAll)
+</script>
+
+<style>
+  .thumb-map {
+    position: absolute;
+    inset: 0;
+  }
+
+  .thumb-map__canvas {
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  :global(.thumb-map .maplibregl-map) {
+    font-family: var(--font-mono);
+  }
+</style>

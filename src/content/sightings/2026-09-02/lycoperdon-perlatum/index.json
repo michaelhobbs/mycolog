@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "lycoperdon-perlatum",
+  "locationSlug": "kankerbach",
   "dateSpotted": "2026-09-02",
   "location": {
     "lat": 47.48448,
-    "lng": 11.15397,
-    "name": {
-      "en": "Kankerbach",
-      "de": "Kankerbach"
-    }
+    "lng": 11.15397
   },
   "images": ["./images/lycoperdon-perlatum1.jpg", "./images/lycoperdon-perlatum2.jpg"],
   "notes": {

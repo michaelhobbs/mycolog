@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-01",
   "species": "caloboletus-calopus",
+  "locationSlug": "kankerbach",
   "dateSpotted": "2026-08-18",
   "location": {
     "lat": 47.484829,
-    "lng": 11.154243,
-    "name": {
-      "en": "Kankerbach",
-      "de": "Kankerbach"
-    }
+    "lng": 11.154243
   },
   "images": ["./images/IMG_4062.jpg", "./images/IMG_4059.jpg", "./images/IMG_4110.jpg"],
   "authors": ["michael"]

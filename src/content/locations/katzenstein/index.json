@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Katzenstein",
+    "de": "Katzenstein"
+  },
+  "description": {
+    "en": "Rocky wooded crag on the sun-exposed slope south-east of Garmisch above the Rießersee; dry conifer litter on calcareous scree, sparse moss cover, warm southern exposure.",
+    "de": "Felsiger Waldfelsen auf dem sonnigen Hang südöstlich von Garmisch über dem Rießersee; trockene Nadelstreu auf kalkreicher Schuttheide, lückiger Moosteppich, warme Südlage."
+  },
+  "forestType": {
+    "en": "Dry conifer scree woodland",
+    "de": "Trockener Nadel-Schutwald"
+  },
+  "soilType": {
+    "en": "Calcareous rendzina on scree",
+    "de": "Kalkrendzina auf Schuttheide"
+  },
+  "center": {
+    "lat": 47.4778,
+    "lng": 11.077
+  }
+}

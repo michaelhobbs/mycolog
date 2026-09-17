@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Schlattan",
+    "de": "Schlattan"
+  },
+  "description": {
+    "en": "Old orchard and hedgerow belt near the Wachtstum on the western slope above the Kanker; fruit-tree litter and meadow margin soil, shaded by beech and ash on calcareous till.",
+    "de": "Alter Streuobst- und Hegengürtel bei der Wacht auf dem Westhang über dem Kanker; Obstlaub und Wiesenrandsoden, von Buche und Esche beschattet, auf kalkhaltiger Moräne."
+  },
+  "forestType": {
+    "en": "Orchard / hedgerow (beech–ash)",
+    "de": "Streuobst / Hecke (Buche–Esche)"
+  },
+  "soilType": {
+    "en": "Calcareous moraine brown earth",
+    "de": "Kalkhaltige Moränenbraunerde"
+  },
+  "center": {
+    "lat": 47.4945,
+    "lng": 11.1505
+  }
+}

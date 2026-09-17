@@ -1,15 +1,12 @@
 {
   "species": "dacrymyces-chrysopermus",
+  "locationSlug": "schweinbach",
   "authors": ["michael"],
   "dateSpotted": "2026-09-12",
   "dateIdentified": "2026-09-13",
   "location": {
     "lat": 47.511,
-    "lng": 11.11154,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11154
   },
   "images": ["./images/dacrymyces-chrysopermus1.jpg", "./images/dacrymyces-chrysopermus2.jpg"],
   "notes": {

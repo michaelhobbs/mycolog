@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Schweinbach",
+    "de": "Schweinbach"
+  },
+  "description": {
+    "en": "Sighting-rich scattered mixed forest along the Schweinbach stream in Burgrain on the northern edge of Garmisch; the orchard–hedgerow margins and damp broadleaf litter under ash, beech and hazel keep the ground moist and calcareous.",
+    "de": "Artenreicher, lockerer Mischwald am Schweinbach im Burgrain am nördlichen Rand von Garmisch; die Streuobst-Hegensäume und feuchte Laubstreu unter Esche, Buche und Hasel halten den Boden feucht und kalkhaltig."
+  },
+  "forestType": {
+    "en": "Mixed forest (ash–beech–hazel hedgerow)",
+    "de": "Mischwald (Esche–Buche–Hasel-Hegen)"
+  },
+  "soilType": {
+    "en": "Moist calcareous clay loam",
+    "de": "Feuchter kalkhaltiger Lehm"
+  },
+  "center": {
+    "lat": 47.5093,
+    "lng": 11.1137
+  }
+}

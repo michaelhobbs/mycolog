@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "inocybe-sindonia",
+  "locationSlug": "eibsee",
   "dateSpotted": "2026-09-04",
   "location": {
     "lat": 47.45547,
-    "lng": 10.98674,
-    "name": {
-      "en": "Eibsee",
-      "de": "Eibsee"
-    }
+    "lng": 10.98674
   },
   "images": [
     "./images/inocybe-sindonia1.jpg",

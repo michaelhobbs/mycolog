@@ -1,6 +1,7 @@
 ---
 import type { Locale } from '../i18n'
-import type { EnrichedSighting } from '../lib/sightings'
+import type { EnrichedSighting, LocationMap } from '../lib/sightings'
+import { locationName } from '../lib/sightings'
 import { Image, getImage } from 'astro:assets'
 import { l10n } from '../i18n/helpers'
 import { formatDate, getTranslations } from '../i18n'
@@ -8,9 +9,10 @@ import { formatDate, getTranslations } from '../i18n'
 interface Props {
   sighting: EnrichedSighting
   locale: Locale
+  locations: LocationMap
 }
 
-const { sighting, locale } = Astro.props
+const { sighting, locale, locations } = Astro.props
 const s = sighting
 const t = l10n
 const dict = getTranslations(locale)
@@ -115,7 +117,18 @@ const fullUrls = await Promise.all(
     <div class="tui-card__row">
       <span class="tui-card__label">location</span>
       <span class="tui-card__sep-dots"></span>
-      <span class="tui-card__val">{t(s.location.name, locale)}</span>
+      {
+        s.locationSlug ? (
+          <a
+            href={`/${locale}/locations/${s.locationSlug}`}
+            class="tui-card__val tui-card__val--link"
+          >
+            {locationName(locations, s.locationSlug, locale)}
+          </a>
+        ) : (
+          <span class="tui-card__val">{dict.mushrooms.unknown}</span>
+        )
+      }
     </div>
     {
       s.species.habitat && (
@@ -413,6 +426,15 @@ const fullUrls = await Promise.all(
     text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .tui-card__val--link {
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+
+  .tui-card__val--link:hover {
+    color: var(--accent);
   }
 
   .tui-card__divider {

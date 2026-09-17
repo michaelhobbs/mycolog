@@ -1,0 +1,138 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { getTranslations, locales } from '../../../i18n'
+import type { Locale } from '../../../i18n'
+import { buildLocationMap, locationName } from '../../../lib/sightings'
+import LocationThumbMap from '../../../components/LocationThumbMap.astro'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }))
+}
+
+const { locale } = Astro.params as { locale: Locale }
+const t = getTranslations(locale)
+
+const [locations, sightings] = await Promise.all([
+  getCollection('locations'),
+  getCollection('sightings'),
+])
+const locMap = buildLocationMap(locations)
+
+const bySlug = new Map<string, typeof sightings>()
+for (const s of sightings) {
+  const slug = s.data.locationSlug
+  if (!bySlug.has(slug)) bySlug.set(slug, [])
+  bySlug.get(slug)!.push(s)
+}
+
+const list = locations
+  .map((l) => {
+    const entries = bySlug.get(l.id) ?? []
+    return {
+      id: l.id,
+      name: locationName(locMap, l.id, locale),
+      center: l.data.center,
+      points: entries.map((e) => ({ lat: e.data.location.lat, lng: e.data.location.lng })),
+      count: entries.length,
+    }
+  })
+  .sort((a, b) => a.name.localeCompare(b.name))
+---
+
+<Layout title={`${t.locations.title} — myco.log`} locale={locale}>
+  <section class="locations-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.locations.title}</span>
+      <span class="page-header__sub"
+        >{t.locations.subtitle} · {list.length} {t.locations.count}</span
+      >
+    </div>
+
+    <div class="grid">
+      {
+        list.map((m) => (
+          <a href={`/${locale}/locations/${m.id}`} class="card">
+            <div class="card__img">
+              {m.center && (
+                <LocationThumbMap region={{ ...m.center, radiusKm: 1 }} points={m.points} />
+              )}
+            </div>
+            <div class="card__body">
+              <span class="card__name">{m.name}</span>
+              <span class="card__meta">
+                {m.count} {t.locations.sightings}
+              </span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .locations-page {
+    padding-bottom: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .card {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    text-decoration: none;
+    overflow: hidden;
+    transition: border-color 0.1s;
+  }
+
+  .card:hover {
+    border-color: var(--accent-dim);
+  }
+
+  .card__img {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-bottom: 1px solid var(--border-char);
+    overflow: hidden;
+    background: var(--bg-highlight);
+  }
+
+  .card__body {
+    padding: 0.625rem 0.75rem;
+  }
+
+  .card__name {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    margin: 0.125rem 0 0.25rem;
+  }
+
+  .card__meta {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+</style>

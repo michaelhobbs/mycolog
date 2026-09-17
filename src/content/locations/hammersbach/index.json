@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Hammersbach",
+    "de": "Hammersbach"
+  },
+  "description": {
+    "en": "Lower valley woodland and hedgerows below the Eibsee trail junction; conifer stand with poor, acid-pocked moraine litter and damp loam in the swales.",
+    "de": "Niederes Talgehölz und Hecken unterhalb der Eibsee-Weggabelung; Nadelbestand auf nährstoffarmer, sauer gefleckter Moränenstreu und feuchtem Lehm in Mulden."
+  },
+  "forestType": {
+    "en": "Conifer / hedgerow mix",
+    "de": "Nadelgehölz / Heckenmix"
+  },
+  "soilType": {
+    "en": "Leached moraine loam",
+    "de": "Ausgewaschener Moränenlehm"
+  },
+  "center": {
+    "lat": 47.4666,
+    "lng": 11.0407
+  }
+}

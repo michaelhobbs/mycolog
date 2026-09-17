@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "coprinus-comatus",
+  "locationSlug": "schoene-aussicht-auf-der-lache",
   "dateSpotted": "2026-09-09",
   "location": {
     "lat": 47.48992,
-    "lng": 11.12428,
-    "name": {
-      "en": "Schöne Aussicht (Auf der Lache)",
-      "de": "Schöne Aussicht (Auf der Lache)"
-    }
+    "lng": 11.12428
   },
   "images": [
     "./images/coprinus-comatus1.jpg",

@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Eibsee",
+    "de": "Eibsee"
+  },
+  "description": {
+    "en": "Lakeside spruce–pine forest on the Eibsee's eastern shore; pine litter and lake-washed gravel, dry calcareous terraces behind the reeds.",
+    "de": "Uferwald aus Fichten und Kiefern am Ostufer des Eibsees; Kiefernstreu und seegewaschene Kiesel, trockene Kalkterrassen hinter dem Schilf."
+  },
+  "forestType": {
+    "en": "Spruce–pine lakeside forest",
+    "de": "Fichten-Kiefern-Uferwald"
+  },
+  "soilType": {
+    "en": "Lake gravel / leached podsols",
+    "de": "Seeschotter / podsoliert"
+  },
+  "center": {
+    "lat": 47.4548,
+    "lng": 10.9849
+  }
+}

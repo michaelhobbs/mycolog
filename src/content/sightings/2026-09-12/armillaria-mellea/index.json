@@ -1,15 +1,12 @@
 {
   "species": "armillaria-mellea",
+  "locationSlug": "schweinbach",
   "authors": ["michael"],
   "dateSpotted": "2026-09-12",
   "dateIdentified": "2026-09-13",
   "location": {
     "lat": 47.50826,
-    "lng": 11.112,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.112
   },
   "images": [
     "./images/armillaria-mellea2.jpg",

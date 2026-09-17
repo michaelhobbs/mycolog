@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-01",
   "species": "amanita-muscaria",
+  "locationSlug": "brunnenkopf",
   "dateSpotted": "2026-08-07",
   "location": {
     "lat": 47.580148,
-    "lng": 10.936839,
-    "name": {
-      "en": "Brunnenkopf",
-      "de": "Brunnenkopf"
-    }
+    "lng": 10.936839
   },
   "images": ["./images/amanita-muscaria1.jpg", "./images/amanita-muscaria2.jpg"],
   "notes": {

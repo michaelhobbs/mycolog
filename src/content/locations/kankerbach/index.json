@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Kankerbach",
+    "de": "Kankerbach"
+  },
+  "description": {
+    "en": "Montane stream ravine of the Kanker river below the Kanker gorge; spruce–fir forest on calc-magnesian bedrock with dense needle litter on mossy limestone boulders beside the brook.",
+    "de": "Montanes Bachtal des Kanker unterhalb der Kankerschlucht; Fichten-Tannen-Wald auf kalk-magnesiumreichem Grundgebirge, dichte Nadelstreu auf moosigen Kalkblöcken am Bach."
+  },
+  "forestType": {
+    "en": "Spruce–fir montane forest",
+    "de": "Fichten-Tannen-Bergwald"
+  },
+  "soilType": {
+    "en": "Calcareous skeletal brown earth on schist",
+    "de": "Kalkskelett-Braunerde auf Schiefer"
+  },
+  "center": {
+    "lat": 47.484,
+    "lng": 11.1523
+  }
+}

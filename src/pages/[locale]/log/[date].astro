@@ -2,7 +2,7 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
-import { enrichSightings } from '../../../lib/sightings'
+import { enrichSightings, buildLocationMap, locationName } from '../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import type { Locale } from '../../../i18n'
@@ -20,10 +20,15 @@ export function getStaticPaths() {
 const { locale, date } = Astro.params as { locale: Locale; date: string }
 const t = getTranslations(locale)
 
-const [all, species] = await Promise.all([getCollection('sightings'), getCollection('species')])
+const [all, species, locations] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+  getCollection('locations'),
+])
 const list = enrichSightings(all, species)
   .filter((s) => s.dateSpotted === date)
   .sort((a, b) => a.id.localeCompare(b.id))
+const locMap = buildLocationMap(locations)
 ---
 
 <Layout title={`${t.log.today} ${date ?? ''} — myco.log`} locale={locale}>
@@ -66,7 +71,13 @@ const list = enrichSightings(all, species)
                   <span class="entry__lbl">{t.log.location}:</span>
                   <span class="entry__dot" />
                   <span class="entry__val">
-                    {l10n(s.location.name, locale) || t.mushrooms.unknown}
+                    {s.locationSlug ? (
+                      <a href={`/${locale}/locations/${s.locationSlug}`} class="entry__val-link">
+                        {locationName(locMap, s.locationSlug, locale) || t.mushrooms.unknown}
+                      </a>
+                    ) : (
+                      t.mushrooms.unknown
+                    )}
                   </span>
                 </div>
                 <div class="entry__row">
@@ -219,6 +230,16 @@ const list = enrichSightings(all, species)
   .entry__val {
     color: var(--fg-bright);
     text-align: right;
+  }
+
+  .entry__val-link {
+    color: var(--fg-bright);
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+
+  .entry__val-link:hover {
+    color: var(--accent);
   }
 
   .entry__features {

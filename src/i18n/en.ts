@@ -6,6 +6,7 @@ export default {
     log: 'Log',
     identifications: 'Identifications',
     mushrooms: 'Mushrooms',
+    locations: 'Locations',
     backlog: 'Backlog',
   },
   home: {
@@ -93,6 +94,19 @@ export default {
     at: 'at',
     unknown: 'Unknown',
   },
+  locations: {
+    title: 'Locations',
+    subtitle: 'The areas where mushrooms have been found',
+    count: 'areas',
+    description: 'Description',
+    forestType: 'Forest type',
+    soilType: 'Soil type',
+    sightings: 'Sightings',
+    backToIndex: 'All locations',
+    fullscreen: 'open fullscreen',
+    unknown: 'Unknown',
+    aiDisclaimer: 'Content on this page is AI generated. Not human verified yet.',
+  },
   footer: {
     copyright: '© 2026 myco.log',
   },
@@ -147,6 +161,7 @@ export default {
     mapTitle: 'map — myco.log',
     logTitle: 'log — myco.log',
     identificationsTitle: 'identifications — myco.log',
+    locationsTitle: 'locations — myco.log',
     backlogTitle: 'backlog — myco.log',
   },
 } as const

@@ -1,13 +1,10 @@
 {
   "species": "amanita-muscaria",
+  "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-12",
   "location": {
     "lat": 47.51028,
-    "lng": 11.11435,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11435
   },
   "images": [
     "./images/amanita-muscaria2.jpg",

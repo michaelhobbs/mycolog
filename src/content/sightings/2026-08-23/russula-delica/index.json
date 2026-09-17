@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-02",
   "species": "russula-delica",
+  "locationSlug": "lauterbach",
   "dateSpotted": "2026-08-23",
   "location": {
     "lat": 47.558756,
-    "lng": 11.159315,
-    "name": {
-      "en": "Lauterbach",
-      "de": "Lauterbach"
-    }
+    "lng": 11.159315
   },
   "images": ["./images/IMG_4220.jpg", "./images/IMG_4217.jpg"],
   "authors": ["michael"]

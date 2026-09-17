@@ -44,17 +44,11 @@ const authors = (await getCollection('authors')).sort((a, b) =>
 const authorsJSON = JSON.stringify(authors.map((a) => ({ slug: a.id, name: a.data.name })))
 const entryAuthors = entry.data.authors
 
-// Distinct location names already used across sightings, so the form can offer
-// them as a picklist (the user can still type a brand-new one).
-const knownLocations = [
-  ...new Set(
-    (await getCollection('sightings'))
-      .map((s) => s.data.location?.name)
-      .filter(Boolean)
-      .map((name) => (typeof name === 'string' ? name : ((name as { en?: string }).en ?? '')))
-      .filter(Boolean),
-  ),
-].sort((a, b) => a.localeCompare(b))
+// Known locations from the locations collection, offered as a picklist (the
+// user can still type a brand-new one).
+const knownLocations = (await getCollection('locations'))
+  .map((l) => l10n(l.data.name, locale))
+  .sort((a, b) => a.localeCompare(b))
 
 const entryJSON = JSON.stringify({
   id: entry.id,

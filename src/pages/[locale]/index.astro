@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro'
 import Notice from '../../components/Notice.astro'
 import MushroomCard from '../../components/MushroomCard.astro'
 import { getCollection } from 'astro:content'
-import { enrichSightings, identificationDate } from '../../lib/sightings'
+import { enrichSightings, identificationDate, buildLocationMap } from '../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
@@ -19,11 +19,13 @@ const logUrl = getRelativeLocaleUrl(locale, 'log')
 const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms')
 const identificationsUrl = getRelativeLocaleUrl(locale, 'identifications')
 
-const [sightingEntries, speciesEntries] = await Promise.all([
+const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
   getCollection('sightings'),
   getCollection('species'),
+  getCollection('locations'),
 ])
 const sightings = enrichSightings(sightingEntries, speciesEntries)
+const locations = buildLocationMap(locationEntries)
 const bySession = new Map<string, typeof sightings>()
 for (const s of sightings) {
   const d = identificationDate(s)
@@ -114,7 +116,7 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
         </div>
         <div class="news__grid">
           {latest.map((sighting) => (
-            <MushroomCard sighting={sighting} locale={locale} />
+            <MushroomCard sighting={sighting} locale={locale} locations={locations} />
           ))}
         </div>
         <a href={identificationsUrl} class="tui-btn tui-btn--dim news__all">

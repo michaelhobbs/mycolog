@@ -4,7 +4,12 @@ import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import Notice from '../../../../components/Notice.astro'
 import MiniMap from '../../../../components/MiniMap.astro'
-import { enrichSighting, buildSpeciesMap } from '../../../../lib/sightings'
+import {
+  enrichSighting,
+  buildSpeciesMap,
+  buildLocationMap,
+  locationName,
+} from '../../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../../i18n'
 import { l10n } from '../../../../i18n/helpers'
 import type { Locale } from '../../../../i18n'
@@ -25,13 +30,15 @@ const { locale, date, slug } = Astro.params as { locale: Locale; date: string; s
 const t = getTranslations(locale)
 const sightingId = `${date}/${slug}`
 
-const [all, species, authors] = await Promise.all([
+const [all, species, authors, locations] = await Promise.all([
   getCollection('sightings'),
   getCollection('species'),
   getCollection('authors'),
+  getCollection('locations'),
 ])
 const entry = all.find((s) => s.id === sightingId)
 const sighting = entry ? enrichSighting(entry, buildSpeciesMap(species)) : undefined
+const locMap = buildLocationMap(locations)
 const authorNames = new Map(authors.map((a) => [a.id, a.data.name]))
 const fullSrcs = sighting
   ? await Promise.all(
@@ -112,7 +119,7 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
               {
                 lat: sighting.location.lat,
                 lng: sighting.location.lng,
-                label: l10n(sighting.location.name, locale),
+                label: locationName(locMap, sighting.locationSlug, locale),
               },
             ]}
           />
@@ -122,7 +129,13 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
               <span class="fact-lbl">{t.sighting.location}</span>
               <span class="fact-dot" />
               <span class="fact-val">
-                {l10n(sighting.location.name, locale) || t.mushrooms.unknown}
+                {sighting.locationSlug ? (
+                  <a href={`/${locale}/locations/${sighting.locationSlug}`} class="fact-val-link">
+                    {locationName(locMap, sighting.locationSlug, locale) || t.mushrooms.unknown}
+                  </a>
+                ) : (
+                  t.mushrooms.unknown
+                )}
               </span>
             </div>
             <div class="fact-row">
@@ -433,6 +446,16 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
   .fact-val {
     color: var(--fg-bright);
     text-align: right;
+  }
+
+  .fact-val-link {
+    color: var(--fg-bright);
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+
+  .fact-val-link:hover {
+    color: var(--accent);
   }
 
   .block {

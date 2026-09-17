@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Brunnenkopf",
+    "de": "Brunnenkopf"
+  },
+  "description": {
+    "en": "High mixed forest below the Brunnenkopf summit; larch and spruce with calcareous humus and needle litter, alpine-meadow fringe on the shoulder.",
+    "de": "Hoher Mischwald unterhalb des Brunnenkopf-Gipfels; Lärche und Fichte, kalkhaltiger Auflagehumus und Nadelstreu, Almsaum am Schulterhang."
+  },
+  "forestType": {
+    "en": "Larch–spruce high forest",
+    "de": "Lärchen-Fichten-Hochwald"
+  },
+  "soilType": {
+    "en": "Calcareous alpine humus",
+    "de": "Kalkhaltiger alpiner Auflagehumus"
+  },
+  "center": {
+    "lat": 47.5809,
+    "lng": 10.9336
+  }
+}

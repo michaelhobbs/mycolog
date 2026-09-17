@@ -1,13 +1,10 @@
 {
   "species": "hydnellum-peckii",
+  "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-12",
   "location": {
     "lat": 47.5107,
-    "lng": 11.11424,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11424
   },
   "images": ["./images/hydnellum-peckii1.jpg", "./images/hydnellum-peckii2.jpg"],
   "authors": ["michael"]

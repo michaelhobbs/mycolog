@@ -1,13 +1,10 @@
 {
   "species": "cantharellus-cibarius",
+  "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-12",
   "location": {
     "lat": 47.51074,
-    "lng": 11.11389,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11389
   },
   "images": [
     "./images/cantharellus-cibarius1.jpg",

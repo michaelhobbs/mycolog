@@ -1,11 +1,14 @@
 ---
 interface Props {
   points: { lat: number; lng: number; label?: string }[]
+  region?: { lat: number; lng: number; radiusKm?: number }
 }
 
-const { points } = Astro.props
+const { points, region } = Astro.props
 const count = points.length
-const center = points.reduce((acc, p) => [acc[0] + p.lng / count, acc[1] + p.lat / count], [0, 0])
+const center = region
+  ? [region.lng, region.lat]
+  : points.reduce((acc, p) => [acc[0] + p.lng / count, acc[1] + p.lat / count], [0, 0])
 const coords = `${center[1].toFixed(4)}°N ${center[0].toFixed(4)}°E`
 const data = JSON.stringify({
   type: 'FeatureCollection',
@@ -15,6 +18,7 @@ const data = JSON.stringify({
     geometry: { type: 'Point', coordinates: [p.lng, p.lat] },
   })),
 })
+const regionData = region ? JSON.stringify(region) : ''
 ---
 
 <div class="mini-map-frame">
@@ -31,7 +35,7 @@ const data = JSON.stringify({
       ⛶
     </button>
   </div>
-  <div id="minimap" class="mini-map-frame__map" data-points={data}></div>
+  <div id="minimap" class="mini-map-frame__map" data-points={data} data-region={regionData}></div>
   <div class="mini-map-frame__attribution">
     <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
   </div>
@@ -100,15 +104,22 @@ const data = JSON.stringify({
     properties: { label?: string }
     geometry: { coordinates: [number, number] }
   }[]
-  const center = features
-    .reduce(
-      (acc, f) => {
-        const [lng, lat] = f.geometry.coordinates
-        return [acc[0] + lng, acc[1] + lat]
-      },
-      [0, 0],
-    )
-    .map((v) => v / Math.max(features.length, 1))
+  const region = JSON.parse(container?.dataset.region || 'null') as {
+    lat: number
+    lng: number
+    radiusKm?: number
+  } | null
+  const center = region
+    ? [region.lng, region.lat]
+    : features
+        .reduce(
+          (acc, f) => {
+            const [lng, lat] = f.geometry.coordinates
+            return [acc[0] + lng, acc[1] + lat]
+          },
+          [0, 0],
+        )
+        .map((v) => v / Math.max(features.length, 1))
 
   // Fixed 15 km "hunting box" around the center, same geographic extent as the
   // big map's box-mask (MapVector). The box is container-size independent, so
@@ -172,6 +183,47 @@ const data = JSON.stringify({
     })
   }
 
+  function buildCircle(lat: number, lng: number, radiusM: number, segments = 96) {
+    const dLat = radiusM / 110574
+    const dLon = radiusM / (111320 * Math.cos((lat * Math.PI) / 180))
+    const coords: number[][] = []
+    for (let i = 0; i < segments; i++) {
+      const a = (i / segments) * 2 * Math.PI
+      coords.push([lng + dLon * Math.sin(a), lat + dLat * Math.cos(a)])
+    }
+    coords.push(coords[0])
+    return { type: 'Polygon' as const, coordinates: [coords] }
+  }
+
+  function addRegion(map: maplibregl.Map) {
+    if (!region) return
+    const radiusM = (region.radiusKm ?? 1) * 1000
+    const circleFeature = {
+      type: 'Feature' as const,
+      properties: {},
+      geometry: buildCircle(region.lat, region.lng, radiusM),
+    }
+    const data = { type: 'FeatureCollection' as const, features: [circleFeature] }
+    map.addSource('mini-region', { type: 'geojson', data: data as any })
+    map.addLayer({
+      id: 'mini-region-fill',
+      type: 'fill',
+      source: 'mini-region',
+      paint: { 'fill-color': '#33ff33', 'fill-opacity': 0.1 },
+    })
+    map.addLayer({
+      id: 'mini-region-line',
+      type: 'line',
+      source: 'mini-region',
+      paint: {
+        'line-color': '#33ff33',
+        'line-width': 1.5,
+        'line-opacity': 0.85,
+        'line-dasharray': [3, 2],
+      },
+    })
+  }
+
   function addMarkers(map: maplibregl.Map) {
     if (!features.length) return
 
@@ -211,10 +263,18 @@ const data = JSON.stringify({
   }
 
   function initMap() {
-    if (!container || !features.length) return
+    if (!container || (!features.length && !region)) return
 
     const [clng, clat] = center
-    const [w, s, e, n] = maskBox(clat, clng)
+    // With a region the view is fitted to the location circle; otherwise it
+    // shows the fixed 15 km hunting box around the area.
+    const [w, s, e, n] = region
+      ? (() => {
+          const dLat = ((region.radiusKm ?? 1) * 1.45) / 111.32
+          const dLon = dLat / Math.cos((region.lat * Math.PI) / 180)
+          return [region.lng - dLon, region.lat - dLat, region.lng + dLon, region.lat + dLat]
+        })()
+      : maskBox(clat, clng)
 
     const map = new maplibregl.Map({
       container,
@@ -228,7 +288,8 @@ const data = JSON.stringify({
 
     map.on('load', () => {
       applyPalette(map)
-      addMask(map, [w, s, e, n])
+      if (!region) addMask(map, [w, s, e, n])
+      addRegion(map)
       try {
         addMarkers(map)
       } catch (err) {

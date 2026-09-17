@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "ganoderma-applanatum",
+  "locationSlug": "eibsee",
   "dateSpotted": "2026-09-04",
   "location": {
     "lat": 47.45414,
-    "lng": 10.98314,
-    "name": {
-      "en": "Eibsee",
-      "de": "Eibsee"
-    }
+    "lng": 10.98314
   },
   "images": ["./images/ganoderma-applanatum1.jpg", "./images/ganoderma-applanatum2.jpg"],
   "notes": {

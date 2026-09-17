@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-10",
   "species": "boletus-edulis",
+  "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-10",
   "location": {
     "lat": 47.50888,
-    "lng": 11.11197,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11197
   },
   "images": [
     "./images/boletus-edulis2.jpg",

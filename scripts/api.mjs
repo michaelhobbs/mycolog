@@ -10,6 +10,7 @@ const BACKLOG_DIR = path.join(CONTENT, 'backlog')
 const SIGHTINGS_DIR = path.join(CONTENT, 'sightings')
 const SPECIES_DIR = path.join(CONTENT, 'species')
 const AUTHORS_DIR = path.join(CONTENT, 'authors')
+const LOCATIONS_DIR = path.join(CONTENT, 'locations')
 
 const PORT = Number(process.env.PORT || 4322)
 
@@ -49,6 +50,23 @@ async function ensureAuthor(name) {
   } catch {
     await fs.mkdir(path.dirname(file), { recursive: true })
     await fs.writeFile(file, JSON.stringify({ name }, null, 2) + '\n')
+  }
+  return slug
+}
+
+// Create (if missing) a content entry for a location name and return its slug.
+async function ensureLocation(name, lat, lng) {
+  const slug = slugify(name) || 'unknown-area'
+  const file = path.join(LOCATIONS_DIR, slug, 'index.json')
+  try {
+    await fs.access(file)
+  } catch {
+    const doc = {
+      name: { en: name, de: name },
+      center: { lat, lng },
+    }
+    await fs.mkdir(path.dirname(file), { recursive: true })
+    await fs.writeFile(file, JSON.stringify(doc, null, 2) + '\n')
   }
   return slug
 }
@@ -158,13 +176,15 @@ app.post('/api/sightings', async (req, res) => {
       lat: location.lat,
       lng: location.lng,
     }
+
+    let locationSlug = null
     if (locationName && typeof locationName === 'string' && locationName.trim()) {
-      const name = locationName.trim()
-      sightingLocation.name = { en: name, de: name }
+      locationSlug = await ensureLocation(locationName.trim(), location.lat, location.lng)
     }
 
     const sightingDoc = {
       species: speciesSlug,
+      locationSlug,
       authors,
       dateSpotted,
       dateIdentified: new Date().toISOString().slice(0, 10),

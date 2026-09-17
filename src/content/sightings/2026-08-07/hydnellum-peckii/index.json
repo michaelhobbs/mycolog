@@ -1,14 +1,11 @@
 {
   "dateIdentified": "2026-09-01",
   "species": "hydnellum-peckii",
+  "locationSlug": "brunnenkopf",
   "dateSpotted": "2026-08-07",
   "location": {
     "lat": 47.581599,
-    "lng": 10.93031,
-    "name": {
-      "en": "Brunnenkopf",
-      "de": "Brunnenkopf"
-    }
+    "lng": 10.93031
   },
   "images": ["./images/hydnellum-peckii.jpg"],
   "authors": ["michael"]

@@ -6,6 +6,7 @@ export default {
     log: 'Log',
     identifications: 'Bestimmungen',
     mushrooms: 'Pilze',
+    locations: 'Orte',
     backlog: 'Backlog',
   },
   home: {
@@ -93,6 +94,19 @@ export default {
     at: 'bei',
     unknown: 'Unbekannt',
   },
+  locations: {
+    title: 'Orte',
+    subtitle: 'Die Gebiete, in denen Pilze gefunden wurden',
+    count: 'Gebiete',
+    description: 'Beschreibung',
+    forestType: 'Waldtyp',
+    soilType: 'Bodentyp',
+    sightings: 'Beobachtungen',
+    backToIndex: 'Alle Orte',
+    fullscreen: 'Vollbild öffnen',
+    unknown: 'Unbekannt',
+    aiDisclaimer: 'Inhalte auf dieser Seite sind KI-generiert. Noch nicht von Menschen geprüft.',
+  },
   footer: {
     copyright: '© 2026 myco.log',
   },
@@ -147,6 +161,7 @@ export default {
     mapTitle: 'karte — myco.log',
     logTitle: 'protokoll — myco.log',
     identificationsTitle: 'bestimmungen — myco.log',
+    locationsTitle: 'orte — myco.log',
     backlogTitle: 'rückstand — myco.log',
   },
 } as const

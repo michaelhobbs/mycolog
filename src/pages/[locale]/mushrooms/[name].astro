@@ -5,6 +5,7 @@ import { Image, getImage } from 'astro:assets'
 import MiniMap from '../../../components/MiniMap.astro'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
+import { buildLocationMap, locationName } from '../../../lib/sightings'
 import type { Locale } from '../../../i18n'
 
 export function getStaticPaths() {
@@ -19,8 +20,13 @@ export function getStaticPaths() {
 const { locale, name } = Astro.params as { locale: Locale; name: string }
 const t = getTranslations(locale)
 
-const [all, speciesList] = await Promise.all([getCollection('sightings'), getCollection('species')])
+const [all, speciesList, locations] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+  getCollection('locations'),
+])
 const species = speciesList.find((sp) => sp.id === name)
+const locMap = buildLocationMap(locations)
 
 const entries = all
   .filter((s) => s.data.species === name)
@@ -92,7 +98,7 @@ const fullSrcs = await Promise.all(
               points={entries.map((e) => ({
                 lat: e.data.location.lat,
                 lng: e.data.location.lng,
-                label: l10n(e.data.location.name, locale),
+                label: locationName(locMap, e.data.locationSlug, locale),
               }))}
             />
           )}
@@ -140,7 +146,17 @@ const fullSrcs = await Promise.all(
                         {formatDate(sd.dateSpotted, locale)}
                       </a>
                       <span class="sighting__loc">
-                        @{l10n(sd.location.name, locale) || t.mushrooms.unknown}
+                        @
+                        {sd.locationSlug ? (
+                          <a
+                            href={`/${locale}/locations/${sd.locationSlug}`}
+                            class="sighting__loc-link"
+                          >
+                            {locationName(locMap, sd.locationSlug, locale) || t.mushrooms.unknown}
+                          </a>
+                        ) : (
+                          t.mushrooms.unknown
+                        )}
                       </span>
                     </div>
                   </li>
@@ -367,5 +383,15 @@ const fullSrcs = await Promise.all(
   .sighting__loc {
     color: var(--fg-dim);
     font-size: 0.75rem;
+  }
+
+  .sighting__loc-link {
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 0.1s;
+  }
+
+  .sighting__loc-link:hover {
+    color: var(--accent);
   }
 </style>

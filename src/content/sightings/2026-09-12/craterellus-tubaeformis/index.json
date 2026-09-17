@@ -1,13 +1,10 @@
 {
   "species": "craterellus-tubaeformis",
+  "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-12",
   "location": {
     "lat": 47.51011,
-    "lng": 11.11443,
-    "name": {
-      "en": "Schweinbach",
-      "de": "Schweinbach"
-    }
+    "lng": 11.11443
   },
   "images": [
     "./images/craterellus-tubaeformis2.jpg",

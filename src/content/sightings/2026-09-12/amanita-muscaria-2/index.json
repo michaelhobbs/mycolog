@@ -1,15 +1,12 @@
 {
   "species": "amanita-muscaria",
+  "locationSlug": "schlattan",
   "authors": ["conor"],
   "dateSpotted": "2026-09-12",
   "dateIdentified": "2026-09-13",
   "location": {
     "lat": 47.49569,
-    "lng": 11.1487,
-    "name": {
-      "en": "Schlattan",
-      "de": "Schlattan"
-    }
+    "lng": 11.1487
   },
   "images": [
     "./images/amanita-muscaria2.jpg",

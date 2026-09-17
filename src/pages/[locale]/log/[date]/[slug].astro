@@ -40,6 +40,9 @@ const entry = all.find((s) => s.id === sightingId)
 const sighting = entry ? enrichSighting(entry, buildSpeciesMap(species)) : undefined
 const locMap = buildLocationMap(locations)
 const authorNames = new Map(authors.map((a) => [a.id, a.data.name]))
+const authorInitials = sighting
+  ? (sighting.authors ?? []).map((a) => (authorNames.get(a) ?? a).charAt(0).toUpperCase()).join('+')
+  : ''
 const fullSrcs = sighting
   ? await Promise.all(
       sighting.images.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
@@ -59,6 +62,13 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
         >╔══ {sighting ? l10n(sighting.species.commonName, locale) : t.sighting.missing}</span
       >
       <span class="page-header__sub">{sighting?.species.scientificName}</span>
+      {
+        sighting && authorInitials && (
+          <span class="stamp" aria-hidden="true">
+            {authorInitials}
+          </span>
+        )
+      }
     </div>
 
     <div class="back">
@@ -154,13 +164,6 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
               <span class="fact-lbl">{t.sighting.identified}</span>
               <span class="fact-dot" />
               <span class="fact-val">{formatDate(sighting.dateIdentified, locale)}</span>
-            </div>
-            <div class="fact-row">
-              <span class="fact-lbl">{t.sighting.authors}</span>
-              <span class="fact-dot" />
-              <span class="fact-val">
-                {(sighting.authors ?? []).map((a) => authorNames.get(a) ?? a).join(', ')}
-              </span>
             </div>
           </div>
 
@@ -270,6 +273,7 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
   }
 
   .page-header {
+    position: relative;
     margin-bottom: 1rem;
   }
 
@@ -284,6 +288,24 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
   .page-header__sub {
     color: var(--accent-dim);
     font-size: 0.8125rem;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 0.1rem;
+    right: 0;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--accent-dim);
+    border: 1.5px dashed var(--accent-dim);
+    border-radius: 2px;
+    padding: 0.15rem 0.45rem;
+    opacity: 0.65;
+    transform: rotate(-4deg);
+    user-select: none;
   }
 
   .back {

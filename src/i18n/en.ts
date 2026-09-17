@@ -150,6 +150,7 @@ export default {
     error: 'Something went wrong',
     missingSpecies: 'Please choose a species',
     missingLocation: 'Please set a location on the map',
+    noLocation: 'No location pinned yet',
     notes: 'notes',
     notesEn: 'notes (en)',
     notesDe: 'notes (de)',

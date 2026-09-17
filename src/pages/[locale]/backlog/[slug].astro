@@ -2,17 +2,13 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
-import { getTranslations, locales } from '../../../i18n'
-import { l10n } from '../../../i18n/helpers'
+import { getTranslations, formatDate, locales } from '../../../i18n'
 import type { Locale, Translations } from '../../../i18n'
-import LocationPicker from '../../../components/LocationPicker.astro'
-import Notice from '../../../components/Notice.astro'
+import BacklogIdentify from '../../../components/BacklogIdentify.astro'
 
 export async function getStaticPaths() {
-  // Identification pages are a dev workflow — never generate them in a
-  // production build (they need the local Express API and editable content).
-  if (import.meta.env.PROD) return []
-
+  // The identification form is a dev workflow, but the read-only item pages
+  // are generated in production too so backlog items can be shared by link.
   const backlog = (await getCollection('backlog')).sort((a, b) =>
     a.data.dateSpotted < b.data.dateSpotted ? -1 : 1,
   )
@@ -23,161 +19,63 @@ export async function getStaticPaths() {
 
 const { locale, slug } = Astro.params as { locale: Locale; slug: string }
 const t: Translations = getTranslations(locale)
+const dev = import.meta.env.DEV
 
 const entry = (await getCollection('backlog')).find((e) => e.id === slug)
 if (!entry) {
   return Astro.redirect(`/${locale}/backlog`)
 }
 
-const species = await getCollection('species')
-const speciesJSON = JSON.stringify(
-  species.map((s) => ({
-    slug: s.id,
-    commonName: l10n(s.data.commonName, locale),
-    scientificName: s.data.scientificName,
-  })),
-)
-
-const authors = (await getCollection('authors')).sort((a, b) =>
-  a.data.name.localeCompare(b.data.name),
-)
-const authorsJSON = JSON.stringify(authors.map((a) => ({ slug: a.id, name: a.data.name })))
-const entryAuthors = entry.data.authors
-
-// Known locations from the locations collection, offered as a picklist (the
-// user can still type a brand-new one).
-const knownLocations = (await getCollection('locations'))
-  .map((l) => l10n(l.data.name, locale))
-  .sort((a, b) => a.localeCompare(b))
-
-const entryJSON = JSON.stringify({
-  id: entry.id,
-  dateSpotted: entry.data.dateSpotted,
-  location: entry.data.location ?? null,
-  images: await Promise.all(
-    entry.data.images.map(async (img) => {
-      const resolved = await getImage({ src: img, width: 640 })
-      return resolved?.src ?? ''
-    }),
-  ),
-})
-
 const fullSrcs = await Promise.all(
   entry.data.images.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
 )
 ---
 
-<Layout title={`${t.backlog.addTitle} — myco.log`} locale={locale}>
+<Layout
+  title={`${dev ? t.backlog.addTitle : `${t.backlog.item} #${entry.id}`} — myco.log`}
+  locale={locale}
+>
   <section class="add-page">
     <div class="add-nav">
       <a class="add-nav__back" href={`/${locale}/backlog`}>{'<'} {t.backlog.backToList}</a>
     </div>
 
     <div class="add-head">
-      <h1 class="add-head__title">{t.backlog.addTitle}</h1>
+      <h1 class="add-head__title">
+        {dev ? t.backlog.addTitle : `${t.backlog.item} #${entry.id}`}
+      </h1>
       <span class="add-head__meta"
-        >{t.backlog.item} #{entry.id} · {t.backlog.date} {entry.data.dateSpotted}</span
+        >{t.backlog.item} #{entry.id} · {t.backlog.date}
+        {formatDate(entry.data.dateSpotted, locale)}</span
       >
     </div>
 
-    <form id="identify-form" class="identify">
-      <Notice body={t.backlog.devOnly} />
-
-      <fieldset>
-        <legend>{t.backlog.date}</legend>
-        <div class="field">
-          <label for="date-spotted">{t.backlog.dateHelp}</label>
-          <input id="date-spotted" name="dateSpotted" type="date" value={entry.data.dateSpotted} />
-          <input type="hidden" id="backlog-id" name="backlogId" value={entry.id} />
+    {
+      dev ? (
+        <BacklogIdentify
+          id={entry.id}
+          dateSpotted={entry.data.dateSpotted}
+          location={entry.data.location}
+          authors={entry.data.authors}
+          locale={locale}
+        />
+      ) : (
+        <div class="identify">
+          <fieldset>
+            <legend>{t.backlog.location}</legend>
+            {entry.data.location ? (
+              <span class="identify__value">
+                {entry.data.location.lat.toFixed(5)}°N {entry.data.location.lng.toFixed(5)}°E
+              </span>
+            ) : (
+              <p class="field-hint">{t.backlog.noLocation}</p>
+            )}
+          </fieldset>
         </div>
-      </fieldset>
+      )
+    }
 
-      <fieldset>
-        <legend>{t.backlog.species}</legend>
-        <select id="species-select" name="species" class="identify__select">
-          <option value="">—</option>
-          {
-            species.map((s) => (
-              <option value={s.id}>
-                {l10n(s.data.commonName, locale)}
-                {s.data.scientificName ? ` (${s.data.scientificName})` : ''}
-              </option>
-            ))
-          }
-          <option value="__new__">{t.backlog.newSpecies}…</option>
-        </select>
-
-        <div id="new-species" class="new-species" hidden>
-          <div class="field">
-            <label for="ns-scientific">{t.backlog.newSpeciesScientific}</label>
-            <input id="ns-scientific" name="newScientific" type="text" />
-          </div>
-          <div class="field">
-            <label for="ns-common-en">{t.backlog.newSpeciesCommonEn}</label>
-            <input id="ns-common-en" name="newCommonEn" type="text" />
-          </div>
-          <div class="field">
-            <label for="ns-common-de">{t.backlog.newSpeciesCommonDe}</label>
-            <input id="ns-common-de" name="newCommonDe" type="text" />
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>{t.backlog.authors}</legend>
-        <select
-          id="author-select"
-          name="authors"
-          class="identify__select"
-          multiple
-          size={Math.min(authors.length + 1, 8)}
-        >
-          {
-            authors.map((a) => (
-              <option value={a.id} selected={entryAuthors.includes(a.id)}>
-                {a.data.name}
-              </option>
-            ))
-          }
-        </select>
-        <p class="field-hint">{t.backlog.newAuthorsHelp}</p>
-        <div class="field">
-          <label for="new-authors">{t.backlog.addAuthors}</label>
-          <input id="new-authors" name="newAuthors" type="text" />
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>{t.backlog.location}</legend>
-
-        <div class="loc-name">
-          <label class="loc-name__label" for="loc-name-select">{t.backlog.locationName}</label>
-          <select id="loc-name-select" name="locationName" class="identify__select">
-            <option value="">—</option>
-            {knownLocations.map((name) => <option value={name}>{name}</option>)}
-            <option value="__new__">{t.backlog.newLocation}…</option>
-          </select>
-          <p class="field-hint">{t.backlog.locationNameHelp}</p>
-
-          <div id="new-location" class="new-species" hidden>
-            <div class="field">
-              <label for="loc-name-new">{t.backlog.newLocationName}</label>
-              <input id="loc-name-new" name="newLocationName" type="text" />
-            </div>
-          </div>
-        </div>
-
-        <p class="field-hint">{t.backlog.pickOnMap}</p>
-        <LocationPicker locale={locale} initial={entry.data.location} />
-
-        <div class="loc-save">
-          <button type="button" id="save-location-btn" class="identify__submit">
-            {t.backlog.saveLocation}
-          </button>
-          <span id="loc-status" class="identify__status" role="status"></span>
-        </div>
-      </fieldset>
-
+    <div class="identify">
       <fieldset>
         <legend>{entry.data.images.length} {t.backlog.photos}</legend>
         <div class="gallery" data-lightbox-group>
@@ -205,196 +103,8 @@ const fullSrcs = await Promise.all(
           }
         </div>
       </fieldset>
-
-      <fieldset>
-        <legend>{t.backlog.notes}</legend>
-        <div class="field">
-          <label for="notes-en">{t.backlog.notesEn}</label>
-          <textarea id="notes-en" name="notesEn" rows="3"></textarea>
-        </div>
-        <div class="field">
-          <label for="notes-de">{t.backlog.notesDe}</label>
-          <textarea id="notes-de" name="notesDe" rows="3"></textarea>
-        </div>
-      </fieldset>
-
-      <div class="identify__actions">
-        <button type="submit" id="submit-btn" class="identify__submit">
-          {t.backlog.submit}
-        </button>
-        <span id="form-status" class="identify__status" role="status"></span>
-      </div>
-    </form>
+    </div>
   </section>
-
-  <script
-    is:inline
-    define:vars={{
-      backlogT: t.backlog,
-      speciesData: speciesJSON,
-      authorsData: authorsJSON,
-      entry: entryJSON,
-      locale,
-    }}
-  >
-    const t = backlogT
-
-    const form = document.getElementById('identify-form')
-    const speciesSelect = document.getElementById('species-select')
-    const newSpecies = document.getElementById('new-species')
-    const authorSelect = document.getElementById('author-select')
-    const locationInput = document.getElementById('picker-location')
-    const locationNameSelect = document.getElementById('loc-name-select')
-    const newLocation = document.getElementById('new-location')
-    const submitBtn = document.getElementById('submit-btn')
-    const status = document.getElementById('form-status')
-    const saveLocationBtn = document.getElementById('save-location-btn')
-    const locStatus = document.getElementById('loc-status')
-
-    speciesSelect.addEventListener('change', () => {
-      newSpecies.hidden = speciesSelect.value !== '__new__'
-    })
-
-    locationNameSelect.addEventListener('change', () => {
-      newLocation.hidden = locationNameSelect.value !== '__new__'
-    })
-
-    saveLocationBtn.addEventListener('click', async () => {
-      let parsed = null
-      try {
-        parsed = JSON.parse(locationInput.value || 'null')
-      } catch {}
-      if (!parsed || !Number.isFinite(parsed.lat) || !Number.isFinite(parsed.lng)) {
-        locStatus.textContent = t.missingLocation
-        locStatus.dataset.state = 'error'
-        return
-      }
-
-      saveLocationBtn.disabled = true
-      locStatus.textContent = t.savingLocation
-      locStatus.dataset.state = 'pending'
-      try {
-        const res = await fetch(
-          `/myco/api/backlog/${document.getElementById('backlog-id').value}/location`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ location: parsed }),
-          },
-        )
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}))
-          throw new Error(err.error || 'HTTP ' + res.status)
-        }
-        locStatus.textContent = t.locationSaved
-        locStatus.dataset.state = 'ok'
-      } catch (err) {
-        console.error('[backlog] save location failed:', err)
-        locStatus.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '')
-        locStatus.dataset.state = 'error'
-      } finally {
-        saveLocationBtn.disabled = false
-      }
-    })
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-
-      const species = speciesSelect.value
-      if (!species) {
-        status.textContent = t.missingSpecies
-        status.dataset.state = 'error'
-        return
-      }
-      const location = locationInput.value
-      if (!location) {
-        status.textContent = t.missingLocation
-        status.dataset.state = 'error'
-        return
-      }
-      let locationParsed
-      try {
-        locationParsed = JSON.parse(location || 'null')
-      } catch {
-        locationParsed = null
-      }
-      if (!locationParsed || !locationParsed.lat || !locationParsed.lng) {
-        status.textContent = t.missingLocation
-        status.dataset.state = 'error'
-        return
-      }
-
-      let locationName = locationNameSelect.value
-      if (locationName === '__new__') {
-        locationName = document.getElementById('loc-name-new').value.trim()
-      }
-
-      const speciesPayload =
-        species === '__new__'
-          ? {
-              newSpecies: {
-                scientificName: document.getElementById('ns-scientific').value,
-                commonName: {
-                  en: document.getElementById('ns-common-en').value,
-                  de: document.getElementById('ns-common-de').value,
-                },
-              },
-            }
-          : { species }
-
-      const notesEn = document.getElementById('notes-en').value
-      const notesDe = document.getElementById('notes-de').value
-
-      const dateSpotted = document.getElementById('date-spotted').value
-      if (!dateSpotted) {
-        status.textContent = t.missingDate
-        status.dataset.state = 'error'
-        return
-      }
-
-      const extraAuthors = [...authorSelect.selectedOptions].map((o) => o.value)
-      const newAuthors = document
-        .getElementById('new-authors')
-        .value.split(';')
-        .map((s) => s.trim())
-        .filter(Boolean)
-
-      const payload = {
-        backlogId: document.getElementById('backlog-id').value,
-        dateSpotted,
-        location: locationParsed,
-        extraAuthors,
-        ...(newAuthors.length ? { newAuthors } : {}),
-        ...(locationName ? { locationName } : {}),
-        ...speciesPayload,
-        ...(notesEn.trim() || notesDe.trim() ? { notes: { en: notesEn, de: notesDe } } : {}),
-      }
-
-      submitBtn.disabled = true
-      status.textContent = t.submitting
-      status.dataset.state = 'pending'
-
-      try {
-        const res = await fetch('/myco/api/sightings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}))
-          throw new Error(err.error || 'HTTP ' + res.status)
-        }
-        status.textContent = t.success
-        status.dataset.state = 'ok'
-        window.location.href = `/${locale}/backlog`
-      } catch (err) {
-        console.error('[identify] submit failed:', err)
-        status.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '')
-        status.dataset.state = 'error'
-        submitBtn.disabled = false
-      }
-    })
-  </script>
 </Layout>
 
 <style>
@@ -450,64 +160,16 @@ const fullSrcs = await Promise.all(
     padding: 0 0.375rem;
   }
 
-  .identify__select {
-    width: 100%;
-    background: var(--bg-highlight);
-    color: var(--fg);
-    border: 1px solid var(--border-char);
-    padding: 0.5rem;
-    font-family: var(--font-mono);
-  }
-
-  .loc-name {
-    margin-bottom: 0.75rem;
-  }
-
-  .loc-name__label {
-    display: block;
-    color: var(--fg-dim);
-    font-size: 0.75rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .field {
-    margin-bottom: 0.75rem;
-  }
-  .field:last-child {
-    margin-bottom: 0;
-  }
-
-  .field label {
-    display: block;
-    color: var(--fg-dim);
-    font-size: 0.75rem;
-    margin-bottom: 0.25rem;
-  }
-
-  .field input,
-  .field textarea {
-    width: 100%;
-    background: var(--bg-highlight);
-    color: var(--fg);
-    border: 1px solid var(--border-char);
-    padding: 0.5rem;
-    font-family: var(--font-mono);
-  }
-
-  .field textarea {
-    resize: vertical;
-  }
-
   .field-hint {
     color: var(--fg-muted);
     font-size: 0.75rem;
     margin: 0 0 0.75rem;
   }
 
-  .new-species {
-    margin-top: 0.75rem;
-    border-top: 1px dashed var(--border-char);
-    padding-top: 0.75rem;
+  .identify__value {
+    color: var(--fg-bright);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
   }
 
   .gallery {
@@ -564,54 +226,5 @@ const fullSrcs = await Promise.all(
     .gallery__full {
       opacity: 1;
     }
-  }
-
-  .loc-save {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 0.75rem;
-  }
-
-  .identify__actions {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .identify__submit {
-    background: var(--bg-surface);
-    color: var(--accent);
-    border: 1px solid var(--accent-dim);
-    padding: 0.625rem 1.25rem;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition:
-      background 0.1s,
-      color 0.1s;
-  }
-
-  .identify__submit:hover {
-    background: var(--accent);
-    color: var(--bg);
-  }
-  .identify__submit:disabled {
-    opacity: 0.5;
-    cursor: wait;
-  }
-
-  .identify__status {
-    font-size: 0.8125rem;
-  }
-  .identify__status[data-state='error'] {
-    color: #ff7a7a;
-  }
-  .identify__status[data-state='ok'] {
-    color: var(--accent);
-  }
-  .identify__status[data-state='pending'] {
-    color: var(--fg-dim);
   }
 </style>

@@ -150,6 +150,7 @@ export default {
     error: 'Etwas ist schiefgelaufen',
     missingSpecies: 'Bitte wähle eine Art',
     missingLocation: 'Bitte markiere einen Ort auf der Karte',
+    noLocation: 'Noch kein Ort markiert',
     notes: 'Notizen',
     notesEn: 'Notizen (en)',
     notesDe: 'Notizen (de)',

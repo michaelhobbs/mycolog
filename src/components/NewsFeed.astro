@@ -1,11 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
-import {
-  enrichSightings,
-  identificationDate,
-  buildLocationMap,
-  locationName,
-} from '../lib/sightings'
+import { enrichSightings, buildLocationMap, locationName } from '../lib/sightings'
+import { buildNewsFeed } from '../lib/news'
 import { getTranslations, formatDate } from '../i18n'
 import type { Locale } from '../i18n'
 
@@ -22,67 +18,15 @@ const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
   getCollection('locations'),
 ])
 const sightings = enrichSightings(sightingEntries, speciesEntries)
+const days = buildNewsFeed(sightings)
 const locations = buildLocationMap(locationEntries)
 const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scientificName]))
-
-interface DayFeed {
-  spottedCount: number | null
-  identifiedCount: number | null
-  newLocations: string[]
-  newSpecies: string[]
-}
-
-const byDate = new Map<string, DayFeed>()
-
-const locationFirst = new Map<string, string>()
-const speciesFirst = new Map<string, string>()
-
-for (const s of sightings) {
-  if (!byDate.has(s.dateSpotted)) {
-    byDate.set(s.dateSpotted, emptyFeed())
-  }
-  const day = byDate.get(s.dateSpotted)!
-  day.spottedCount = (day.spottedCount ?? 0) + 1
-
-  const idDate = identificationDate(s)
-  if (!byDate.has(idDate)) byDate.set(idDate, emptyFeed())
-  byDate.get(idDate)!.identifiedCount = (byDate.get(idDate)!.identifiedCount ?? 0) + 1
-
-  if (!locationFirst.has(s.locationSlug) || s.dateSpotted < locationFirst.get(s.locationSlug)!) {
-    locationFirst.set(s.locationSlug, s.dateSpotted)
-  }
-  if (!speciesFirst.has(s.id) || s.dateSpotted < speciesFirst.get(s.id)!) {
-    speciesFirst.set(s.id, s.dateSpotted)
-  }
-}
-
-for (const [slug, date] of locationFirst) {
-  byDate.get(date)!.newLocations.push(slug)
-}
-for (const [id, date] of speciesFirst) {
-  byDate.get(date)!.newSpecies.push(id)
-}
-
-const dates = [...byDate.keys()].sort().reverse()
-for (const date of dates) {
-  byDate.get(date)!.newLocations.sort()
-  byDate.get(date)!.newSpecies.sort()
-}
-
-function emptyFeed(): DayFeed {
-  return {
-    spottedCount: null,
-    identifiedCount: null,
-    newLocations: [],
-    newSpecies: [],
-  }
-}
 ---
 
 <div class="days">
   {
-    dates.map((date) => {
-      const day = byDate.get(date)!
+    days.map((day) => {
+      const { date } = day
       return (
         <article class="day">
           <header class="day__head">

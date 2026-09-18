@@ -119,6 +119,7 @@ export default {
   },
   footer: {
     copyright: '© 2026 myco.log',
+    rss: 'RSS feed',
   },
   backlog: {
     title: 'Backlog',

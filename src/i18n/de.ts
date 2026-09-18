@@ -119,6 +119,7 @@ export default {
   },
   footer: {
     copyright: '© 2026 myco.log',
+    rss: 'RSS-Feed',
   },
   backlog: {
     title: 'Rückstand',

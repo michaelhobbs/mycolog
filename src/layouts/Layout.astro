@@ -143,6 +143,14 @@ function localizedPath(targetLocale: Locale): string {
       <div class="footer__inner">
         <span class="footer__content">
           <span>{t.footer.copyright}</span>
+          <a
+            class="footer__rss"
+            href={`/${locale}/rss.xml`}
+            rel="alternate"
+            type="application/rss+xml"
+          >
+            {t.footer.rss}
+          </a>
         </span>
       </div>
     </footer>
@@ -365,10 +373,26 @@ function localizedPath(targetLocale: Locale): string {
   .footer__inner {
     max-width: 960px;
     margin: 0 auto;
+    padding: 0 1.5rem;
   }
 
   .footer__content {
     color: var(--fg-dim);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .footer__rss {
+    color: var(--fg-subtle);
+    text-decoration: none;
+    font-size: 0.75rem;
+  }
+
+  .footer__rss:hover {
+    color: var(--accent-dim);
+    text-decoration: underline;
   }
 
   /* ─── Responsive ──────────────────────────────── */

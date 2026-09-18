@@ -23,7 +23,7 @@ export default {
     newsTitle: 'News',
     newsItem: 'item',
     newsItems: 'items',
-    newsBacklogFrom: 'added to the backlog on',
+    newsBacklogFrom: 'added to the backlog from',
     newsMushrooms: 'mushrooms',
     newsIdentifiedSuffix: 'identified from the backlog',
     newsNewLocation: 'New location',

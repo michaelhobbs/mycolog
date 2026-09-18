@@ -3,6 +3,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { format } from 'prettier'
+import { appendNewsEvent } from './news-events.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -66,7 +67,8 @@ async function ensureAuthor(name) {
   return slug
 }
 
-// Create (if missing) a content entry for a location name and return its slug.
+// Create (if missing) a content entry for a location name. Returns the slug
+// and whether the entry was created by this call.
 async function ensureLocation(name, lat, lng) {
   const slug = slugify(name) || 'unknown-area'
   const file = path.join(LOCATIONS_DIR, slug, 'index.json')
@@ -79,8 +81,9 @@ async function ensureLocation(name, lat, lng) {
     }
     await fs.mkdir(path.dirname(file), { recursive: true })
     await fs.writeFile(file, JSON.stringify(doc, null, 2) + '\n')
+    return { slug, created: true }
   }
-  return slug
+  return { slug, created: false }
 }
 
 app.get('/api/health', (_req, res) => {
@@ -190,8 +193,11 @@ app.post('/api/sightings', async (req, res) => {
     }
 
     let locationSlug = null
+    let createdNewLocation = false
     if (locationName && typeof locationName === 'string' && locationName.trim()) {
-      locationSlug = await ensureLocation(locationName.trim(), location.lat, location.lng)
+      const loc = await ensureLocation(locationName.trim(), location.lat, location.lng)
+      locationSlug = loc.slug
+      createdNewLocation = loc.created
     }
 
     const sightingDoc = {
@@ -217,6 +223,20 @@ app.post('/api/sightings', async (req, res) => {
 
     // 5. Remove the backlog entry
     await fs.rm(backlogEntryDir, { recursive: true, force: true })
+
+    // 6. Record declarative news events
+    const today = new Date().toISOString().slice(0, 10)
+    await appendNewsEvent({
+      type: 'identified',
+      date: today,
+      sightings: [`${dateSpotted}/${sightingSlug}`],
+    })
+    if (newSpecies && speciesSlug) {
+      await appendNewsEvent({ type: 'new-species', date: today, slugs: [speciesSlug] })
+    }
+    if (createdNewLocation) {
+      await appendNewsEvent({ type: 'new-location', date: today, slugs: [locationSlug] })
+    }
 
     return res.json({
       ok: true,

@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { execFileSync } from 'node:child_process'
+import { appendNewsEvent } from './news-events.mjs'
 
 const ROOT = path.resolve(import.meta.dirname, '..')
 const PUBLIC = path.join(ROOT, 'public/images')
@@ -118,6 +119,14 @@ for (const author of authorDirs) {
     if (location) entry.location = location
 
     await fs.writeFile(path.join(itemDir, 'index.json'), JSON.stringify(entry, null, 2) + '\n')
+
+    await appendNewsEvent({
+      type: 'backlog-added',
+      date: new Date().toISOString().slice(0, 10),
+      photoDate: date,
+      count: 1,
+      items: [String(slug).padStart(2, '0')],
+    })
 
     const loc = location ? `, ${location.lat}, ${location.lng}` : ''
     console.log(

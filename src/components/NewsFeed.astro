@@ -12,15 +12,16 @@ interface Props {
 const { locale } = Astro.props
 const t = getTranslations(locale)
 
-const [sightingEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
-  getCollection('sightings'),
+const [newsEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
+  getCollection('news'),
   getCollection('species'),
   getCollection('locations'),
   getCollection('backlog'),
 ])
-const days = buildNewsFeed({ sightingEntries, speciesEntries, locationEntries, backlogEntries })
+const days = buildNewsFeed({ newsEntries, speciesEntries, locationEntries, backlogEntries })
 const locations = buildLocationMap(locationEntries)
 const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scientificName]))
+const backlogIds = new Set(backlogEntries.map((b) => b.id))
 ---
 
 <div class="days">
@@ -38,12 +39,12 @@ const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scient
                 <a
                   class="feed-line"
                   href={
-                    batch.ids.length === 1
+                    batch.ids.length === 1 && backlogIds.has(batch.ids[0])
                       ? `/${locale}/backlog/${batch.ids[0]}`
                       : `/${locale}/backlog#${formatAnchorDate(batch.photoDate)}`
                   }
                 >
-                  {itemsCount(batch.ids.length, locale)} {t.home.newsBacklogFrom}{' '}
+                  {itemsCount(batch.count, locale)} {t.home.newsBacklogFrom}{' '}
                   {formatDate(batch.photoDate, locale)}
                 </a>
               </li>

@@ -72,4 +72,32 @@ const backlog = defineCollection({
     }),
 })
 
-export const collections = { species, locations, sightings, backlog, authors }
+const news = defineCollection({
+  loader: glob({ base: './src/content/news', pattern: '**/index.json' }),
+  schema: z.discriminatedUnion('type', [
+    z.object({
+      type: z.literal('backlog-added'),
+      date: z.string(),
+      photoDate: z.string(),
+      count: z.number().int().positive(),
+      items: z.array(z.string()).optional(),
+    }),
+    z.object({
+      type: z.literal('identified'),
+      date: z.string(),
+      sightings: z.array(z.string()).min(1),
+    }),
+    z.object({
+      type: z.literal('new-species'),
+      date: z.string(),
+      slugs: z.array(z.string()).min(1),
+    }),
+    z.object({
+      type: z.literal('new-location'),
+      date: z.string(),
+      slugs: z.array(z.string()).min(1),
+    }),
+  ]),
+})
+
+export const collections = { species, locations, sightings, backlog, authors, news }

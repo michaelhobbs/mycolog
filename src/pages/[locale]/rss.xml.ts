@@ -15,14 +15,14 @@ export async function GET(context: APIContext) {
   const t = getTranslations(locale)
   const base = siteBase(context.site)
 
-  const [sightingEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
-    getCollection('sightings'),
+  const [newsEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
+    getCollection('news'),
     getCollection('species'),
     getCollection('locations'),
     getCollection('backlog'),
   ])
   const collections: NewsCollections = {
-    sightingEntries,
+    newsEntries,
     speciesEntries,
     locationEntries,
     backlogEntries,

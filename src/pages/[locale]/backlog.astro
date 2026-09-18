@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro'
+import DateIndex from '../../components/DateIndex.astro'
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import { getTranslations, formatDate, formatAnchorDate, locales } from '../../i18n'
@@ -30,6 +31,8 @@ for (const entry of backlog) {
       <span class="page-header__sub">{t.backlog.subtitle} · {backlog.length} {t.backlog.items}</span
       >
     </div>
+
+    <DateIndex dates={[...groups.keys()]} label={t.common.jumpToDate} />
 
     <div class="backlog-list">
       {
@@ -115,7 +118,6 @@ for (const entry of backlog) {
     font-weight: 700;
     font-size: 0.9375rem;
     margin: 0;
-    scroll-margin-top: 1rem;
   }
 
   .backlog-item {

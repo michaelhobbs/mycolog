@@ -1,5 +1,8 @@
 export default {
   lang: 'en',
+  common: {
+    jumpToDate: 'Jump to date',
+  },
   nav: {
     home: 'Home',
     map: 'Map',

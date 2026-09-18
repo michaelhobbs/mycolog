@@ -1,9 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import MushroomCard from '../../components/MushroomCard.astro'
+import DateIndex from '../../components/DateIndex.astro'
 import { getCollection } from 'astro:content'
 import { enrichSightings, buildLocationMap } from '../../lib/sightings'
-import { getTranslations, formatDate, locales } from '../../i18n'
+import { getTranslations, formatDate, formatAnchorDate, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 
 export function getStaticPaths() {
@@ -39,10 +40,12 @@ const days = [...byDate.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
       <span class="page-header__sub">{t.log.subtitle}</span>
     </div>
 
+    <DateIndex dates={days.map(([date]) => date)} label={t.common.jumpToDate} />
+
     <div class="days">
       {
         days.map(([date, list]) => (
-          <article class="day">
+          <article class="day" id={formatAnchorDate(date)}>
             <header class="day__head">
               <a href={`/${locale}/log/${date}`} class="day__date">
                 {formatDate(date, locale)}

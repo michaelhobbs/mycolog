@@ -1,6 +1,7 @@
 ---
 import Layout from '../../../layouts/Layout.astro'
 import MushroomCard from '../../../components/MushroomCard.astro'
+import LinkRow from '../../../components/LinkRow.astro'
 import { getCollection } from 'astro:content'
 import { enrichSightings, identificationDate, buildLocationMap } from '../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../i18n'
@@ -40,12 +41,7 @@ const locations = buildLocationMap(locationEntries)
       <span class="page-header__sub">{sightings.length} {t.log.sightingsCount}</span>
     </div>
 
-    <div class="back">
-      <a href={`/${locale}/identifications`} class="tui-link">
-        {'<'}
-        {t.identifications.backToList}
-      </a>
-    </div>
+    <LinkRow locale={locale} fallback={`/${locale}/identifications`} />
 
     {sightings.length === 0 && <p class="empty">{t.log.noSightings}</p>}
 
@@ -79,24 +75,6 @@ const locations = buildLocationMap(locationEntries)
   .page-header__sub {
     color: var(--fg-dim);
     font-size: 0.8125rem;
-  }
-
-  .back {
-    margin-bottom: 1rem;
-  }
-
-  .back__sep {
-    color: var(--fg-subtle);
-  }
-
-  .tui-link {
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-  }
-
-  .tui-link:hover {
-    color: var(--accent);
   }
 
   .empty {

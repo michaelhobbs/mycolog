@@ -166,6 +166,28 @@ function localizedPath(targetLocale: Locale): string {
           menu.classList.toggle('nav__mobile-menu--open')
         })
       })
+      const ref = (() => {
+        try {
+          return new URL(document.referrer)
+        } catch {
+          return null
+        }
+      })()
+      if (ref && ref.origin === location.origin) {
+        document.querySelectorAll('[data-back]').forEach((a) => {
+          a.setAttribute('href', ref.href)
+          a.setAttribute('data-back', 'pop')
+        })
+      }
+      document.addEventListener('click', (e) => {
+        const a = (e.target as HTMLElement | null)?.closest?.('[data-back]')
+        if (!a) return
+        if (a.getAttribute('data-back') === 'pop') {
+          e.preventDefault()
+          if (history.length > 1) history.back()
+          else if (a instanceof HTMLAnchorElement && a.href) location.href = a.href
+        }
+      })
     </script>
   </body>
 </html>

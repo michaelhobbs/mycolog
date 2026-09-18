@@ -5,6 +5,7 @@ import { Image, getImage } from 'astro:assets'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import type { Locale, Translations } from '../../../i18n'
 import BacklogIdentify from '../../../components/BacklogIdentify.astro'
+import LinkRow from '../../../components/LinkRow.astro'
 
 export async function getStaticPaths() {
   // The identification form is a dev workflow, but the read-only item pages
@@ -36,9 +37,7 @@ const fullSrcs = await Promise.all(
   locale={locale}
 >
   <section class="add-page">
-    <div class="add-nav">
-      <a class="add-nav__back" href={`/${locale}/backlog`}>{'<'} {t.backlog.backToList}</a>
-    </div>
+    <LinkRow locale={locale} fallback={`/${locale}/backlog`} />
 
     <div class="add-head">
       <h1 class="add-head__title">
@@ -110,20 +109,6 @@ const fullSrcs = await Promise.all(
 <style>
   .add-page {
     padding-bottom: 3rem;
-  }
-
-  .add-nav {
-    margin-bottom: 1rem;
-  }
-
-  .add-nav__back {
-    color: var(--accent);
-    font-size: 0.875rem;
-    text-decoration: none;
-  }
-
-  .add-nav__back:hover {
-    color: var(--fg-bright);
   }
 
   .add-head {

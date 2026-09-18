@@ -1,0 +1,55 @@
+---
+import type { Locale } from '../i18n'
+import BackLink from './BackLink.astro'
+
+interface ExtraLink {
+  href: string
+  label: string
+}
+
+interface Props {
+  locale: Locale
+  fallback: string
+  links?: ExtraLink[]
+}
+
+const { locale, fallback, links = [] } = Astro.props
+---
+
+<div class="link-row">
+  <BackLink locale={locale} fallback={fallback} />
+  {
+    links.map((link) => (
+      <>
+        <span class="link-row__sep">·</span>
+        <a href={link.href} class="link-row__link">
+          {link.label}
+        </a>
+      </>
+    ))
+  }
+</div>
+
+<style>
+  .link-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .link-row__sep {
+    color: var(--fg-subtle);
+  }
+
+  .link-row__link {
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .link-row__link:hover {
+    color: var(--accent);
+  }
+</style>

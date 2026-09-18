@@ -3,6 +3,7 @@ import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import MiniMap from '../../../components/MiniMap.astro'
+import LinkRow from '../../../components/LinkRow.astro'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import { buildLocationMap, locationName } from '../../../lib/sightings'
@@ -55,9 +56,11 @@ const fullSrcs = await Promise.all(
       <span class="page-header__sub">{sp?.scientificName}</span>
     </div>
 
-    <div class="back">
-      <a href={`/${locale}/mushrooms`} class="tui-link">{'<'} {t.mushrooms.backToIndex}</a>
-    </div>
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/mushrooms`}
+      links={[{ href: `/${locale}/mushrooms`, label: t.mushrooms.backToIndex }]}
+    />
 
     {
       sp && (
@@ -273,7 +276,14 @@ const fullSrcs = await Promise.all(
   }
 
   .back {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
     margin-bottom: 1.25rem;
+  }
+
+  .back__sep {
+    color: var(--fg-subtle);
   }
 
   .tui-link {

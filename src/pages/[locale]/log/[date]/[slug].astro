@@ -3,6 +3,7 @@ import Layout from '../../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import Notice from '../../../../components/Notice.astro'
+import LinkRow from '../../../../components/LinkRow.astro'
 import MiniMap from '../../../../components/MiniMap.astro'
 import {
   enrichSighting,
@@ -52,14 +53,20 @@ const fullSrcs = sighting
 // Re-ordering the gallery (choosing the main photo) is a dev-only workflow.
 const dev = import.meta.env.DEV
 
-const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — myco.log` : 'myco.log'
+const pageTitle = sighting
+  ? `${l10n(sighting.species.commonName, locale)} (${formatDate(sighting.dateSpotted, locale)}) — myco.log`
+  : 'myco.log'
 ---
 
 <Layout title={pageTitle} locale={locale}>
   <section class="sighting-page">
     <div class="page-header">
       <span class="page-header__tag"
-        >╔══ {sighting ? l10n(sighting.species.commonName, locale) : t.sighting.missing}</span
+        >╔══ {
+          sighting
+            ? `${l10n(sighting.species.commonName, locale)} (${formatDate(sighting.dateSpotted, locale)})`
+            : t.sighting.missing
+        }</span
       >
       <span class="page-header__sub">{sighting?.species.scientificName}</span>
       {
@@ -71,11 +78,16 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
       }
     </div>
 
-    <div class="back">
-      <a href={`/${locale}/log/${date}`} class="tui-link">{'<'} {t.sighting.day}</a>
-      <span class="back__sep">·</span>
-      <a href={`/${locale}/mushrooms/${sighting?.id}`} class="tui-link">{t.sighting.species}</a>
-    </div>
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/log/${date}`}
+      links={[
+        {
+          href: `/${locale}/mushrooms/${sighting?.id}`,
+          label: t.sighting.species,
+        },
+      ]}
+    />
 
     {
       sighting && (
@@ -306,27 +318,6 @@ const pageTitle = sighting ? `${l10n(sighting.species.commonName, locale)} — m
     opacity: 0.65;
     transform: rotate(-4deg);
     user-select: none;
-  }
-
-  .back {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .back__sep {
-    color: var(--fg-subtle);
-  }
-
-  .tui-link {
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-  }
-
-  .tui-link:hover {
-    color: var(--accent);
   }
 
   .gallery {

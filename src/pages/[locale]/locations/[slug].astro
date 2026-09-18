@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import MiniMap from '../../../components/MiniMap.astro'
 import Notice from '../../../components/Notice.astro'
+import LinkRow from '../../../components/LinkRow.astro'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import type { Locale } from '../../../i18n'
@@ -49,9 +50,11 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
       </span>
     </div>
 
-    <div class="back">
-      <a href={`/${locale}/locations`} class="tui-link">{'<'} {t.locations.backToIndex}</a>
-    </div>
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/locations`}
+      links={[{ href: `/${locale}/locations`, label: t.locations.backToIndex }]}
+    />
 
     {
       location && (
@@ -153,20 +156,6 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
   .page-header__sub {
     color: var(--accent-dim);
     font-size: 0.8125rem;
-  }
-
-  .back {
-    margin-bottom: 1.25rem;
-  }
-
-  .tui-link {
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-  }
-
-  .tui-link:hover {
-    color: var(--accent);
   }
 
   .facts {

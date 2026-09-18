@@ -2,6 +2,7 @@ export default {
   lang: 'en',
   common: {
     jumpToDate: 'Jump to date',
+    back: 'back',
   },
   nav: {
     home: 'Home',
@@ -97,7 +98,7 @@ export default {
     habitat: 'Habitat',
     edibility: 'Edibility',
     sightings: 'Sightings',
-    backToIndex: 'All species',
+    backToIndex: 'all species',
     fullscreen: 'open fullscreen',
     spottedIn: 'Spotted in',
     onDate: 'on',
@@ -112,7 +113,7 @@ export default {
     forestType: 'Forest type',
     soilType: 'Soil type',
     sightings: 'Sightings',
-    backToIndex: 'All locations',
+    backToIndex: 'all locations',
     fullscreen: 'open fullscreen',
     unknown: 'Unknown',
     aiDisclaimer: 'Content on this page is AI generated. Not human verified yet.',

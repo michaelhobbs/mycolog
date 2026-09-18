@@ -1,5 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro'
+import LinkRow from '../../../components/LinkRow.astro'
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import { enrichSightings, buildLocationMap, locationName } from '../../../lib/sightings'
@@ -38,9 +39,7 @@ const locMap = buildLocationMap(locations)
       <span class="page-header__sub">{list.length} {t.log.sightingsCount}</span>
     </div>
 
-    <div class="back">
-      <a href={`/${locale}/log`} class="tui-link">{'<'} {t.log.backToLog}</a>
-    </div>
+    <LinkRow locale={locale} fallback={`/${locale}/log`} />
 
     {list.length === 0 && <p class="empty">{t.log.noSightings}</p>}
 
@@ -134,20 +133,6 @@ const locMap = buildLocationMap(locations)
   .page-header__sub {
     color: var(--fg-dim);
     font-size: 0.8125rem;
-  }
-
-  .back {
-    margin-bottom: 1rem;
-  }
-
-  .tui-link {
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-  }
-
-  .tui-link:hover {
-    color: var(--accent);
   }
 
   .empty {

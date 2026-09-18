@@ -2,6 +2,7 @@ export default {
   lang: 'de',
   common: {
     jumpToDate: 'Zum Datum springen',
+    back: 'zurück',
   },
   nav: {
     home: 'Start',

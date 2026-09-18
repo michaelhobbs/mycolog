@@ -27,7 +27,7 @@ const fullUrls = await Promise.all(
 
 <div class="tui-card">
   <div class="tui-card__head">
-    <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__title"
+    <a href={`/${locale}/log/${s.slug}`} class="tui-card__title"
       >┌─ {t(s.species.commonName, locale)}</a
     >
     <a href={`/${locale}/log/${s.slug}`} class="tui-card__more">{'>'}{dict.card.more}</a>
@@ -112,7 +112,9 @@ const fullUrls = await Promise.all(
     <div class="tui-card__row">
       <span class="tui-card__label">species</span>
       <span class="tui-card__sep-dots"></span>
-      <span class="tui-card__val">{s.species.scientificName}</span>
+      <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__val tui-card__val--link"
+        >{s.species.scientificName}</a
+      >
     </div>
     <div class="tui-card__row">
       <span class="tui-card__label">location</span>

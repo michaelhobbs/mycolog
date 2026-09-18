@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content'
-import { enrichSightings, buildLocationMap, locationName } from '../lib/sightings'
-import { buildNewsFeed } from '../lib/news'
-import { getTranslations, formatDate } from '../i18n'
+import { buildLocationMap, locationName } from '../lib/sightings'
+import { buildNewsFeed, itemsCount } from '../lib/news'
+import { getTranslations, formatDate, formatAnchorDate } from '../i18n'
 import type { Locale } from '../i18n'
 
 interface Props {
@@ -12,13 +12,13 @@ interface Props {
 const { locale } = Astro.props
 const t = getTranslations(locale)
 
-const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
+const [sightingEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
   getCollection('sightings'),
   getCollection('species'),
   getCollection('locations'),
+  getCollection('backlog'),
 ])
-const sightings = enrichSightings(sightingEntries, speciesEntries)
-const days = buildNewsFeed(sightings)
+const days = buildNewsFeed({ sightingEntries, speciesEntries, locationEntries, backlogEntries })
 const locations = buildLocationMap(locationEntries)
 const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scientificName]))
 ---
@@ -33,13 +33,21 @@ const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scient
             <span class="day__date">{formatDate(date, locale)}</span>
           </header>
           <ul class="day__feed">
-            {day.spottedCount !== null && (
+            {day.backlogBatches.map((batch) => (
               <li>
-                <a class="feed-line" href={`/${locale}/log/${date}`}>
-                  {day.spottedCount} {t.home.newsBacklogAdded}
+                <a
+                  class="feed-line"
+                  href={
+                    batch.ids.length === 1
+                      ? `/${locale}/backlog/${batch.ids[0]}`
+                      : `/${locale}/backlog#${formatAnchorDate(batch.photoDate)}`
+                  }
+                >
+                  {itemsCount(batch.ids.length, locale)} {t.home.newsBacklogFrom}{' '}
+                  {formatDate(batch.photoDate, locale)}
                 </a>
               </li>
-            )}
+            ))}
             {day.identifiedCount !== null && (
               <li>
                 <a class="feed-line" href={`/${locale}/identifications/${date}`}>

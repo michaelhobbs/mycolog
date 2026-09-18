@@ -15,12 +15,18 @@ export async function GET(context: APIContext) {
   const t = getTranslations(locale)
   const base = siteBase(context.site)
 
-  const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
+  const [sightingEntries, speciesEntries, locationEntries, backlogEntries] = await Promise.all([
     getCollection('sightings'),
     getCollection('species'),
     getCollection('locations'),
+    getCollection('backlog'),
   ])
-  const collections: NewsCollections = { sightingEntries, speciesEntries, locationEntries }
+  const collections: NewsCollections = {
+    sightingEntries,
+    speciesEntries,
+    locationEntries,
+    backlogEntries,
+  }
 
   return rss({
     title: `${t.home.newsTitle} — myco.log`,

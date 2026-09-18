@@ -1,0 +1,170 @@
+---
+import { getCollection } from 'astro:content'
+import {
+  enrichSightings,
+  identificationDate,
+  buildLocationMap,
+  locationName,
+} from '../lib/sightings'
+import { getTranslations, formatDate } from '../i18n'
+import type { Locale } from '../i18n'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getTranslations(locale)
+
+const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
+  getCollection('sightings'),
+  getCollection('species'),
+  getCollection('locations'),
+])
+const sightings = enrichSightings(sightingEntries, speciesEntries)
+const locations = buildLocationMap(locationEntries)
+const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scientificName]))
+
+interface DayFeed {
+  spottedCount: number | null
+  identifiedCount: number | null
+  newLocations: string[]
+  newSpecies: string[]
+}
+
+const byDate = new Map<string, DayFeed>()
+
+const locationFirst = new Map<string, string>()
+const speciesFirst = new Map<string, string>()
+
+for (const s of sightings) {
+  if (!byDate.has(s.dateSpotted)) {
+    byDate.set(s.dateSpotted, emptyFeed())
+  }
+  const day = byDate.get(s.dateSpotted)!
+  day.spottedCount = (day.spottedCount ?? 0) + 1
+
+  const idDate = identificationDate(s)
+  if (!byDate.has(idDate)) byDate.set(idDate, emptyFeed())
+  byDate.get(idDate)!.identifiedCount = (byDate.get(idDate)!.identifiedCount ?? 0) + 1
+
+  if (!locationFirst.has(s.locationSlug) || s.dateSpotted < locationFirst.get(s.locationSlug)!) {
+    locationFirst.set(s.locationSlug, s.dateSpotted)
+  }
+  if (!speciesFirst.has(s.id) || s.dateSpotted < speciesFirst.get(s.id)!) {
+    speciesFirst.set(s.id, s.dateSpotted)
+  }
+}
+
+for (const [slug, date] of locationFirst) {
+  byDate.get(date)!.newLocations.push(slug)
+}
+for (const [id, date] of speciesFirst) {
+  byDate.get(date)!.newSpecies.push(id)
+}
+
+const dates = [...byDate.keys()].sort().reverse()
+for (const date of dates) {
+  byDate.get(date)!.newLocations.sort()
+  byDate.get(date)!.newSpecies.sort()
+}
+
+function emptyFeed(): DayFeed {
+  return {
+    spottedCount: null,
+    identifiedCount: null,
+    newLocations: [],
+    newSpecies: [],
+  }
+}
+---
+
+<div class="days">
+  {
+    dates.map((date) => {
+      const day = byDate.get(date)!
+      return (
+        <article class="day">
+          <header class="day__head">
+            <span class="day__date">{formatDate(date, locale)}</span>
+          </header>
+          <ul class="day__feed">
+            {day.spottedCount !== null && (
+              <li>
+                <a class="feed-line" href={`/${locale}/log/${date}`}>
+                  {day.spottedCount} {t.home.newsBacklogAdded}
+                </a>
+              </li>
+            )}
+            {day.identifiedCount !== null && (
+              <li>
+                <a class="feed-line" href={`/${locale}/identifications/${date}`}>
+                  {day.identifiedCount} {t.home.newsMushrooms} {t.home.newsIdentifiedSuffix}
+                </a>
+              </li>
+            )}
+            {day.newLocations.map((slug) => (
+              <li>
+                <a class="feed-line" href={`/${locale}/locations/${slug}`}>
+                  {'>'} {t.home.newsNewLocation}: {locationName(locations, slug, locale)}
+                </a>
+              </li>
+            ))}
+            {day.newSpecies.map((id) => (
+              <li>
+                <a class="feed-line" href={`/${locale}/mushrooms/${id}`}>
+                  {'>'} {t.home.newsNewSpecies}: {speciesScientific.get(id) ?? id}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </article>
+      )
+    })
+  }
+</div>
+
+<style>
+  .days {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .day {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .day__head {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border-char);
+  }
+
+  .day__date {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+
+  .day__feed {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .feed-line {
+    display: inline-block;
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+
+  .feed-line:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+</style>

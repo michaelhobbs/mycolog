@@ -1,10 +1,8 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import Notice from '../../components/Notice.astro'
-import MushroomCard from '../../components/MushroomCard.astro'
-import { getCollection } from 'astro:content'
-import { enrichSightings, identificationDate, buildLocationMap } from '../../lib/sightings'
-import { getTranslations, formatDate, locales } from '../../i18n'
+import NewsFeed from '../../components/NewsFeed.astro'
+import { getTranslations, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 
@@ -17,23 +15,6 @@ const t = getTranslations(locale)
 const mapUrl = getRelativeLocaleUrl(locale, 'map')
 const logUrl = getRelativeLocaleUrl(locale, 'log')
 const mushroomsUrl = getRelativeLocaleUrl(locale, 'mushrooms')
-const identificationsUrl = getRelativeLocaleUrl(locale, 'identifications')
-
-const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
-  getCollection('sightings'),
-  getCollection('species'),
-  getCollection('locations'),
-])
-const sightings = enrichSightings(sightingEntries, speciesEntries)
-const locations = buildLocationMap(locationEntries)
-const bySession = new Map<string, typeof sightings>()
-for (const s of sightings) {
-  const d = identificationDate(s)
-  if (!bySession.has(d)) bySession.set(d, [])
-  bySession.get(d)!.push(s)
-}
-const latestDate = [...bySession.keys()].sort().at(-1)
-const latest = latestDate ? (bySession.get(latestDate) ?? []) : []
 ---
 
 <Layout title={t.meta.homeTitle} locale={locale}>
@@ -105,27 +86,12 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
 
   <Notice margin={false} title={t.home.warningTitle} body={t.home.warningText} />
 
-  {
-    latest.length > 0 && (
-      <section class="news">
-        <div class="news__head">
-          <span class="news__title">╔══ {t.home.newsTitle}</span>
-          <span class="news__meta">
-            {formatDate(latestDate!, locale)} · {latest.length} {t.log.sightingsCount}
-          </span>
-        </div>
-        <div class="news__grid">
-          {latest.map((sighting) => (
-            <MushroomCard sighting={sighting} locale={locale} locations={locations} />
-          ))}
-        </div>
-        <a href={identificationsUrl} class="tui-btn tui-btn--dim news__all">
-          {'>'}
-          {t.home.newsAll}
-        </a>
-      </section>
-    )
-  }
+  <section class="news">
+    <div class="news__head">
+      <span class="news__title">╔══ {t.home.newsTitle}</span>
+    </div>
+    <NewsFeed locale={locale} />
+  </section>
 </Layout>
 
 <style>
@@ -200,16 +166,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     color: var(--bg);
   }
 
-  .tui-btn--dim {
-    border-color: var(--border-char);
-    color: var(--fg-dim);
-  }
-
-  .tui-btn--dim:hover {
-    background: var(--fg-dim);
-    color: var(--bg);
-  }
-
   .news {
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
@@ -230,21 +186,6 @@ mmmmmm   mmmmmm   mmmmmm     y:::::y            cccccccccccccccc   ooooooooooo  
     color: var(--fg-bright);
     font-weight: 700;
     font-size: 0.9375rem;
-  }
-
-  .news__meta {
-    color: var(--fg-dim);
-    font-size: 0.8125rem;
-  }
-
-  .news__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
-    gap: 0.75rem;
-  }
-
-  .news__all {
-    margin-top: 1rem;
   }
 
   @media (max-width: 640px) {

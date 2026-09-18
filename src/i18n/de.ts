@@ -17,8 +17,12 @@ export default {
     heroCta: 'Auf der Karte ansehen',
     heroLogCta: 'Funde durchlesen',
     heroMushroomsCta: 'Alle Pilze durchstöbern',
-    newsTitle: 'Neueste Bestimmungen',
-    newsAll: 'Alle Bestimmungen',
+    newsTitle: 'Nachrichten',
+    newsMushrooms: 'Pilze',
+    newsBacklogAdded: 'Einträge zum Rückstand hinzugefügt',
+    newsIdentifiedSuffix: 'aus dem Rückstand bestimmt',
+    newsNewLocation: 'Neuer Standort',
+    newsNewSpecies: 'Neue Art',
     warningTitle: 'Wichtiger Hinweis',
     warningText:
       'Die Angaben auf dieser Seite sind ohne Gewähr und können Fehler enthalten. Sammelt nur Pilze, die ihr selbst sicher bestimmen könnt — verlasst euch nicht allein auf diese Informationen.',
@@ -57,6 +61,7 @@ export default {
   identifications: {
     title: 'Bestimmungen',
     subtitle: 'Bestimmungen aus dem Backlog — keine neuen Funde verpassen.',
+    backToList: 'Alle Bestimmungen',
   },
   sighting: {
     missing: 'Fund nicht gefunden',

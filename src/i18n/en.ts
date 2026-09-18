@@ -17,8 +17,12 @@ export default {
     heroCta: 'View on map',
     heroLogCta: 'Read the logs',
     heroMushroomsCta: 'Browse all mushrooms',
-    newsTitle: 'Latest identifications',
-    newsAll: 'All identifications',
+    newsTitle: 'News',
+    newsMushrooms: 'mushrooms',
+    newsBacklogAdded: 'items added to the backlog',
+    newsIdentifiedSuffix: 'identified from the backlog',
+    newsNewLocation: 'New location',
+    newsNewSpecies: 'New species',
     warningTitle: 'Foraging Warning',
     warningText:
       "The information on this site may not be accurate. Only forage mushrooms you can independently identify — don't rely on these pages alone.",
@@ -57,6 +61,7 @@ export default {
   identifications: {
     title: 'Identifications',
     subtitle: 'Identifications from the backlog — catch new sightings as they appear.',
+    backToList: 'All identifications',
   },
   sighting: {
     missing: 'Sighting not found',

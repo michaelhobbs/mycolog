@@ -5,12 +5,14 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 
 ## Highlights
 
-- **Static content collections** for species, sightings, and an identification backlog.
+- **Six static content collections** for species, locations, authors, sightings,
+  an identification backlog, and declarative news events.
 - **Interactive vector map** (`MapLibre`) showing every sighting with clustered,
   carousel popups, plus on-the-fly elevation contours and hiking overlays.
 - **Dev-only identification workflow**: import unknown photos into the backlog and
   promote each item to a full sighting (species + location + notes) via a small
   local Express API.
+- **RSS feeds** (`/rss.xml`, `/{locale}/rss.xml`) built from the news collection.
 
 ---
 
@@ -19,57 +21,79 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 ```text
 /
 ├── public/
-│   └── images/                      # Drop source photos here (HEIC/JPG) to add to the backlog
+│   ├── favicon.ico / favicon.svg
+│   └── images/{author}/{find}/    # Drop source photos here (HEIC/JPG) to add to the backlog
 ├── scripts/
-│   ├── api.mjs                      # Dev-only identify API (http://localhost:4322)
-│   └── import-backlog-public.mjs    # Converts public/images → backlog items
+│   ├── api.mjs                    # Dev-only API (:4322): identify, set cover, pin backlog location
+│   ├── import-backlog-public.mjs  # Converts public/images → backlog items (+ news events)
+│   ├── news-events.mjs            # appendNewsEvent() — shared by the API, import & backfills
+│   └── backfill-*.mjs             # One-off migrations (authors, dateIdentified, news history)
 ├── src/
 │   ├── content/
-│   │   ├── backlog/{NN}/            # Unidentified items (dateSpotted + images)
+│   │   ├── authors/{slug}/        # Author reference data (name)
+│   │   ├── backlog/{NN}/          # Unidentified items (authors, dateSpotted, optional GPS, images)
+│   │   ├── locations/{slug}/      # Shared location reference data
+│   │   ├── news/{date}-{type}-{NN}/ # Declarative news events
 │   │   ├── sightings/{DATE}/{slug}/ # Per-observation data + photos
-│   │   └── species/{slug}/          # Shared species reference data
+│   │   └── species/{slug}/        # Shared species reference data
 │   ├── components/
-│   │   ├── LocationPicker.astro     # Click-to-pin map for the identify form
-│   │   ├── MapVector.astro          # The sightings map
-│   │   └── MushroomCard.astro       # Species summary card
+│   │   ├── BackLink.astro         # Back link (prev-page aware)
+│   │   ├── BacklogIdentify.astro  # The dev-only identify form
+│   │   ├── DateIndex.astro        # Day index list on log pages
+│   │   ├── Lightbox.astro         # Fullscreen photo viewer
+│   │   ├── LinkRow.astro          # Nav back-links row
+│   │   ├── LocationPicker.astro   # Click-to-pin map for the identify form
+│   │   ├── LocationThumbMap.astro # Small static map per location
+│   │   ├── MapVector.astro        # The full sightings map
+│   │   ├── MiniMap.astro          # Compact map variant
+│   │   ├── MushroomCard.astro     # Species summary card
+│   │   ├── NewsFeed.astro         # News feed on home
+│   │   └── Notice.astro           # Foraging warning banner
 │   ├── layouts/
-│   │   └── Layout.astro             # Shared page shell / navigation
+│   │   └── Layout.astro           # Shared page shell / navigation
 │   ├── lib/
-│   │   └── sightings.ts             # Enriches sightings with species data
+│   │   ├── news.ts                # News → day feed + RSS items
+│   │   └── sightings.ts           # Enriches sightings with species data
 │   ├── i18n/
-│   │   ├── en.ts / de.ts            # EN & DE strings
-│   │   ├── index.ts                 # Locale helpers (getTranslations, formatDate)
-│   │   └── helpers.ts               # l10n() localized-string picker
+│   │   ├── en.ts / de.ts          # EN & DE strings
+│   │   ├── index.ts               # Locale helpers (getTranslations, formatDate)
+│   │   └── helpers.ts             # l10n() localized-string picker
 │   ├── pages/
-│   │   ├── index.astro              # Root → redirects to /{default-locale}
+│   │   ├── index.astro            # Root → redirects to /{default-locale}
+│   │   ├── rss.xml.ts             # RSS feed (default locale)
 │   │   └── [locale]/
-│   │       ├── index.astro          # Home
-│   │       ├── map.astro            # Map page
-│   │       ├── log.astro            # Day index
-│   │       ├── log/[date].astro     # A single day's sightings
-│   │       ├── mushrooms/index.astro# Species index
-│   │       ├── mushrooms/[name].astro# Species page (all sightings + photos)
-│   │       ├── backlog.astro        # Chronological backlog list
-│   │       └── backlog/[slug].astro # DEV-only identify form
-│   └── content.config.ts            # Content-collection schemas (see below)
-├── astro.config.mjs                 # i18n routing + dev proxy → api.mjs
+│   │       ├── index.astro        # Home
+│   │       ├── map.astro          # Map page
+│   │       ├── log.astro          # Day index
+│   │       ├── log/[date].astro   # A single day's sightings
+│   │       ├── log/[date]/[slug].astro # A single sighting
+│   │       ├── identifications.astro / identifications/[date].astro
+│   │       ├── locations/index.astro / locations/[slug].astro
+│   │       ├── mushrooms/index.astro / mushrooms/[name].astro
+│   │       ├── backlog.astro      # Chronological backlog list
+│   │       ├── backlog/[slug].astro # DEV-only identify form
+│   │       └── rss.xml.ts         # Locale-specific RSS feed
+│   ├── types/
+│   │   └── mushroom.ts            # Shared TypeScript types
+│   └── content.config.ts          # Content-collection schemas (see below)
+├── astro.config.mjs               # i18n routing, site, dev proxy → api.mjs
+├── prettier.config.ts
 └── package.json
 ```
 
 ### Key commands
 
-| Command         | Action                                      |
-| :-------------- | :------------------------------------------ |
-| `npm install`   | Install dependencies                        |
-| `npm run dev`   | Start dev server at `http://localhost:4321` |
-| `npm run build` | Build the static site into `./dist/`        |
-
-> Production must set `SITE_URL` at build time so absolute links (e.g. the RSS
-> feed) point at the real domain instead of `http://localhost:4321`:
-> `SITE_URL=https://example.com npm run build`
-> | `npm run preview` | Preview the production build |
-> | `npm run update-backlog` | Import `public/images/*` into the backlog |
-> | `node scripts/api.mjs` | Start the identify API (`:4322`; dev workflows) |
+| Command                  | Action                                          |
+| :----------------------- | :---------------------------------------------- |
+| `npm install`            | Install dependencies                            |
+| `npm run dev`            | Start dev server at `http://localhost:4321`     |
+| `npm run build`          | Build the static site into `./dist/`            |
+| `npm run preview`        | Preview the production build                    |
+| `npm run typecheck`      | Run `astro check`                               |
+| `npm run format`         | Prettier write                                  |
+| `npm run format:check`   | Prettier check                                  |
+| `npm run update-backlog` | Import `public/images/**` into the backlog      |
+| `npm run api`            | Start the identify API (`node scripts/api.mjs`) |
 
 Dev server + identify API are managed with background mode:
 
@@ -79,11 +103,18 @@ astro dev stop | status | logs
 node scripts/api.mjs        # runs the API in the foreground
 ```
 
+> Production must set `SITE_URL` at build time so absolute links (e.g. the RSS
+> feed) point at the real domain instead of `http://localhost:4321`:
+>
+> ```
+> SITE_URL=https://example.com npm run build
+> ```
+
 ---
 
 ## Content Collections
 
-`src/content.config.ts` defines three collections. All text that must render in
+`src/content.config.ts` defines six collections. All text that must render in
 both languages is stored as a _localized string_ object:
 
 ```ts
@@ -106,7 +137,35 @@ Sightings reference a species **only by slug**; the shared data lives here once.
   "notes": { "en": "…", "de": "…" }, // optional
   "habitat": { "en": "Birch forest", "de": "Birkenwald" }, // optional
   "edibility": { "en": "Psychoactive", "de": "Psychoaktiv" }, // optional
+  "cover": { "sighting": "2026-09-12/amanita-muscaria-2", "index": 0 }, // optional
 }
+```
+
+`cover` points at one image of one sighting of this species (`{date/slug}` +
+image index); the species index falls back to that sighting's first image.
+
+### `locations` — shared location reference data
+
+Location: `src/content/locations/{slug}/index.json`
+
+Sightings reference a location by `locationSlug`; the shared data lives here once.
+
+```jsonc
+{
+  "name": { "en": "Kankerbach", "de": "Kankerbach" },
+  "description": { "en": "…", "de": "…" }, // optional
+  "forestType": { "en": "…", "de": "…" }, // optional
+  "soilType": { "en": "…", "de": "…" }, // optional
+  "center": { "lat": 47.48, "lng": 11.15 }, // optional
+}
+```
+
+### `authors` — contributor reference data
+
+Location: `src/content/authors/{slug}/index.json`
+
+```jsonc
+{ "name": "Michael" }
 ```
 
 ### `sightings` — per-observation data
@@ -116,18 +175,18 @@ Location: `src/content/sightings/{DATE}/{species-slug}/index.json`
 ```jsonc
 {
   "species": "schizophyllum-commune", // references a species slug
+  "locationSlug": "kankerbach", // references a location slug
+  "authors": ["michael"], // one or more author slugs
   "dateSpotted": "2026-08-22", // YYYY-MM-DD
-  "location": {
-    "lat": 47.483453,
-    "lng": 11.149244,
-    "name": { "en": "Kankerbach", "de": "Kankerbach" }, // optional, localized
-  },
+  "dateIdentified": "2026-09-01", // optional
+  "location": { "lat": 47.483453, "lng": 11.149244 },
   "images": ["./images/IMG_4163.jpg", "./images/IMG_4164.jpg"], // relative to this folder
   "notes": { "en": "…", "de": "…" }, // optional
 }
 ```
 
-The images live in `…/{DATE}/{slug}/images/` next to `index.json`.
+The images live in `…/{DATE}/{slug}/images/` next to `index.json`. The first
+image is the sighting's cover (the map popup, log, and species pages use it).
 
 ### `backlog` — unidentified items awaiting identification
 
@@ -135,13 +194,29 @@ Location: `src/content/backlog/{NN}/index.json` (numeric slug, e.g. `01`, `30`)
 
 ```jsonc
 {
+  "authors": ["michael"],
   "dateSpotted": "2026-08-22", // YYYY-MM-DD (taken from the photo's EXIF date)
+  "location": { "lat": 47.4843, "lng": 11.15283 }, // optional, taken from EXIF GPS or pinned manually
   "images": ["./images/01.jpg", "./images/02.jpg"], // converted to JPG
 }
 ```
 
-Only `dateSpotted` + images; species/location are filled in when the item is
-promoted to a sighting.
+Only `authors` + `dateSpotted` + images are required; species/location are
+filled in when the item is promoted to a sighting.
+
+### `news` — declarative news events
+
+Location: `src/content/news/{date}-{type}-{NN}/index.json`
+
+Events are appended by `scripts/news-events.mjs` (`appendNewsEvent`) and feed
+the home page and the RSS feeds — **don't hand-edit them**. Four event types:
+
+```jsonc
+{ "type": "backlog-added", "date": "2026-09-03", "photoDate": "2026-08-22", "count": 3, "items": ["01", "02", "03"] }
+{ "type": "identified", "date": "2026-09-03", "sightings": ["2026-08-07/amanita-muscaria"] }
+{ "type": "new-species", "date": "2026-09-03", "slugs": ["hydnellum-peckii"] }
+{ "type": "new-location", "date": "2026-09-03", "slugs": ["kankerbach"] }
+```
 
 ---
 
@@ -152,11 +227,11 @@ Two ways:
 ### 1. Manual
 
 Create a numeric folder under `src/content/backlog/`, e.g. `31`, with an
-`index.json` and converted JPGs in `images/`:
+`index.json` (authors, `dateSpotted`, optional `location`) and converted JPGs:
 
 ```
 src/content/backlog/31/
-├── index.json        # { "dateSpotted": "2026-08-22", "images": ["./images/01.jpg", …] }
+├── index.json        # { "authors": ["michael"], "dateSpotted": "2026-08-22", "images": ["./images/01.jpg", …] }
 └── images/
     ├── 01.jpg
     └── 02.jpg
@@ -164,16 +239,19 @@ src/content/backlog/31/
 
 ### 2. Automatic (`npm run update-backlog`)
 
-1. Drop **HEIC or JPG** photos into a new subfolder under `public/images/`,
-   e.g. `public/images/my-new-find/`.
+1. Drop **HEIC or JPG** photos into `public/images/{author}/{find}/`, where
+   `{author}` is the contributor's name and `{find}` a subfolder per "find".
 2. Run `npm run update-backlog`.
 
-`scripts/import-backlog-public.mjs` then, for every subfolder:
+`scripts/import-backlog-public.mjs` then, for every `{find}` subfolder:
 
 - picks the **next free numeric id** (highest existing backlog folder + 1),
+- creates an `authors` entry if that contributor is new,
 - **derives `dateSpotted` from the photo's EXIF** capture date (via `mdls`),
+- **derives GPS `lat`/`lng` from the photo's EXIF** GPS tags when present,
 - **converts the HEIC photos to JPG** (`sips`) as `images/01.jpg…NN.jpg`,
-- writes the item's `index.json`.
+- writes the item's `index.json`, and
+- **appends a `backlog-added` news event**.
 
 The HEIC sources in `public/images/` are left in place; you can remove them
 after a successful import.
@@ -192,7 +270,7 @@ node scripts/api.mjs                 # identify API  → http://localhost:4322
 astro dev                            # Astro dev server → http://localhost:4321
 ```
 
-`astro config.mjs` proxies `/myco/api` → `http://localhost:4322`
+`astro.config.mjs` proxies `/myco/api` → `http://localhost:4322`
 (`vite.server.proxy`), so the form submits through the dev server.
 
 ### Identify an item
@@ -202,15 +280,32 @@ astro dev                            # Astro dev server → http://localhost:432
    - **Date** — pre-filled from the photo's `dateSpotted` (editable).
    - **Species** — pick an existing one, or add a new species (scientific +
      common names EN/DE), which creates a `species` entry on submit.
+   - **Authors** — the backlog contributors are pre-selected; add new authors
+     (semicolon-separated) as needed.
    - **Location** — choose a known location name or type a new one, and
      **click the map** to drop a pin (writes `lat`/`lng` to a hidden input).
    - **Notes** — optional EN + DE notes.
 3. Submit → the API (`scripts/api.mjs:POST /api/sightings`):
    - creates the sighting under `src/content/sightings/{date}/{slug}/`,
-   - **moves the item's images** into it (renamed `{speciesSlug}{n}.jpg`),
-   - optionally creates the new `species`,
+   - **copies the item's images** into it (renamed `{speciesSlug}{n}.jpg`),
+   - optionally creates the new `species` / `location` / `authors` entries,
    - **removes the backlog item**, and
-   - redirects you back to the backlog overview.
+   - **appends `identified` (+ `new-species` / `new-location`) news events**.
+
+Other dev-only API endpoints:
+
+- `POST /api/sightings/cover` — reorders a sighting's images (first = cover).
+- `POST /api/species/:slug/cover` — sets a species' `cover` reference.
+- `POST /api/backlog/:id/location` — pins/removes a backlog item's location.
+
+---
+
+## RSS feeds
+
+Feeds are generated from the `news` collection at `/rss.xml` (default locale)
+and `/{locale}/rss.xml` (`src/lib/news.ts` builds the day feed and items).
+Links are absolute and derive from the `site` config — see the `SITE_URL`
+note under [Key commands](#key-commands).
 
 ---
 

@@ -7,8 +7,8 @@
 ---
 
 <aside class="lightbox" data-lightbox-modal hidden aria-hidden="true">
-  <figure class="lightbox__frame">
-    <img class="lightbox__img" data-lightbox-img alt="" />
+  <figure class="lightbox__frame" data-lightbox-frame>
+    <img class="lightbox__img" data-lightbox-img alt="" draggable="false" />
     <figcaption class="lightbox__caption" data-lightbox-caption></figcaption>
   </figure>
 
@@ -32,6 +32,7 @@
     const captionEl = modal.querySelector('[data-lightbox-caption]')
     const countEl = modal.querySelector('[data-lightbox-count]')
     const closeBtn = modal.querySelector('[data-lightbox-close]')
+    const frameEl = modal.querySelector('[data-lightbox-frame]')
 
     let sources = []
     let captions = []
@@ -79,6 +80,30 @@
       update()
     }
 
+    let dragX = null
+    let dragY = null
+    let suppressClick = false
+    const clearDrag = () => {
+      dragX = null
+      dragY = null
+    }
+    frameEl.addEventListener('pointerdown', (e) => {
+      dragX = e.clientX
+      dragY = e.clientY
+    })
+    frameEl.addEventListener('pointermove', (e) => {
+      if (dragX === null) return
+      const dx = e.clientX - dragX
+      const dy = e.clientY - dragY
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        go(dx < 0 ? 1 : -1)
+        suppressClick = true
+        clearDrag()
+      }
+    })
+    frameEl.addEventListener('pointerup', clearDrag)
+    frameEl.addEventListener('pointercancel', clearDrag)
+
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('[data-lightbox-trigger]')
       if (!btn) return
@@ -103,6 +128,10 @@
       go(1)
     })
     modal.addEventListener('click', (e) => {
+      if (suppressClick) {
+        suppressClick = false
+        return
+      }
       if (e.target === modal) close()
     })
     document.addEventListener('keydown', (e) => {
@@ -116,6 +145,23 @@
         go(1)
       }
     })
+
+    let wheelLock = false
+    modal.addEventListener(
+      'wheel',
+      (e) => {
+        if (modal.hidden) return
+        e.preventDefault()
+        if (wheelLock) return
+        const dx = Math.abs(e.deltaX)
+        const dy = Math.abs(e.deltaY)
+        if (Math.max(dx, dy) < 30) return
+        wheelLock = true
+        setTimeout(() => (wheelLock = false), 400)
+        go(dx > dy ? (e.deltaX > 0 ? 1 : -1) : e.deltaY > 0 ? 1 : -1)
+      },
+      { passive: false },
+    )
   }
 </script>
 
@@ -141,6 +187,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    touch-action: pan-y;
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   .lightbox__img {

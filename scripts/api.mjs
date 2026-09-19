@@ -118,13 +118,15 @@ app.post('/api/sightings', async (req, res) => {
       return res.status(400).json({ error: 'Missing backlogId' })
     }
 
-    // 2. Find the backlog entry
+    // 2. Find the backlog entry (images + metadata)
     const backlogEntryDir = path.join(BACKLOG_DIR, String(backlogId))
     let backlogImages = []
+    let backlogMeta = null
     try {
       const imagesDir = path.join(backlogEntryDir, 'images')
       const files = (await fs.readdir(imagesDir)).filter((f) => /\.(jpe?g|png)$/i.test(f)).sort()
       backlogImages = files.map((f) => ({ from: path.join(imagesDir, f), name: f }))
+      backlogMeta = JSON.parse(await fs.readFile(path.join(backlogEntryDir, 'index.json'), 'utf8'))
     } catch {
       return res.status(404).json({ error: `Backlog entry not found: ${backlogId}` })
     }
@@ -132,14 +134,33 @@ app.post('/api/sightings', async (req, res) => {
       return res.status(404).json({ error: `No images in backlog entry ${backlogId}` })
     }
 
+    // Order the photos by the backlog's images array (what the gallery shows),
+    // falling back to the on-disk sort if the files don't line up.
+    let orderedImages = backlogImages
+    if (Array.isArray(backlogMeta?.images)) {
+      const byBase = new Map(backlogImages.map((f) => [path.basename(f.name).toLowerCase(), f]))
+      const arr = []
+      for (const rel of backlogMeta.images) {
+        const base = path.basename(String(rel).split('?')[0]).toLowerCase()
+        const f = byBase.get(base)
+        if (f) arr.push(f)
+      }
+      if (arr.length === backlogImages.length) orderedImages = arr
+    }
+
+    // The sighting's first photo is used as its cover; honour the main photo
+    // chosen on the backlog item by moving that photo to the front.
+    const coverIdx = Number.isInteger(backlogMeta?.cover) ? backlogMeta.cover : 0
+    const pickedImages = [...orderedImages]
+    if (coverIdx > 0 && coverIdx < pickedImages.length) {
+      const [chosen] = pickedImages.splice(coverIdx, 1)
+      pickedImages.unshift(chosen)
+    }
+
     // Backlog authors (from import) + any selected/new authors supplied by the form.
-    let backlogAuthors = []
-    try {
-      const meta = JSON.parse(await fs.readFile(path.join(backlogEntryDir, 'index.json'), 'utf8'))
-      backlogAuthors = Array.isArray(meta.authors)
-        ? meta.authors.filter((a) => typeof a === 'string')
-        : []
-    } catch {}
+    const backlogAuthors = Array.isArray(backlogMeta?.authors)
+      ? backlogMeta.authors.filter((a) => typeof a === 'string')
+      : []
     const chosenExtras = Array.isArray(extraAuthors)
       ? extraAuthors.filter((a) => typeof a === 'string')
       : []
@@ -180,10 +201,10 @@ app.post('/api/sightings', async (req, res) => {
     await fs.mkdir(imagesDir, { recursive: true })
 
     const imagePaths = []
-    for (let i = 0; i < backlogImages.length; i++) {
-      const ext = path.extname(backlogImages[i].name).toLowerCase()
+    for (let i = 0; i < pickedImages.length; i++) {
+      const ext = path.extname(pickedImages[i].name).toLowerCase()
       const newName = `${speciesSlug}${i + 1}${ext}`
-      await fs.copyFile(backlogImages[i].from, path.join(imagesDir, newName))
+      await fs.copyFile(pickedImages[i].from, path.join(imagesDir, newName))
       imagePaths.push(`./images/${newName}`)
     }
 
@@ -395,6 +416,96 @@ app.post('/api/backlog/:id/location', async (req, res) => {
 
     await writeJson(file, doc)
     return res.json({ ok: true, location: doc.location ?? null })
+  } catch (err) {
+    console.error('[api] error:', err)
+    return res.status(500).json({ error: String(err?.message || err) })
+  }
+})
+
+app.post('/api/backlog/:id/notes', async (req, res) => {
+  const id = String(req.params?.id || '')
+  const { notes } = req.body || {}
+
+  try {
+    if (!id || !/^\d+$/.test(id)) {
+      return res.status(400).json({ error: 'Invalid backlog id' })
+    }
+    if (notes !== null && (typeof notes !== 'object' || notes === null || Array.isArray(notes))) {
+      return res.status(400).json({ error: 'Invalid notes' })
+    }
+    if (notes) {
+      for (const key of ['en', 'de']) {
+        if (key in notes && typeof notes[key] !== 'string') {
+          return res.status(400).json({ error: `Invalid ${key} note` })
+        }
+      }
+    }
+
+    const entryDir = path.join(BACKLOG_DIR, id)
+    const file = path.join(entryDir, 'index.json')
+    let doc
+    try {
+      doc = JSON.parse(await fs.readFile(file, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Backlog entry not found: ${id}` })
+    }
+
+    const notesEn = notes?.en ? String(notes.en).trim() : ''
+    const notesDe = notes?.de ? String(notes.de).trim() : ''
+    if (notesEn || notesDe) {
+      doc.notes = { en: notesEn, de: notesDe }
+    } else {
+      delete doc.notes
+    }
+
+    await writeJson(file, doc)
+    return res.json({ ok: true, notes: doc.notes ?? null })
+  } catch (err) {
+    console.error('[api] error:', err)
+    return res.status(500).json({ error: String(err?.message || err) })
+  }
+})
+
+app.post('/api/backlog/:id/cover', async (req, res) => {
+  const id = String(req.params?.id || '')
+  const { image } = req.body || {}
+
+  try {
+    // The main photo is simply the image that ends up first in the promoted
+    // sighting; its position is the index into the backlog's images array.
+    if (!id || !/^\d+$/.test(id)) {
+      return res.status(400).json({ error: 'Invalid backlog id' })
+    }
+    if (!image || typeof image !== 'string') {
+      return res.status(400).json({ error: 'Invalid image' })
+    }
+
+    const entryDir = path.join(BACKLOG_DIR, id)
+    const file = path.join(entryDir, 'index.json')
+    let doc
+    try {
+      doc = JSON.parse(await fs.readFile(file, 'utf8'))
+    } catch {
+      return res.status(404).json({ error: `Backlog entry not found: ${id}` })
+    }
+
+    const images = Array.isArray(doc.images) ? doc.images.filter((x) => typeof x === 'string') : []
+    // The frontend sends the resolved ImageMetadata src (e.g. a dev-mode
+    // /@fs/.../images/xxx.jpg?origWidth=... URL). Match on the bare filename.
+    const targetBase = path.basename(String(image).split('?')[0]).toLowerCase()
+    const idx = images.findIndex((rel) => path.basename(rel).toLowerCase() === targetBase)
+    if (idx === -1) {
+      return res.status(400).json({ error: 'Image is not part of this backlog item' })
+    }
+
+    if (idx === 0) {
+      delete doc.cover
+    } else {
+      doc.cover = idx
+    }
+
+    await writeJson(file, doc)
+    return res.json({ ok: true, index: doc.cover ?? 0 })
   } catch (err) {
     console.error('[api] error:', err)
     return res.status(500).json({ error: String(err?.message || err) })

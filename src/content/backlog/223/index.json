@@ -14,5 +14,10 @@
   "location": {
     "lat": 47.4838,
     "lng": 11.15689
-  }
+  },
+  "notes": {
+    "en": "A white liquid can be seen where some gills were damaged",
+    "de": ""
+  },
+  "cover": 5
 }

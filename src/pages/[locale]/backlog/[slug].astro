@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import type { Locale, Translations } from '../../../i18n'
+import { l10n } from '../../../i18n/helpers'
 import BacklogIdentify from '../../../components/BacklogIdentify.astro'
 import LinkRow from '../../../components/LinkRow.astro'
 
@@ -30,6 +31,7 @@ if (!entry) {
 const fullSrcs = await Promise.all(
   entry.data.images.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
 )
+const coverIdx = entry.data.cover ?? 0
 ---
 
 <Layout
@@ -49,38 +51,16 @@ const fullSrcs = await Promise.all(
       >
     </div>
 
-    {
-      dev ? (
-        <BacklogIdentify
-          id={entry.id}
-          dateSpotted={entry.data.dateSpotted}
-          location={entry.data.location}
-          authors={entry.data.authors}
-          locale={locale}
-        />
-      ) : (
-        <div class="identify">
-          <fieldset>
-            <legend>{t.backlog.location}</legend>
-            {entry.data.location ? (
-              <span class="identify__value">
-                {entry.data.location.lat.toFixed(5)}°N {entry.data.location.lng.toFixed(5)}°E
-              </span>
-            ) : (
-              <p class="field-hint">{t.backlog.noLocation}</p>
-            )}
-          </fieldset>
-        </div>
-      )
-    }
-
     <div class="identify">
       <fieldset>
         <legend>{entry.data.images.length} {t.backlog.photos}</legend>
         <div class="gallery" data-lightbox-group>
           {
             entry.data.images.map((img, i) => (
-              <figure class="gallery__fig" data-lightbox-src={fullSrcs[i]}>
+              <figure
+                class:list={['gallery__fig', dev && i === coverIdx && 'gallery__fig--cover']}
+                data-lightbox-src={fullSrcs[i]}
+              >
                 <Image
                   src={img}
                   alt={`#{entry.id} — ${i + 1}`}
@@ -97,14 +77,112 @@ const fullSrcs = await Promise.all(
                 >
                   ⛶
                 </button>
+                {dev && (
+                  <button
+                    type="button"
+                    class="gallery__cover"
+                    data-cover
+                    data-image={img.src}
+                    disabled={i === coverIdx}
+                    title={i === coverIdx ? t.backlog.mainPhoto : t.backlog.setMainPhoto}
+                  >
+                    {i === coverIdx ? t.backlog.mainPhoto : t.backlog.setMainPhoto}
+                  </button>
+                )}
               </figure>
             ))
           }
         </div>
+        {dev && <span id="cover-status" class="cover-status" role="status" />}
       </fieldset>
     </div>
+
+    {
+      dev ? (
+        <BacklogIdentify
+          id={entry.id}
+          dateSpotted={entry.data.dateSpotted}
+          location={entry.data.location}
+          authors={entry.data.authors}
+          notes={entry.data.notes}
+          locale={locale}
+        />
+      ) : (
+        <div class="identify">
+          <fieldset>
+            <legend>{t.backlog.location}</legend>
+            {entry.data.location ? (
+              <span class="identify__value">
+                {entry.data.location.lat.toFixed(5)}°N {entry.data.location.lng.toFixed(5)}°E
+              </span>
+            ) : (
+              <p class="field-hint">{t.backlog.noLocation}</p>
+            )}
+          </fieldset>
+          <fieldset>
+            <legend>{t.backlog.notes}</legend>
+            {entry.data.notes ? (
+              <span class="identify__value">{l10n(entry.data.notes, locale)}</span>
+            ) : (
+              <p class="field-hint">{t.backlog.noNotes}</p>
+            )}
+          </fieldset>
+        </div>
+      )
+    }
   </section>
 </Layout>
+
+<script
+  is:inline
+  define:vars={{
+    coverEnabled: dev,
+    backlogId: entry.id,
+    coverT: {
+      updating: t.backlog.updatingCover,
+      updated: t.backlog.coverUpdated,
+      error: t.backlog.error,
+    },
+  }}
+>
+  if (!coverEnabled) {
+    // noop in the production build (buttons aren't rendered there either)
+  } else {
+    const statusEl = document.getElementById('cover-status')
+    document.querySelectorAll('[data-cover]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        btn.disabled = true
+        if (statusEl) {
+          statusEl.textContent = coverT.updating
+          statusEl.dataset.state = 'pending'
+        }
+        try {
+          const res = await fetch(`/myco/api/backlog/${backlogId}/cover`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: btn.dataset.image }),
+          })
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}))
+            throw new Error(err.error || 'HTTP ' + res.status)
+          }
+          if (statusEl) {
+            statusEl.textContent = coverT.updated
+            statusEl.dataset.state = 'ok'
+          }
+          window.location.reload()
+        } catch (err) {
+          console.error('[backlog] set cover failed:', err)
+          if (statusEl) {
+            statusEl.textContent = coverT.error + (err instanceof Error ? ' — ' + err.message : '')
+            statusEl.dataset.state = 'error'
+          }
+          btn.disabled = false
+        }
+      })
+    })
+  }
+</script>
 
 <style>
   .add-page {
@@ -172,6 +250,10 @@ const fullSrcs = await Promise.all(
     position: relative;
   }
 
+  .gallery__fig.gallery__fig--cover {
+    border-color: var(--accent);
+  }
+
   .gallery__fig img {
     width: 100%;
     height: 100%;
@@ -211,5 +293,51 @@ const fullSrcs = await Promise.all(
     .gallery__full {
       opacity: 1;
     }
+  }
+
+  .gallery__cover {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0e120b;
+    border: none;
+    border-top: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  .gallery__cover:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .gallery__cover:disabled {
+    color: var(--yellow);
+    cursor: default;
+  }
+
+  .cover-status {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .cover-status[data-state='error'] {
+    color: var(--red);
+  }
+
+  .cover-status[data-state='ok'] {
+    color: var(--accent);
+  }
+
+  .cover-status[data-state='pending'] {
+    color: var(--fg-dim);
   }
 </style>

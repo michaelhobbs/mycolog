@@ -5,5 +5,10 @@
   "location": {
     "lat": 47.4839,
     "lng": 11.15795
+  },
+  "cover": 1,
+  "notes": {
+    "en": "A third cluster of chanterelles growing in this forest clearing",
+    "de": ""
   }
 }

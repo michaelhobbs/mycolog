@@ -5,5 +5,10 @@
   "location": {
     "lat": 47.48419,
     "lng": 11.15778
+  },
+  "cover": 2,
+  "notes": {
+    "en": "Here we see both before and after the cap opens",
+    "de": ""
   }
 }

@@ -12,9 +12,12 @@ interface Props {
   location?: { lat: number; lng: number }
   authors: string[]
   locale: Locale
+  notes?: { en?: string; de?: string }
 }
 
-const { id, dateSpotted, location, authors: entryAuthors, locale } = Astro.props
+const { id, dateSpotted, location, authors: entryAuthors, locale, notes: entryNotes } = Astro.props
+const notesEn = entryNotes?.en ?? ''
+const notesDe = entryNotes?.de ?? ''
 const t: Translations = getTranslations(locale)
 
 const [species, authors, locations] = await Promise.all([
@@ -121,7 +124,7 @@ const knownLocations = locations
     <p class="field-hint">{t.backlog.pickOnMap}</p>
     <LocationPicker locale={locale} initial={location} />
 
-    <div class="loc-save">
+    <div class="save-row">
       <button type="button" id="save-location-btn" class="identify__submit">
         {t.backlog.saveLocation}
       </button>
@@ -133,11 +136,17 @@ const knownLocations = locations
     <legend>{t.backlog.notes}</legend>
     <div class="field">
       <label for="notes-en">{t.backlog.notesEn}</label>
-      <textarea id="notes-en" name="notesEn" rows="3"></textarea>
+      <textarea id="notes-en" name="notesEn" rows="3" value={notesEn}></textarea>
     </div>
     <div class="field">
       <label for="notes-de">{t.backlog.notesDe}</label>
-      <textarea id="notes-de" name="notesDe" rows="3"></textarea>
+      <textarea id="notes-de" name="notesDe" rows="3" value={notesDe}></textarea>
+    </div>
+    <div class="save-row">
+      <button type="button" id="save-notes-btn" class="identify__submit">
+        {t.backlog.saveNotes}
+      </button>
+      <span id="notes-status" class="identify__status" role="status"></span>
     </div>
   </fieldset>
 
@@ -163,6 +172,8 @@ const knownLocations = locations
   const status = document.getElementById('form-status')
   const saveLocationBtn = document.getElementById('save-location-btn')
   const locStatus = document.getElementById('loc-status')
+  const saveNotesBtn = document.getElementById('save-notes-btn')
+  const notesStatus = document.getElementById('notes-status')
 
   speciesSelect.addEventListener('change', () => {
     newSpecies.hidden = speciesSelect.value !== '__new__'
@@ -207,6 +218,37 @@ const knownLocations = locations
       locStatus.dataset.state = 'error'
     } finally {
       saveLocationBtn.disabled = false
+    }
+  })
+
+  saveNotesBtn.addEventListener('click', async () => {
+    const notesEn = document.getElementById('notes-en').value
+    const notesDe = document.getElementById('notes-de').value
+
+    saveNotesBtn.disabled = true
+    notesStatus.textContent = t.savingNotes
+    notesStatus.dataset.state = 'pending'
+    try {
+      const res = await fetch(
+        `/myco/api/backlog/${document.getElementById('backlog-id').value}/notes`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ notes: { en: notesEn, de: notesDe } }),
+        },
+      )
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'HTTP ' + res.status)
+      }
+      notesStatus.textContent = t.notesSaved
+      notesStatus.dataset.state = 'ok'
+    } catch (err) {
+      console.error('[backlog] save notes failed:', err)
+      notesStatus.textContent = t.error + (err instanceof Error ? ` — ${err.message}` : '')
+      notesStatus.dataset.state = 'error'
+    } finally {
+      saveNotesBtn.disabled = false
     }
   })
 
@@ -389,7 +431,7 @@ const knownLocations = locations
     padding-top: 0.75rem;
   }
 
-  .loc-save {
+  .save-row {
     display: flex;
     align-items: center;
     gap: 1rem;

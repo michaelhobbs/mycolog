@@ -58,14 +58,18 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 
 ### Key commands
 
-| Command                  | Action                                          |
-| :----------------------- | :---------------------------------------------- |
-| `npm install`            | Install dependencies                            |
-| `npm run dev`            | Start dev server at `http://localhost:4321`     |
-| `npm run build`          | Build the static site into `./dist/`            |
-| `npm run preview`        | Preview the production build                    |
-| `npm run update-backlog` | Import `public/images/*` into the backlog       |
-| `node scripts/api.mjs`   | Start the identify API (`:4322`; dev workflows) |
+| Command         | Action                                      |
+| :-------------- | :------------------------------------------ |
+| `npm install`   | Install dependencies                        |
+| `npm run dev`   | Start dev server at `http://localhost:4321` |
+| `npm run build` | Build the static site into `./dist/`        |
+
+> Production must set `SITE_URL` at build time so absolute links (e.g. the RSS
+> feed) point at the real domain instead of `http://localhost:4321`:
+> `SITE_URL=https://example.com npm run build`
+> | `npm run preview` | Preview the production build |
+> | `npm run update-backlog` | Import `public/images/*` into the backlog |
+> | `node scripts/api.mjs` | Start the identify API (`:4322`; dev workflows) |
 
 Dev server + identify API are managed with background mode:
 

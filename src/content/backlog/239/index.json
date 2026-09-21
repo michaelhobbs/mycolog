@@ -5,5 +5,10 @@
   "location": {
     "lat": 47.48204,
     "lng": 11.14963
-  }
+  },
+  "notes": {
+    "en": "This mushroom was covered with flies. It exudes a smelly dark liquid that attracts flies to which spores get attached and dispersed over great distances piggy-backing a ride. It is native to Australia.",
+    "de": ""
+  },
+  "cover": 2
 }

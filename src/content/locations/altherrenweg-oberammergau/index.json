@@ -3,6 +3,18 @@
     "en": "Altherrenweg (Oberammergau)",
     "de": "Altherrenweg (Oberammergau)"
   },
+  "description": {
+    "en": "Sun-exposed traverse path along the western flank of the Aufacker ridge between Oberammergau and Unterammergau, with open views across the Ammertal to the Pulvermoos nature reserve; montane mixed forest of spruce and beech with scattered larches and meadow clearings.",
+    "de": "Sonnenverwöhnter Höhenweg entlang der Westflanke des Aufacker-Rückens zwischen Oberammergau und Unterammergau, mit freiem Blick über das Ammertal zum Naturschutzgebiet Pulvermoos; montaner Mischwald aus Fichte und Buche mit einzelnen Lärchen und Wiesenlichtungen."
+  },
+  "forestType": {
+    "en": "Montane mixed forest (spruce–beech) with larch",
+    "de": "Montaner Mischwald (Fichte-Buche) mit Lärche"
+  },
+  "soilType": {
+    "en": "Calcareous skeletal brown earth on sun-drenched slope debris",
+    "de": "Kalk-Skelettbraunerde auf sonnigen Schutthängen"
+  },
   "center": {
     "lat": 47.60522,
     "lng": 11.08032

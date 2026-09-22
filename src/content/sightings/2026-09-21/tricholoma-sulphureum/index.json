@@ -1,0 +1,18 @@
+{
+  "species": "tricholoma-sulphureum",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49157,
+    "lng": 11.0597
+  },
+  "images": [
+    "./images/tricholoma-sulphureum1.jpg",
+    "./images/tricholoma-sulphureum2.jpg",
+    "./images/tricholoma-sulphureum3.jpg",
+    "./images/tricholoma-sulphureum4.jpg",
+    "./images/tricholoma-sulphureum5.jpg"
+  ]
+}

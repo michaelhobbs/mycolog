@@ -1,0 +1,33 @@
+{
+  "scientificName": "Macrolepiota procera",
+  "commonName": {
+    "en": "Parasol mushroom",
+    "de": "Parasol"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Large pale cap with coarse, shaggy brown scales; egg-shaped and brown-scaly when young",
+      "de": "Großer blasser Hut mit groben, aufstellenden braunen Schuppen; junge Hüte eiförmig und braunschuppig"
+    },
+    {
+      "en": "Naked margin without veil remnants",
+      "de": "Hutrand ohne anhaftende Velumreste"
+    },
+    {
+      "en": "Snake-skin patterned, slightly club-shaped stem with a thick double ring",
+      "de": "Schlangenhautartig gemusterter, leicht knolliger Stiel mit dickem, verschiebbarem Doppelring"
+    },
+    {
+      "en": "Free, close white gills; flesh white, flushed reddish-brown when cut",
+      "de": "Freie, dicht stehende weiße Lamellen; Fleisch weiß, im Schnitt leicht rötlich-bräunlich"
+    }
+  ],
+  "habitat": {
+    "en": "In meadows, forest edges and clearings on sunny ground",
+    "de": "Auf Wiesen, an Waldrändern und in Kahlschlägen auf sonnigem Boden"
+  },
+  "edibility": {
+    "en": "Good edible when young",
+    "de": "Jung ein guter Speisepilz"
+  }
+}

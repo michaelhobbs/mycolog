@@ -1,0 +1,37 @@
+{
+  "scientificName": "Rickenella fibula",
+  "commonName": {
+    "en": "Orange mosscap",
+    "de": "Orangeroter Heftelnabeling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Tiny orange, bell- to navel-shaped cap with a small central depression",
+      "de": "Winziger oranger, glockiger bis nabeliger Hut mit kleiner mittiger Vertiefung"
+    },
+    {
+      "en": "Gills long-decurrent on the slender hairy stem",
+      "de": "Lamellen weit am schlanken, behaarten Stiel herablaufend"
+    },
+    {
+      "en": "Cap and stem in the same vivid orange colour",
+      "de": "Hut und Stiel in leuchtendem Orange"
+    },
+    {
+      "en": "Grows on moss, especially on moss cushions in forests and bogs",
+      "de": "Wächst auf Moos, besonders auf Moospolstern in Wäldern und Mooren"
+    }
+  ],
+  "habitat": {
+    "en": "On living moss on the ground, also on damp walls and paths",
+    "de": "Auf lebendem Moos am Boden, auch an feuchten Mauern und Wegen"
+  },
+  "edibility": {
+    "en": "No culinary value",
+    "de": "Ohne Speisewert"
+  },
+  "cover": {
+    "sighting": "2026-09-21/rickenella-fibula",
+    "index": 2
+  }
+}

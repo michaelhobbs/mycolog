@@ -1,0 +1,33 @@
+{
+  "scientificName": "Coprinus niveus",
+  "commonName": {
+    "en": "Snowy inkcap",
+    "de": "Schneeweißer Tintling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Whole fruit body initially covered in a white, powdery to flocculose veil",
+      "de": "Ganzer Fruchtkörper zunächst von einem weißen, mehligen bis flockigen Velum bedeckt"
+    },
+    {
+      "en": "White, egg-shaped cap that opens and greys at the margin with age",
+      "de": "Weißer, eiförmiger Hut, der sich mit dem Alter öffnet und am Rand grau wird"
+    },
+    {
+      "en": "Gills dissolve into black 'ink' (deliquescence)",
+      "de": "Lamellen zerfließen zu schwarzer „Tinte“ (Deliqueszenz)"
+    },
+    {
+      "en": "Grows on dung or heavily manured ground",
+      "de": "Wächst auf Mist oder stark gedüngtem Boden"
+    }
+  ],
+  "habitat": {
+    "en": "Pastures and roadsides on horse or cattle dung",
+    "de": "Weiden und Wegränder auf Pferde- oder Rindermist"
+  },
+  "edibility": {
+    "en": "No culinary value",
+    "de": "Ohne Speisewert"
+  }
+}

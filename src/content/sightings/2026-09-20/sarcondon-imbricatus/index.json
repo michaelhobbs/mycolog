@@ -1,0 +1,12 @@
+{
+  "species": "sarcondon-imbricatus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-20",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.60326,
+    "lng": 11.08219
+  },
+  "images": ["./images/sarcondon-imbricatus1.jpg"]
+}

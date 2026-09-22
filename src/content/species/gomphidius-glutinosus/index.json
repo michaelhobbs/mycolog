@@ -1,0 +1,33 @@
+{
+  "scientificName": "Gomphidius glutinosus",
+  "commonName": {
+    "en": "Slimy Spike",
+    "de": "Kuhmaul"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Cap covered in a thick, slimy, grey-brown glutinous veil",
+      "de": "Hut von einem dicken, schleimigen, graubraunen Velum überzogen"
+    },
+    {
+      "en": "Soft grey-violet cap that darkens to brown-black with age",
+      "de": "Weicher grau-violetter Hut, der mit dem Alter bis braunschwarz nachdunkelt"
+    },
+    {
+      "en": "Distant, waxy white-grey gills, decurrent on the stem",
+      "de": "Entfernt stehende, wachsartige weißgraue Lamellen, die am Stiel herablaufen"
+    },
+    {
+      "en": "Stem base is chrome-yellow",
+      "de": "Stielbasis chromgelb"
+    }
+  ],
+  "habitat": {
+    "en": "Mycorrhizal with spruce in mossy coniferous forest",
+    "de": "Mykorrhiza-Partner der Fichte in moosigen Nadelwäldern"
+  },
+  "edibility": {
+    "en": "Edible",
+    "de": "Essbar"
+  }
+}

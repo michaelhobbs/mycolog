@@ -1,0 +1,37 @@
+{
+  "scientificName": "Albatrellus ovinus",
+  "commonName": {
+    "en": "Sheep polypore",
+    "de": "Schaf-Porling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Whitish to cream cap that stains yellow when bruised",
+      "de": "Weißlicher bis cremefarbener Hut, der sich bei Druck gelb verfärbt"
+    },
+    {
+      "en": "Smooth cap in young specimens, cracking and becoming scaly with age",
+      "de": "Junge Hüte glatt, mit zunehmendem Alter aufreißend und schuppig"
+    },
+    {
+      "en": "Very short, often eccentric stem",
+      "de": "Sehr kurzer, oft exzentrischer Stiel"
+    },
+    {
+      "en": "Whitish pores running down the stem; older specimens sometimes greenish-brown at the base",
+      "de": "Weißliche, am Stiel herablaufende Poren; ältere Fruchtkörper an der Basis gelegentlich grünlich-bräunlich"
+    }
+  ],
+  "habitat": {
+    "en": "In spruce forest on calcareous soil, montane to subalpine",
+    "de": "In Fichtenwäldern auf kalkhaltigem Boden, montan bis subalpin"
+  },
+  "edibility": {
+    "en": "Edible when young, becomes bitter with age",
+    "de": "Jung essbar, wird im Alter bitter"
+  },
+  "cover": {
+    "sighting": "2026-09-21/albatrellus-ovinus",
+    "index": 1
+  }
+}

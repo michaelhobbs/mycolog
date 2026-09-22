@@ -1,0 +1,17 @@
+{
+  "species": "amanita-phalloides",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-18",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48356,
+    "lng": 11.15829
+  },
+  "images": [
+    "./images/amanita-phalloides1.jpg",
+    "./images/amanita-phalloides2.jpg",
+    "./images/amanita-phalloides3.jpg",
+    "./images/amanita-phalloides4.jpg"
+  ]
+}

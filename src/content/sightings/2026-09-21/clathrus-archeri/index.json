@@ -1,0 +1,20 @@
+{
+  "species": "clathrus-archeri",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49071,
+    "lng": 11.05482
+  },
+  "images": [
+    "./images/clathrus-archeri1.jpg",
+    "./images/clathrus-archeri2.jpg",
+    "./images/clathrus-archeri3.jpg"
+  ],
+  "notes": {
+    "en": "Stinky - interesting to find a group of ovoids as well as an opened mushroom.",
+    "de": "Stinkend – interessant, sowohl eine Gruppe von Eiern als auch einen geöffneten Pilz zu finden."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "species": "clathrus-archeri",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-19",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48204,
+    "lng": 11.14963
+  },
+  "images": [
+    "./images/clathrus-archeri1.jpg",
+    "./images/clathrus-archeri2.jpg",
+    "./images/clathrus-archeri3.jpg"
+  ]
+}

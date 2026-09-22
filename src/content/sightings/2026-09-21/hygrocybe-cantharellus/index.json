@@ -1,0 +1,18 @@
+{
+  "species": "hygrocybe-cantharellus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49101,
+    "lng": 11.05834
+  },
+  "images": [
+    "./images/hygrocybe-cantharellus1.jpg",
+    "./images/hygrocybe-cantharellus2.jpg",
+    "./images/hygrocybe-cantharellus3.jpg",
+    "./images/hygrocybe-cantharellus4.jpg",
+    "./images/hygrocybe-cantharellus5.jpg"
+  ]
+}

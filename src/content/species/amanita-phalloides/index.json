@@ -1,0 +1,37 @@
+{
+  "scientificName": "Amanita phalloides",
+  "commonName": {
+    "en": "Deathcap",
+    "de": "Grüner Knollenblätterpilz"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Yellowish-green to olive cap, shiny when damp; smooth, without flecks",
+      "de": "Gelbgrüner bis olivfarbener Hut, bei Nässe glänzend; glatt, ohne Flocken"
+    },
+    {
+      "en": "White gills and ring",
+      "de": "Weiße Lamellen und weißer Ring"
+    },
+    {
+      "en": "White stem with a bulbous base in a white, sac-like volva",
+      "de": "Weißer Stiel mit knolliger Basis in einer weißen, sackartigen Scheide (Volva)"
+    },
+    {
+      "en": "Pale, watery-marbled cap margin in damp conditions (veil remnants)",
+      "de": "Blasse, bei Nässe wassergrädierte Hutrandzone (Reste des Velums)"
+    }
+  ],
+  "habitat": {
+    "en": "Mycorrhizal under broadleaf trees (oak, beech, hornbeam), occasionally with spruce",
+    "de": "Mykorrhiza-Pilz unter Laubbäumen (Eiche, Buche, Hainbuche), gelegentlich bei Fichte"
+  },
+  "edibility": {
+    "en": "DEADLY POISONOUS",
+    "de": "TÖDLICH GIFTIG"
+  },
+  "notes": {
+    "en": "Responsible for most fatal mushroom poisonings in Europe. Must not be tasted.",
+    "de": "Verursacht in Europa die meisten tödlichen Pilzvergiftungen. Nicht probieren."
+  }
+}

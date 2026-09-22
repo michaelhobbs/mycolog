@@ -1,0 +1,12 @@
+{
+  "species": "macrolepiota-procera",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49059,
+    "lng": 11.05829
+  },
+  "images": ["./images/macrolepiota-procera1.jpg", "./images/macrolepiota-procera2.jpg"]
+}

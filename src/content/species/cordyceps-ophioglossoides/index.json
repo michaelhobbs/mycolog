@@ -1,0 +1,41 @@
+{
+  "scientificName": "Cordyceps ophioglossoides",
+  "commonName": {
+    "en": "Snaketongue truffleclub",
+    "de": "Zungen-Kernkeule"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Orange-brown to yellowish, tongue-like clubs rising from the ground",
+      "de": "Ockerbraune bis gelbliche, zungenförmige Fruchtkörper (Stromata), die aus dem Boden ragen"
+    },
+    {
+      "en": "Each club is deeply rooted in the soil via a darkened holdfast",
+      "de": "Jede Keule wurzelt über einen dunklen Haltefaden tief im Boden"
+    },
+    {
+      "en": "Parasitic on the underground fruit bodies of Elaphomyces ('hart's truffle')",
+      "de": "Parasitiert auf den unterirdischen Fruchtkörpern von Elaphomyces (Hirschtrüffeln)"
+    },
+    {
+      "en": "Occurs in small, scattered groups in mossy coniferous forest",
+      "de": "Kommt in kleinen, verstreuten Gruppen in moosigen Nadelwäldern vor"
+    }
+  ],
+  "habitat": {
+    "en": "Mossy spruce forest, above buried Elaphomyces truffles",
+    "de": "Moosiger Fichtenwald über vergrabenen Elaphomyces-Trüffeln"
+  },
+  "edibility": {
+    "en": "Not edible",
+    "de": "Nicht essbar"
+  },
+  "notes": {
+    "en": "aka Tolypocladium ophioglossoides",
+    "de": "Tolypocladium ophioglossoides"
+  },
+  "cover": {
+    "sighting": "2026-09-21/cordyceps-ophioglossoides",
+    "index": 2
+  }
+}

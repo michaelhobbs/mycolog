@@ -1,0 +1,26 @@
+{
+  "species": "cantharellus-cibarius",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-17",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48352,
+    "lng": 11.1572
+  },
+  "images": [
+    "./images/cantharellus-cibarius1.jpg",
+    "./images/cantharellus-cibarius2.jpg",
+    "./images/cantharellus-cibarius3.jpg",
+    "./images/cantharellus-cibarius4.jpg",
+    "./images/cantharellus-cibarius5.jpg",
+    "./images/cantharellus-cibarius6.jpg",
+    "./images/cantharellus-cibarius7.jpg",
+    "./images/cantharellus-cibarius8.jpg",
+    "./images/cantharellus-cibarius9.jpg",
+    "./images/cantharellus-cibarius10.jpg",
+    "./images/cantharellus-cibarius11.jpg",
+    "./images/cantharellus-cibarius12.jpg",
+    "./images/cantharellus-cibarius13.jpg"
+  ]
+}

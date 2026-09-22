@@ -1,0 +1,24 @@
+{
+  "species": "rickenella-fibula",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49068,
+    "lng": 11.05834
+  },
+  "images": [
+    "./images/rickenella-fibula3.jpg",
+    "./images/rickenella-fibula1.jpg",
+    "./images/rickenella-fibula2.jpg",
+    "./images/rickenella-fibula4.jpg",
+    "./images/rickenella-fibula5.jpg",
+    "./images/rickenella-fibula6.jpg",
+    "./images/rickenella-fibula7.jpg"
+  ],
+  "notes": {
+    "en": "Orange mosscap / orange bonnet (rickenella fibula / mycena acicula). Cap shape with slightly depressed centre and growing on moss hints more towards the orange mosscap.",
+    "de": "Orangeroter Heftelnabeling / orangeroter Helmling (Rickenella fibula / Mycena acicula). Die Hutform mit leicht vertiefter Mitte und das Wachsen auf Moos deuten eher auf den Heftelnabeling hin."
+  }
+}

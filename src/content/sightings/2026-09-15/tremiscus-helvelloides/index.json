@@ -1,0 +1,18 @@
+{
+  "species": "tremiscus-helvelloides",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48413,
+    "lng": 11.1531
+  },
+  "images": [
+    "./images/tremiscus-helvelloides1.jpg",
+    "./images/tremiscus-helvelloides2.jpg",
+    "./images/tremiscus-helvelloides3.jpg",
+    "./images/tremiscus-helvelloides4.jpg",
+    "./images/tremiscus-helvelloides5.jpg"
+  ]
+}

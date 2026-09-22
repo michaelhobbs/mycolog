@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Wamberg approach",
+    "de": "Wamberg-Aufstieg"
+  },
+  "description": {
+    "en": "Steep, shady lower slope along the road that climbs from Garmisch-Partenkirchen towards the hamlet of Wamberg; mixed beech–spruce forest with rock outcrops and calcareous scree.",
+    "de": "Steiler, schattiger Unterhang entlang des Weges, der von Garmisch-Partenkirchen hinauf zum Weiler Wamberg führt; Buchen-Fichten-Mischwald mit Felsrippen und Kalkschutt."
+  },
+  "forestType": {
+    "en": "Montane beech–spruce forest",
+    "de": "Montaner Buchen-Fichtenwald"
+  },
+  "soilType": {
+    "en": "Calcareous brown earth on limestone slope debris",
+    "de": "Kalk-Braunerde über Kalkschutthängen"
+  },
+  "center": {
+    "lat": 47.4821,
+    "lng": 11.14939
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "species": "coprinus-niveus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49135,
+    "lng": 11.05559
+  },
+  "images": [
+    "./images/coprinus-niveus1.jpg",
+    "./images/coprinus-niveus2.jpg",
+    "./images/coprinus-niveus3.jpg",
+    "./images/coprinus-niveus4.jpg"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "scientificName": "Hygrocybe cantharellus",
+  "commonName": {
+    "en": "Goblet waxcap",
+    "de": "Pfifferlings-Saftling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Orange to red-orange cap with a scaly, fibrillose surface that yellows with age",
+      "de": "Oranger bis rot-oranger Hut mit schuppig-faseriger Oberfläche, die mit dem Alter vergilbt"
+    },
+    {
+      "en": "Convex cap with a conspicuous central depression, goblet-like",
+      "de": "Gewölbter Hut mit deutlicher mittiger Vertiefung – becherartig, an einen Pfifferling erinnernd"
+    },
+    {
+      "en": "Decurrent, yellowish gills with forked cross-veins",
+      "de": "Herablaufende, gelbliche Lamellen mit gegabelten Querverbindungen"
+    },
+    {
+      "en": "Fragile, hollow stem in the colour of the cap",
+      "de": "Bruchhafter, hohler Stiel in Hutfarbe"
+    }
+  ],
+  "habitat": {
+    "en": "On nutrient-poor grassland and mossy alpine meadows",
+    "de": "Auf mageren Wiesen und moosigen Almmatten"
+  },
+  "edibility": {
+    "en": "Edible but of little culinary value",
+    "de": "Essbar, aber ohne nennenswerten Speisewert"
+  }
+}

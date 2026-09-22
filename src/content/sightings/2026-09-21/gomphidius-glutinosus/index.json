@@ -1,0 +1,22 @@
+{
+  "species": "gomphidius-glutinosus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49089,
+    "lng": 11.05757
+  },
+  "images": [
+    "./images/gomphidius-glutinosus1.jpg",
+    "./images/gomphidius-glutinosus2.jpg",
+    "./images/gomphidius-glutinosus3.jpg",
+    "./images/gomphidius-glutinosus4.jpg",
+    "./images/gomphidius-glutinosus5.jpg"
+  ],
+  "notes": {
+    "en": "The bottom of the stem should be yellow (we did not check).",
+    "de": "Die Stielbasis sollte gelb sein (haben wir nicht überprüft)."
+  }
+}

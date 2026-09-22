@@ -1,0 +1,22 @@
+{
+  "species": "cortinarius-largus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49026,
+    "lng": 11.05573
+  },
+  "images": [
+    "./images/cortinarius-largus2.jpg",
+    "./images/cortinarius-largus4.jpg",
+    "./images/cortinarius-largus5.jpg",
+    "./images/cortinarius-largus1.jpg",
+    "./images/cortinarius-largus3.jpg"
+  ],
+  "notes": {
+    "en": "Could be a Blewit (Wood blewit / Lepista nuda). To distinguish with more certainty check for staining yellow with KOH. In case you do not have any KOH at hand, when cut in a vertical cross section the Cortinarius largus will be lilac to violaceous becoming white in the centre of cap and stem.",
+    "de": "Es könnte sich um einen Violetten Rötelritterling (Lepista nuda) handeln. Zur sichereren Unterscheidung prüfen, ob sich das Fleisch mit KOH gelb verfärbt. Falls kein KOH zur Hand ist: Im senkrechten Querschnitt ist das Fleisch von Cortinarius largus flieder- bis violettfarben und wird im Zentrum von Hut und Stiel weiß."
+  }
+}

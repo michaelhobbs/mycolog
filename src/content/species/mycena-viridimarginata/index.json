@@ -1,0 +1,37 @@
+{
+  "scientificName": "Mycena viridimarginata",
+  "commonName": {
+    "en": "Olive edge bonnet",
+    "de": "Grünschneidiger Helmling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Olive-green to olive-brown cap margin (greenish edge above the gills)",
+      "de": "Olivgrüner bis olivbrauner Hutrand (grünliche Schneide über den Lamellen)"
+    },
+    {
+      "en": "Slender, dark olive stem",
+      "de": "Schlanker, dunkel olivgrüner Stiel"
+    },
+    {
+      "en": "Small, bell-shaped cap on mossy ground or rotten wood",
+      "de": "Kleiner, glockiger Hut auf moosigem Boden oder morschem Holz"
+    },
+    {
+      "en": "White to pale grey gills with green edges in fresh material",
+      "de": "Weiße bis blassgraue Lamellen, bei frischen Fruchtkörpern mit grüner Schneide"
+    }
+  ],
+  "habitat": {
+    "en": "In the needle litter of spruce forest",
+    "de": "In der Nadelstreu von Fichtenwäldern"
+  },
+  "edibility": {
+    "en": "No culinary value",
+    "de": "Ohne Speisewert"
+  },
+  "cover": {
+    "sighting": "2026-09-21/mycena-viridimarginata",
+    "index": 1
+  }
+}

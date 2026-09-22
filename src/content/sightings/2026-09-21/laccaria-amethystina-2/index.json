@@ -1,0 +1,17 @@
+{
+  "species": "laccaria-amethystina",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49069,
+    "lng": 11.05785
+  },
+  "images": [
+    "./images/laccaria-amethystina3.jpg",
+    "./images/laccaria-amethystina1.jpg",
+    "./images/laccaria-amethystina2.jpg",
+    "./images/laccaria-amethystina4.jpg"
+  ]
+}

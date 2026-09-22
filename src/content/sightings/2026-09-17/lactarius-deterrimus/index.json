@@ -1,0 +1,22 @@
+{
+  "species": "lactarius-deterrimus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-17",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48342,
+    "lng": 11.15518
+  },
+  "images": [
+    "./images/lactarius-deterrimus1.jpg",
+    "./images/lactarius-deterrimus2.jpg",
+    "./images/lactarius-deterrimus3.jpg",
+    "./images/lactarius-deterrimus4.jpg",
+    "./images/lactarius-deterrimus5.jpg"
+  ],
+  "notes": {
+    "en": "The markings on the stem are not prominent enough to be \"pits\" and thus indicative of the \"real\" saffron milkcap.",
+    "de": "Die Zeichnung auf dem Stiel ist nicht ausgeprägt genug für „Gruben“ und damit für den „echten“ Reizker."
+  }
+}

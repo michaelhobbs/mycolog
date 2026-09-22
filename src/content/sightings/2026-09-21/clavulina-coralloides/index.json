@@ -1,0 +1,16 @@
+{
+  "species": "clavulina-coralloides",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49118,
+    "lng": 11.05833
+  },
+  "images": [
+    "./images/clavulina-coralloides1.jpg",
+    "./images/clavulina-coralloides2.jpg",
+    "./images/clavulina-coralloides3.jpg"
+  ]
+}

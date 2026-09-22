@@ -1,0 +1,17 @@
+{
+  "species": "russula-delica",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.4916,
+    "lng": 11.05882
+  },
+  "images": [
+    "./images/russula-delica3.jpg",
+    "./images/russula-delica1.jpg",
+    "./images/russula-delica2.jpg",
+    "./images/russula-delica4.jpg"
+  ]
+}

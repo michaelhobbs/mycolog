@@ -1,0 +1,12 @@
+{
+  "species": "sarcondon-imbricatus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48321,
+    "lng": 11.151
+  },
+  "images": ["./images/sarcondon-imbricatus1.jpg"]
+}

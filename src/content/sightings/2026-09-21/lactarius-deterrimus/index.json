@@ -1,0 +1,16 @@
+{
+  "species": "lactarius-deterrimus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49157,
+    "lng": 11.05977
+  },
+  "images": ["./images/lactarius-deterrimus2.jpg", "./images/lactarius-deterrimus1.jpg"],
+  "notes": {
+    "en": "A similar other option: Lactarius semisanguifluus.",
+    "de": "Eine ähnliche Alternative: Lactarius semisanguifluus."
+  }
+}

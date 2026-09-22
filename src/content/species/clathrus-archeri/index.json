@@ -1,6 +1,9 @@
 {
   "scientificName": "Clathrus archeri",
-  "commonName": { "en": "Devil's fingers", "de": "Tintenfischpilz" },
+  "commonName": {
+    "en": "Devil's fingers",
+    "de": "Tintenfischpilz"
+  },
   "determiningFeatures": [
     {
       "en": "Starts as a whitish, leathery 'egg' at the base",
@@ -30,5 +33,9 @@
   "edibility": {
     "en": "Inedible — foul smell",
     "de": "Ungenießbar — Fäulnisgeruch"
+  },
+  "cover": {
+    "sighting": "2026-09-21/clathrus-archeri",
+    "index": 2
   }
 }

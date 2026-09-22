@@ -1,0 +1,37 @@
+{
+  "scientificName": "Clavulina coralloides",
+  "commonName": {
+    "en": "Crested coral",
+    "de": "Kammförmige Koralle"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Cream-white to greyish, coral-like branched fruit body",
+      "de": "Cremeweißer bis gräulicher, korallenartig verzweigter Fruchtkörper"
+    },
+    {
+      "en": "Branches end in comb-like crests or pointed tips",
+      "de": "Astenden laufen in kammartige Spitzen oder Zacken aus"
+    },
+    {
+      "en": "No distinct stem; grows directly from needle and leaf litter, often in tufts",
+      "de": "Ohne abgesetzten Stiel; wächst direkt aus der Nadel- und Laubstreu, oft in Büscheln"
+    },
+    {
+      "en": "Turns greyish with age or in dry weather",
+      "de": "Wird mit dem Alter oder bei Trockenheit gräulich"
+    }
+  ],
+  "habitat": {
+    "en": "On the ground in coniferous and broadleaf forest, in litter and moss",
+    "de": "Auf dem Boden in Nadel- und Laubwäldern, in Streu und Moos"
+  },
+  "edibility": {
+    "en": "Edible but of little culinary value",
+    "de": "Essbar, aber ohne nennenswerten Speisewert"
+  },
+  "cover": {
+    "sighting": "2026-09-21/clavulina-coralloides",
+    "index": 1
+  }
+}

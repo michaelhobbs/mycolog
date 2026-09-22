@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Kramerplateau",
+    "de": "Kramerplateau"
+  },
+  "description": {
+    "en": "Gentle high shoulder with open, subalpine spruce and mountain-pine woodland, scattered moss cushions over calcareous bedrock; wide views across the Loisach valley and the Wetterstein range.",
+    "de": "Sanfte Hochfläche mit offenem, subalpinem Fichten- und Legföhrenbestand, dazwischen Moospolster über Kalkfels; weite Ausblicke über das Loisachtal und das Wettersteingebirge."
+  },
+  "forestType": {
+    "en": "Subalpine spruce forest with mountain-pine scrub",
+    "de": "Subalpiner Fichtenwald mit Legföhrengebüsch"
+  },
+  "soilType": {
+    "en": "Shallow calcareous alpine humus / karst rendzina",
+    "de": "Flachgründiger kalkalpiner Auflagehumus / Karst-Rendzina"
+  },
+  "center": {
+    "lat": 47.49078,
+    "lng": 11.05807
+  }
+}

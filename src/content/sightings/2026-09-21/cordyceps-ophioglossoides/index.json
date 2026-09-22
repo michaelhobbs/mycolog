@@ -1,0 +1,21 @@
+{
+  "species": "cordyceps-ophioglossoides",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49078,
+    "lng": 11.05807
+  },
+  "images": [
+    "./images/cordyceps-ophioglossoides1.jpg",
+    "./images/cordyceps-ophioglossoides2.jpg",
+    "./images/cordyceps-ophioglossoides3.jpg",
+    "./images/cordyceps-ophioglossoides4.jpg"
+  ],
+  "notes": {
+    "en": "If Snaketongue truffleclub, it would be growing on Elaphomyces (a type of truffle). Had we dug more we could have verified/ruled this option out.",
+    "de": "Handelt es sich um die Schlangenzungen-Kernkeule, wächst sie auf Elaphomyces (einer Hirschtrüffel). Hätten wir mehr gegraben, hätten wir diese Möglichkeit bestätigen bzw. ausschließen können."
+  }
+}

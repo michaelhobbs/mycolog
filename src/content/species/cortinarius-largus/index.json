@@ -1,0 +1,37 @@
+{
+  "scientificName": "Cortinarius largus",
+  "commonName": {
+    "en": "Large webcap",
+    "de": "Blasser Schleimkopf"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Stocky fruit body with a pale grey-brown, viscid cap",
+      "de": "Kräftiger Fruchtkörper mit blass graubraunem, schmierigem Hut"
+    },
+    {
+      "en": "Pale lavender-grey gills, later rust-brown from the spores; cortina on young specimens",
+      "de": "Blass lavendelgraue Lamellen, später durch die Sporen rostbraun; Cortina bei jungen Fruchtkörpern"
+    },
+    {
+      "en": "Firm, pale, club-shaped stem with a bulbous base",
+      "de": "Fester, blasser, keuliger Stiel mit knolliger Basis"
+    },
+    {
+      "en": "Flesh of cap and stem lilac to violaceous, becoming white in the centre when cut",
+      "de": "Fleisch von Hut und Stiel flieder- bis violettfarben, im Zentrum beim Anschneiden weiß werdend"
+    }
+  ],
+  "habitat": {
+    "en": "In coniferous and mixed forest, often on calcareous soil",
+    "de": "In Nadel- und Mischwäldern, oft auf kalkhaltigem Boden"
+  },
+  "edibility": {
+    "en": "Unknown, not recommended",
+    "de": "Unbekannt, nicht empfehlenswert"
+  },
+  "cover": {
+    "sighting": "2026-09-21/cortinarius-largus",
+    "index": 4
+  }
+}

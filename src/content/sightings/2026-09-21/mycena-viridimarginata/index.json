@@ -1,0 +1,21 @@
+{
+  "species": "mycena-viridimarginata",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49128,
+    "lng": 11.05828
+  },
+  "images": [
+    "./images/mycena-viridimarginata2.jpg",
+    "./images/mycena-viridimarginata1.jpg",
+    "./images/mycena-viridimarginata3.jpg",
+    "./images/mycena-viridimarginata4.jpg"
+  ],
+  "notes": {
+    "en": "Options: Mousepee pinkgill/Entoloma incanum, Mycena viridimarginata/olive edge bonnet. Most likely a bonnet/mycena",
+    "de": "Möglichkeiten: Entoloma incanum (Rötling mit Mäusegeruch), Mycena viridimarginata (Grünschneidiger Helmling). Am wahrscheinlichsten ein Helmling (Mycena)."
+  }
+}

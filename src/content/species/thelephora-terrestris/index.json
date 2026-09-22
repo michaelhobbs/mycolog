@@ -1,0 +1,33 @@
+{
+  "scientificName": "Thelephora terrestris",
+  "commonName": {
+    "en": "Earthfan",
+    "de": "Fächerförmiger Erd-Warzenpilz"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Fan- to rosette-shaped fruit bodies growing in overlapping clusters, brick-brown and matted-fibrous",
+      "de": "Fächer- bis rosettenartige, dachziegelig verbundene Fruchtkörper, ziegelbraun und verfilzt-faserig"
+    },
+    {
+      "en": "Upper surface coarse with small tubercles, whitish fringe towards the margin",
+      "de": "Oberseite rau mit kleinen Drüsen, zum Rand hin weißlich gesäumt"
+    },
+    {
+      "en": "No gills; fertile lower side smooth to wrinkled, grey-brown",
+      "de": "Ohne Lamellen; fertile Unterseite glatt bis runzelig, graubraun"
+    },
+    {
+      "en": "Stout, felty stem, often partially buried in the litter",
+      "de": "Kräftiger, filziger Stiel, oft teilweise in der Streu vergraben"
+    }
+  ],
+  "habitat": {
+    "en": "On the ground and in needle litter, also on bare soil; one of the 'nursery' fungi in tree nurseries",
+    "de": "Auf dem Boden und in Nadelstreu, auch auf offenem Boden; in Baumschulen einer der „Anzuchtpilze“"
+  },
+  "edibility": {
+    "en": "Not edible; tough and leathery",
+    "de": "Nicht essbar; zäh und lederartig"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "scientificName": "Lactarius deterrimus",
+  "commonName": {
+    "en": "False Saffron Milkcap",
+    "de": "Fichten-Reizker"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Orange to carrot-red cap with faint concentric zones, greening with age",
+      "de": "Oranger bis möhrenroter Hut mit schwachen konzentrischen Zonen, mit dem Alter grünend"
+    },
+    {
+      "en": "Orange, later greenish milk that stains weakly orange on exposure",
+      "de": "Orangefarbene, später grünliche Milch, die sich an der Luft schwach orange verfärbt"
+    },
+    {
+      "en": "Gills bruise green where damaged",
+      "de": "Lamellen verfärben sich bei Verletzung grün"
+    },
+    {
+      "en": "Stem without distinct pits; latex mild to slightly bitter, never hot",
+      "de": "Stiel ohne deutliche Gruben; Milch mild bis schwach bitter, nie brennend"
+    }
+  ],
+  "habitat": {
+    "en": "Under spruce (Picea), more rarely in mixed forest, from lowland to subalpine",
+    "de": "Bei Fichten (Picea), seltener im Mischwald, vom Flachland bis subalpin"
+  },
+  "edibility": {
+    "en": "Edible",
+    "de": "Essbar"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "species": "hydnellum-peckii",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49053,
+    "lng": 11.05845
+  },
+  "images": [
+    "./images/hydnellum-peckii1.jpg",
+    "./images/hydnellum-peckii2.jpg",
+    "./images/hydnellum-peckii3.jpg",
+    "./images/hydnellum-peckii4.jpg",
+    "./images/hydnellum-peckii5.jpg",
+    "./images/hydnellum-peckii6.jpg",
+    "./images/hydnellum-peckii7.jpg",
+    "./images/hydnellum-peckii8.jpg",
+    "./images/hydnellum-peckii9.jpg"
+  ]
+}

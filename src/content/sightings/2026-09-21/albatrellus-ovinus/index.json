@@ -1,0 +1,16 @@
+{
+  "species": "albatrellus-ovinus",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49085,
+    "lng": 11.05398
+  },
+  "images": [
+    "./images/albatrellus-ovinus1.jpg",
+    "./images/albatrellus-ovinus2.jpg",
+    "./images/albatrellus-ovinus3.jpg"
+  ]
+}

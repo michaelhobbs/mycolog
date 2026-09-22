@@ -1,0 +1,33 @@
+{
+  "scientificName": "Tricholoma sulphureum",
+  "commonName": {
+    "en": "Sulphur knight",
+    "de": "Schwefelritterling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Uniform sulphur-yellow cap, gills and stem",
+      "de": "Einheitlich schwefelgelber Hut, Lamellen und Stiel"
+    },
+    {
+      "en": "Strong smell of coal gas or tar",
+      "de": "Starker Geruch nach Steinkohlengas bzw. Teer"
+    },
+    {
+      "en": "Convex cap, later wavy and slightly scaly",
+      "de": "Gewölbter Hut, später wellig und leicht schuppig"
+    },
+    {
+      "en": "Yellow, distant gills, in places slightly decurrent",
+      "de": "Gelbe, entfernt stehende Lamellen, teils leicht herablaufend"
+    }
+  ],
+  "habitat": {
+    "en": "On the ground in broadleaf and coniferous forest, often under beech",
+    "de": "Auf dem Boden in Laub- und Nadelwäldern, oft unter Buchen"
+  },
+  "edibility": {
+    "en": "Poisonous (gastrointestinal)",
+    "de": "Giftig (magen-darm-giftig)"
+  }
+}

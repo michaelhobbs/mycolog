@@ -1,0 +1,18 @@
+{
+  "species": "amanita-muscaria",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49079,
+    "lng": 11.058
+  },
+  "images": [
+    "./images/amanita-muscaria1.jpg",
+    "./images/amanita-muscaria2.jpg",
+    "./images/amanita-muscaria3.jpg",
+    "./images/amanita-muscaria4.jpg",
+    "./images/amanita-muscaria5.jpg"
+  ]
+}

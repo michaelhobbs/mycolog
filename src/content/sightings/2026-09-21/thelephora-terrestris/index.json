@@ -1,0 +1,16 @@
+{
+  "species": "thelephora-terrestris",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.49057,
+    "lng": 11.05408
+  },
+  "images": [
+    "./images/thelephora-terrestris1.jpg",
+    "./images/thelephora-terrestris2.jpg",
+    "./images/thelephora-terrestris3.jpg"
+  ]
+}

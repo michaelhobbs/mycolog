@@ -1,0 +1,16 @@
+{
+  "species": "tremiscus-helvelloides",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.52027,
+    "lng": 11.08467
+  },
+  "images": [
+    "./images/tremiscus-helvelloides1.jpg",
+    "./images/tremiscus-helvelloides2.jpg",
+    "./images/tremiscus-helvelloides3.jpg"
+  ]
+}

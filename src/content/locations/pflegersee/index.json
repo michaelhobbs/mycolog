@@ -1,0 +1,22 @@
+{
+  "name": {
+    "en": "Pflegersee",
+    "de": "Pflegersee"
+  },
+  "description": {
+    "en": "Small, shallow mountain lake on the lower southern slope of the Kramer, about 2 km above Garmisch-Partenkirchen; ringed by montane spruce forest with a damp, mossy, muddy shore line rich in rotten wood.",
+    "de": "Kleiner, flacher Bergsee am unteren Südhang des Kramer, rund 2 km oberhalb von Garmisch-Partenkirchen; umgeben von montanem Fichtenwald mit feuchtem, moosig-schlammigem Ufer, an dem viel morsches Holz liegt."
+  },
+  "forestType": {
+    "en": "Montane spruce forest",
+    "de": "Montaner Fichtenwald"
+  },
+  "soilType": {
+    "en": "Calcareous, moist shore soil on limestone moraine",
+    "de": "Kalkhaltiger, feuchter Uferboden auf Kalkschotter-Moräne"
+  },
+  "center": {
+    "lat": 47.52027,
+    "lng": 11.08467
+  }
+}

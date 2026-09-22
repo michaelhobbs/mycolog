@@ -1,0 +1,12 @@
+{
+  "species": "russula-delica",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-17",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48291,
+    "lng": 11.154
+  },
+  "images": ["./images/russula-delica1.jpg", "./images/russula-delica2.jpg"]
+}

@@ -1,0 +1,20 @@
+{
+  "species": "amanita-muscaria",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48267,
+    "lng": 11.15022
+  },
+  "images": [
+    "./images/amanita-muscaria1.jpg",
+    "./images/amanita-muscaria2.jpg",
+    "./images/amanita-muscaria3.jpg",
+    "./images/amanita-muscaria4.jpg",
+    "./images/amanita-muscaria5.jpg",
+    "./images/amanita-muscaria6.jpg",
+    "./images/amanita-muscaria7.jpg"
+  ]
+}

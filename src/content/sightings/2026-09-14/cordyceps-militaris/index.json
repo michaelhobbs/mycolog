@@ -1,0 +1,24 @@
+{
+  "species": "cordyceps-militaris",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-09-23",
+  "location": {
+    "lat": 47.52027,
+    "lng": 11.08444
+  },
+  "images": [
+    "./images/cordyceps-militaris1.jpg",
+    "./images/cordyceps-militaris2.jpg",
+    "./images/cordyceps-militaris3.jpg",
+    "./images/cordyceps-militaris4.jpg",
+    "./images/cordyceps-militaris5.jpg",
+    "./images/cordyceps-militaris6.jpg",
+    "./images/cordyceps-militaris7.jpg"
+  ],
+  "notes": {
+    "en": "Moving the moss aside, it is possible to see the insect which was infected and whose body is now feeding the mushroom.",
+    "de": ""
+  }
+}

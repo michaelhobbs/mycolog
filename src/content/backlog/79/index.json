@@ -11,5 +11,9 @@
     "./images/07.jpg",
     "./images/08.jpg",
     "./images/09.jpg"
-  ]
+  ],
+  "location": {
+    "lat": 47.48297,
+    "lng": 11.14968
+  }
 }

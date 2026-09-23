@@ -1,0 +1,25 @@
+{
+  "species": "amanita-muscaria",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-09-23",
+  "location": {
+    "lat": 47.49101,
+    "lng": 11.05804
+  },
+  "images": [
+    "./images/amanita-muscaria1.jpg",
+    "./images/amanita-muscaria2.jpg",
+    "./images/amanita-muscaria3.jpg",
+    "./images/amanita-muscaria4.jpg",
+    "./images/amanita-muscaria5.jpg",
+    "./images/amanita-muscaria6.jpg",
+    "./images/amanita-muscaria7.jpg",
+    "./images/amanita-muscaria8.jpg"
+  ],
+  "notes": {
+    "en": "Here we see paler coloured caps than the usual bright red.",
+    "de": ""
+  }
+}

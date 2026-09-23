@@ -1,5 +1,10 @@
 {
   "dateSpotted": "2026-09-12",
   "images": ["./images/01.jpg", "./images/02.jpg", "./images/03.jpg", "./images/04.jpg"],
-  "authors": ["michael"]
+  "authors": ["michael"],
+  "cover": 1,
+  "location": {
+    "lat": 47.50835,
+    "lng": 11.11165
+  }
 }

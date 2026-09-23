@@ -1,0 +1,41 @@
+{
+  "scientificName": "Cordyceps militaris",
+  "commonName": {
+    "en": "Caterpillar fungus",
+    "de": "Puppenkernkeule"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Bright orange, club-shaped fruiting bodies (stromata) rising from the ground, often in clusters",
+      "de": "Leuchtend orange, knollenförmige Fruchtkörper (Stromata), die aus dem Boden ragen, oft in Büscheln"
+    },
+    {
+      "en": "The smooth, slightly swollen head is covered with tiny, embedded flask-shaped perithecia",
+      "de": "Der glatte, leicht verdickte Kopf ist mit winzigen, eingesenkten Flaschenperithecien bedeckt"
+    },
+    {
+      "en": "Grows from the buried pupae of moths and butterflies, which the fungus has infected and killed",
+      "de": "Wächst aus vergrabenen Puppen von Schmetterlingen, die der Pilz befallen und abgetötet hat"
+    },
+    {
+      "en": "Emerges from mossy soil and forest litter during the humid autumn months",
+      "de": "Erscheint in feuchten Herbstmonaten aus moosigem Boden und Waldstreu"
+    }
+  ],
+  "habitat": {
+    "en": "Mossy forest floor, growing on buried insect pupae",
+    "de": "Moosiger Waldboden, auf vergrabenen Insektenpuppen wachsend"
+  },
+  "edibility": {
+    "en": "Not edible",
+    "de": "Nicht essbar"
+  },
+  "notes": {
+    "en": "Rich in cordycepin; widely cultivated as a medicinal supplement. Lifting the moss aside reveals the insect that the mushroom is feeding on.",
+    "de": "Reich an Cordycepin; wird häufig als Nahrungsergänzungsmittel kultiviert. Schiebt man das Moos zur Seite, erkennt man das Insekt, von dem sich der Pilz ernährt."
+  },
+  "cover": {
+    "sighting": "2026-09-14/cordyceps-militaris",
+    "index": 0
+  }
+}

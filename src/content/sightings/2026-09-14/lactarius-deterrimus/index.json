@@ -1,0 +1,17 @@
+{
+  "species": "lactarius-deterrimus",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-09-23",
+  "location": {
+    "lat": 47.52055,
+    "lng": 11.08309
+  },
+  "images": [
+    "./images/lactarius-deterrimus1.jpg",
+    "./images/lactarius-deterrimus2.jpg",
+    "./images/lactarius-deterrimus3.jpg",
+    "./images/lactarius-deterrimus4.jpg"
+  ]
+}

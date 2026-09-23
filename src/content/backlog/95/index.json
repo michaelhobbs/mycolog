@@ -8,5 +8,9 @@
     "./images/04.jpg",
     "./images/05.jpg",
     "./images/06.jpg"
-  ]
+  ],
+  "location": {
+    "lat": 47.48253,
+    "lng": 11.15011
+  }
 }

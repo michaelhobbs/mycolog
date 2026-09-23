@@ -46,7 +46,7 @@ const coverIdx = entry.data.cover ?? 0
         {dev ? t.backlog.addTitle : `${t.backlog.item} #${entry.id}`}
       </h1>
       <span class="add-head__meta"
-        >{t.backlog.item} #{entry.id} · {t.backlog.date}
+        >{t.backlog.item} #{entry.id} · {t.backlog.date}{' '}
         {formatDate(entry.data.dateSpotted, locale)}</span
       >
     </div>

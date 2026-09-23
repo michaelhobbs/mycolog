@@ -50,6 +50,15 @@ export default {
     more: 'more details',
     fullscreen: 'open fullscreen',
   },
+  lightbox: {
+    viewer: 'Photo viewer',
+    close: 'close',
+    previous: 'previous',
+    next: 'next',
+    zoomIn: 'zoom in',
+    zoomOut: 'zoom out',
+    resetZoom: 'reset zoom',
+  },
   log: {
     title: 'Field Log',
     subtitle: 'Days of documented fungal finds',

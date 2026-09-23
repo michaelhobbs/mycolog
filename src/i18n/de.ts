@@ -50,6 +50,15 @@ export default {
     more: 'mehr Details',
     fullscreen: 'Vollbild öffnen',
   },
+  lightbox: {
+    viewer: 'Fotobetrachter',
+    close: 'schließen',
+    previous: 'vorheriges',
+    next: 'nächstes',
+    zoomIn: 'vergrößern',
+    zoomOut: 'verkleinern',
+    resetZoom: 'Zoom zurücksetzen',
+  },
   log: {
     title: 'Fundprotokoll',
     subtitle: 'Tage mit dokumentierten Pilzfunden',

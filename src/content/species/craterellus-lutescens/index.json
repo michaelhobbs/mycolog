@@ -1,0 +1,37 @@
+{
+  "scientificName": "Craterellus lutescens",
+  "commonName": {
+    "en": "Yellowfoot chanterelle",
+    "de": "Gelber Pfifferling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Slender, deeply funnel-shaped cap with a strongly wavy, lobed margin",
+      "de": "Schlanker, tief trichterförmiger Hut mit stark gewelltem, gelapptem Rand"
+    },
+    {
+      "en": "Thin, forked and cross-veined yellow false gills running down the stem (no true gills)",
+      "de": "Dünne, gegabelte und quervernetzte gelbe Leisten statt echter Lamellen, die am Stiel herablaufen"
+    },
+    {
+      "en": "Very slender, hollow, smooth yellow stem",
+      "de": "Sehr schlanker, hohler, glatter gelber Stiel"
+    },
+    {
+      "en": "Faint fruity smell and mild taste",
+      "de": "Schwacher fruchtiger Geruch und mildes Geschmacksgefühl"
+    }
+  ],
+  "notes": {
+    "en": "Thin flesh, so the slender stems make up most of the meal; a good mushroom to dry.",
+    "de": "Dünnes Fleisch, die schlanken Stiele machen daher den Großteil der Mahlzeit aus; ein guter Trockenpilz."
+  },
+  "habitat": {
+    "en": "Deciduous and mixed woodland, often along paths and in mossy, grassy spots",
+    "de": "Laub- und Mischwälder, häufig an Wegen und in moosigen, grasigen Stellen"
+  },
+  "edibility": {
+    "en": "Edible, but of lesser value than the chanterelle because of its thin flesh",
+    "de": "Essbar, aber wegen des dünnen Fleischs weniger wertvoll als der Pfifferling"
+  }
+}

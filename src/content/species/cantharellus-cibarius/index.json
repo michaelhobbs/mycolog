@@ -1,6 +1,9 @@
 {
   "scientificName": "Cantharellus cibarius",
-  "commonName": { "en": "Chanterelle", "de": "Pfifferling" },
+  "commonName": {
+    "en": "Chanterelle",
+    "de": "Pfifferling"
+  },
   "determiningFeatures": [
     {
       "en": "Golden-yellow, funnel-shaped cap with a wavy, irregular margin",
@@ -30,5 +33,9 @@
   "edibility": {
     "en": "Excellent edible mushroom",
     "de": "Ausgezeichneter Speisepilz"
+  },
+  "cover": {
+    "sighting": "2026-09-17/cantharellus-cibarius",
+    "index": 10
   }
 }

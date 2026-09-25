@@ -8,7 +8,7 @@ const ROOT = path.resolve(__dirname, '..')
 const NEWS_DIR = path.join(ROOT, 'src', 'content', 'news')
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
-const EVENT_TYPES = ['backlog-added', 'identified', 'new-species', 'new-location']
+const EVENT_TYPES = ['backlog-added', 'identified', 'new-species', 'new-location', 'edit']
 
 const prettierOptions = { parser: 'json', semi: false, printWidth: 100 }
 

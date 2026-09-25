@@ -1,7 +1,9 @@
 import type { CollectionEntry } from 'astro:content'
 import type { RSSFeedItem } from '@astrojs/rss'
 import type { Locale } from '../i18n'
+import type { LocalizedString } from '../types/mushroom'
 import { getTranslations, formatDate, formatAnchorDate } from '../i18n'
+import { l10n } from '../i18n/helpers'
 import { buildLocationMap, locationName } from './sightings'
 
 export type SpeciesEntry = CollectionEntry<'species'>
@@ -22,12 +24,20 @@ export interface BacklogBatch {
   ids: string[]
 }
 
+export interface NewsEdit {
+  sighting: string
+  from: string
+  to: string
+  reason: LocalizedString
+}
+
 export interface DayFeed {
   date: string
   backlogBatches: BacklogBatch[]
   identifiedCount: number | null
   newLocations: string[]
   newSpecies: string[]
+  edits: NewsEdit[]
 }
 
 export function siteBase(site: URL | string | undefined): string {
@@ -51,6 +61,7 @@ export function buildNewsFeed(collections: NewsCollections): DayFeed[] {
         identifiedCount: null,
         newLocations: [],
         newSpecies: [],
+        edits: [],
       }
       byDate.set(date, day)
     }
@@ -80,6 +91,14 @@ export function buildNewsFeed(collections: NewsCollections): DayFeed[] {
       case 'new-location':
         day.newLocations.push(...entry.data.slugs)
         break
+      case 'edit':
+        day.edits.push({
+          sighting: entry.data.sighting,
+          from: entry.data.from,
+          to: entry.data.to,
+          reason: entry.data.reason,
+        })
+        break
     }
   }
 
@@ -88,6 +107,7 @@ export function buildNewsFeed(collections: NewsCollections): DayFeed[] {
     for (const batch of day.backlogBatches) batch.ids.sort()
     day.newSpecies = [...new Set(day.newSpecies)].sort()
     day.newLocations = [...new Set(day.newLocations)].sort()
+    day.edits = [...day.edits].sort((a, b) => a.sighting.localeCompare(b.sighting))
   }
 
   const feed = [...byDate.values()]
@@ -109,12 +129,14 @@ export function buildRssItems(
   const backlogIds = new Set(collections.backlogEntries.map((b) => b.id))
   const items: RSSFeedItem[] = []
 
-  const push = (date: string, title: string, link: string) => {
+  const push = (date: string, title: string, link: string, note?: string) => {
     items.push({
       title,
       link: `${base}/${locale}${link}`,
       pubDate: new Date(`${date}T12:00:00`),
-      description: `${title} — ${formatDate(date, locale)}`,
+      description: note
+        ? `${title} — ${note} — ${formatDate(date, locale)}`
+        : `${title} — ${formatDate(date, locale)}`,
     })
   }
 
@@ -132,6 +154,14 @@ export function buildRssItems(
         day.date,
         `${day.identifiedCount} ${t.home.newsMushrooms} ${t.home.newsIdentifiedSuffix}`,
         `/identifications/${day.date}`,
+      )
+    }
+    for (const edit of day.edits) {
+      push(
+        day.date,
+        `${t.home.newsEdit}: ${speciesScientific.get(edit.from) ?? edit.from} → ${speciesScientific.get(edit.to) ?? edit.to}`,
+        `/log/${edit.sighting}`,
+        l10n(edit.reason, locale),
       )
     }
     for (const slug of day.newLocations) {

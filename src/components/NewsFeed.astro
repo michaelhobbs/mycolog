@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content'
 import { buildLocationMap, locationName } from '../lib/sightings'
 import { buildNewsFeed, itemsCount } from '../lib/news'
 import { getTranslations, formatDate, formatAnchorDate } from '../i18n'
+import { l10n } from '../i18n/helpers'
 import type { Locale } from '../i18n'
 
 interface Props {
@@ -56,6 +57,15 @@ const backlogIds = new Set(backlogEntries.map((b) => b.id))
                 </a>
               </li>
             )}
+            {day.edits.map((edit) => (
+              <li>
+                <a class="feed-line" href={`/${locale}/log/${edit.sighting}`}>
+                  {'>'} {t.home.newsEdit}: {speciesScientific.get(edit.from) ?? edit.from} →{' '}
+                  {speciesScientific.get(edit.to) ?? edit.to}
+                </a>
+                <span class="feed-note">{l10n(edit.reason, locale)}</span>
+              </li>
+            ))}
             {day.newLocations.map((slug) => (
               <li>
                 <a class="feed-line" href={`/${locale}/locations/${slug}`}>
@@ -119,5 +129,12 @@ const backlogIds = new Set(backlogEntries.map((b) => b.id))
   .feed-line:hover {
     color: var(--accent);
     text-decoration: underline;
+  }
+
+  .feed-note {
+    display: block;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    font-style: italic;
   }
 </style>

@@ -1,0 +1,11 @@
+{
+  "type": "edit",
+  "date": "2026-09-25",
+  "sighting": "2026-09-12/craterellus-lutescens",
+  "from": "craterellus-tubaeformis",
+  "to": "craterellus-lutescens",
+  "reason": {
+    "en": "Craterellus lutescens is more brightly coloured than Craterellus tubaeformis",
+    "de": "Craterellus lutescens ist kräftiger gefärbt als Craterellus tubaeformis"
+  }
+}

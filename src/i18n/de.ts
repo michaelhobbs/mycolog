@@ -29,6 +29,7 @@ export default {
     newsIdentifiedSuffix: 'aus dem Rückstand bestimmt',
     newsNewLocation: 'Neuer Standort',
     newsNewSpecies: 'Neue Art',
+    newsEdit: 'Bestimmung korrigiert',
     warningTitle: 'Wichtiger Hinweis',
     warningText:
       'Die Angaben auf dieser Seite sind ohne Gewähr und können Fehler enthalten. Sammelt nur Pilze, die ihr selbst sicher bestimmen könnt — verlasst euch nicht allein auf diese Informationen.',

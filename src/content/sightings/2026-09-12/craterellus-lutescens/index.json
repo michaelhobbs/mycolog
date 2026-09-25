@@ -1,5 +1,5 @@
 {
-  "species": "craterellus-tubaeformis",
+  "species": "craterellus-lutescens",
   "locationSlug": "schweinbach",
   "dateSpotted": "2026-09-12",
   "location": {
@@ -7,10 +7,10 @@
     "lng": 11.11443
   },
   "images": [
-    "./images/craterellus-tubaeformis2.jpg",
-    "./images/craterellus-tubaeformis1.jpg",
-    "./images/craterellus-tubaeformis3.jpg",
-    "./images/craterellus-tubaeformis4.jpg"
+    "./images/craterellus-lutescens2.jpg",
+    "./images/craterellus-lutescens1.jpg",
+    "./images/craterellus-lutescens3.jpg",
+    "./images/craterellus-lutescens4.jpg"
   ],
   "notes": {
     "en": "Many of these along this hillside. Also other edibles and mushrooms of interest.",

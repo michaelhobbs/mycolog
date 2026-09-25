@@ -29,6 +29,7 @@ export default {
     newsIdentifiedSuffix: 'identified from the backlog',
     newsNewLocation: 'New location',
     newsNewSpecies: 'New species',
+    newsEdit: 'Identification revised',
     warningTitle: 'Foraging Warning',
     warningText:
       "The information on this site may not be accurate. Only forage mushrooms you can independently identify — don't rely on these pages alone.",

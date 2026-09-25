@@ -99,6 +99,14 @@ const news = defineCollection({
       date: z.string(),
       slugs: z.array(z.string()).min(1),
     }),
+    z.object({
+      type: z.literal('edit'),
+      date: z.string(),
+      sighting: z.string(),
+      from: z.string(),
+      to: z.string(),
+      reason: localizedString,
+    }),
   ]),
 })
 

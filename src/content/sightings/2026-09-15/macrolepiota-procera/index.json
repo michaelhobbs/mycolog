@@ -1,0 +1,48 @@
+{
+  "species": "macrolepiota-procera",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-09-25",
+  "location": {
+    "lat": 47.48287,
+    "lng": 11.15044
+  },
+  "images": [
+    "./images/macrolepiota-procera1.jpg",
+    "./images/macrolepiota-procera2.jpg",
+    "./images/macrolepiota-procera3.jpg",
+    "./images/macrolepiota-procera4.jpg",
+    "./images/macrolepiota-procera5.jpg",
+    "./images/macrolepiota-procera6.jpg",
+    "./images/macrolepiota-procera7.jpg",
+    "./images/macrolepiota-procera8.jpg",
+    "./images/macrolepiota-procera9.jpg",
+    "./images/macrolepiota-procera10.jpg",
+    "./images/macrolepiota-procera11.jpg",
+    "./images/macrolepiota-procera12.jpg",
+    "./images/macrolepiota-procera13.jpg",
+    "./images/macrolepiota-procera14.jpg",
+    "./images/macrolepiota-procera15.jpg",
+    "./images/macrolepiota-procera16.jpg",
+    "./images/macrolepiota-procera17.jpg",
+    "./images/macrolepiota-procera18.jpg",
+    "./images/macrolepiota-procera19.jpg",
+    "./images/macrolepiota-procera20.jpg",
+    "./images/macrolepiota-procera21.jpg",
+    "./images/macrolepiota-procera22.jpg",
+    "./images/macrolepiota-procera23.jpg",
+    "./images/macrolepiota-procera24.jpg",
+    "./images/macrolepiota-procera25.jpg",
+    "./images/macrolepiota-procera26.jpg",
+    "./images/macrolepiota-procera27.jpg",
+    "./images/macrolepiota-procera28.jpg",
+    "./images/macrolepiota-procera29.jpg",
+    "./images/macrolepiota-procera30.jpg",
+    "./images/macrolepiota-procera31.jpg"
+  ],
+  "notes": {
+    "en": "We went to visit this parasol every day over five days. It is interesting to watch it develop.",
+    "de": "Wir haben diesen Parasol fünf Tage lang jeden Tag besucht. Es ist interessant, ihm beim Wachsen zuzusehen."
+  }
+}

@@ -29,5 +29,9 @@
   "edibility": {
     "en": "Good edible when young",
     "de": "Jung ein guter Speisepilz"
+  },
+  "cover": {
+    "sighting": "2026-09-15/macrolepiota-procera",
+    "index": 18
   }
 }

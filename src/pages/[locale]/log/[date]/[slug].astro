@@ -100,21 +100,20 @@ const pageTitle = sighting
                 class:list={['gallery__item', dev && i === 0 && 'gallery__item--cover']}
                 data-lightbox-src={fullSrcs[i]}
               >
-                <Image
-                  src={img}
-                  alt={`${l10n(sighting.species.commonName, locale)} — ${i + 1}`}
-                  loading="lazy"
-                  widths={[320, 640]}
-                />
                 <button
                   type="button"
-                  class="gallery__full"
+                  class="gallery__zoom"
                   data-lightbox-trigger
                   data-index={i}
                   aria-label={`${t.sighting.fullscreen} ${i + 1}`}
                   title={t.sighting.fullscreen}
                 >
-                  ⛶
+                  <Image
+                    src={img}
+                    alt={`${l10n(sighting.species.commonName, locale)} — ${i + 1}`}
+                    loading="lazy"
+                    widths={[320, 640]}
+                  />
                 </button>
                 {dev && (
                   <button
@@ -345,6 +344,22 @@ const pageTitle = sighting
     height: 100%;
     object-fit: cover;
     object-position: center;
+    transition: filter 0.15s;
+  }
+
+  .gallery__zoom {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .gallery__zoom:hover img {
+    filter: brightness(1.08);
   }
 
   .gallery__cover {
@@ -373,41 +388,6 @@ const pageTitle = sighting
   .gallery__cover:disabled {
     color: var(--yellow);
     cursor: default;
-  }
-
-  .gallery__full {
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1;
-    padding: 0.25rem 0.5rem;
-    cursor: pointer;
-    opacity: 0;
-    transition:
-      background 0.1s,
-      color 0.1s,
-      opacity 0.15s;
-  }
-
-  .gallery__item:hover .gallery__full,
-  .gallery__full:focus-visible {
-    opacity: 1;
-  }
-
-  .gallery__full:hover {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  @media (hover: none) {
-    .gallery__full {
-      opacity: 1;
-    }
   }
 
   .cover-status {

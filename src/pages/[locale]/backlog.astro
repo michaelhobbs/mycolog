@@ -214,6 +214,8 @@ for (const entry of backlog) {
     background: none;
     cursor: zoom-in;
     -webkit-tap-highlight-color: transparent;
+    /* Opts out of iOS double-tap-to-zoom, so a single tap fires click. */
+    touch-action: manipulation;
   }
 
   .backlog-item__zoom:hover img {

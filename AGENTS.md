@@ -8,6 +8,33 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Hover styles & touch input
+
+Every `:hover` rule is automatically wrapped in
+`@media (hover: hover), (-moz-touch-enabled: 0), (-ms-high-contrast: none), (-ms-high-contrast: active)`
+by the `@jetbrains/postcss-require-hover` plugin wired into `vite.css.postcss`
+in `astro.config.mjs`. This stops touch browsers from getting a sticky `:hover`
+state and from swallowing the first tap of a two-tap activation.
+
+- **Never hand-wrap `:hover` rules** in a `@media` block — the plugin does it.
+- The plugin also splits mixed selector lists, so
+  `.x:hover, .x[data-active] { … }` correctly keeps the `[data-active]` half
+  ungated. That is what keeps active-state styling working on touch.
+- When Vite processes a stylesheet more than once (it does, once per
+  environment), hover rules end up wrapped in nested _identical_ media queries.
+  That is valid CSS and evaluates the same, just slightly redundant — do not
+  "fix" it if you see it in `dist/`.
+- **Hover-revealed controls also need `pointer-events: none`** in their base
+  rule (and `pointer-events: auto` in the `:hover` rule). `opacity: 0` alone
+  stays hit-testable, so an invisible control keeps swallowing taps meant for
+  the element underneath it. See `.tui-card__arrow` in `MushroomCard.astro`.
+- Anything reachable on touch must not _depend_ on hover. Carousels, for
+  example, need real touch affordances (`MushroomCard.astro` uses pointer
+  swipe + a thumbnail strip; its arrows are mouse-only by design).
+- Interactive elements that open the lightbox carry
+  `touch-action: manipulation` (and `-webkit-tap-highlight-color: transparent`)
+  to opt out of iOS's double-tap-to-zoom tap delay.
+
 ## Formatting
 
 All code must follow the Prettier rules (`semi: false`, `singleQuote: true`,

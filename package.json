@@ -31,10 +31,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@jetbrains/postcss-require-hover": "^0.2.0",
     "@types/node": "^26.6.1",
     "express": "^5.2.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.5.0",
+    "postcss": "^8.5.28",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3"

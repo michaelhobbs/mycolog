@@ -224,6 +224,8 @@ const fullUrls = await Promise.all(
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--bg-highlight);
+    /* Let the browser own vertical panning, keep horizontal drags for swipe nav. */
+    touch-action: pan-y;
   }
 
   .tui-card__slide {
@@ -237,6 +239,8 @@ const fullUrls = await Promise.all(
     visibility: hidden;
     cursor: zoom-in;
     -webkit-tap-highlight-color: transparent;
+    /* Opts this element out of iOS double-tap-to-zoom, so a single tap fires click. */
+    touch-action: manipulation;
     transition:
       opacity 0.2s,
       visibility 0.2s;
@@ -275,6 +279,9 @@ const fullUrls = await Promise.all(
     cursor: pointer;
     z-index: 2;
     opacity: 0;
+    /* Must be none while hidden: opacity:0 alone stays hit-testable and would
+       swallow taps on the photo, so the lightbox never opens on the first tap. */
+    pointer-events: none;
     transition:
       background 0.1s,
       color 0.1s,
@@ -283,6 +290,7 @@ const fullUrls = await Promise.all(
 
   .tui-card__carousel:hover .tui-card__arrow {
     opacity: 1;
+    pointer-events: auto;
   }
 
   .tui-card__arrow:hover {
@@ -449,6 +457,9 @@ const fullUrls = await Promise.all(
 </style>
 
 <script>
+  const SWIPE_MIN_DX = 40
+  const SWIPE_DY_RATIO = 1.5
+
   document.querySelectorAll('.tui-card__carousel[data-carousel]').forEach((el) => {
     const carousel = el as HTMLElement
     const slides = [...carousel.querySelectorAll('.tui-card__slide')]
@@ -456,6 +467,9 @@ const fullUrls = await Promise.all(
     const thumbs = [...(card?.querySelectorAll('[data-thumb]') ?? [])]
     if (slides.length <= 1) return
     let active = 0
+    let startX: number | null = null
+    let startY: number | null = null
+    let suppressClick = false
 
     function show(i: number) {
       slides[active].removeAttribute('data-active')
@@ -473,5 +487,43 @@ const fullUrls = await Promise.all(
     carousel.querySelector('[data-arrow="prev"]')?.addEventListener('click', () => show(active - 1))
     carousel.querySelector('[data-arrow="next"]')?.addEventListener('click', () => show(active + 1))
     thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => show(i)))
+
+    carousel.addEventListener('pointerdown', (e) => {
+      // Any pending suppression belongs to a finished gesture; a new one supersedes it.
+      suppressClick = false
+      if (e.pointerType === 'mouse' || !e.isPrimary) return
+      startX = e.clientX
+      startY = e.clientY
+    })
+
+    carousel.addEventListener('pointerup', (e) => {
+      if (startX === null || startY === null) return
+      const dx = e.clientX - startX
+      const dy = e.clientY - startY
+      startX = null
+      startY = null
+      if (Math.abs(dx) < SWIPE_MIN_DX || Math.abs(dx) < Math.abs(dy) * SWIPE_DY_RATIO) return
+      show(dx < 0 ? active + 1 : active - 1)
+      // The slide is a child of the carousel and the lightbox opens from a
+      // document-level bubble listener, so cancelling during capture keeps a
+      // swipe from also firing the click that opens the lightbox.
+      suppressClick = true
+    })
+
+    carousel.addEventListener('pointercancel', () => {
+      startX = null
+      startY = null
+    })
+
+    carousel.addEventListener(
+      'click',
+      (e) => {
+        if (!suppressClick) return
+        suppressClick = false
+        e.preventDefault()
+        e.stopPropagation()
+      },
+      { capture: true },
+    )
   })
 </script>

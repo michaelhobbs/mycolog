@@ -328,6 +328,8 @@ const fullSrcs = await Promise.all(
     background: none;
     cursor: zoom-in;
     -webkit-tap-highlight-color: transparent;
+    /* Opts out of iOS double-tap-to-zoom, so a single tap fires click. */
+    touch-action: manipulation;
   }
 
   .gallery__zoom:hover img {

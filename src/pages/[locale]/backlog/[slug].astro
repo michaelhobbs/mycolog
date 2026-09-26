@@ -5,7 +5,6 @@ import { Image, getImage } from 'astro:assets'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import type { Locale, Translations } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
-import BacklogIdentify from '../../../components/BacklogIdentify.astro'
 import LinkRow from '../../../components/LinkRow.astro'
 
 export async function getStaticPaths() {
@@ -22,6 +21,14 @@ export async function getStaticPaths() {
 const { locale, slug } = Astro.params as { locale: Locale; slug: string }
 const t: Translations = getTranslations(locale)
 const dev = import.meta.env.DEV
+
+// Imported dynamically, and only in dev, so that a production build never pulls
+// BacklogIdentify — and through it LocationPicker and maplibre-gl.css — into this
+// page's module graph. A static import would make Astro link the map stylesheet
+// on all 532 backlog pages even though the form is never rendered.
+const BacklogIdentify = dev
+  ? ((await import('../../../components/BacklogIdentify.astro')).default as any)
+  : null
 
 const entry = (await getCollection('backlog')).find((e) => e.id === slug)
 if (!entry) {
@@ -97,7 +104,7 @@ const coverIdx = entry.data.cover ?? 0
     </div>
 
     {
-      dev ? (
+      BacklogIdentify ? (
         <BacklogIdentify
           id={entry.id}
           dateSpotted={entry.data.dateSpotted}

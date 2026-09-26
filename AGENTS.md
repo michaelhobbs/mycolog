@@ -68,6 +68,26 @@ state and from swallowing the first tap of a two-tap activation.
 `maplibre-gl` v6 is ESM-only and has **no default export**. Import the namespace
 (`import * as maplibregl from 'maplibre-gl'`).
 
+Import `maplibre-gl/dist/maplibre-gl.css` in the component's **frontmatter**, not
+in its client `<script>`. Astro attributes frontmatter CSS to the pages that
+actually render the component, but CSS reached through a `<script>` is not
+attributed at all: a single such import linked the 83 KB stylesheet on 936 of
+937 built pages, when only 330 render a map. Moving it cut that to exactly those
+330 pages (`dist` must satisfy both directions — no page that renders a map
+without the stylesheet, and no page that links the stylesheet without a map).
+Note that Astro emits component `<style>` blocks as inline `<style>` elements
+_after_ the `<link>` tags, so `:global(.maplibregl-*)` overrides in a component
+still beat MapLibre's own rules even though the MapLibre `<link>` now sorts
+after `Layout.css`. That only holds for equal specificity: MapLibre sets the
+`font` **shorthand** on `.maplibregl-map`, so overriding just `font-family`
+against a later-loading shorthand would need a specificity bump.
+
+For the same reason, a **dev-only** component must be loaded with a dynamic
+`await import()` guarded by `import.meta.env.DEV` — never a static import. A
+static import is enough to pull its CSS into a production page's module graph
+even when the component never renders; that is how all 532 backlog pages were
+linking MapLibre's stylesheet.
+
 Every map component must import `../lib/maplibre-worker` for its side effect
 _before_ the MapLibre import. v6 locates its worker with a computed
 `new URL('./maplibre-gl-worker.mjs', import.meta.url)`, which no bundler can

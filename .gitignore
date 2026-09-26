@@ -4,6 +4,9 @@ dist/
 # generated types
 .astro/
 
+# build-time location map thumbnails (regenerate: node scripts/generate-thumbnails.mjs)
+src/assets/thumbnails/
+
 # dependencies
 node_modules/
 

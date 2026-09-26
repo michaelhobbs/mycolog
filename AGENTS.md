@@ -8,6 +8,34 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Location card thumbnails
+
+The `/locations` card maps are **static images rendered at build time**, not live
+maps — `scripts/generate-thumbnails.mjs` (the `prebuild` npm hook) writes
+gitignored WebPs into `src/assets/thumbnails/{slug}.webp`, which the page serves
+via `astro:assets`. Do not reintroduce a per-card MapLibre map there: 14 of them
+meant 14 WebGL contexts (Chrome caps out near 16) and ~1.6 MB of tile requests on
+a page that also loads other maps.
+
+- Rendering uses **`@maplibre/maplibre-gl-native`**, the headless MapLibre
+  binding, pinned to the same v6 style spec as `maplibre-gl`. It needs no
+  browser. It downloads a prebuilt binary at install time and has **no
+  source-build fallback** (`--fallback-to-build=false`), so musl/Alpine and
+  FreeBSD cannot install it — macOS and ubuntu-24.04 CI are fine.
+- **The build now requires network access** to `tiles.openfreemap.org`. This is
+  the only build step that fetches anything.
+- The palette is shared with the live maps via `src/lib/map-palette.ts`; change
+  it there rather than in a component, so thumbnails and interactive maps cannot
+  drift.
+- Renders are cached by a `sha256` of style + centre + points + geometry, so an
+  unchanged rebuild is ~0.3 s. Use `--force` to re-render, `SKIP_THUMBS=1` to
+  opt out. `predev` runs it in `--soft` mode so a network failure cannot stop the
+  dev server; `prebuild` runs it hard so a broken thumbnail fails the build.
+- `sharp` is an explicit devDependency because this script imports it directly
+  (it is also a transitive dep of `astro`, but do not rely on that hoisting).
+- `src/assets/thumbnails/manifest.json` is the cache key index. If a location is
+  deleted, its stale image is pruned on the next run.
+
 ## Hover styles & touch input
 
 Every `:hover` rule is automatically wrapped in

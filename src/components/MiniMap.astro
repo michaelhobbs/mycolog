@@ -47,64 +47,9 @@ const regionData = region ? JSON.stringify(region) : ''
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
   import 'maplibre-gl/dist/maplibre-gl.css'
+  import { applyPalette } from '../lib/map-palette'
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
-
-  // Same dark terrain palette as the full map (/map), trimmed to the layers
-  // relevant at thumbnail zoom. Kept in sync with MapVector.applyPalette.
-  function applyPalette(map: maplibregl.Map) {
-    // maplibre-gl v6 narrowed setPaintProperty to `keyof AllPaintProperties` and
-    // dropped its implicit value type. Derive both from the method signature so we
-    // don't need the (transitive) style-spec package just to name the types.
-    type PaintKey = Parameters<maplibregl.Map['setPaintProperty']>[1]
-    type PaintValue = Parameters<maplibregl.Map['setPaintProperty']>[2]
-
-    const paint = (layer: string, props: Partial<Record<PaintKey, PaintValue>>) => {
-      if (!map.getLayer(layer)) return
-      for (const k of Object.keys(props) as PaintKey[]) {
-        map.setPaintProperty(layer, k, props[k] as PaintValue)
-      }
-    }
-
-    paint('background', { 'background-color': '#0e120b' })
-    paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
-    paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
-    paint('landcover_ice_shelf', { 'fill-color': '#20291a' })
-    paint('landcover_glacier', { 'fill-color': '#20291a' })
-
-    ;['park', 'park_outline'].forEach((l) => {
-      if (map.getLayer(l)) map.setLayoutProperty(l, 'visibility', 'none')
-    })
-
-    paint('water', { 'fill-color': '#2a7d94' })
-    paint('waterway', { 'line-color': '#2a6a80' })
-    paint('building', { 'fill-color': '#263222' })
-
-    paint('highway_major_casing', { 'line-color': '#151a10' })
-    paint('highway_major_inner', { 'line-color': '#d4f0d4' })
-    paint('highway_major_subtle', { 'line-color': '#d4f0d4', 'line-opacity': 0.6 })
-    paint('highway_motorway_casing', { 'line-color': '#151a10' })
-    paint('highway_motorway_inner', { 'line-color': '#d4f0d4' })
-    paint('highway_minor', { 'line-color': '#8fbf8f' })
-    paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
-
-    paint('boundary_state', { 'line-color': '#2d5a2d' })
-    paint('boundary_country_z5-', { 'line-color': '#4a8f4a' })
-
-    ;[
-      'place_city_large',
-      'place_city',
-      'place_town',
-      'place_village',
-      'place_suburb',
-      'place_other',
-      'highway_name_other',
-      'highway_name_motorway',
-      'water_name',
-    ].forEach((l) =>
-      paint(l, { 'text-color': '#d4f0d4', 'text-halo-color': '#0e120b', 'text-halo-width': 1.5 }),
-    )
-  }
 
   const container = document.getElementById('minimap')
   const frame = container?.closest('.mini-map-frame') as HTMLElement | null

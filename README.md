@@ -26,6 +26,7 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 ├── scripts/
 │   ├── api.mjs                    # Dev-only API (:4322): identify, set cover, pin backlog location
 │   ├── import-backlog-public.mjs  # Converts public/images → backlog items (+ news events)
+│   ├── generate-thumbnails.mjs    # Renders /locations card maps at build time (prebuild hook)
 │   ├── news-events.mjs            # appendNewsEvent() — shared by the API, import & backfills
 │   └── backfill-*.mjs             # One-off migrations (authors, dateIdentified, news history)
 ├── src/
@@ -43,7 +44,6 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 │   │   ├── Lightbox.astro         # Fullscreen photo viewer
 │   │   ├── LinkRow.astro          # Nav back-links row
 │   │   ├── LocationPicker.astro   # Click-to-pin map for the identify form
-│   │   ├── LocationThumbMap.astro # Small static map per location
 │   │   ├── MapVector.astro        # The full sightings map
 │   │   ├── MiniMap.astro          # Compact map variant
 │   │   ├── MushroomCard.astro     # Species summary card
@@ -330,6 +330,41 @@ note under [Key commands](#key-commands).
   look: dark woods/residential, teal water, green-toned roads, and accent
   dashed hiking paths; several layers (parks, city names, etc.) are toggled or
   recolored.
+- The palette lives in **`src/lib/map-palette.ts`** as a plain layer → paint
+  record. `MapVector.astro` and `MiniMap.astro` apply it to a live map via
+  `applyPalette()`, and `scripts/generate-thumbnails.mjs` merges the same record
+  into a style object, so the build-time thumbnails and the interactive maps stay
+  in sync by construction. Layer ids come from the `fiord` style and are not
+  stable across style versions (`landcover_glacier` is currently absent), so
+  every consumer skips missing layers rather than assuming they exist.
+
+### Location card thumbnails (build-time, no browser)
+
+The location cards on `/{locale}/locations` used to mount 14 live MapLibre maps
+— 14 WebGL contexts, ~426 KB of maplibre JS + worker, and ~1.6 MB of tile and
+glyph requests, on a page that also has other maps competing for the browser's
+~16-context limit. They are now static images rendered at build time.
+
+- `scripts/generate-thumbnails.mjs` (wired as the **`prebuild`** npm hook, and
+  `predev` in `--soft` mode) renders one WebP per location into
+  `src/assets/thumbnails/{slug}.webp` — gitignored, and served through
+  `astro:assets` so it gets hashed URLs, a `srcset` and lazy loading.
+- It uses **`@maplibre/maplibre-gl-native`** (a devDependency), the official
+  headless MapLibre binding pinned to the same v6 style spec as `maplibre-gl`.
+  There is no browser, no headless Chrome and no WebGL involved. It bakes in the
+  same region circle and sighting dots the old component drew.
+- The logical canvas (297×184, `padding: 12`) reproduces the exact `fitBounds`
+  framing the live component used, and is supersampled 3× for retina.
+- Output is cached by a `sha256` of the style + centre + sighting points +
+  geometry, so a rebuild that changes nothing costs ~0.3 s instead of re-fetching
+  tiles. `--force` re-renders; `SKIP_THUMBS=1` opts out entirely.
+- Thumbnails are geographic only (no text), so one image per location serves
+  every locale.
+
+The trade-off: the build now needs network access to `tiles.openfreemap.org` and
+installs a native binary for `maplibre-gl-native` (prebuilt for macOS/Linux/Windows
+on Node 20/22/24; there is no source-build fallback, so musl/Alpine and FreeBSD
+cannot install it).
 
 ### On-the-fly elevation contours
 

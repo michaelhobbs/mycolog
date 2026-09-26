@@ -21,7 +21,7 @@
     "@astrojs/rss": "^4.0.19",
     "astro": "^7.2.6",
     "maplibre-contour": "^0.1.0",
-    "maplibre-gl": "^4.7.1"
+    "maplibre-gl": "^6.11.2"
   },
   "allowScripts": {
     "esbuild": true

@@ -35,6 +35,34 @@ state and from swallowing the first tap of a two-tap activation.
   `touch-action: manipulation` (and `-webkit-tap-highlight-color: transparent`)
   to opt out of iOS's double-tap-to-zoom tap delay.
 
+## MapLibre
+
+`maplibre-gl` v6 is ESM-only and has **no default export**. Import the namespace
+(`import * as maplibregl from 'maplibre-gl'`).
+
+Every map component must import `../lib/maplibre-worker` for its side effect
+_before_ the MapLibre import. v6 locates its worker with a computed
+`new URL('./maplibre-gl-worker.mjs', import.meta.url)`, which no bundler can
+see, so the worker is never emitted; at runtime the request 404s — or, worse, an
+SPA fallback answers it with `index.html` and the worker is silently handed HTML.
+`src/lib/maplibre-worker.ts` fixes this with `setWorkerUrl()`.
+
+- Use `?worker&url`, **not** `?url`. The dist worker imports its sibling
+  `maplibre-gl-shared.mjs`; `?url` emits it verbatim without that chunk and the
+  worker dies on its first import, so no vector tiles load. `?worker&url` routes
+  it through Vite's worker pipeline and emits a self-contained chunk.
+- `setPaintProperty` is typed `<K extends keyof AllPaintProperties>` in v6. The
+  shared `paint()` helpers derive `PaintKey`/`PaintValue` via
+  `Parameters<maplibregl.Map['setPaintProperty']>` so palette property names are
+  checked against the real style spec (no need to import the transitive
+  `@maplibre/maplibre-gl-style-spec`). Adding a layer to a palette with a
+  misspelled property is now a compile error instead of a silent no-op.
+- `maplibre-contour`'s `DemSource.setupMaplibre()` only needs `addProtocol`,
+  which still exists in v6, and it builds its own blob worker. It is compatible.
+  Note: the contour tiles are not currently being requested (no DEM fetches,
+  pre-existing on v4 too) — the layers are added but the `mlcontour://` source
+  never fetches. Treat as a separate bug, not a migration regression.
+
 ## Formatting
 
 All code must follow the Prettier rules (`semi: false`, `singleQuote: true`,

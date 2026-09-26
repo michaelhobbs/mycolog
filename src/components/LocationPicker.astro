@@ -30,7 +30,10 @@ const { locale, initial = null } = Astro.props as {
 </div>
 
 <script>
-  import maplibregl from 'maplibre-gl'
+  // Must precede the Maplibre import so the worker URL is set before any `new Map()`.
+  import '../lib/maplibre-worker'
+  // maplibre-gl v6 is ESM-only and no longer has a default export.
+  import * as maplibregl from 'maplibre-gl'
   import 'maplibre-gl/dist/maplibre-gl.css'
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
@@ -66,9 +69,16 @@ const { locale, initial = null } = Astro.props as {
     let marker: maplibregl.Marker | null = null
 
     function paintPalette() {
-      const paint = (layer: string, props: { [s: string]: unknown }) => {
-        if (map.getLayer(layer)) {
-          Object.entries(props).forEach(([k, v]) => map.setPaintProperty(layer, k, v))
+      // maplibre-gl v6 narrowed setPaintProperty to `keyof AllPaintProperties` and
+      // dropped its implicit value type. Derive both from the method signature so we
+      // don't need the (transitive) style-spec package just to name the types.
+      type PaintKey = Parameters<maplibregl.Map['setPaintProperty']>[1]
+      type PaintValue = Parameters<maplibregl.Map['setPaintProperty']>[2]
+
+      const paint = (layer: string, props: Partial<Record<PaintKey, PaintValue>>) => {
+        if (!map.getLayer(layer)) return
+        for (const k of Object.keys(props) as PaintKey[]) {
+          map.setPaintProperty(layer, k, props[k] as PaintValue)
         }
       }
       paint('background', { 'background-color': '#0e120b' })

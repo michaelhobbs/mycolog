@@ -4,6 +4,7 @@
 // that use the component: Astro links it on every page in the build. See the
 // MapLibre section in AGENTS.md.
 import 'maplibre-gl/dist/maplibre-gl.css'
+import MapAttribution from './MapAttribution.astro'
 
 interface Props {
   locale: string
@@ -30,9 +31,7 @@ const { locale, initial = null } = Astro.props as {
     data-initial={initial ? JSON.stringify(initial) : ''}
   >
   </div>
-  <div class="map-frame__attribution">
-    <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
-  </div>
+  <MapAttribution />
 </div>
 
 <script>
@@ -164,13 +163,6 @@ const { locale, initial = null } = Astro.props as {
     cursor: crosshair;
     touch-action: none;
     background: var(--bg-highlight);
-  }
-
-  .map-frame__attribution {
-    padding: 0.375rem 0.75rem;
-    border-top: 1px solid var(--border-char);
-    font-size: 0.6875rem;
-    color: var(--fg-dim);
   }
 
   :global(.picker-pin) {

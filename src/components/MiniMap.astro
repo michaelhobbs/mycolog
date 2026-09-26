@@ -4,6 +4,7 @@
 // that use the component: Astro links it on every page in the build. See the
 // MapLibre section in AGENTS.md.
 import 'maplibre-gl/dist/maplibre-gl.css'
+import MapAttribution from './MapAttribution.astro'
 
 interface Props {
   points: { lat: number; lng: number; label?: string }[]
@@ -42,9 +43,7 @@ const regionData = region ? JSON.stringify(region) : ''
     </button>
   </div>
   <div id="minimap" class="mini-map-frame__map" data-points={data} data-region={regionData}></div>
-  <div class="mini-map-frame__attribution">
-    <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
-  </div>
+  <MapAttribution />
 </div>
 
 <script>
@@ -382,13 +381,6 @@ const regionData = region ? JSON.stringify(region) : ''
   .mini-map-frame[data-expanded] .mini-map-frame__map {
     flex: 1;
     height: auto;
-  }
-
-  .mini-map-frame__attribution {
-    padding: 0.375rem 0.75rem;
-    border-top: 1px solid var(--border-char);
-    font-size: 0.6875rem;
-    color: var(--fg-dim);
   }
 
   :global(.maplibregl-map) {

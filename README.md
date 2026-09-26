@@ -416,4 +416,4 @@ cannot install it).
 
 ### Attribution
 
-OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors
+Map footers link the services used: OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors

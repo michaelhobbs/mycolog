@@ -8,6 +8,7 @@ import type { Locale } from '../i18n'
 import type { EnrichedSighting } from '../lib/sightings'
 import { getImage } from 'astro:assets'
 import { l10n } from '../i18n/helpers'
+import MapAttribution from './MapAttribution.astro'
 
 interface Props {
   sightings: EnrichedSighting[]
@@ -64,9 +65,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
     data-locale={locale}
   >
   </div>
-  <div class="map-frame__attribution">
-    <span>OpenFreeMap · © OpenMapTiles · © OpenStreetMap contributors</span>
-  </div>
+  <MapAttribution />
 </div>
 
 <script>
@@ -858,13 +857,6 @@ const sightingsJSON = JSON.stringify(clientSightings)
 
   .map:active {
     cursor: grabbing;
-  }
-
-  .map-frame__attribution {
-    padding: 0.375rem 0.75rem;
-    border-top: 1px solid var(--border-char);
-    font-size: 0.6875rem;
-    color: var(--fg-dim);
   }
 
   :global(.maplibregl-map) {

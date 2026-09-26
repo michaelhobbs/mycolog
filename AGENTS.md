@@ -58,10 +58,17 @@ SPA fallback answers it with `index.html` and the worker is silently handed HTML
   `@maplibre/maplibre-gl-style-spec`). Adding a layer to a palette with a
   misspelled property is now a compile error instead of a silent no-op.
 - `maplibre-contour`'s `DemSource.setupMaplibre()` only needs `addProtocol`,
-  which still exists in v6, and it builds its own blob worker. It is compatible.
-  Note: the contour tiles are not currently being requested (no DEM fetches,
-  pre-existing on v4 too) — the layers are added but the `mlcontour://` source
-  never fetches. Treat as a separate bug, not a migration regression.
+  which still exists in v6, so it is compatible. The registered protocol is
+  `dem-contour://` (built from `DemSource`'s default `id: 'dem'`), not
+  `mlcontour://`. `MapVector.astro` passes `worker: false`, so the DEM manager
+  runs on the main thread and no extra blob worker is created.
+- Contours only render at zooms that have a `thresholds` entry. `addContours()`
+  configures 12/13/14, but the map's zoom is derived from fitting the fixed 15 km
+  `bounds` box and lands at **z9.0–10.1 on every viewport tested**, so at the
+  default view the handler resolves an empty interval set and fetches no DEM
+  tiles. The source is still added and loads — it just yields no features. Not a
+  v6 migration regression; identical on v4. Fix by extending `thresholds` down to
+  the default zoom (or raising the map's default zoom).
 
 ## Formatting
 

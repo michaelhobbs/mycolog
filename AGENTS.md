@@ -210,8 +210,11 @@ reintroduce a listing on an index; the point is to make the day the unit.
   visible as the close control. The header (z-index 100) must stay above the
   drawer (z-index 1) or the button the user just pressed vanishes behind the dim.
 - The toggle is a toggle, not an opener: one click opens, the next closes, and
-  `aria-expanded` tracks it. Scrim tap and <kbd>Esc</kbd> also close, focus moves
-  into the panel on open and returns to the toggle on close.
+  `aria-expanded` tracks it. **The panel is the day list and nothing else — it has
+  no close button**, so the only three close paths are the toggle, the scrim, and
+  <kbd>Esc</kbd>; do not add a fourth. Focus moves into the panel on open (onto
+  the first day row, the only focusable left in it) and returns to the toggle on
+  close, and the <kbd>Tab</kbd> trap still wraps at both ends.
 - The drawer `<div>` and its `DateList` must not share an id: `aria-controls`
   and `getElementById` both resolve to the first match in document order, so an
   overlapping `idPrefix` wires the toggle to the wrong element.

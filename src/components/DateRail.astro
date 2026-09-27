@@ -1,6 +1,6 @@
 ---
 import DateList from './DateList.astro'
-import { getTranslations, type Locale } from '../i18n'
+import type { Locale } from '../i18n'
 import type { RailDay } from '../lib/date-rail'
 
 interface Props {
@@ -17,7 +17,6 @@ interface Props {
 }
 
 const { days, basePath, locale, countUnit, navLabel, activeDate } = Astro.props
-const t = getTranslations(locale)
 const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
 
 // An omitted `activeDate` *is* the overview marker: the index pages pass title,
@@ -55,12 +54,6 @@ const isOverview = activeDate === undefined
         aria-label={navLabel}
         data-rail-panel
       >
-        <div class="rail-drawer__head">
-          <button type="button" class="rail-drawer__close" data-rail-close>
-            <span aria-hidden="true">[×]</span>
-            <span class="rail-drawer__close-label">{t.common.closeDateMenu}</span>
-          </button>
-        </div>
         <DateList {...listProps} idPrefix="rail-drawer-list" />
       </div>
     </div>
@@ -162,36 +155,6 @@ const isOverview = activeDate === undefined
     overflow-y: auto;
     background: var(--bg);
     border-right: 1px solid var(--border-char);
-  }
-
-  .rail-drawer__head {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1rem;
-  }
-
-  .rail-drawer__close {
-    display: flex;
-    align-items: baseline;
-    gap: 0.375rem;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    color: var(--fg-dim);
-    font: inherit;
-    font-size: 0.75rem;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .rail-drawer__close-label {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    clip-path: inset(50%);
-    white-space: nowrap;
   }
 
   @media (min-width: 768px) {

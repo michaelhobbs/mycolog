@@ -190,6 +190,15 @@ reintroduce a listing on an index; the point is to make the day the unit.
   two layouts. Do not hand-roll a two-column grid on an index page: the rail
   geometry lives in `DateRail` only, so a copy of that grid is how the two drift
   apart again.
+- **An omitted `activeDate` is the overview marker, and it drives the mobile
+  layout**: overview pages get a third `DateList` (`.rail__inline`) under the
+  slot, visible below 768px and `display: none` above it, and neither the
+  sticky bar nor the drawer is rendered at all — a toggle that opens the very
+  list already on screen is just a second way to reach it. Derive it from
+  `activeDate === undefined` rather than adding a prop: three index pages all
+  having to remember a flag is three chances to forget, and a day page silently
+  losing its drawer would be the failure mode. That also keeps the DOM at two
+  list instances, not three, so there is no duplicate `nav` landmark.
 - The title and description belong in the content pane, never in the rail. The
   rail is navigation (month headings and day rows); prose goes right. Overview
   descriptions keep a `34rem` measure so they do not stretch across the pane.

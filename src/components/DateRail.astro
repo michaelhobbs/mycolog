@@ -20,22 +20,33 @@ interface Props {
 const { days, basePath, locale, countUnit, navLabel, activeDate, activeLabel } = Astro.props
 const t = getTranslations(locale)
 const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
+
+// An omitted `activeDate` *is* the overview marker: the index pages pass title,
+// description and counts and no day, so they get the list inline on mobile
+// rather than a toggle that opens the very list already on screen.
+const isOverview = activeDate === undefined
 ---
 
 <div class="rail">
-  <div class="rail__bar">
-    <button
-      type="button"
-      class="rail__toggle"
-      data-rail-toggle
-      aria-expanded="false"
-      aria-controls="rail-drawer"
-    >
-      <span class="rail__toggle-label">{activeLabel}</span>
-      <span class="rail__toggle-hint">{t.common.changeDate}</span>
-      <span class="rail__toggle-icon" aria-hidden="true">[≡]</span>
-    </button>
-  </div>
+  {
+    isOverview ? null : (
+      <div class="rail__bar">
+        <button
+          type="button"
+          class="rail__toggle"
+          data-rail-toggle
+          aria-expanded="false"
+          aria-controls="rail-drawer"
+        >
+          <span class="rail__toggle-label">{activeLabel}</span>
+          <span class="rail__toggle-hint">{t.common.changeDate}</span>
+          <span class="rail__toggle-icon" aria-hidden="true">
+            [≡]
+          </span>
+        </button>
+      </div>
+    )
+  }
 
   <aside class="rail__side">
     <DateList {...listProps} idPrefix="rail-side" />
@@ -43,28 +54,39 @@ const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
 
   <div class="rail__main">
     <slot />
+    {
+      isOverview && (
+        <div class="rail__inline">
+          <DateList {...listProps} idPrefix="rail-inline" />
+        </div>
+      )
+    }
   </div>
 </div>
 
-<div class="rail-drawer" id="rail-drawer" data-rail-drawer>
-  <div class="rail-drawer__scrim" data-rail-close></div>
-  <div
-    class="rail-drawer__panel"
-    role="dialog"
-    aria-modal="true"
-    aria-label={navLabel}
-    data-rail-panel
-  >
-    <div class="rail-drawer__head">
-      <span class="rail-drawer__title">{t.common.changeDate}</span>
-      <button type="button" class="rail-drawer__close" data-rail-close>
-        <span aria-hidden="true">[×]</span>
-        <span class="rail-drawer__close-label">{t.common.closeDateMenu}</span>
-      </button>
+{
+  isOverview ? null : (
+    <div class="rail-drawer" id="rail-drawer" data-rail-drawer>
+      <div class="rail-drawer__scrim" data-rail-close />
+      <div
+        class="rail-drawer__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label={navLabel}
+        data-rail-panel
+      >
+        <div class="rail-drawer__head">
+          <span class="rail-drawer__title">{t.common.changeDate}</span>
+          <button type="button" class="rail-drawer__close" data-rail-close>
+            <span aria-hidden="true">[×]</span>
+            <span class="rail-drawer__close-label">{t.common.closeDateMenu}</span>
+          </button>
+        </div>
+        <DateList {...listProps} idPrefix="rail-drawer" />
+      </div>
     </div>
-    <DateList {...listProps} idPrefix="rail-drawer" />
-  </div>
-</div>
+  )
+}
 
 <style>
   .rail {
@@ -144,6 +166,10 @@ const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
     min-width: 0;
   }
 
+  .rail__inline {
+    margin-top: 1.5rem;
+  }
+
   @media (min-width: 768px) {
     .rail {
       grid-template-columns: var(--rail-w) minmax(0, 1fr);
@@ -152,6 +178,12 @@ const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
     }
 
     .rail__bar {
+      display: none;
+    }
+
+    /* The sidebar carries the list from here up, so the inline copy would be a
+       duplicate nav landmark. */
+    .rail__inline {
       display: none;
     }
 

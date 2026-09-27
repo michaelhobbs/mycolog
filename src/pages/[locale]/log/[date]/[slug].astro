@@ -169,12 +169,23 @@ const pageTitle = sighting
             <div class="fact-row">
               <span class="fact-lbl">{t.sighting.spotted}</span>
               <span class="fact-dot" />
-              <span class="fact-val">{formatDate(sighting.dateSpotted, locale)}</span>
+              <span class="fact-val">
+                <a href={`/${locale}/log/${sighting.dateSpotted}`} class="fact-val-link">
+                  {formatDate(sighting.dateSpotted, locale)}
+                </a>
+              </span>
             </div>
             <div class="fact-row">
               <span class="fact-lbl">{t.sighting.identified}</span>
               <span class="fact-dot" />
-              <span class="fact-val">{formatDate(sighting.dateIdentified, locale)}</span>
+              <span class="fact-val">
+                <a
+                  href={`/${locale}/identifications/${sighting.dateIdentified}`}
+                  class="fact-val-link"
+                >
+                  {formatDate(sighting.dateIdentified, locale)}
+                </a>
+              </span>
             </div>
           </div>
 

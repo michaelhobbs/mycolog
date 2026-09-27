@@ -51,15 +51,6 @@ export function formatDay(dateStr: string, locale: Locale): string {
   })
 }
 
-export function formatDayLong(dateStr: string, locale: Locale): string {
-  return toLocalDate(dateStr).toLocaleDateString(intlLocale(locale), {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
-}
-
 export function groupByMonth(days: RailDay[], locale: Locale): RailMonth[] {
   const months = new Map<string, RailDay[]>()
   for (const day of days) {

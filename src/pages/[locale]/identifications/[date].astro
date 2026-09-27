@@ -11,7 +11,7 @@ import {
   locationName,
 } from '../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../i18n'
-import { formatDayLong, type RailDay } from '../../../lib/date-rail'
+import { type RailDay } from '../../../lib/date-rail'
 import type { Locale } from '../../../i18n'
 
 export async function getStaticPaths() {
@@ -64,7 +64,6 @@ const countLabel = `${sightings.length} ${t.log.sightingsCount}`
     countUnit={t.log.sightingsCount}
     navLabel={t.common.jumpToDate}
     activeDate={date}
-    activeLabel={formatDayLong(date, locale)}
   >
     <div class="page-header">
       <span class="page-header__tag"

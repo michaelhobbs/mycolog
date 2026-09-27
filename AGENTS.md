@@ -181,24 +181,48 @@ reintroduce a listing on an index; the point is to make the day the unit.
   the three cannot drift. `groupByMonth()` in `src/lib/date-rail.ts` does the
   grouping; months contain individual days, not just month totals.
 - `DateRail.astro` is the app shell: a 240px sticky sidebar (≥768px) wrapping a
-  content pane, plus, below that breakpoint, a sticky bar opening an off-canvas
-  drawer. The drawer is the only client JS here and is a progressive
-  enhancement — every page is fully readable with it disabled.
+  content pane, plus, below that breakpoint, an overlay drawer holding every day.
+  Its script is the only client JS here and is a progressive enhancement — every
+  page is fully readable with it disabled.
 - **The overview pages use the same shell as the day pages** — pass
   `DateRail` a slot holding the title, description, and counts, with `activeDate`
   omitted. That is what makes the two page types feel like one app instead of
   two layouts. Do not hand-roll a two-column grid on an index page: the rail
   geometry lives in `DateRail` only, so a copy of that grid is how the two drift
   apart again.
+- **The mobile toggle lives in `Layout`'s header, not in the rail.** It is
+  rendered on _every_ page carrying the `hidden` attribute, and `DateRail`'s
+  script clears it only when it finds the drawer that `aria-controls` names. So
+  no page has to remember a flag — a day page cannot silently lose its only
+  mobile navigation — and the pages without a drawer carry a permanently hidden
+  button. The `hidden` restatement in `Layout.css` is load-bearing: an author
+  `display` beats the UA's `[hidden]` rule, so without it the button would show
+  on every page.
+- Hide that button with `min-width: 768px`, not the `max-width` query the nav
+  itself uses. At exactly 768px both queries apply, and the drawer is
+  `display: none !important` there, so a `max-width` rule would leave a button
+  that opens nothing. From 768px up the sidebar replaces it.
+- **The scrim and the panel start at `var(--header-h)`, and the header stays
+  above both.** A sticky bar _inside_ the rail used to sit at `z-index: 50` over
+  a `z-index: 1` panel, so the toggle covered the top of the date list whenever
+  the drawer was open; starting the overlay under the header removes that
+  overlap structurally, and keeping the header on top leaves the toggle itself
+  visible as the close control. The header (z-index 100) must stay above the
+  drawer (z-index 1) or the button the user just pressed vanishes behind the dim.
+- The toggle is a toggle, not an opener: one click opens, the next closes, and
+  `aria-expanded` tracks it. Scrim tap and <kbd>Esc</kbd> also close, focus moves
+  into the panel on open and returns to the toggle on close.
+- The drawer `<div>` and its `DateList` must not share an id: `aria-controls`
+  and `getElementById` both resolve to the first match in document order, so an
+  overlapping `idPrefix` wires the toggle to the wrong element.
 - **An omitted `activeDate` is the overview marker, and it drives the mobile
   layout**: overview pages get a third `DateList` (`.rail__inline`) under the
-  slot, visible below 768px and `display: none` above it, and neither the
-  sticky bar nor the drawer is rendered at all — a toggle that opens the very
-  list already on screen is just a second way to reach it. Derive it from
-  `activeDate === undefined` rather than adding a prop: three index pages all
-  having to remember a flag is three chances to forget, and a day page silently
-  losing its drawer would be the failure mode. That also keeps the DOM at two
-  list instances, not three, so there is no duplicate `nav` landmark.
+  slot, visible below 768px and `display: none` above it, and no drawer at all —
+  the header toggle then stays hidden because it has nothing to open. Derive it
+  from `activeDate === undefined` rather than adding a prop: three index pages
+  all having to remember a flag is three chances to forget, and a day page
+  silently losing its drawer would be the failure mode. That also keeps the DOM
+  at two list instances, not three, so there is no duplicate `nav` landmark.
 - The title and description belong in the content pane, never in the rail. The
   rail is navigation (month headings and day rows); prose goes right. Overview
   descriptions keep a `34rem` measure so they do not stretch across the pane.

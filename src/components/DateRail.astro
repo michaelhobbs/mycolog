@@ -14,40 +14,20 @@ interface Props {
    * render the same shell without a selected day.
    */
   activeDate?: string
-  activeLabel: string
 }
 
-const { days, basePath, locale, countUnit, navLabel, activeDate, activeLabel } = Astro.props
+const { days, basePath, locale, countUnit, navLabel, activeDate } = Astro.props
 const t = getTranslations(locale)
 const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
 
 // An omitted `activeDate` *is* the overview marker: the index pages pass title,
-// description and counts and no day, so they get the list inline on mobile
-// rather than a toggle that opens the very list already on screen.
+// description and counts and no day, so they show the list inline on mobile and
+// have no drawer at all — which also leaves the header's toggle hidden, because
+// there is nothing for it to open.
 const isOverview = activeDate === undefined
 ---
 
 <div class="rail">
-  {
-    isOverview ? null : (
-      <div class="rail__bar">
-        <button
-          type="button"
-          class="rail__toggle"
-          data-rail-toggle
-          aria-expanded="false"
-          aria-controls="rail-drawer"
-        >
-          <span class="rail__toggle-label">{activeLabel}</span>
-          <span class="rail__toggle-hint">{t.common.changeDate}</span>
-          <span class="rail__toggle-icon" aria-hidden="true">
-            [≡]
-          </span>
-        </button>
-      </div>
-    )
-  }
-
   <aside class="rail__side">
     <DateList {...listProps} idPrefix="rail-side" />
   </aside>
@@ -76,13 +56,12 @@ const isOverview = activeDate === undefined
         data-rail-panel
       >
         <div class="rail-drawer__head">
-          <span class="rail-drawer__title">{t.common.changeDate}</span>
           <button type="button" class="rail-drawer__close" data-rail-close>
             <span aria-hidden="true">[×]</span>
             <span class="rail-drawer__close-label">{t.common.closeDateMenu}</span>
           </button>
         </div>
-        <DateList {...listProps} idPrefix="rail-drawer" />
+        <DateList {...listProps} idPrefix="rail-drawer-list" />
       </div>
     </div>
   )
@@ -93,43 +72,6 @@ const isOverview = activeDate === undefined
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 1.25rem;
-  }
-
-  .rail__bar {
-    position: sticky;
-    top: var(--header-h);
-    z-index: 50;
-    margin: -0.5rem 0 0;
-  }
-
-  .rail__toggle {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    color: var(--fg);
-    font: inherit;
-    font-size: 0.8125rem;
-    text-align: left;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  .rail__toggle-label {
-    font-weight: 700;
-  }
-
-  .rail__toggle-hint {
-    flex: 1;
-    color: var(--fg-dim);
-    font-size: 0.75rem;
-  }
-
-  .rail__toggle-icon {
-    color: var(--fg-dim);
   }
 
   .rail__side {
@@ -177,10 +119,6 @@ const isOverview = activeDate === undefined
       align-items: start;
     }
 
-    .rail__bar {
-      display: none;
-    }
-
     /* The sidebar carries the list from here up, so the inline copy would be a
        duplicate nav landmark. */
     .rail__inline {
@@ -205,15 +143,17 @@ const isOverview = activeDate === undefined
     display: block;
   }
 
+  /* Both start below the header, which keeps the header (and the toggle that
+     opened this) legible and tappable above the dim. */
   .rail-drawer__scrim {
     position: fixed;
-    inset: 0;
+    inset: var(--header-h) 0 0 0;
     background: rgb(0 0 0 / 0.65);
   }
 
   .rail-drawer__panel {
     position: fixed;
-    inset: 0 auto 0 0;
+    inset: var(--header-h) auto 0 0;
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -226,18 +166,8 @@ const isOverview = activeDate === undefined
 
   .rail-drawer__head {
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.75rem;
+    justify-content: flex-end;
     margin-bottom: 1rem;
-  }
-
-  .rail-drawer__title {
-    color: var(--accent-dim);
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   .rail-drawer__close {
@@ -280,9 +210,14 @@ const isOverview = activeDate === undefined
     const panel = drawer.querySelector<HTMLElement>('[data-rail-panel]')
     if (!panel) continue
 
+    // The header ships the toggle on every page, hidden. Only a page that
+    // actually renders this drawer may reveal it.
+    toggle.hidden = false
+
     let lastFocus: HTMLElement | null = null
 
     const focusables = () => [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)]
+    const isOpen = () => drawer.hasAttribute('data-open')
 
     const open = () => {
       lastFocus = document.activeElement as HTMLElement | null
@@ -300,7 +235,7 @@ const isOverview = activeDate === undefined
       lastFocus = null
     }
 
-    toggle.addEventListener('click', open)
+    toggle.addEventListener('click', () => (isOpen() ? close() : open()))
 
     for (const el of drawer.querySelectorAll('[data-rail-close]')) {
       el.addEventListener('click', close)

@@ -5,7 +5,7 @@ import DateRail from '../../../components/DateRail.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
 import { getTranslations, formatDate, locales } from '../../../i18n'
-import { formatDayLong, type RailDay } from '../../../lib/date-rail'
+import { type RailDay } from '../../../lib/date-rail'
 import type { Locale } from '../../../i18n'
 
 export async function getStaticPaths() {
@@ -61,7 +61,6 @@ const countLabel = `${entries.length} ${t.backlog.items}`
     countUnit={t.backlog.items}
     navLabel={t.common.jumpToDate}
     activeDate={date}
-    activeLabel={formatDayLong(date, locale)}
   >
     <div class="page-header">
       <span class="page-header__tag">╔══ {formatDate(date, locale)}</span>

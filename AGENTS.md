@@ -63,6 +63,47 @@ state and from swallowing the first tap of a two-tap activation.
   `touch-action: manipulation` (and `-webkit-tap-highlight-color: transparent`)
   to opt out of iOS's double-tap-to-zoom tap delay.
 
+## Lightbox
+
+`Lightbox.astro` is **one `<dialog>` for the whole page**, mounted once in
+`Layout.astro` — not one per gallery. Its script is `is:inline` (so it is emitted
+unbundled: no imports, no TypeScript) and resolves `[data-lightbox-modal]` a single
+time, then serves every gallery through one document-level click listener. Keep it
+that way: a second mount, or a per-component instance, silently leaves every
+gallery but the first dead.
+
+A gallery opts in with `data-lightbox-group`; per-photo URLs come from
+`data-lightbox-src`, and a trigger carries `data-lightbox-trigger` plus an optional
+`data-index` (it falls back to the group's own `data-index`, then 0). A group
+without any `data-lightbox-src` falls back to its own `<img>` elements as sources,
+so a plain gallery needs no changes to become lightbox-able.
+
+- **All five source producers pass `getImage({ src: img, width: 1600 })`**:
+  `MushroomCard.astro`, `mushrooms/[name].astro`, `log/[date]/[slug].astro`,
+  `backlog/[slug].astro`, `backlog/[date].astro`. Those are 1600px WebP
+  derivatives, never the original JPEGs (median 336 kB, p90 897 kB, max 1.5 MB),
+  and they are a _different_ asset from the 320/640px card thumbnails — pointing
+  the lightbox at the thumbnails would show a blurry fullscreen photo.
+- **Preloading is per opened group, never per page.** A backlog day page carries
+  292 sources across 59 groups, so anything page-scoped would fetch ~100 MB. The
+  largest single group is 33 photos (~10.8 MB at the median), which is why
+  `preload()` orders the queue nearest-first from the current index and keeps only
+  `PRELOAD_CONCURRENCY` (4) requests in flight: 33 in parallel would starve the
+  image the viewer is about to swipe to. Measured ceiling is 4 preloads plus the
+  displayed one. Do not simplify this into "fetch the group on load".
+- **`close` bumps `preloadToken`**, which retires the queue so the tail of a large
+  group stops costing bandwidth the moment the viewer walks away (a 33-photo group
+  closed 400 ms in issues a handful of requests, not 33). Finished images stay in
+  the HTTP cache, so reopening is instant — do not "fix" that by caching the queue
+  itself.
+- `update()` calls `resetZoom()`, so a slide change never inherits zoom or pan from
+  the previous photo. Keep the reset inside `update()`.
+- `open()` is the only thing that locks `document.body.style.overflow`, and `close`
+  is the only thing that clears it; any new open path must go through `open()` or
+  the page will scroll behind the modal.
+- <kbd>Esc</kbd> resets the zoom first and only closes on the second press: the
+  `cancel` handler calls `preventDefault()` while `scale > 1`.
+
 ## MapLibre
 
 `maplibre-gl` v6 is ESM-only and has **no default export**. Import the namespace

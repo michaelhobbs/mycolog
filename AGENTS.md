@@ -80,6 +80,71 @@ state and from swallowing the first tap of a two-tap activation.
   `touch-action: manipulation` (and `-webkit-tap-highlight-color: transparent`)
   to opt out of iOS's double-tap-to-zoom tap delay.
 
+## Responsive images
+
+**Every `<Image>` that sets `widths` must also set `width`, and `width` must be
+the largest entry in that list.** This is not a style preference — omitting it is
+a silent 1.5 GB regression.
+
+Astro's `internal.js` falls back to `originalWidth`/`originalHeight` when neither
+`width` nor `height` is given, so `<Image src={img} widths={[400, 800]} />` makes
+the _primary_ transform the untouched 3024×4032 original and emits it as the `src`
+fallback next to the `srcset`. Every browser with `srcset` support picks a
+`srcset` candidate and never requests that file, so it is pure dead weight —
+built, shipped and stored for nothing.
+
+Measured across the site (1,492 photos): 1,490 full-resolution WebP, 1,481 MB,
+**63% of `dist`**, and 766 ms of sharp CPU each — ~1,141 s of encoding per cold
+build. Verified 7,818 full-res `src` references in the built HTML, all of them
+`srcset`-paired, i.e. 0 real requests. Setting `width` to the largest candidate
+makes `matchesValidatedTransform` reuse that file as the `src`, so this **removes**
+an encode rather than adding one:
+
+| Site                      | `widths`          | `width` |
+| ------------------------- | ----------------- | ------- |
+| `MushroomCard.astro`      | `[640, 320]`      | 640     |
+| `mushrooms/index.astro`   | `[320, 640]`      | 640     |
+| `mushrooms/[name].astro`  | `[320, 640]`      | 640     |
+| `log/[date]/[slug].astro` | `[320, 640]`      | 640     |
+| `backlog/[date].astro`    | `[400, 800]`      | 800     |
+| `backlog/[slug].astro`    | `[400, 800]`      | 800     |
+| `locations/index.astro`   | `[260, 520, 891]` | 891     |
+
+Result: 4,951 images instead of 6,441, `dist` 2.30 GB → 921 MB, and no `dist`
+image ≥ 3000 px wide. The emitted `width`/`height` attributes change but the
+aspect ratio does not, so layout and CLS are unaffected. An `<Image>` with
+neither `width` nor `widths` is fine as long as it sets an explicit small `width`
+(that is what the 96px sighting rows in `mushrooms/[name].astro` do).
+
+Assert the invariant after touching an `<Image>`: no image in `dist/_astro` may be
+≥ 3000 px wide, and every `<img src>` URL must be a member of its own `srcset`.
+
+## CI
+
+`.github/workflows/deploy.yml` is the only deploy path. Measured cost of the
+steps that are still worth watching: `checkout` 224–320 s (the repo is 3.81 GB
+because all 1,492 photos live in git), and `rsync` 215–224 s. The build was
+1,169–1,377 s cold before the image fix above.
+
+- **`actions/cache` for `node_modules/.astro/assets` sits _after_ `npm ci`**,
+  because `npm ci` deletes `node_modules` outright and would otherwise discard a
+  restored cache. The key is deliberately **stable across content commits**
+  (`package-lock.json` + `astro.config.mjs`): Astro names every derivative by a
+  hash of its own source and transform, so a restored cache is always safe to
+  reuse and stale entries are simply never requested. Do **not** add `src/**` to
+  the key — it would miss on every commit and defeat the whole point.
+- **Bump the `-v1` suffix whenever an image width, quality or format changes.**
+  `actions/cache` only saves on a primary-key _miss_, so a key that already hits
+  will never re-save, and the new derivatives would be re-encoded on every
+  subsequent build forever.
+- **`rsync --checksum` is load-bearing.** Astro rewrites the mtime of every file
+  it rebuilds, so rsync's default size+mtime test fails across the whole of
+  `dist/` and re-uploads everything on every deploy even when the bytes are
+  identical. `-c` trades ~10 s of hashing for a transfer that drops to
+  essentially nothing when no content changed.
+- Cold build is ~4 min, warm ~9 s (all 4,951 derivatives log "reused cache
+  entry"). `prebuild` thumbnails are ~3.5 s of that and are not a bottleneck.
+
 ## Lightbox
 
 `Lightbox.astro` is **one `<dialog>` for the whole page**, mounted once in

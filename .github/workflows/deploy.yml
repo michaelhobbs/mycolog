@@ -41,6 +41,26 @@ jobs:
             libjpeg-turbo8 libwebp7 libicu74
 
       - run: npm ci
+
+      # Astro's derived-image cache. MUST come after `npm ci`, which wipes
+      # node_modules outright and would otherwise delete a restored cache.
+      #
+      # The key is deliberately stable across content commits: Astro names every
+      # derivative by a hash of its own source + transform, so a restored cache
+      # is always safe to reuse and stale entries are simply never requested.
+      # That is what turns this into a real incremental build. Keeping `src/**`
+      # out of the key is the point — including it would miss on every commit.
+      # Bump the `-v1` suffix when changing any image width, quality or format,
+      # because actions/cache only saves on a primary-key miss and would
+      # otherwise never re-save under a key that already hits.
+      - uses: actions/cache@v4
+        with:
+          path: node_modules/.astro/assets
+          key: astro-assets-v1-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}
+          restore-keys: |
+            astro-assets-v1-${{ hashFiles('package-lock.json', 'astro.config.mjs') }}-
+            astro-assets-
+
       - name: Build
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
@@ -63,7 +83,12 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts 2>/dev/null
 
-          rsync -avz --delete \
+          # --checksum is load-bearing: Astro rewrites the mtime of every file
+          # it rebuilds, so rsync's default size+mtime test fails across the
+          # whole of dist/ and re-uploads ~850MB on every single deploy even
+          # when the bytes are identical. -c trades ~10s of hashing for that
+          # transfer, so a no-content-change deploy moves essentially nothing.
+          rsync -avz --delete --checksum \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             dist/ \
             "${VPS_USER}@${VPS_HOST}:${WEB_ROOT}"

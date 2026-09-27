@@ -11,7 +11,11 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Pinned, not `ubuntu-latest`: @maplibre/maplibre-gl-native ships a prebuilt
+    # binary for Ubuntu 24.04 only. It needs glibc >= 2.38 and links against
+    # that release's sonames (libjpeg.so.8, libicu*.so.74), so a runner image
+    # bump breaks it in ways an `apt` line below cannot paper over.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
 
@@ -20,11 +24,32 @@ jobs:
           node-version: 22
           cache: npm
 
+      # @maplibre/maplibre-gl-native is a native addon that links against
+      # libGLX.so.0 and libOpenGL.so.0, which the runner image does not ship —
+      # hence `Error: libOpenGL.so.0: cannot open shared object file` at
+      # require() time. libgl1-mesa-dri + libglx-mesa0 add the llvmpipe software
+      # rasteriser, because CI has no GPU. The image/font libs below are the
+      # binary's other DT_NEEDED entries; the runner has most already, and apt
+      # is a no-op for those.
+      - name: Install MapLibre Native runtime libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgl1 libglx0 libopengl0 libgl1-mesa-dri libglx-mesa0 \
+            xvfb xauth \
+            libcurl4 libuv1 libx11-6 libxext6 libpng16-16 zlib1g \
+            libjpeg-turbo8 libwebp7 libicu74
+
       - run: npm ci
       - name: Build
         env:
           SITE_URL: ${{ secrets.SITE_URL }}
-        run: npm run build
+        # The `prebuild` thumbnail step renders with MapLibre Native through
+        # GLX, which aborts with "Failed to open X display" if DISPLAY is unset.
+        # That is a C++ std::runtime_error -> terminate(), so it is not a
+        # catchable exception and `--soft` cannot downgrade it: the process dies.
+        # Xvfb gives GLX a display to draw into. 14 thumbnails take ~3.5s.
+        run: xvfb-run --auto-servernum npm run build
 
       - name: Deploy to VPS
         env:

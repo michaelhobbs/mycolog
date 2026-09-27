@@ -185,6 +185,20 @@ async function main() {
     return
   }
 
+  // MapLibre Native renders through GLX, which needs an X display. Without one
+  // it raises a C++ std::runtime_error that the runtime turns into an
+  // uncatchable abort, so it cannot be handled by the try/catch below or
+  // downgraded by --soft — the process just dies. Check up front and say
+  // something actionable instead. macOS renders through Metal and is exempt.
+  if (process.platform === 'linux' && !process.env.DISPLAY) {
+    const msg = 'DISPLAY is unset, but MapLibre Native needs an X display to render (GLX)'
+    const hint =
+      'run under a virtual display, e.g. `xvfb-run --auto-servernum node scripts/generate-thumbnails.mjs`'
+    if (!SOFT) throw new Error(`${msg} — ${hint}`)
+    console.warn(`[thumbnails] ${msg}; skipping (${hint})`)
+    return
+  }
+
   // The slug is the directory name, which readEntries() discards.
   const locationDirs = await fs.readdir(path.join(CONTENT, 'locations'), { withFileTypes: true })
   const locations = []

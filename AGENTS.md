@@ -22,6 +22,23 @@ a page that also loads other maps.
   browser. It downloads a prebuilt binary at install time and has **no
   source-build fallback** (`--fallback-to-build=false`), so musl/Alpine and
   FreeBSD cannot install it — macOS and ubuntu-24.04 CI are fine.
+- **On Linux the prebuilt binary needs system libraries and an X display.** It is
+  a GLX addon, so it links `libGLX.so.0` / `libOpenGL.so.0`, which the GitHub
+  runner image does not ship, hence `ERR_DLOPEN_FAILED` at `require()` time. CI
+  installs `libgl1 libglx0 libopengl0 libgl1-mesa-dri libglx-mesa0 xvfb xauth`
+  (the mesa pair supplies the llvmpipe software rasteriser — no GPU on CI) and
+  runs the build as `xvfb-run --auto-servernum npm run build`. A missing X
+  display is a C++ `std::runtime_error` → `terminate()`, i.e. an **uncatchable
+  abort**, so it cannot be handled by the script's `try/catch` nor downgraded by
+  `--soft`; `main()` therefore preflights `DISPLAY` on Linux and fails early with
+  an actionable message. macOS renders through Metal and needs no `DISPLAY`.
+  Because the binary is published for Ubuntu 24.04 only (glibc ≥ 2.38,
+  `libjpeg.so.8`, `libicu*.so.74`), the workflow pins `runs-on: ubuntu-24.04`
+  rather than `ubuntu-latest` — an image bump breaks it in ways an `apt` line
+  cannot paper over. `libEGL`/`libegl1` is _not_ needed: the binding is GLX-only.
+- The script is `.mjs` but imports `../src/lib/map-palette.ts`, so it relies on
+  Node's type stripping. That is on by default from **Node 22.18**, hence
+  `node-version: 22` (which floats above that floor) rather than a pinned patch.
 - **The build now requires network access** to `tiles.openfreemap.org`. This is
   the only build step that fetches anything.
 - The palette is shared with the live maps via `src/lib/map-palette.ts`; change

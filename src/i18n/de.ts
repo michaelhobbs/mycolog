@@ -4,8 +4,6 @@ export default {
     jumpToDate: 'Zum Datum springen',
     back: 'zurück',
     changeDate: 'Datum ändern',
-    openDateMenu: 'Datumsmenü öffnen',
-    closeDateMenu: 'Datumsmenü schließen',
     noEntries: 'Noch nichts erfasst.',
   },
   nav: {
@@ -19,7 +17,6 @@ export default {
   },
   home: {
     heroTitle: 'Pilze rund um Garmisch-Partenkirchen',
-    heroSubtitle: 'Entdeckungen aus den Wäldern der Bayerischen Alpen',
     heroDescription:
       'Eine persönliche Sammlung von Pilzfunden in den Bergen und Wäldern rund um Garmisch-Partenkirchen. Jeder Eintrag enthält Artbestimmung, Merkmale, Standortdaten und Fotos.',
     heroCta: 'Auf der Karte ansehen',
@@ -55,7 +52,6 @@ export default {
     more: 'mehr Details',
     fullscreen: 'Vollbild öffnen',
     edibility: 'Essbarkeit',
-    speciesNotes: 'Allgemeine Notiz (Art)',
   },
   lightbox: {
     viewer: 'Fotobetrachter',
@@ -79,7 +75,6 @@ export default {
     species: 'Art',
     location: 'Ort',
     habitat: 'Lebensraum',
-    speciesNotes: 'Allgemeine Notiz (Art)',
     sightingNotes: 'Notiz (dieser Fund)',
   },
   identifications: {
@@ -120,8 +115,6 @@ export default {
     sightings: 'Beobachtungen',
     backToIndex: 'Alle Arten',
     fullscreen: 'Vollbild öffnen',
-    spottedIn: 'Gesehen in',
-    onDate: 'am',
     at: 'bei',
     unknown: 'Unbekannt',
   },
@@ -178,7 +171,6 @@ export default {
     locationSaved: 'Standort gespeichert',
     lat: 'Breite',
     lng: 'Länge',
-    removePin: 'Markierung entfernen',
     submit: 'Fund anlegen',
     submitting: 'Wird angelegt…',
     success: 'Fund angelegt!',
@@ -199,17 +191,14 @@ export default {
     updatingCover: 'Aktualisiere Hauptfoto…',
     coverUpdated: 'Hauptfoto aktualisiert',
     devOnly: 'Die Bestimmung im Rückstand ist nur im Dev-Build verfügbar',
-    noItems: 'Der Rückstand ist derzeit leer.',
   },
   meta: {
     homeDescription:
       'Pilzbeobachtungen und Sammlertouren rund um Garmisch-Partenkirchen in den Bayerischen Alpen.',
-    mapDescription: 'Interaktive Karte der Pilzfunde rund um Garmisch-Partenkirchen.',
     homeTitle: 'myco.log — pilzfunde',
     mapTitle: 'karte — myco.log',
     logTitle: 'protokoll — myco.log',
     identificationsTitle: 'bestimmungen — myco.log',
-    locationsTitle: 'orte — myco.log',
     backlogTitle: 'rückstand — myco.log',
   },
 } as const

@@ -4,8 +4,6 @@ export default {
     jumpToDate: 'Jump to date',
     back: 'back',
     changeDate: 'Change date',
-    openDateMenu: 'Open date menu',
-    closeDateMenu: 'Close date menu',
     noEntries: 'Nothing recorded yet.',
   },
   nav: {
@@ -19,7 +17,6 @@ export default {
   },
   home: {
     heroTitle: 'Mushrooms of Garmisch-Partenkirchen',
-    heroSubtitle: 'Discoveries from the forests of the Bavarian Alps',
     heroDescription:
       'A personal collection of mushroom sightings documented in the mountains and forests around Garmisch-Partenkirchen. Each entry includes species identification, key features, location data, and photographs.',
     heroCta: 'View on map',
@@ -55,7 +52,6 @@ export default {
     more: 'more details',
     fullscreen: 'open fullscreen',
     edibility: 'edibility',
-    speciesNotes: 'General note (species)',
   },
   lightbox: {
     viewer: 'Photo viewer',
@@ -79,7 +75,6 @@ export default {
     species: 'species',
     location: 'location',
     habitat: 'habitat',
-    speciesNotes: 'General note (species)',
     sightingNotes: 'Note (this sighting)',
   },
   identifications: {
@@ -120,8 +115,6 @@ export default {
     sightings: 'Sightings',
     backToIndex: 'all species',
     fullscreen: 'open fullscreen',
-    spottedIn: 'Spotted in',
-    onDate: 'on',
     at: 'at',
     unknown: 'Unknown',
   },
@@ -178,7 +171,6 @@ export default {
     locationSaved: 'Location saved',
     lat: 'lat',
     lng: 'lng',
-    removePin: 'remove pin',
     submit: 'Create sighting',
     submitting: 'Creating…',
     success: 'Sighting created!',
@@ -199,17 +191,14 @@ export default {
     updatingCover: 'Updating main photo…',
     coverUpdated: 'Main photo updated',
     devOnly: 'Backlog identification is only available in the dev build',
-    noItems: 'The backlog is currently empty.',
   },
   meta: {
     homeDescription:
       'Mushroom sightings and foraging discoveries around Garmisch-Partenkirchen in the Bavarian Alps.',
-    mapDescription: 'Interactive map of mushroom sightings around Garmisch-Partenkirchen.',
     homeTitle: 'myco.log — mushroom sightings',
     mapTitle: 'map — myco.log',
     logTitle: 'log — myco.log',
     identificationsTitle: 'identifications — myco.log',
-    locationsTitle: 'locations — myco.log',
     backlogTitle: 'backlog — myco.log',
   },
 } as const

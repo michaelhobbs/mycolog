@@ -2,9 +2,16 @@
 import Layout from '../../../layouts/Layout.astro'
 import MushroomCard from '../../../components/MushroomCard.astro'
 import LinkRow from '../../../components/LinkRow.astro'
+import DateRail from '../../../components/DateRail.astro'
 import { getCollection } from 'astro:content'
-import { enrichSightings, identificationDate, buildLocationMap } from '../../../lib/sightings'
+import {
+  enrichSightings,
+  identificationDate,
+  buildLocationMap,
+  locationName,
+} from '../../../lib/sightings'
 import { getTranslations, formatDate, locales } from '../../../i18n'
+import { formatDayLong, type RailDay } from '../../../lib/date-rail'
 import type { Locale } from '../../../i18n'
 
 export async function getStaticPaths() {
@@ -23,43 +30,70 @@ const [sightingEntries, speciesEntries, locationEntries] = await Promise.all([
   getCollection('species'),
   getCollection('locations'),
 ])
-const sightings = enrichSightings(sightingEntries, speciesEntries).filter(
-  (s) => identificationDate(s) === date,
-)
+const enriched = enrichSightings(sightingEntries, speciesEntries)
+const sightings = enriched.filter((s) => identificationDate(s) === date)
 const locations = buildLocationMap(locationEntries)
+
+const byDate = new Map<string, typeof sightings>()
+for (const s of enriched) {
+  const key = identificationDate(s)
+  const bucket = byDate.get(key)
+  if (bucket) bucket.push(s)
+  else byDate.set(key, [s])
+}
+
+const railDays: RailDay[] = [...byDate.entries()]
+  .map(([day, items]) => {
+    const names = [...new Set(items.map((s) => s.locationSlug).filter(Boolean))]
+      .slice(0, 3)
+      .map((slug) => locationName(locations, slug, locale))
+    return { date: day, count: items.length, meta: names.join(' · ') || undefined }
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+const countLabel = `${sightings.length} ${t.log.sightingsCount}`
 ---
 
 <Layout
   title={`${t.identifications.title} · ${formatDate(date, locale)} — myco.log`}
   locale={locale}
 >
-  <section class="identifications-page">
+  <DateRail
+    days={railDays}
+    basePath={`/${locale}/identifications`}
+    locale={locale}
+    countUnit={t.log.sightingsCount}
+    navLabel={t.common.jumpToDate}
+    activeDate={date}
+    activeLabel={formatDayLong(date, locale)}
+  >
     <div class="page-header">
       <span class="page-header__tag"
         >╔══ {t.identifications.title} · {formatDate(date, locale)}</span
       >
-      <span class="page-header__sub">{sightings.length} {t.log.sightingsCount}</span>
+      <span class="page-header__sub">{countLabel}</span>
     </div>
 
-    <LinkRow locale={locale} fallback={`/${locale}/identifications`} />
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/identifications`}
+      links={[{ href: `/${locale}/identifications`, label: t.identifications.backToList }]}
+    />
 
-    {sightings.length === 0 && <p class="empty">{t.log.noSightings}</p>}
-
-    <div class="day__grid">
-      {
-        sightings.map((sighting) => (
-          <MushroomCard sighting={sighting} locale={locale} locations={locations} />
-        ))
-      }
-    </div>
-  </section>
+    {
+      sightings.length === 0 ? (
+        <p class="empty">{t.log.noSightings}</p>
+      ) : (
+        <div class="day__grid">
+          {sightings.map((sighting) => (
+            <MushroomCard sighting={sighting} locale={locale} locations={locations} />
+          ))}
+        </div>
+      )
+    }
+  </DateRail>
 </Layout>
 
 <style>
-  .identifications-page {
-    padding-bottom: 2rem;
-  }
-
   .page-header {
     margin-bottom: 1.25rem;
   }

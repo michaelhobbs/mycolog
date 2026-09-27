@@ -1,10 +1,15 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import MushroomCard from '../../components/MushroomCard.astro'
-import DateIndex from '../../components/DateIndex.astro'
+import DateRail from '../../components/DateRail.astro'
 import { getCollection } from 'astro:content'
-import { enrichSightings, identificationDate, buildLocationMap } from '../../lib/sightings'
-import { getTranslations, formatDate, formatAnchorDate, locales } from '../../i18n'
+import {
+  enrichSightings,
+  identificationDate,
+  buildLocationMap,
+  locationName,
+} from '../../lib/sightings'
+import { getTranslations, locales } from '../../i18n'
+import type { RailDay } from '../../lib/date-rail'
 import type { Locale } from '../../i18n'
 
 export function getStaticPaths() {
@@ -24,54 +29,47 @@ const locations = buildLocationMap(locationEntries)
 
 const bySession = new Map<string, typeof sightings>()
 for (const s of sightings) {
-  const d = identificationDate(s)
-  if (!bySession.has(d)) bySession.set(d, [])
-  bySession.get(d)!.push(s)
+  const key = identificationDate(s)
+  const bucket = bySession.get(key)
+  if (bucket) bucket.push(s)
+  else bySession.set(key, [s])
 }
-const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
+
+const railDays: RailDay[] = [...bySession.entries()]
+  .map(([day, items]) => {
+    const names = [...new Set(items.map((s) => s.locationSlug).filter(Boolean))]
+      .slice(0, 3)
+      .map((slug) => locationName(locations, slug, locale))
+    return { date: day, count: items.length, meta: names.join(' · ') || undefined }
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+
+const counts = `${railDays.length} ${t.log.daysLabel} · ${sightings.length} ${t.log.sightingsCount}`
 ---
 
 <Layout title={t.meta.identificationsTitle} locale={locale}>
-  <section class="identifications-page">
+  <DateRail
+    days={railDays}
+    basePath={`/${locale}/identifications`}
+    locale={locale}
+    countUnit={t.log.sightingsCount}
+    navLabel={t.common.jumpToDate}
+    activeLabel={t.identifications.title}
+  >
     <div class="page-header">
       <span class="page-header__tag">╔══ {t.identifications.title}</span>
       <span class="page-header__sub">{t.identifications.subtitle}</span>
     </div>
 
-    <DateIndex dates={sessions.map(([date]) => date)} label={t.common.jumpToDate} />
+    <p class="overview__intro">{t.identifications.indexIntro}</p>
 
-    <div class="days">
-      {
-        sessions.map(([date, list]) => (
-          <article class="day" id={formatAnchorDate(date)}>
-            <header class="day__head">
-              <a class="day__date" href={`/${locale}/identifications/${date}`}>
-                {formatDate(date, locale)}
-              </a>
-              <span class="day__meta">
-                ({list.length} {t.log.sightingsCount})
-              </span>
-            </header>
-
-            <div class="day__grid">
-              {list.map((sighting) => (
-                <MushroomCard sighting={sighting} locale={locale} locations={locations} />
-              ))}
-            </div>
-          </article>
-        ))
-      }
-    </div>
-  </section>
+    <p class="overview__count">{counts}</p>
+  </DateRail>
 </Layout>
 
 <style>
-  .identifications-page {
-    padding-bottom: 2rem;
-  }
-
   .page-header {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .page-header__tag {
@@ -87,50 +85,20 @@ const sessions = [...bySession.entries()].sort((a, b) => (a[0] < b[0] ? 1 : -1))
     font-size: 0.8125rem;
   }
 
-  .days {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .day {
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-  }
-
-  .day__head {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid var(--border-char);
-  }
-
-  .day__date {
-    color: var(--yellow);
-    font-weight: 700;
+  .overview__intro {
+    max-width: 34rem;
+    margin: 0 0 0.75rem;
+    color: var(--fg);
     font-size: 0.875rem;
-    text-decoration: none;
+    line-height: 1.7;
   }
 
-  .day__date:hover {
-    color: var(--accent);
-  }
-
-  .day__meta {
+  .overview__count {
+    max-width: 34rem;
+    margin: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-char);
     color: var(--fg-dim);
-    font-size: 0.75rem;
-  }
-
-  .day__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
-    padding: 0;
-  }
-
-  @media (max-width: 640px) {
-    .day__grid {
-      grid-template-columns: 1fr;
-    }
+    font-size: 0.8125rem;
   }
 </style>

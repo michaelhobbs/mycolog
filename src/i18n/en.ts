@@ -3,6 +3,10 @@ export default {
   common: {
     jumpToDate: 'Jump to date',
     back: 'back',
+    changeDate: 'Change date',
+    openDateMenu: 'Open date menu',
+    closeDateMenu: 'Close date menu',
+    noEntries: 'Nothing recorded yet.',
   },
   nav: {
     home: 'Home',
@@ -50,6 +54,8 @@ export default {
     features: 'Key Features',
     more: 'more details',
     fullscreen: 'open fullscreen',
+    edibility: 'edibility',
+    speciesNotes: 'General note (species)',
   },
   lightbox: {
     viewer: 'Photo viewer',
@@ -68,6 +74,8 @@ export default {
     today: 'Sightings from',
     noSightings: 'No sightings recorded on this day.',
     backToLog: 'All log days',
+    indexIntro:
+      'Entries are grouped by the day they were recorded. Choose a date from the list to see what was found.',
     species: 'species',
     location: 'location',
     habitat: 'habitat',
@@ -78,6 +86,8 @@ export default {
     title: 'Identifications',
     subtitle: 'Identifications from the backlog — catch new sightings as they appear.',
     backToList: 'All identifications',
+    indexIntro:
+      'Grouped by the day the identification was made. Choose a date from the list to see what was identified.',
   },
   sighting: {
     missing: 'Sighting not found',
@@ -135,8 +145,11 @@ export default {
   backlog: {
     title: 'Backlog',
     subtitle: 'Unidentified mushrooms awaiting identification',
+    indexIntro:
+      'Unidentified items grouped by the day they were found. Choose a date from the list to review that day’s items.',
     items: 'items',
     photos: 'photos',
+    pinned: 'pinned',
     item: 'item',
     date: 'sighted',
     dateHelp: 'Date the mushrooms were found (pre-filled from the photo)',
@@ -173,6 +186,7 @@ export default {
     missingSpecies: 'Please choose a species',
     missingLocation: 'Please set a location on the map',
     noLocation: 'No location pinned yet',
+    locationPinned: 'Location pinned',
     notes: 'notes',
     notesEn: 'notes (en)',
     notesDe: 'notes (de)',

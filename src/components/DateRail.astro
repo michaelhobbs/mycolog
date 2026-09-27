@@ -1,0 +1,302 @@
+---
+import DateList from './DateList.astro'
+import { getTranslations, type Locale } from '../i18n'
+import type { RailDay } from '../lib/date-rail'
+
+interface Props {
+  days: RailDay[]
+  basePath: string
+  locale: Locale
+  countUnit: string
+  navLabel: string
+  /**
+   * The day whose row is marked current. Omitted on overview pages, which
+   * render the same shell without a selected day.
+   */
+  activeDate?: string
+  activeLabel: string
+}
+
+const { days, basePath, locale, countUnit, navLabel, activeDate, activeLabel } = Astro.props
+const t = getTranslations(locale)
+const listProps = { days, basePath, locale, countUnit, navLabel, activeDate }
+---
+
+<div class="rail">
+  <div class="rail__bar">
+    <button
+      type="button"
+      class="rail__toggle"
+      data-rail-toggle
+      aria-expanded="false"
+      aria-controls="rail-drawer"
+    >
+      <span class="rail__toggle-label">{activeLabel}</span>
+      <span class="rail__toggle-hint">{t.common.changeDate}</span>
+      <span class="rail__toggle-icon" aria-hidden="true">[≡]</span>
+    </button>
+  </div>
+
+  <aside class="rail__side">
+    <DateList {...listProps} idPrefix="rail-side" />
+  </aside>
+
+  <div class="rail__main">
+    <slot />
+  </div>
+</div>
+
+<div class="rail-drawer" id="rail-drawer" data-rail-drawer>
+  <div class="rail-drawer__scrim" data-rail-close></div>
+  <div
+    class="rail-drawer__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-label={navLabel}
+    data-rail-panel
+  >
+    <div class="rail-drawer__head">
+      <span class="rail-drawer__title">{t.common.changeDate}</span>
+      <button type="button" class="rail-drawer__close" data-rail-close>
+        <span aria-hidden="true">[×]</span>
+        <span class="rail-drawer__close-label">{t.common.closeDateMenu}</span>
+      </button>
+    </div>
+    <DateList {...listProps} idPrefix="rail-drawer" />
+  </div>
+</div>
+
+<style>
+  .rail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+  }
+
+  .rail__bar {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 50;
+    margin: -0.5rem 0 0;
+  }
+
+  .rail__toggle {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    color: var(--fg);
+    font: inherit;
+    font-size: 0.8125rem;
+    text-align: left;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .rail__toggle-label {
+    font-weight: 700;
+  }
+
+  .rail__toggle-hint {
+    flex: 1;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+
+  .rail__toggle-icon {
+    color: var(--fg-dim);
+  }
+
+  .rail__side {
+    display: none;
+  }
+
+  .rail__side,
+  .rail-drawer__panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--fg-dim) transparent;
+  }
+
+  .rail__side::-webkit-scrollbar,
+  .rail-drawer__panel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .rail__side::-webkit-scrollbar-track,
+  .rail-drawer__panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .rail__side::-webkit-scrollbar-thumb,
+  .rail-drawer__panel::-webkit-scrollbar-thumb {
+    background: var(--fg-dim);
+  }
+
+  .rail__side::-webkit-scrollbar-thumb:hover,
+  .rail-drawer__panel::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+
+  .rail__main {
+    min-width: 0;
+  }
+
+  @media (min-width: 768px) {
+    .rail {
+      grid-template-columns: var(--rail-w) minmax(0, 1fr);
+      gap: 1.75rem;
+      align-items: start;
+    }
+
+    .rail__bar {
+      display: none;
+    }
+
+    .rail__side {
+      display: block;
+      position: sticky;
+      top: calc(var(--header-h) + 1rem);
+      max-height: calc(100dvh - var(--header-h) - 2rem);
+      overflow-y: auto;
+      padding-right: 0.25rem;
+    }
+  }
+
+  .rail-drawer {
+    display: none;
+  }
+
+  .rail-drawer[data-open] {
+    display: block;
+  }
+
+  .rail-drawer__scrim {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 0.65);
+  }
+
+  .rail-drawer__panel {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: min(var(--rail-w), 88vw);
+    padding: 1rem;
+    overflow-y: auto;
+    background: var(--bg);
+    border-right: 1px solid var(--border-char);
+  }
+
+  .rail-drawer__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .rail-drawer__title {
+    color: var(--accent-dim);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rail-drawer__close {
+    display: flex;
+    align-items: baseline;
+    gap: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    color: var(--fg-dim);
+    font: inherit;
+    font-size: 0.75rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .rail-drawer__close-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  @media (min-width: 768px) {
+    .rail-drawer {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  const FOCUSABLE = 'a[href], button:not([disabled])'
+
+  for (const toggle of document.querySelectorAll<HTMLElement>('[data-rail-toggle]')) {
+    const drawer = document.getElementById(toggle.getAttribute('aria-controls') ?? '')
+    if (!drawer) continue
+    const panel = drawer.querySelector<HTMLElement>('[data-rail-panel]')
+    if (!panel) continue
+
+    let lastFocus: HTMLElement | null = null
+
+    const focusables = () => [...panel.querySelectorAll<HTMLElement>(FOCUSABLE)]
+
+    const open = () => {
+      lastFocus = document.activeElement as HTMLElement | null
+      drawer.setAttribute('data-open', '')
+      toggle.setAttribute('aria-expanded', 'true')
+      document.body.style.overflow = 'hidden'
+      focusables()[0]?.focus()
+    }
+
+    const close = () => {
+      drawer.removeAttribute('data-open')
+      toggle.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+      lastFocus?.focus()
+      lastFocus = null
+    }
+
+    toggle.addEventListener('click', open)
+
+    for (const el of drawer.querySelectorAll('[data-rail-close]')) {
+      el.addEventListener('click', close)
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (!drawer.hasAttribute('data-open')) return
+
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        close()
+        return
+      }
+
+      if (e.key !== 'Tab') return
+      const items = focusables()
+      if (items.length === 0) return
+      const first = items[0]
+      const last = items[items.length - 1]
+      const active = document.activeElement
+
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    })
+  }
+</script>

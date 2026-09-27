@@ -75,12 +75,28 @@ attributed at all: a single such import linked the 83 KB stylesheet on 936 of
 937 built pages, when only 330 render a map. Moving it cut that to exactly those
 330 pages (`dist` must satisfy both directions — no page that renders a map
 without the stylesheet, and no page that links the stylesheet without a map).
+The build is now 977 pages, and the invariant still holds at 330/330. Verify it
+by _resolving each `<link>`'s CSS and searching its content_ for
+`.maplibregl-`, never by grepping the `dist` filenames: adding a component with
+its own stylesheet made Vite merge and rename the MapLibre chunk, so a
+filename grep reports 0. Detect a map page by `class="map"` (what
+`MapVector`/`MiniMap` hand to MapLibre) **or** `maplibregl-` — MapLibre only
+adds `maplibregl-map` at runtime, so a class-only regex misses `/map`.
 Note that Astro emits component `<style>` blocks as inline `<style>` elements
 _after_ the `<link>` tags, so `:global(.maplibregl-*)` overrides in a component
 still beat MapLibre's own rules even though the MapLibre `<link>` now sorts
 after `Layout.css`. That only holds for equal specificity: MapLibre sets the
 `font` **shorthand** on `.maplibregl-map`, so overriding just `font-family`
 against a later-loading shorthand would need a specificity bump.
+
+Caveat: that inline-vs-`<link>` split is **size-dependent** — Vite inlines a
+component's CSS only below a threshold, and adding enough rules to a component
+silently flips it to a `<link>` that now sorts by chunk name. `DateRail` did
+this when it grew scrollbar rules, so its CSS moved from inline-after-links to
+`DateRail.<hash>.css` between `Layout.css` and `MushroomCard.css`. Harmless
+there (the rail shares no element with the map or the cards), but it means
+**never rely on inline-vs-link ordering**; assert cascade order by resolving the
+actual `<link>`s instead.
 
 For the same reason, a **dev-only** component must be loaded with a dynamic
 `await import()` guarded by `import.meta.env.DEV` — never a static import. A
@@ -135,21 +151,88 @@ TypeScript must compile: run `npm run typecheck` (`astro check`) and keep it at
   the home-page feed and the RSS feeds. Events are appended via
   `scripts/news-events.mjs` `appendNewsEvent()` (from `api.mjs`,
   `import-backlog-public.mjs`, and the backfill scripts) — **never hand-edit**
-  them. Four types: `backlog-added`, `identified`, `new-species`,
-  `new-location` (schemas in `src/content.config.ts`).
+  them. Five types: `backlog-added`, `identified`, `new-species`,
+  `new-location`, `backlog-updated` (schemas in `src/content.config.ts`).
 - RSS feeds live at `/rss.xml` (default locale) and `/{locale}/rss.xml`;
   items are built in `src/lib/news.ts`. Absolute links come from the `site`
   config (`astro.config.mjs`), which reads `process.env.SITE_URL` with a
   `http://localhost:4321` fallback — so **production builds must set
   `SITE_URL`** or the RSS links will point at localhost.
+- A `backlog-added` batch records items that were in the backlog _at the time_,
+  and `getStaticPaths` only builds `/backlog/{date}` for dates that still hold
+  items. So a batch whose items have since been identified has no day page.
+  Always resolve these links with `backlogBatchLink()` in `src/lib/news.ts`
+  (item page → day page → index) rather than string-building `/backlog/{date}`:
+  the naive form produced 404s as soon as a batch was identified away.
 
-## Backlog identification workflow (dev only)
+## Date-first navigation
 
-The backlog identification page (`/{locale}/backlog/{slug}`) lets you promote an
+`/log`, `/backlog`, and `/identifications` are **index-only** pages: an
+instructions paragraph plus a day picker. They deliberately render **no
+thumbnails and no full listing** — the day pages are the content. Do not
+reintroduce a listing on an index; the point is to make the day the unit.
+
+- Day pages exist at `/{locale}/{log,identifications}/{date}` and
+  `/{locale}/backlog/{date}`. `backlog/[date]` and `backlog/[slug]` are
+  sibling dynamic routes, resolved by Astro's routing order — verified to
+  coexist (40 day pages + 266 item pages, no shadowing).
+- `DateList.astro` is the pure, no-JS month-grouped day list. It is the single
+  renderer used on the index pages, the desktop rail, and the mobile drawer, so
+  the three cannot drift. `groupByMonth()` in `src/lib/date-rail.ts` does the
+  grouping; months contain individual days, not just month totals.
+- `DateRail.astro` is the app shell: a 240px sticky sidebar (≥768px) wrapping a
+  content pane, plus, below that breakpoint, a sticky bar opening an off-canvas
+  drawer. The drawer is the only client JS here and is a progressive
+  enhancement — every page is fully readable with it disabled.
+- **The overview pages use the same shell as the day pages** — pass
+  `DateRail` a slot holding the title, description, and counts, with `activeDate`
+  omitted. That is what makes the two page types feel like one app instead of
+  two layouts. Do not hand-roll a two-column grid on an index page: the rail
+  geometry lives in `DateRail` only, so a copy of that grid is how the two drift
+  apart again.
+- The title and description belong in the content pane, never in the rail. The
+  rail is navigation (month headings and day rows); prose goes right. Overview
+  descriptions keep a `34rem` measure so they do not stretch across the pane.
+- **Never let Prettier wrap a line that puts a number next to a label.** A
+  newline inside a JSX text node is collapsed away, so `<p>{n} {unit}</p>`
+  renders as `22Days` the moment that line exceeds `printWidth` — silently, and
+  in every locale. Build the whole string in frontmatter instead
+  (`const countLabel = n + ' ' + unit`, or a template literal) and emit a single
+  `{countLabel}`. All six overview count lines and the three day-page headers are
+  written this way; keep it that way if a label is ever renamed or translated.
+- `DateList.astro` stays the single renderer for the list itself, so the sidebar
+  and the drawer can never show different days.
+- **Parse `YYYY-MM-DD` with `toLocalDate()`** (`src/lib/date-rail.ts`), never
+  `new Date(dateStr)`. The string form is UTC midnight, so west of UTC it
+  formats as the _previous_ day. In a date-first UI that silently mislabels
+  every page. `formatDate()` in `src/i18n/index.ts` routes through it too.
+- `DateIndex.astro` and the `formatAnchorDate`/`formatCompactDate` helpers were
+  removed with the index listings; do not reintroduce anchor-based day links.
+- Layout width is the `--page-max` token (1280px) applied to nav, main, and
+  footer. Sticky offsets derive from `--header-h`, so changing the header height
+  cannot desynchronise the rail or the scroll-margin.
+- The date rail is `--rail-w` (240px) **everywhere** — the day-page sidebar
+  column, the mobile drawer (`min(var(--rail-w), 88vw)`), and the whole overview
+  column. Never size a rail context in its own units: the overview pages used
+  to render at the 34rem text measure, so selecting a date snapped the rail from
+  544px to 240px, and constraining only the day list left the title and intro
+  still at 544px — the rail block jumped twice over. That class of drift is
+  now structural rather than a width to remember: `DateRail` owns the geometry
+  and both page types render through it.
+
+## Backlog identification workflow (form is dev only)
+
+The backlog item page (`/{locale}/backlog/{slug}`) lets you promote an
 unidentified backlog item into a sighting by filling a form (date, species
 dropdown + add-new-species, authors + add-new-authors, a click-to-pin location
-map, and optional EN/DE notes). It is **only generated in dev**; `astro build`
-skips these routes.
+map, and optional EN/DE notes). The **page** is built normally (`astro build`
+emits all 266 item pages); only the `BacklogIdentify` form — and therefore the
+`LocationPicker` map — is dev-gated behind `import.meta.env.DEV`.
+
+That is why a production build has no map on `/backlog/*`: the form is the only
+consumer of `LocationPicker`, and it is a dynamic import that production never
+executes. Do not add a static `BacklogIdentify` import back, or all 532 backlog
+pages would link MapLibre's stylesheet again.
 
 It requires a local Express API alongside the Astro dev server:
 

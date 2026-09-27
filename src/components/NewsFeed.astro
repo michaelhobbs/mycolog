@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content'
 import { buildLocationMap, locationName } from '../lib/sightings'
-import { buildNewsFeed, itemsCount } from '../lib/news'
-import { getTranslations, formatDate, formatAnchorDate } from '../i18n'
+import { buildNewsFeed, itemsCount, backlogBatchLink } from '../lib/news'
+import { getTranslations, formatDate } from '../i18n'
 import { l10n } from '../i18n/helpers'
 import type { Locale } from '../i18n'
 
@@ -22,7 +22,6 @@ const [newsEntries, speciesEntries, locationEntries, backlogEntries] = await Pro
 const days = buildNewsFeed({ newsEntries, speciesEntries, locationEntries, backlogEntries })
 const locations = buildLocationMap(locationEntries)
 const speciesScientific = new Map(speciesEntries.map((s) => [s.id, s.data.scientificName]))
-const backlogIds = new Set(backlogEntries.map((b) => b.id))
 ---
 
 <div class="days">
@@ -37,14 +36,7 @@ const backlogIds = new Set(backlogEntries.map((b) => b.id))
           <ul class="day__feed">
             {day.backlogBatches.map((batch) => (
               <li>
-                <a
-                  class="feed-line"
-                  href={
-                    batch.ids.length === 1 && backlogIds.has(batch.ids[0])
-                      ? `/${locale}/backlog/${batch.ids[0]}`
-                      : `/${locale}/backlog#${formatAnchorDate(batch.photoDate)}`
-                  }
-                >
+                <a class="feed-line" href={backlogBatchLink(batch, locale, backlogEntries)}>
                   {itemsCount(batch.count, locale)} {t.home.newsBacklogFrom}{' '}
                   {formatDate(batch.photoDate, locale)}
                 </a>

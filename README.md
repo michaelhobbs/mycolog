@@ -64,14 +64,16 @@ around Garmisch-Partenkirchen in the Bavarian Alps. Built with **Astro**.
 │   │   └── [locale]/
 │   │       ├── index.astro        # Home
 │   │       ├── map.astro          # Map page
-│   │       ├── log.astro          # Day index
+│   │       ├── log.astro          # Day picker (no listing)
 │   │       ├── log/[date].astro   # A single day's sightings
 │   │       ├── log/[date]/[slug].astro # A single sighting
-│   │       ├── identifications.astro / identifications/[date].astro
+│   │       ├── identifications.astro   # Day picker (no listing)
+│   │       ├── identifications/[date].astro # One day of identifications
 │   │       ├── locations/index.astro / locations/[slug].astro
 │   │       ├── mushrooms/index.astro / mushrooms/[name].astro
-│   │       ├── backlog.astro      # Chronological backlog list
-│   │       ├── backlog/[slug].astro # DEV-only identify form
+│   │       ├── backlog.astro      # Day picker (no listing)
+│   │       ├── backlog/[date].astro # One day of backlog items
+│   │       ├── backlog/[slug].astro  # Item page (DEV-only identify form)
 │   │       └── rss.xml.ts         # Locale-specific RSS feed
 │   ├── types/
 │   │   └── mushroom.ts            # Shared TypeScript types
@@ -260,8 +262,10 @@ after a successful import.
 
 ## Promoting a backlog item to a sighting (dev workflow)
 
-Identification is a **dev-only** workflow: the identify pages
-(`/{locale}/backlog/{slug}`) are only generated in dev — `astro build` skips them.
+Identification is a **dev-only** workflow: the identify _form_ on
+`/{locale}/backlog/{slug}` is gated behind `import.meta.env.DEV`. The page
+itself is built normally, so `/backlog/*` exists in production — just without
+the form, and therefore without the location-picker map.
 
 ### Start the two servers
 

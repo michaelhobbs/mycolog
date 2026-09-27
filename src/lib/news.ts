@@ -2,7 +2,7 @@ import type { CollectionEntry } from 'astro:content'
 import type { RSSFeedItem } from '@astrojs/rss'
 import type { Locale } from '../i18n'
 import type { LocalizedString } from '../types/mushroom'
-import { getTranslations, formatDate, formatAnchorDate } from '../i18n'
+import { getTranslations, formatDate } from '../i18n'
 import { l10n } from '../i18n/helpers'
 import { buildLocationMap, locationName } from './sightings'
 
@@ -22,6 +22,28 @@ export interface BacklogBatch {
   photoDate: string
   count: number
   ids: string[]
+}
+
+/**
+ * Where a `backlog-added` news batch should link.
+ *
+ * A batch records what was *once* in the backlog, and `getStaticPaths` only
+ * builds `/backlog/{date}` for dates that still hold items — so a batch whose
+ * items have since been identified has no day page. Resolve the target against
+ * the live backlog to keep the link from 404ing: the item page, else the day
+ * page, else the index.
+ */
+export function backlogBatchLink(
+  batch: BacklogBatch,
+  locale: Locale | null,
+  backlog: readonly Pick<BacklogEntry, 'id' | 'data'>[],
+): string {
+  const prefix = locale ? `/${locale}` : ''
+  const ids = new Set(backlog.map((b) => b.id))
+  if (batch.ids.length === 1 && ids.has(batch.ids[0])) return `${prefix}/backlog/${batch.ids[0]}`
+  const dates = new Set(backlog.map((b) => b.data.dateSpotted))
+  if (dates.has(batch.photoDate)) return `${prefix}/backlog/${batch.photoDate}`
+  return `${prefix}/backlog`
 }
 
 export interface NewsEdit {
@@ -126,7 +148,6 @@ export function buildRssItems(
   const speciesScientific = new Map(
     collections.speciesEntries.map((s) => [s.id, s.data.scientificName]),
   )
-  const backlogIds = new Set(collections.backlogEntries.map((b) => b.id))
   const items: RSSFeedItem[] = []
 
   const push = (date: string, title: string, link: string, note?: string) => {
@@ -143,10 +164,7 @@ export function buildRssItems(
   for (const day of feed) {
     for (const batch of day.backlogBatches) {
       const title = `${itemsCount(batch.count, locale)} ${t.home.newsBacklogFrom} ${formatDate(batch.photoDate, locale)}`
-      const link =
-        batch.ids.length === 1 && backlogIds.has(batch.ids[0])
-          ? `/backlog/${batch.ids[0]}`
-          : `/backlog#${formatAnchorDate(batch.photoDate)}`
+      const link = backlogBatchLink(batch, null, collections.backlogEntries)
       push(day.date, title, link)
     }
     if (day.identifiedCount !== null) {

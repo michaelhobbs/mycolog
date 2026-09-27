@@ -1,9 +1,9 @@
 ---
 import Layout from '../../layouts/Layout.astro'
-import DateIndex from '../../components/DateIndex.astro'
+import DateRail from '../../components/DateRail.astro'
 import { getCollection } from 'astro:content'
-import { Image, getImage } from 'astro:assets'
-import { getTranslations, formatDate, formatAnchorDate, locales } from '../../i18n'
+import { getTranslations, locales } from '../../i18n'
+import type { RailDay } from '../../lib/date-rail'
 import type { Locale } from '../../i18n'
 
 export function getStaticPaths() {
@@ -16,98 +16,52 @@ const t = getTranslations(locale)
 const backlog = (await getCollection('backlog')).sort((a, b) =>
   a.data.dateSpotted < b.data.dateSpotted ? 1 : -1,
 )
-const groups = new Map<string, typeof backlog>()
+
+const byDate = new Map<string, typeof backlog>()
 for (const entry of backlog) {
   const key = entry.data.dateSpotted
-  if (!groups.has(key)) groups.set(key, [])
-  groups.get(key)!.push(entry)
+  const bucket = byDate.get(key)
+  if (bucket) bucket.push(entry)
+  else byDate.set(key, [entry])
 }
 
-const fullSrcs = new Map<string, string[]>()
-for (const entry of backlog) {
-  fullSrcs.set(
-    entry.id,
-    await Promise.all(
-      entry.data.images.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
-    ),
-  )
-}
+const railDays: RailDay[] = [...byDate.entries()]
+  .map(([day, entries]) => {
+    const pinned = entries.filter((e) => e.data.location).length
+    return {
+      date: day,
+      count: entries.length,
+      meta: `${pinned}/${entries.length} ${t.backlog.pinned}`,
+    }
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+
+const counts = `${railDays.length} ${t.log.daysLabel} · ${backlog.length} ${t.backlog.items}`
 ---
 
 <Layout title={t.meta.backlogTitle} locale={locale}>
-  <section class="backlog-page">
+  <DateRail
+    days={railDays}
+    basePath={`/${locale}/backlog`}
+    locale={locale}
+    countUnit={t.backlog.items}
+    navLabel={t.common.jumpToDate}
+    activeLabel={t.backlog.title}
+  >
     <div class="page-header">
       <span class="page-header__tag">╔══ {t.backlog.title}</span>
-      <span class="page-header__sub">{t.backlog.subtitle} · {backlog.length} {t.backlog.items}</span
-      >
+      <span class="page-header__sub">{t.backlog.subtitle}</span>
     </div>
 
-    <DateIndex dates={[...groups.keys()]} label={t.common.jumpToDate} />
+    <p class="overview__intro">{t.backlog.indexIntro}</p>
 
-    <div class="backlog-list">
-      {
-        [...groups].map(([date, entries]) => (
-          <section class="backlog-group">
-            <h2 class="backlog-group__date" id={formatAnchorDate(date)}>
-              {formatDate(date, locale)}
-            </h2>
-            {entries.map((entry) => (
-              <article class="backlog-item">
-                <header class="backlog-item__head">
-                  <a class="backlog-item__date" href={`/${locale}/backlog/${entry.id}`}>
-                    {formatDate(entry.data.dateSpotted, locale)}
-                  </a>
-                  <span class="backlog-item__meta">
-                    {entry.data.images.length} {t.backlog.photos}
-                  </span>
-                  {!import.meta.env.PROD && (
-                    <a class="backlog-item__edit" href={`/${locale}/backlog/${entry.id}`}>
-                      {'>'} {t.backlog.identify}
-                    </a>
-                  )}
-                </header>
-
-                <div class="backlog-item__images" data-lightbox-group>
-                  {entry.data.images.map((img, i) => (
-                    <figure
-                      class="backlog-item__fig"
-                      data-lightbox-src={fullSrcs.get(entry.id)?.[i]}
-                    >
-                      <button
-                        type="button"
-                        class="backlog-item__zoom"
-                        data-lightbox-trigger
-                        data-index={i}
-                        aria-label={`${t.backlog.fullscreen} ${i + 1}`}
-                        title={t.backlog.fullscreen}
-                      >
-                        <Image
-                          src={img}
-                          alt={`${t.backlog.item} ${entry.id} — ${i + 1}`}
-                          loading="lazy"
-                          widths={[400, 800]}
-                          sizes="(min-width: 640px) 400px, 100vw"
-                        />
-                      </button>
-                    </figure>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </section>
-        ))
-      }
-    </div>
-  </section>
+    <p class="overview__count">{counts}</p>
+  </DateRail>
 </Layout>
 
 <style>
-  .backlog-page {
-    padding-bottom: 2rem;
-  }
-
   .page-header {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
   }
 
   .page-header__tag {
@@ -123,102 +77,20 @@ for (const entry of backlog) {
     font-size: 0.8125rem;
   }
 
-  .backlog-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-  }
-
-  .backlog-group {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .backlog-group__date {
-    color: var(--yellow);
-    font-weight: 700;
-    font-size: 0.9375rem;
-    margin: 0;
-  }
-
-  .backlog-item {
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    padding: 0.75rem;
-  }
-
-  .backlog-item__head {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-char);
-    margin-bottom: 0.75rem;
-  }
-
-  .backlog-item__date {
-    color: var(--yellow);
-    font-weight: 700;
+  .overview__intro {
+    max-width: 34rem;
+    margin: 0 0 0.75rem;
+    color: var(--fg);
     font-size: 0.875rem;
-    text-decoration: none;
+    line-height: 1.7;
   }
 
-  .backlog-item__date:hover {
-    color: var(--fg-bright);
-  }
-
-  .backlog-item__meta {
-    color: var(--fg-dim);
-    font-size: 0.75rem;
-  }
-
-  .backlog-item__edit {
-    margin-left: auto;
-    color: var(--accent-dim);
-    text-decoration: none;
-    font-size: 0.8125rem;
-  }
-
-  .backlog-item__edit:hover {
-    color: var(--accent);
-  }
-
-  .backlog-item__images {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 0.5rem;
-  }
-
-  .backlog-item__fig {
+  .overview__count {
+    max-width: 34rem;
     margin: 0;
-    border: 1px solid var(--fg-muted);
-    overflow: hidden;
-    background: var(--bg-highlight);
-    aspect-ratio: 4 / 3;
-  }
-
-  .backlog-item__fig img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: filter 0.15s;
-  }
-
-  .backlog-item__zoom {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: zoom-in;
-    -webkit-tap-highlight-color: transparent;
-    /* Opts out of iOS double-tap-to-zoom, so a single tap fires click. */
-    touch-action: manipulation;
-  }
-
-  .backlog-item__zoom:hover img {
-    filter: brightness(1.08);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-char);
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
   }
 </style>

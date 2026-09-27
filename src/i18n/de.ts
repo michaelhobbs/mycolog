@@ -3,6 +3,10 @@ export default {
   common: {
     jumpToDate: 'Zum Datum springen',
     back: 'zurück',
+    changeDate: 'Datum ändern',
+    openDateMenu: 'Datumsmenü öffnen',
+    closeDateMenu: 'Datumsmenü schließen',
+    noEntries: 'Noch nichts erfasst.',
   },
   nav: {
     home: 'Start',
@@ -50,6 +54,8 @@ export default {
     features: 'Bestimmungsmerkmale',
     more: 'mehr Details',
     fullscreen: 'Vollbild öffnen',
+    edibility: 'Essbarkeit',
+    speciesNotes: 'Allgemeine Notiz (Art)',
   },
   lightbox: {
     viewer: 'Fotobetrachter',
@@ -68,6 +74,8 @@ export default {
     today: 'Funde vom',
     noSightings: 'An diesem Tag wurden keine Funde verzeichnet.',
     backToLog: 'Alle Protokolltage',
+    indexIntro:
+      'Die Einträge sind nach dem Tag der Aufnahme gruppiert. Wähle ein Datum aus der Liste, um die Funde des Tages zu sehen.',
     species: 'Art',
     location: 'Ort',
     habitat: 'Lebensraum',
@@ -78,6 +86,8 @@ export default {
     title: 'Bestimmungen',
     subtitle: 'Bestimmungen aus dem Backlog — keine neuen Funde verpassen.',
     backToList: 'Alle Bestimmungen',
+    indexIntro:
+      'Gruppiert nach dem Tag der Bestimmung. Wähle ein Datum aus der Liste, um die Bestimmungen des Tages zu sehen.',
   },
   sighting: {
     missing: 'Fund nicht gefunden',
@@ -133,10 +143,13 @@ export default {
     rss: 'RSS-Feed',
   },
   backlog: {
-    title: 'Rückstand',
-    subtitle: 'Noch nicht bestimmte Pilze, die auf Identifizierung warten',
+    title: 'Backlog',
+    subtitle: 'Unbestimmte Pilze, die noch auf eine Bestimmung warten',
+    indexIntro:
+      'Unbestimmte Einträge, gruppiert nach dem Fundtag. Wähle ein Datum aus der Liste, um die Einträge des Tages zu prüfen.',
     items: 'Einträge',
     photos: 'Fotos',
+    pinned: 'verortet',
     item: 'Eintrag',
     date: 'gesehen am',
     dateHelp: 'Datum, an dem die Pilze gefunden wurden (vom Foto vorausgefüllt)',
@@ -173,6 +186,7 @@ export default {
     missingSpecies: 'Bitte wähle eine Art',
     missingLocation: 'Bitte markiere einen Ort auf der Karte',
     noLocation: 'Noch kein Ort markiert',
+    locationPinned: 'Ort markiert',
     notes: 'Notizen',
     notesEn: 'Notizen (en)',
     notesDe: 'Notizen (de)',

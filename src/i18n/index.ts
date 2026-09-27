@@ -1,3 +1,4 @@
+import { toLocalDate } from '../lib/date-rail'
 import en from './en'
 import de from './de'
 
@@ -17,21 +18,9 @@ export function getTranslations(locale: Locale): Translations {
 }
 
 export function formatDate(dateStr: string, locale: Locale): string {
-  const date = new Date(dateStr)
-  return date.toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', {
+  return toLocalDate(dateStr).toLocaleDateString(locale === 'de' ? 'de-DE' : 'en-GB', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
   })
-}
-
-export function formatAnchorDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  const day = String(date.getDate()).padStart(2, '0')
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  return `${day}-${month}-${date.getFullYear()}`
-}
-
-export function formatCompactDate(dateStr: string): string {
-  return formatAnchorDate(dateStr).replace(/-/g, '.')
 }

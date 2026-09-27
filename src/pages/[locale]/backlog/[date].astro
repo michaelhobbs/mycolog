@@ -1,0 +1,236 @@
+---
+import Layout from '../../../layouts/Layout.astro'
+import LinkRow from '../../../components/LinkRow.astro'
+import DateRail from '../../../components/DateRail.astro'
+import { getCollection } from 'astro:content'
+import { Image, getImage } from 'astro:assets'
+import { getTranslations, formatDate, locales } from '../../../i18n'
+import { formatDayLong, type RailDay } from '../../../lib/date-rail'
+import type { Locale } from '../../../i18n'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('backlog')
+  const dates = [...new Set(entries.map((e) => e.data.dateSpotted))].sort()
+  return dates.flatMap((date) => locales.map((locale) => ({ params: { locale, date } })))
+}
+
+const { locale, date } = Astro.params as { locale: Locale; date: string }
+const t = getTranslations(locale)
+
+const all = await getCollection('backlog')
+const entries = all
+  .filter((e) => e.data.dateSpotted === date)
+  .sort((a, b) => a.id.localeCompare(b.id))
+
+const byDate = new Map<string, typeof all>()
+for (const entry of all) {
+  const key = entry.data.dateSpotted
+  const bucket = byDate.get(key)
+  if (bucket) bucket.push(entry)
+  else byDate.set(key, [entry])
+}
+
+const railDays: RailDay[] = [...byDate.entries()]
+  .map(([day, items]) => {
+    const pinned = items.filter((e) => e.data.location).length
+    return {
+      date: day,
+      count: items.length,
+      meta: `${pinned}/${items.length} ${t.backlog.pinned}`,
+    }
+  })
+  .sort((a, b) => (a.date < b.date ? 1 : -1))
+
+const fullSrcs = new Map<string, string[]>()
+for (const entry of entries) {
+  fullSrcs.set(
+    entry.id,
+    await Promise.all(
+      entry.data.images.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
+    ),
+  )
+}
+const countLabel = `${entries.length} ${t.backlog.items}`
+---
+
+<Layout title={`${t.backlog.title} · ${formatDate(date, locale)} — myco.log`} locale={locale}>
+  <DateRail
+    days={railDays}
+    basePath={`/${locale}/backlog`}
+    locale={locale}
+    countUnit={t.backlog.items}
+    navLabel={t.common.jumpToDate}
+    activeDate={date}
+    activeLabel={formatDayLong(date, locale)}
+  >
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {formatDate(date, locale)}</span>
+      <span class="page-header__sub">{countLabel}</span>
+    </div>
+
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/backlog`}
+      links={[{ href: `/${locale}/backlog`, label: t.backlog.backToList }]}
+    />
+
+    {
+      entries.length === 0 ? (
+        <p class="empty">{t.common.noEntries}</p>
+      ) : (
+        <div class="backlog-list">
+          {entries.map((entry) => (
+            <article class="backlog-item">
+              <header class="backlog-item__head">
+                <a class="backlog-item__date" href={`/${locale}/backlog/${entry.id}`}>
+                  #{entry.id} · {entry.data.images.length} {t.backlog.photos}
+                </a>
+                <span class="backlog-item__meta">
+                  {entry.data.location ? t.backlog.locationPinned : t.backlog.noLocation}
+                </span>
+                {!import.meta.env.PROD && (
+                  <a class="backlog-item__edit" href={`/${locale}/backlog/${entry.id}`}>
+                    {'>'} {t.backlog.identify}
+                  </a>
+                )}
+              </header>
+
+              <div class="backlog-item__images" data-lightbox-group>
+                {entry.data.images.map((img, i) => (
+                  <figure class="backlog-item__fig" data-lightbox-src={fullSrcs.get(entry.id)?.[i]}>
+                    <button
+                      type="button"
+                      class="backlog-item__zoom"
+                      data-lightbox-trigger
+                      data-index={i}
+                      aria-label={`${t.backlog.fullscreen} ${i + 1}`}
+                      title={t.backlog.fullscreen}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${t.backlog.item} ${entry.id} — ${i + 1}`}
+                        loading="lazy"
+                        widths={[400, 800]}
+                        sizes="(min-width: 640px) 400px, 100vw"
+                      />
+                    </button>
+                  </figure>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      )
+    }
+  </DateRail>
+</Layout>
+
+<style>
+  .page-header {
+    margin-bottom: 1rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .empty {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .backlog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .backlog-item {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.75rem;
+  }
+
+  .backlog-item__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-char);
+    margin-bottom: 0.75rem;
+  }
+
+  .backlog-item__date {
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+  }
+
+  .backlog-item__date:hover {
+    color: var(--fg-bright);
+  }
+
+  .backlog-item__meta {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+  }
+
+  .backlog-item__edit {
+    margin-left: auto;
+    color: var(--accent-dim);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+
+  .backlog-item__edit:hover {
+    color: var(--accent);
+  }
+
+  .backlog-item__images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .backlog-item__fig {
+    margin: 0;
+    border: 1px solid var(--fg-muted);
+    overflow: hidden;
+    background: var(--bg-highlight);
+    aspect-ratio: 4 / 3;
+  }
+
+  .backlog-item__fig img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.15s;
+  }
+
+  .backlog-item__zoom {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+    /* Opts out of iOS double-tap-to-zoom, so a single tap fires click. */
+    touch-action: manipulation;
+  }
+
+  .backlog-item__zoom:hover img {
+    filter: brightness(1.08);
+  }
+</style>

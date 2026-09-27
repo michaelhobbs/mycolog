@@ -71,11 +71,15 @@ const fullUrls = await Promise.all(
           <button
             class="tui-card__arrow tui-card__arrow--prev"
             data-arrow="prev"
-            aria-label="Previous"
+            aria-label={dict.lightbox.previous}
           >
             ‹
           </button>
-          <button class="tui-card__arrow tui-card__arrow--next" data-arrow="next" aria-label="Next">
+          <button
+            class="tui-card__arrow tui-card__arrow--next"
+            data-arrow="next"
+            aria-label={dict.lightbox.next}
+          >
             ›
           </button>
         </>
@@ -104,14 +108,14 @@ const fullUrls = await Promise.all(
 
   <div class="tui-card__body">
     <div class="tui-card__row">
-      <span class="tui-card__label">species</span>
+      <span class="tui-card__label">{dict.log.species}</span>
       <span class="tui-card__sep-dots"></span>
       <a href={`/${locale}/mushrooms/${s.id}`} class="tui-card__val tui-card__val--link"
         >{s.species.scientificName}</a
       >
     </div>
     <div class="tui-card__row">
-      <span class="tui-card__label">location</span>
+      <span class="tui-card__label">{dict.log.location}</span>
       <span class="tui-card__sep-dots"></span>
       {
         s.locationSlug ? (
@@ -129,7 +133,7 @@ const fullUrls = await Promise.all(
     {
       s.species.habitat && (
         <div class="tui-card__row">
-          <span class="tui-card__label">habitat</span>
+          <span class="tui-card__label">{dict.log.habitat}</span>
           <span class="tui-card__sep-dots" />
           <span class="tui-card__val">{t(s.species.habitat, locale)}</span>
         </div>
@@ -138,7 +142,7 @@ const fullUrls = await Promise.all(
     {
       s.species.edibility && (
         <div class="tui-card__row">
-          <span class="tui-card__label">edibility</span>
+          <span class="tui-card__label">{dict.card.edibility}</span>
           <span class="tui-card__sep-dots" />
           <span class="tui-card__val">{t(s.species.edibility, locale)}</span>
         </div>
@@ -149,7 +153,7 @@ const fullUrls = await Promise.all(
 
     <div class="tui-card__features">
       <span class="tui-card__features-hdr"
-        >├─ {t(s.species.determiningFeatures[0], locale) ? 'features:' : ''}</span
+        >├─ {t(s.species.determiningFeatures[0], locale) ? dict.card.features : ''}</span
       >
       <ul>
         {
@@ -163,10 +167,21 @@ const fullUrls = await Promise.all(
     </div>
 
     {
+      s.species.notes && (
+        <>
+          <div class="tui-card__divider" />
+          <div class="tui-card__notes tui-card__notes--species">
+            └─ <span class="tui-card__note-text">{t(s.species.notes, locale)}</span>
+          </div>
+        </>
+      )
+    }
+
+    {
       s.notes && (
         <>
           <div class="tui-card__divider" />
-          <div class="tui-card__notes">
+          <div class="tui-card__notes tui-card__notes--sighting">
             └─ <span class="tui-card__note-text">{t(s.notes, locale)}</span>
           </div>
         </>
@@ -453,6 +468,14 @@ const fullUrls = await Promise.all(
 
   .tui-card__note-text {
     color: var(--fg);
+  }
+
+  .tui-card__notes--species .tui-card__note-text {
+    color: var(--accent-dim);
+  }
+
+  .tui-card__notes--sighting .tui-card__note-text {
+    color: var(--yellow);
   }
 </style>
 

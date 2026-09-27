@@ -12,6 +12,9 @@
 //   - wheel / trackpad pinch / two-finger pinch: zoom (anchored at cursor)
 //   - double-click / double-tap: toggle 1× ⇄ 2.5×
 //   - +/- keys zoom, 0 resets, Esc resets zoom first, then closes
+//
+// Opening a group warms every photo in it (nearest to the current index first,
+// a few at a time) so swiping never waits on the network.
 
 import { getTranslations } from '../i18n'
 import type { Locale } from '../i18n'
@@ -165,6 +168,48 @@ const t = getTranslations(locale)
       resetZoom()
     }
 
+    // A species page can hold 34 photos of ~250 kB each, so the whole group is
+    // warmed in a queue of a few at a time rather than fired at once: 34 parallel
+    // requests would starve the two the viewer is about to swipe to. Sources are
+    // taken nearest-first from the current index, so the next image is cached
+    // before the far end of the group is even requested. `token` retires a queue
+    // whose modal was closed, so the tail of a large group stops costing
+    // bandwidth the moment the viewer walks away.
+    const PRELOAD_CONCURRENCY = 4
+    let preloadToken = 0
+
+    function preload() {
+      const token = ++preloadToken
+      const queue = sources
+        .map((src, i) => ({ src, i }))
+        .filter((item) => item.i !== index && item.src)
+        .sort((a, b) => Math.abs(a.i - index) - Math.abs(b.i - index))
+      let cursor = 0
+      let inFlight = 0
+
+      const pump = () => {
+        if (token !== preloadToken) return
+        while (inFlight < PRELOAD_CONCURRENCY && cursor < queue.length) {
+          const img = new Image()
+          let settled = false
+          const done = () => {
+            if (settled) return
+            settled = true
+            inFlight--
+            pump()
+          }
+          img.addEventListener('load', done, { once: true })
+          img.addEventListener('error', done, { once: true })
+          inFlight++
+          img.src = queue[cursor++].src
+          // A cached source can be complete before the listener is attached.
+          if (img.complete) done()
+        }
+      }
+
+      pump()
+    }
+
     function open(group, start) {
       sources = sourcesOf(group)
       captions = captionsOf(group)
@@ -173,6 +218,7 @@ const t = getTranslations(locale)
       document.body.style.overflow = 'hidden'
       if (!modal.open) modal.showModal()
       update()
+      preload()
     }
 
     function go(step) {
@@ -328,6 +374,8 @@ const t = getTranslations(locale)
     modal.addEventListener('close', () => {
       document.body.style.overflow = ''
       imgEl.removeAttribute('src')
+      // Retire the preload queue; the cached images stay put, the rest is dropped.
+      preloadToken++
       pointers.clear()
       pinch = null
       dragX = null

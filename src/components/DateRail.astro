@@ -144,13 +144,23 @@ const isOverview = activeDate === undefined
     background: rgb(0 0 0 / 0.65);
   }
 
+  /* Grows to fit its longest day row rather than forcing one to overflow: a
+     German row like "Mo., 21. Sept.21 Beobachtungen" needs ~26px more width
+     than the English one, which a fixed --rail-w turned into a horizontal
+     scrollbar inside the panel. Only the *rows* size it — the meta line is kept
+     out of the intrinsic width by `contain: inline-size` in DateList, or its
+     `nowrap` text would demand its own full length (~100px more) and push the
+     panel off screen. The 92vw cap keeps a strip of scrim showing, and the meta
+     ellipsises at whatever width the panel lands on. */
   .rail-drawer__panel {
     position: fixed;
     inset: var(--header-h) auto 0 0;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    width: min(var(--rail-w), 88vw);
+    width: max-content;
+    min-width: min(var(--rail-w), 88vw);
+    max-width: 92vw;
     padding: 1rem;
     overflow-y: auto;
     background: var(--bg);

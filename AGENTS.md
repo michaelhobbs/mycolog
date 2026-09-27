@@ -248,13 +248,24 @@ reintroduce a listing on an index; the point is to make the day the unit.
   footer. Sticky offsets derive from `--header-h`, so changing the header height
   cannot desynchronise the rail or the scroll-margin.
 - The date rail is `--rail-w` (240px) **everywhere** — the day-page sidebar
-  column, the mobile drawer (`min(var(--rail-w), 88vw)`), and the whole overview
-  column. Never size a rail context in its own units: the overview pages used
-  to render at the 34rem text measure, so selecting a date snapped the rail from
-  544px to 240px, and constraining only the day list left the title and intro
-  still at 544px — the rail block jumped twice over. That class of drift is
-  now structural rather than a width to remember: `DateRail` owns the geometry
-  and both page types render through it.
+  column, the mobile drawer's minimum, and the whole overview column. Never size
+  a rail context in its own units: the overview pages used to render at the 34rem
+  text measure, so selecting a date snapped the rail from 544px to 240px, and
+  constraining only the day list left the title and intro still at 544px — the
+  rail block jumped twice over. That class of drift is now structural rather than
+  a width to remember: `DateRail` owns the geometry and both page types render
+  through it.
+- The mobile drawer panel is `width: max-content` with a
+  `min-width: min(var(--rail-w), 88vw)` floor and a `max-width: 92vw` cap —
+  `--rail-w` is its _floor_, not its width, because German does not fit 240px: a
+  day row like `Mo., 21. Sept.21 Beobachtungen` needs 237px of content, and the
+  panel's 1rem padding turned the overflow into a horizontal scrollbar (English
+  fits at 240, so check German when touching this). The rows size the panel, and
+  `contain: inline-size` on `.date-list__meta` in `DateList.astro` is
+  load-bearing: without it the `nowrap` meta line's own max-content (~100px wider
+  than the rows) wins, the panel jumps to the 92vw cap, and the rows overflow it
+  instead. The meta then just ellipsises. Do not "fix" the scroll by capping the
+  row's `min-width` or un-wrapping the meta.
 
 ## Backlog identification workflow (form is dev only)
 

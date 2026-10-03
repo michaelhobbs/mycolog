@@ -7,13 +7,19 @@ export const amanitaPhalloidesQ188643: WikidataSpeciesData = {
   wikidataId: 'Q188643',
   taxonomy: {
     taxonName: 'Amanita phalloides',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q213938', label: 'Amanita' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q213938', labels: { en: 'Amanita', de: 'Wulstlinge' } }],
     instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q11619941', label: 'mycorrhizal fungus' },
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      { pid: 'P31', qid: 'Q11619941', labels: { en: 'mycorrhizal fungus' } },
     ],
-    basionym: [{ pid: 'P566', qid: 'Q61962642', label: 'Agaricus phalloides' }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q61962642',
+        labels: { en: 'Agaricus phalloides', de: 'Agaricus phalloides' },
+      },
+    ],
     authorCitation: '(Vaill. ex Fr.) Link',
     shortName: 'A. phalloides',
   },
@@ -44,19 +50,27 @@ export const amanitaPhalloidesQ188643: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544563', label: 'free hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q19887987', label: 'ring and volva stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544563',
+      labels: { en: 'free hymenium attachment' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q19887987', labels: { en: 'ring and volva stipe' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888591', label: 'deadly mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q19888591', labels: { en: 'deadly mushroom', de: 'tödlicher Pilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -65,14 +79,44 @@ export const amanitaPhalloidesQ188643: WikidataSpeciesData = {
     commonsGallery: 'Amanita phalloides',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '178962' },
-    { pid: 'P846', source: 'GBIF', value: '5240325' },
-    { pid: 'P962', source: 'MycoBank', value: '178962' },
-    { pid: 'P3151', source: 'iNaturalist', value: '52135' },
-    { pid: 'P838', source: 'BioLib', value: '60473' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1009706' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '67723' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '65ZB2' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '178962',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=178962',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5240325', url: 'https://www.gbif.org/species/5240325' },
+    { pid: 'P962', source: 'MycoBank', value: '178962', url: 'https://www.mycobank.org/MB/178962' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '52135',
+      url: 'https://inaturalist.org/taxa/52135',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60473',
+      url: 'https://www.biolib.cz/cz/taxon/id60473',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1009706',
+      url: 'https://eol.org/pages/1009706',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '67723',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/67723',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '65ZB2',
+      url: 'https://www.catalogueoflife.org/data/taxon/65ZB2',
+    },
   ],
 }
 

@@ -7,10 +7,16 @@ export const tremiscusHelvelloidesQ1473292: WikidataSpeciesData = {
   wikidataId: 'Q1473292',
   taxonomy: {
     taxonName: 'Tremiscus helvelloides',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19842617', label: 'Tremiscus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q26678308', label: 'Tremella helvelloides' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q19842617', labels: { en: 'Tremiscus', de: 'Tremiscus' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q26678308',
+        labels: { en: 'Tremella helvelloides', de: 'Tremella helvelloides' },
+      },
+    ],
     shortName: 'T. helvelloides',
   },
   names: {
@@ -36,12 +42,32 @@ export const tremiscusHelvelloidesQ1473292: WikidataSpeciesData = {
     commonsGallery: 'Guepinia helvelloides',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '189772' },
-    { pid: 'P846', source: 'GBIF', value: '8824388' },
-    { pid: 'P962', source: 'MycoBank', value: '306999' },
-    { pid: 'P3151', source: 'iNaturalist', value: '348814' },
-    { pid: 'P838', source: 'BioLib', value: '59814' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '583TJ' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '189772',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=189772',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8824388', url: 'https://www.gbif.org/species/8824388' },
+    { pid: 'P962', source: 'MycoBank', value: '306999', url: 'https://www.mycobank.org/MB/306999' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '348814',
+      url: 'https://inaturalist.org/taxa/348814',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59814',
+      url: 'https://www.biolib.cz/cz/taxon/id59814',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '583TJ',
+      url: 'https://www.catalogueoflife.org/data/taxon/583TJ',
+    },
   ],
 }
 

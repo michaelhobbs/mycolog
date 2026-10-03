@@ -7,9 +7,9 @@ export const lactariusDeterrimusQ498221: WikidataSpeciesData = {
   wikidataId: 'Q498221',
   taxonomy: {
     taxonName: 'Lactarius deterrimus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2142268', label: 'Deliciosi' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q2142268', labels: { en: 'Deliciosi', de: 'Reizker' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Gröger',
     shortName: 'L. deterrimus',
   },
@@ -33,17 +33,33 @@ export const lactariusDeterrimusQ498221: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q19887955', label: 'depressed mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q1670336', label: 'tan' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      {
+        pid: 'P784',
+        qid: 'Q19887955',
+        labels: { en: 'depressed mushroom cap', de: 'Mitte niedergedrückt' },
+      },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q1670336', labels: { en: 'tan', de: 'Lohfarbe' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
   },
   media: {
     images: ['Lactarius-deterrimus-Fichten-Reizker.jpg'],
@@ -51,14 +67,44 @@ export const lactariusDeterrimusQ498221: WikidataSpeciesData = {
     commonsGallery: 'Lactarius deterrimus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '332881' },
-    { pid: 'P846', source: 'GBIF', value: '5248699' },
-    { pid: 'P962', source: 'MycoBank', value: '332881' },
-    { pid: 'P3151', source: 'iNaturalist', value: '194385' },
-    { pid: 'P838', source: 'BioLib', value: '59999' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1016697' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '36060' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3RRSG' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '332881',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=332881',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5248699', url: 'https://www.gbif.org/species/5248699' },
+    { pid: 'P962', source: 'MycoBank', value: '332881', url: 'https://www.mycobank.org/MB/332881' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '194385',
+      url: 'https://inaturalist.org/taxa/194385',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59999',
+      url: 'https://www.biolib.cz/cz/taxon/id59999',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1016697',
+      url: 'https://eol.org/pages/1016697',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '36060',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/36060',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3RRSG',
+      url: 'https://www.catalogueoflife.org/data/taxon/3RRSG',
+    },
   ],
 }
 

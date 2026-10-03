@@ -7,10 +7,16 @@ export const tricholomaSulphureumQ583388: WikidataSpeciesData = {
   wikidataId: 'Q583388',
   taxonomy: {
     taxonName: 'Tricholoma sulphureum',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q573661', label: 'Tricholoma' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q105048907', label: 'Agaricus sulphureus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q573661', labels: { en: 'Tricholoma', de: 'Ritterlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q105048907',
+        labels: { en: 'Agaricus sulphureus', de: 'Agaricus sulphureus' },
+      },
+    ],
     authorCitation: '(Bull.) P.Kumm.',
     shortName: 'T. sulphureum',
   },
@@ -25,20 +31,32 @@ export const tricholomaSulphureumQ583388: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887923', label: 'adnexed hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887923',
+      labels: { en: 'adnexed hymenium attachment' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q359511', label: 'poisonous mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q359511', labels: { en: 'poisonous mushroom', de: 'Giftpilz' } },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -47,14 +65,44 @@ export const tricholomaSulphureumQ583388: WikidataSpeciesData = {
     commonsGallery: 'Tricholoma sulphureum',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '227491' },
-    { pid: 'P846', source: 'GBIF', value: '3324436' },
-    { pid: 'P962', source: 'MycoBank', value: '227491' },
-    { pid: 'P3151', source: 'iNaturalist', value: '408299' },
-    { pid: 'P838', source: 'BioLib', value: '60408' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '6681318' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '181718' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '7D3FT' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '227491',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=227491',
+    },
+    { pid: 'P846', source: 'GBIF', value: '3324436', url: 'https://www.gbif.org/species/3324436' },
+    { pid: 'P962', source: 'MycoBank', value: '227491', url: 'https://www.mycobank.org/MB/227491' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '408299',
+      url: 'https://inaturalist.org/taxa/408299',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60408',
+      url: 'https://www.biolib.cz/cz/taxon/id60408',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '6681318',
+      url: 'https://eol.org/pages/6681318',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '181718',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/181718',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '7D3FT',
+      url: 'https://www.catalogueoflife.org/data/taxon/7D3FT',
+    },
   ],
 }
 

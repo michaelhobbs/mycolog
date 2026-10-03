@@ -7,9 +7,11 @@ export const schizophyllumCommuneQ941733: WikidataSpeciesData = {
   wikidataId: 'Q941733',
   taxonomy: {
     taxonName: 'Schizophyllum commune',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1303760', label: 'Schizophyllum' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1303760', labels: { en: 'Schizophyllum', de: 'Spaltblättlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Fr.',
     shortName: 'S. commune',
   },
@@ -30,19 +32,31 @@ export const schizophyllumCommuneQ941733: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544541', label: 'offset mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544541', labels: { en: 'offset mushroom cap', de: 'versetzt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -51,14 +65,44 @@ export const schizophyllumCommuneQ941733: WikidataSpeciesData = {
     commonsGallery: 'Schizophyllum commune',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '208403' },
-    { pid: 'P846', source: 'GBIF', value: '5241128' },
-    { pid: 'P962', source: 'MycoBank', value: '208403' },
-    { pid: 'P3151', source: 'iNaturalist', value: '54573' },
-    { pid: 'P838', source: 'BioLib', value: '59975' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1017353' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '5334' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '79WX9' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '208403',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=208403',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5241128', url: 'https://www.gbif.org/species/5241128' },
+    { pid: 'P962', source: 'MycoBank', value: '208403', url: 'https://www.mycobank.org/MB/208403' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '54573',
+      url: 'https://inaturalist.org/taxa/54573',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59975',
+      url: 'https://www.biolib.cz/cz/taxon/id59975',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1017353',
+      url: 'https://eol.org/pages/1017353',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '5334',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/5334',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '79WX9',
+      url: 'https://www.catalogueoflife.org/data/taxon/79WX9',
+    },
   ],
 }
 

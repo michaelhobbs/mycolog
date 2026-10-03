@@ -1,0 +1,344 @@
+---
+// The four Wikidata-driven blocks on a species page: names, morphology,
+// ecology and edibility.
+//
+// Every value here is `optional` on purpose. Wikidata's coverage is partial --
+// `hymenium type` is on 31 of the 47 species, `ecological type` on 29 -- so a
+// missing property means "Wikidata makes no claim", which is not the same as
+// "this species has no pores". A row with no data is therefore omitted rather
+// than rendered as a negative, and a section with no rows at all says so
+// explicitly.
+//
+// Icons come from `iconsByQid`, which only contains values Commons actually has
+// a drawing for. An unknown QID renders as text with no image, never a broken
+// one -- 4 values have no icon and 1 has an icon belonging to a different value.
+import Block from './Block.astro'
+import { iconUrlFor } from '../lib/wikidata-icons'
+import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
+import type { Locale } from '../i18n'
+import type { Translations } from '../i18n'
+import { l10n } from '../i18n/helpers'
+
+type Localized = { en: string; de: string }
+type AnyRef = ItemRef<never> | ItemRef
+
+interface Props {
+  data: WikidataSpeciesData | undefined
+  locale: Locale
+  t: Translations
+  /** The site's own prose, which is richer than Wikidata's enum values. */
+  commonName?: Localized
+  habitat?: Localized
+  edibility?: Localized
+  scientificName: string
+}
+
+const { data, locale, t, commonName, habitat, edibility, scientificName } = Astro.props
+
+/** Prefer the requested language, then English, so a value is never blank. */
+const labelOf = (ref: AnyRef) => ref.labels[locale] ?? ref.labels.en ?? ref.labels.de ?? ref.qid
+
+interface Value {
+  qid: string
+  text: string
+  /** Null when Commons has no drawing for this value. */
+  icon: string | null
+}
+
+const val = (ref: AnyRef): Value => ({
+  qid: ref.qid,
+  text: labelOf(ref),
+  icon: iconUrlFor(ref.qid),
+})
+
+const morphology = data?.morphology
+const ecoVals = (data?.ecology.ecologicalType ?? []).map(val)
+const consVals = (data?.edibility.conservationStatus ?? []).map(val)
+const edibilityVals = (data?.edibility.values ?? []).map(val)
+
+// Rows with no data are dropped, so a species missing `spore print color` does
+// not get a row reading "Spore print — not stated", which reads as a finding.
+const morphRows = [
+  {
+    label: t.mushrooms.hymeniumType,
+    vals: morphology?.hymeniumType ? [val(morphology.hymeniumType)] : [],
+  },
+  { label: t.mushrooms.capShape, vals: (morphology?.capShape ?? []).map(val) },
+  {
+    label: t.mushrooms.hymeniumAttachment,
+    vals: morphology?.hymeniumAttachment ? [val(morphology.hymeniumAttachment)] : [],
+  },
+  {
+    label: t.mushrooms.stipeCharacter,
+    vals: morphology?.stipeCharacter ? [val(morphology.stipeCharacter)] : [],
+  },
+  {
+    label: t.mushrooms.sporePrintColor,
+    vals: morphology?.sporePrintColor ? [val(morphology.sporePrintColor)] : [],
+  },
+].filter((r) => r.vals.length > 0)
+
+// Common names: the site's own first, then whatever Wikidata adds.
+//
+// Dedupe is case- and diacritic-insensitive. Wikidata is inconsistent about
+// casing ("Fly Agaric" vs "Fly agaric") and routinely lists a species' common
+// name again as its own alias, so a plain `Set` yields "Fly Agaric, Fly agaric"
+// under Common names and then "fly agaric" a second time under "also known as".
+// The first spelling wins, which is the site's own.
+const fold = (v: string) =>
+  v
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase()
+
+const dedupe = (values: string[]) => {
+  const seen = new Set<string>()
+  const out: string[] = []
+  for (const v of values) {
+    const key = fold(v)
+    if (!key || seen.has(key)) continue
+    seen.add(key)
+    out.push(v)
+  }
+  return out
+}
+
+const wikiCommon = (data?.names.commonNames ?? [])
+  .filter((c) => c.lang === locale || c.lang === 'en')
+  .map((c) => c.value)
+const commonNames = dedupe([l10n(commonName, locale), ...wikiCommon])
+
+// Wikidata lists the scientific name (and infraspecific variants of it) among
+// the aliases of most items, and often repeats a common name there too. Both
+// are already stated elsewhere on the page, so an alias list echoing them back
+// is noise.
+const statedElsewhere = new Set(
+  [...commonNames, scientificName, data?.taxonomy.taxonName ?? ''].map(fold),
+)
+const aliases = dedupe([
+  ...(data?.names.aliases?.[locale] ?? []),
+  ...(data?.names.aliases?.en ?? []),
+]).filter((a) => !statedElsewhere.has(fold(a)))
+---
+
+<Block title={t.mushrooms.names}>
+  <div class="rows">
+    <div class="row">
+      <span class="row__label">{t.mushrooms.scientificName}</span>
+      <span class="row__dots"></span>
+      <span class="row__value"><em>{scientificName}</em></span>
+    </div>
+    {
+      commonNames.length > 0 && (
+        <div class="row">
+          <span class="row__label">{t.mushrooms.commonNames}</span>
+          <span class="row__dots" />
+          <span class="row__value">{commonNames.join(', ')}</span>
+        </div>
+      )
+    }
+    {
+      aliases.length > 0 && (
+        <div class="row">
+          <span class="row__label">{t.mushrooms.alternateNames}</span>
+          <span class="row__dots" />
+          <span class="row__value">{aliases.join(', ')}</span>
+        </div>
+      )
+    }
+  </div>
+</Block>
+
+<Block title={t.mushrooms.morphology}>
+  {
+    morphRows.length ? (
+      <div class="rows">
+        {morphRows.map((row) => (
+          <div class="row">
+            <span class="row__label">{row.label}</span>
+            <span class="row__dots" />
+            <span class="row__value">
+              {row.vals.map((v) => (
+                <span class="value">
+                  {v.icon && (
+                    <img
+                      class="value__icon"
+                      src={v.icon}
+                      alt=""
+                      loading="lazy"
+                      width="28"
+                      height="28"
+                    />
+                  )}
+                  <span class="value__text">{v.text}</span>
+                </span>
+              ))}
+            </span>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p class="none">{t.mushrooms.noData}</p>
+    )
+  }
+</Block>
+
+<Block title={t.mushrooms.ecology}>
+  <div class="rows">
+    {
+      ecoVals.length > 0 && (
+        <div class="row">
+          <span class="row__label">{t.mushrooms.ecologicalType}</span>
+          <span class="row__dots" />
+          <span class="row__value">
+            {ecoVals.map((v) => (
+              <span class="value">
+                {v.icon && (
+                  <img
+                    class="value__icon"
+                    src={v.icon}
+                    alt=""
+                    loading="lazy"
+                    width="28"
+                    height="28"
+                  />
+                )}
+                <span class="value__text">{v.text}</span>
+              </span>
+            ))}
+          </span>
+        </div>
+      )
+    }
+    {
+      consVals.length > 0 && (
+        <div class="row">
+          <span class="row__label">{t.mushrooms.conservationStatus}</span>
+          <span class="row__dots" />
+          <span class="row__value">
+            {consVals.map((v) => (
+              <span class="value">
+                <span class="value__text">{v.text}</span>
+              </span>
+            ))}
+          </span>
+        </div>
+      )
+    }
+  </div>
+  {habitat && <p class="prose">{l10n(habitat, locale)}</p>}
+</Block>
+
+<Block title={t.mushrooms.edibility}>
+  {
+    edibilityVals.length ? (
+      <ul class="values">
+        {edibilityVals.map((v) => (
+          <li class="value">
+            {v.icon && (
+              <img class="value__icon" src={v.icon} alt="" loading="lazy" width="28" height="28" />
+            )}
+            <span class="value__text">{v.text}</span>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      // An empty list would read as "safe to eat". Wikidata making no edibility
+      // claim is not the same as an edible species, so say what it means.
+      <p class="none">{t.mushrooms.noData}</p>
+    )
+  }
+  {edibility && <p class="prose">{l10n(edibility, locale)}</p>}
+</Block>
+
+<style>
+  .rows {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .rows:empty {
+    display: none;
+  }
+
+  .row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.9;
+  }
+
+  .row__label {
+    color: var(--fg-dim);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+  }
+
+  .row__dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 0.5rem;
+    margin-bottom: 0.2em;
+  }
+
+  .row__value {
+    color: var(--fg-bright);
+    text-align: right;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.15rem 0.5rem;
+  }
+
+  .value {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .value__icon {
+    /* Commons drawings are 300px and arrive in mixed PNG/SVG; constrain both
+       axes so neither a square PNG nor a tall drawing stretches a row. */
+    width: 1.4rem;
+    height: 1.4rem;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .value__text {
+    color: var(--fg-bright);
+    font-size: 0.8125rem;
+  }
+
+  .values {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.6rem 0.75rem;
+  }
+
+  .none {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    color: var(--fg-muted);
+    font-style: italic;
+    font-size: 0.8125rem;
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .prose {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.6rem 0.75rem;
+    margin: 0.4rem 0 0;
+    color: var(--fg);
+    line-height: 1.7;
+    font-size: 0.8125rem;
+  }
+</style>

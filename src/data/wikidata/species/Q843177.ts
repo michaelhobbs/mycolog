@@ -7,11 +7,11 @@ export const russulaDelicaQ843177: WikidataSpeciesData = {
   wikidataId: 'Q843177',
   taxonomy: {
     taxonName: 'Russula delica',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q216110', label: 'Russula' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q216110', labels: { en: 'Russula', de: 'Täublinge' } }],
     instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q11619941', label: 'mycorrhizal fungus' },
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      { pid: 'P31', qid: 'Q11619941', labels: { en: 'mycorrhizal fungus' } },
     ],
     authorCitation: '(Paul.) Fr.',
     shortName: 'R. delica',
@@ -42,22 +42,32 @@ export const russulaDelicaQ843177: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
     capShape: [
-      { pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' },
-      { pid: 'P784', qid: 'Q19887957', label: 'flat mushroom cap' },
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+      { pid: 'P784', qid: 'Q19887957', labels: { en: 'flat mushroom cap', de: 'ausgebreitet' } },
     ],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -66,14 +76,44 @@ export const russulaDelicaQ843177: WikidataSpeciesData = {
     commonsGallery: 'Russula delica',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '184527' },
-    { pid: 'P846', source: 'GBIF', value: '2551331' },
-    { pid: 'P962', source: 'MycoBank', value: '184527' },
-    { pid: 'P3151', source: 'iNaturalist', value: '352278' },
-    { pid: 'P838', source: 'BioLib', value: '60063' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1009665' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '111140' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6X9H6' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '184527',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=184527',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2551331', url: 'https://www.gbif.org/species/2551331' },
+    { pid: 'P962', source: 'MycoBank', value: '184527', url: 'https://www.mycobank.org/MB/184527' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '352278',
+      url: 'https://inaturalist.org/taxa/352278',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60063',
+      url: 'https://www.biolib.cz/cz/taxon/id60063',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1009665',
+      url: 'https://eol.org/pages/1009665',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '111140',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/111140',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6X9H6',
+      url: 'https://www.catalogueoflife.org/data/taxon/6X9H6',
+    },
   ],
 }
 

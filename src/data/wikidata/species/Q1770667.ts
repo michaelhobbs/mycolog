@@ -7,10 +7,12 @@ export const rickenellaFibulaQ1770667: WikidataSpeciesData = {
   wikidataId: 'Q1770667',
   taxonomy: {
     taxonName: 'Rickenella fibula',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2714656', label: 'Rickenella' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q105048244', label: 'Agaricus fibula' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q2714656', labels: { en: 'Rickenella', de: 'Rickenella' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q105048244', labels: { en: 'Agaricus fibula', de: 'Agaricus fibula' } },
+    ],
     authorCitation: '(Bull.) Raithelh.',
     shortName: 'R. fibula',
   },
@@ -36,13 +38,38 @@ export const rickenellaFibulaQ1770667: WikidataSpeciesData = {
     commonsGallery: 'Rickenella fibula',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '322818' },
-    { pid: 'P846', source: 'GBIF', value: '2523473' },
-    { pid: 'P962', source: 'MycoBank', value: '322818' },
-    { pid: 'P3151', source: 'iNaturalist', value: '118170' },
-    { pid: 'P838', source: 'BioLib', value: '60380' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '52786724' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '264144' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '322818',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=322818',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2523473', url: 'https://www.gbif.org/species/2523473' },
+    { pid: 'P962', source: 'MycoBank', value: '322818', url: 'https://www.mycobank.org/MB/322818' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '118170',
+      url: 'https://inaturalist.org/taxa/118170',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60380',
+      url: 'https://www.biolib.cz/cz/taxon/id60380',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '52786724',
+      url: 'https://eol.org/pages/52786724',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '264144',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/264144',
+    },
   ],
 }
 

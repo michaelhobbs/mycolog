@@ -7,10 +7,16 @@ export const cudoniellaAcicularisQ10682294: WikidataSpeciesData = {
   wikidataId: 'Q10682294',
   taxonomy: {
     taxonName: 'Cudoniella acicularis',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q5192540', label: 'Cudoniella' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q15411488', label: 'Helvella acicularis' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q5192540', labels: { en: 'Cudoniella', de: 'Cudoniella' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q15411488',
+        labels: { en: 'Helvella acicularis', de: 'Helvella acicularis' },
+      },
+    ],
     shortName: 'C. acicularis',
   },
   names: {
@@ -34,14 +40,44 @@ export const cudoniellaAcicularisQ10682294: WikidataSpeciesData = {
     commonsGallery: 'Cudoniella acicularis',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '220435' },
-    { pid: 'P846', source: 'GBIF', value: '2582073' },
-    { pid: 'P962', source: 'MycoBank', value: '220435' },
-    { pid: 'P3151', source: 'iNaturalist', value: '382065' },
-    { pid: 'P838', source: 'BioLib', value: '343878' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188119' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '354080' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6BP4P' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '220435',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=220435',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2582073', url: 'https://www.gbif.org/species/2582073' },
+    { pid: 'P962', source: 'MycoBank', value: '220435', url: 'https://www.mycobank.org/MB/220435' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '382065',
+      url: 'https://inaturalist.org/taxa/382065',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '343878',
+      url: 'https://www.biolib.cz/cz/taxon/id343878',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188119',
+      url: 'https://eol.org/pages/188119',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '354080',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/354080',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6BP4P',
+      url: 'https://www.catalogueoflife.org/data/taxon/6BP4P',
+    },
   ],
 }
 

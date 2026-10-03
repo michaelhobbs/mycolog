@@ -22,24 +22,34 @@ export interface LocalizedName {
   value: string
 }
 
-/** A reference to another Wikidata item, carrying its resolved English label. */
+/**
+ * A reference to another Wikidata item, carrying its labels in each language.
+ *
+ * Both `en` and `de` are kept because these values have to render on a German
+ * page, and the fungal terms are German-authored on Wikidata. A value may lack
+ * a translation, so callers should fall back to `en` before rendering nothing.
+ */
 export interface ItemRef<T extends string = string> {
   pid: string
   qid: T
-  label: string
+  labels: Partial<Record<'en' | 'de', string>>
 }
 
-/** An identifier in an external taxonomy database.
- *
- *  Only the pid and the opaque value are stored. Resolving each source's URL
- *  pattern is deliberately left to the caller: baking `https://.../{id}` into
- *  47 generated files would freeze a guess about 8 sites' URL conventions,
- *  and getting one wrong produces a link that 404s in production. */
+/** An identifier in an external taxonomy database, with a resolved link. */
 export interface ExternalId {
   pid: string
   /** The database's own name, so a caller can render "MycoBank: MB 1234". */
   source: string
   value: string
+  /**
+   * A link to the record, built from the property's Wikidata formatter URL
+   * (`formatter URL`, P1630) with the value substituted. Read from Wikidata
+   * rather than hardcoded here so the pattern cannot drift out of date.
+   *
+   * Required, and the generator skips any identifier whose property has no
+   * formatter URL: an id we cannot link is not worth rendering as a source.
+   */
+  url: string
 }
 
 export interface TaxonomyData {

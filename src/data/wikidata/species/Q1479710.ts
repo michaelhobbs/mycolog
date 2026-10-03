@@ -7,10 +7,12 @@ export const ramariaAureaQ1479710: WikidataSpeciesData = {
   wikidataId: 'Q1479710',
   taxonomy: {
     taxonName: 'Ramaria aurea',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1753622', label: 'Ramaria' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q105050663', label: 'Clavaria aurea' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q1753622', labels: { en: 'Ramaria', de: 'Korallen' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q105050663', labels: { en: 'Clavaria aurea', de: 'Clavaria aurea' } },
+    ],
     authorCitation: '(Schaeff.) Quél.',
     shortName: 'R. aurea',
   },
@@ -23,17 +25,29 @@ export const ramariaAureaQ1479710: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861550', label: 'smooth' },
-    capShape: [{ pid: 'P784', qid: 'Q19887965', label: 'no mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q194191', label: 'ochre' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861550', labels: { en: 'smooth' } },
+    capShape: [{ pid: 'P784', qid: 'Q19887965', labels: { en: 'no mushroom cap' } }],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q194191', labels: { en: 'ochre', de: 'Ocker' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q62102033', label: 'edible when cooked' }],
+    values: [
+      {
+        pid: 'P789',
+        qid: 'Q62102033',
+        labels: { en: 'edible when cooked', de: 'nur zubereitet essbar' },
+      },
+    ],
   },
   media: {
     images: ['2012-09-03 Ramaria aurea crop.jpg'],
@@ -41,14 +55,44 @@ export const ramariaAureaQ1479710: WikidataSpeciesData = {
     commonsGallery: 'Ramaria aurea',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '414477' },
-    { pid: 'P846', source: 'GBIF', value: '5238642' },
-    { pid: 'P962', source: 'MycoBank', value: '414477' },
-    { pid: 'P3151', source: 'iNaturalist', value: '352176' },
-    { pid: 'P838', source: 'BioLib', value: '59904' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1007252' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '150180' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '4RBLM' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '414477',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=414477',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5238642', url: 'https://www.gbif.org/species/5238642' },
+    { pid: 'P962', source: 'MycoBank', value: '414477', url: 'https://www.mycobank.org/MB/414477' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '352176',
+      url: 'https://inaturalist.org/taxa/352176',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59904',
+      url: 'https://www.biolib.cz/cz/taxon/id59904',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1007252',
+      url: 'https://eol.org/pages/1007252',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '150180',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/150180',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '4RBLM',
+      url: 'https://www.catalogueoflife.org/data/taxon/4RBLM',
+    },
   ],
 }
 

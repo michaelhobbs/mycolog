@@ -7,9 +7,11 @@ export const dacrymycesChrysopermusQ2152361: WikidataSpeciesData = {
   wikidataId: 'Q2152361',
   taxonomy: {
     taxonName: 'Dacrymyces chrysospermus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1331136', label: 'Dacrymyces' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1331136', labels: { en: 'Dacrymyces', de: 'Gallerttränen' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Berk. & M.A.Curtis',
     shortName: 'D. chrysospermus',
   },
@@ -35,13 +37,38 @@ export const dacrymycesChrysopermusQ2152361: WikidataSpeciesData = {
     commonsGallery: 'Dacrymyces chrysospermus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '141916' },
-    { pid: 'P846', source: 'GBIF', value: '2512921' },
-    { pid: 'P962', source: 'MycoBank', value: '141916' },
-    { pid: 'P3151', source: 'iNaturalist', value: '118028' },
-    { pid: 'P838', source: 'BioLib', value: '344218' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1030838' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '29886' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '141916',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=141916',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2512921', url: 'https://www.gbif.org/species/2512921' },
+    { pid: 'P962', source: 'MycoBank', value: '141916', url: 'https://www.mycobank.org/MB/141916' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '118028',
+      url: 'https://inaturalist.org/taxa/118028',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '344218',
+      url: 'https://www.biolib.cz/cz/taxon/id344218',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1030838',
+      url: 'https://eol.org/pages/1030838',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '29886',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/29886',
+    },
   ],
 }
 

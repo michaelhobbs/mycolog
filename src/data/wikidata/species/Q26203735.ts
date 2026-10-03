@@ -7,10 +7,18 @@ export const butyriboletusAppendiculatusQ26203735: WikidataSpeciesData = {
   wikidataId: 'Q26203735',
   taxonomy: {
     taxonName: 'Butyriboletus appendiculatus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q17311833', label: 'Butyriboletus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q545849', label: 'Boletus appendiculatus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q17311833', labels: { en: 'Butyriboletus', de: 'Butyriboletus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q545849',
+        labels: { en: 'Boletus appendiculatus', de: 'Boletus appendiculatus' },
+      },
+    ],
     authorCitation: '(Schaeff.) D. Arora & J.L. Frank',
     shortName: 'B. appendiculatus',
   },
@@ -34,17 +42,29 @@ export const butyriboletusAppendiculatusQ26203735: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544569', label: 'adnate hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q864152', label: 'olive' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544569',
+      labels: { en: 'adnate hymenium attachment', de: 'Lamellen breit angewachsen' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q864152', labels: { en: 'olive', de: 'Oliv' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
   },
   media: {
     images: ['Boletus appendiculatus.jpg'],
@@ -52,13 +72,38 @@ export const butyriboletusAppendiculatusQ26203735: WikidataSpeciesData = {
     commonsGallery: 'Butyriboletus appendiculatus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '803319' },
-    { pid: 'P846', source: 'GBIF', value: '8250249' },
-    { pid: 'P962', source: 'MycoBank', value: '803319' },
-    { pid: 'P3151', source: 'iNaturalist', value: '372726' },
-    { pid: 'P838', source: 'BioLib', value: '60128' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '182627' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'NZ7L' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '803319',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=803319',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8250249', url: 'https://www.gbif.org/species/8250249' },
+    { pid: 'P962', source: 'MycoBank', value: '803319', url: 'https://www.mycobank.org/MB/803319' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '372726',
+      url: 'https://inaturalist.org/taxa/372726',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60128',
+      url: 'https://www.biolib.cz/cz/taxon/id60128',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '182627',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/182627',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'NZ7L',
+      url: 'https://www.catalogueoflife.org/data/taxon/NZ7L',
+    },
   ],
 }
 

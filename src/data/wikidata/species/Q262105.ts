@@ -7,10 +7,18 @@ export const sarcondonImbricatusQ262105: WikidataSpeciesData = {
   wikidataId: 'Q262105',
   taxonomy: {
     taxonName: 'Sarcodon imbricatus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q902135', label: 'Sarcodon' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q21874616', label: 'Hydnum imbricatum' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q902135', labels: { en: 'Sarcodon', de: 'Braunsporstachelinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q21874616',
+        labels: { en: 'Hydnum imbricatum', de: 'Hydnum imbricatum' },
+      },
+    ],
     shortName: 'S. imbricatus',
   },
   names: {
@@ -29,17 +37,29 @@ export const sarcondonImbricatusQ262105: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861552', label: 'teeth' },
-    capShape: [{ pid: 'P784', qid: 'Q19887957', label: 'flat mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544569', label: 'adnate hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q47071', label: 'brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861552', labels: { en: 'teeth', de: 'Stacheln' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q19887957', labels: { en: 'flat mushroom cap', de: 'ausgebreitet' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544569',
+      labels: { en: 'adnate hymenium attachment', de: 'Lamellen breit angewachsen' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q47071', labels: { en: 'brown', de: 'Braun' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
   },
   media: {
     images: ['Habichtspilz-Sarcodon-imbricatus.jpg'],
@@ -47,14 +67,44 @@ export const sarcondonImbricatusQ262105: WikidataSpeciesData = {
     commonsGallery: 'Sarcodon imbricatus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '414481' },
-    { pid: 'P846', source: 'GBIF', value: '5238865' },
-    { pid: 'P962', source: 'MycoBank', value: '414481' },
-    { pid: 'P3151', source: 'iNaturalist', value: '122335' },
-    { pid: 'P838', source: 'BioLib', value: '60635' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1007251' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '57136' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6XLRR' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '414481',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=414481',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5238865', url: 'https://www.gbif.org/species/5238865' },
+    { pid: 'P962', source: 'MycoBank', value: '414481', url: 'https://www.mycobank.org/MB/414481' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '122335',
+      url: 'https://inaturalist.org/taxa/122335',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60635',
+      url: 'https://www.biolib.cz/cz/taxon/id60635',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1007251',
+      url: 'https://eol.org/pages/1007251',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '57136',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/57136',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6XLRR',
+      url: 'https://www.catalogueoflife.org/data/taxon/6XLRR',
+    },
   ],
 }
 

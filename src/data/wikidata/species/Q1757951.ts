@@ -7,10 +7,12 @@ export const clathrusArcheriQ1757951: WikidataSpeciesData = {
   wikidataId: 'Q1757951',
   taxonomy: {
     taxonName: 'Clathrus archeri',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q913940', label: 'Clathrus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59455934', label: 'Lysurus archeri' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q913940', labels: { en: 'Clathrus', de: 'Gitterlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q59455934', labels: { en: 'Lysurus archeri', de: 'Lysurus archeri' } },
+    ],
     authorCitation: '(Berk.) Dring',
     shortName: 'C. archeri',
   },
@@ -26,16 +28,28 @@ export const clathrusArcheriQ1757951: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q2034230', label: 'gleba' },
-    capShape: [{ pid: 'P784', qid: 'Q19887965', label: 'no mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888352', label: 'olive brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q2034230', labels: { en: 'gleba', de: 'Gleba' } },
+    capShape: [{ pid: 'P784', qid: 'Q19887965', labels: { en: 'no mushroom cap' } }],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888352',
+      labels: { en: 'olive brown', de: 'olivbraun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' }],
+    values: [
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
+    ],
   },
   media: {
     images: ['Clathrus archeri.jpg', 'Tintenfischpilz 1a.JPG'],
@@ -43,14 +57,44 @@ export const clathrusArcheriQ1757951: WikidataSpeciesData = {
     commonsGallery: 'Clathrus archeri',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '112728' },
-    { pid: 'P846', source: 'GBIF', value: '5239483' },
-    { pid: 'P962', source: 'MycoBank', value: '112728' },
-    { pid: 'P3151', source: 'iNaturalist', value: '51135' },
-    { pid: 'P838', source: 'BioLib', value: '60809' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1029300' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '1449397' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'VT9Z' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '112728',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=112728',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5239483', url: 'https://www.gbif.org/species/5239483' },
+    { pid: 'P962', source: 'MycoBank', value: '112728', url: 'https://www.mycobank.org/MB/112728' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '51135',
+      url: 'https://inaturalist.org/taxa/51135',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60809',
+      url: 'https://www.biolib.cz/cz/taxon/id60809',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1029300',
+      url: 'https://eol.org/pages/1029300',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '1449397',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/1449397',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'VT9Z',
+      url: 'https://www.catalogueoflife.org/data/taxon/VT9Z',
+    },
   ],
 }
 

@@ -7,10 +7,16 @@ export const amanitaPantherinaQ45547: WikidataSpeciesData = {
   wikidataId: 'Q45547',
   taxonomy: {
     taxonName: 'Amanita pantherina',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q213938', label: 'Amanita' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q33038753', label: 'Agaricus pantherinus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q213938', labels: { en: 'Amanita', de: 'Wulstlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q33038753',
+        labels: { en: 'Agaricus pantherinus', de: 'Agaricus pantherinus' },
+      },
+    ],
     authorCitation: '(DC.) Krombh. (1846)',
     shortName: 'A. pantherina',
   },
@@ -33,17 +39,25 @@ export const amanitaPantherinaQ45547: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q19887957', label: 'flat mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544563', label: 'free hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q19887987', label: 'ring and volva stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q19887957', labels: { en: 'flat mushroom cap', de: 'ausgebreitet' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544563',
+      labels: { en: 'free hymenium attachment' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q19887987', labels: { en: 'ring and volva stipe' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q359511', label: 'poisonous mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q359511', labels: { en: 'poisonous mushroom', de: 'Giftpilz' } }],
   },
   media: {
     images: [
@@ -55,14 +69,44 @@ export const amanitaPantherinaQ45547: WikidataSpeciesData = {
     commonsGallery: 'Amanita pantherina',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '156565' },
-    { pid: 'P846', source: 'GBIF', value: '8961574' },
-    { pid: 'P962', source: 'MycoBank', value: '156565' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48418' },
-    { pid: 'P838', source: 'BioLib', value: '60471' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1029661' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '67721' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '5TYZH' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '156565',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=156565',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8961574', url: 'https://www.gbif.org/species/8961574' },
+    { pid: 'P962', source: 'MycoBank', value: '156565', url: 'https://www.mycobank.org/MB/156565' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48418',
+      url: 'https://inaturalist.org/taxa/48418',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60471',
+      url: 'https://www.biolib.cz/cz/taxon/id60471',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1029661',
+      url: 'https://eol.org/pages/1029661',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '67721',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/67721',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '5TYZH',
+      url: 'https://www.catalogueoflife.org/data/taxon/5TYZH',
+    },
   ],
 }
 

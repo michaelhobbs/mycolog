@@ -7,10 +7,14 @@ export const suillellusLuridusQ752494: WikidataSpeciesData = {
   wikidataId: 'Q752494',
   taxonomy: {
     taxonName: 'Suillellus luridus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q18907506', label: 'Suillellus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q41597775', label: 'Boletus luridus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q18907506', labels: { en: 'Suillellus', de: 'Suillellus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q41597775', labels: { en: 'Boletus luridus', de: 'Boletus luridus' } },
+    ],
     authorCitation: '(Schaeff.) Murrill',
     shortName: 'S. luridus',
   },
@@ -30,19 +34,35 @@ export const suillellusLuridusQ752494: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888352', label: 'olive brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888352',
+      labels: { en: 'olive brown', de: 'olivbraun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q62102033', label: 'edible when cooked' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q62102033',
+        labels: { en: 'edible when cooked', de: 'nur zubereitet essbar' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
   },
   media: {
@@ -54,14 +74,44 @@ export const suillellusLuridusQ752494: WikidataSpeciesData = {
     commonsGallery: 'Suillellus luridus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '102402' },
-    { pid: 'P846', source: 'GBIF', value: '3355021' },
-    { pid: 'P962', source: 'MycoBank', value: '102402' },
-    { pid: 'P3151', source: 'iNaturalist', value: '824777' },
-    { pid: 'P838', source: 'BioLib', value: '60143' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '18506462' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '121041' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '7B4RP' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '102402',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=102402',
+    },
+    { pid: 'P846', source: 'GBIF', value: '3355021', url: 'https://www.gbif.org/species/3355021' },
+    { pid: 'P962', source: 'MycoBank', value: '102402', url: 'https://www.mycobank.org/MB/102402' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '824777',
+      url: 'https://inaturalist.org/taxa/824777',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60143',
+      url: 'https://www.biolib.cz/cz/taxon/id60143',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '18506462',
+      url: 'https://eol.org/pages/18506462',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '121041',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/121041',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '7B4RP',
+      url: 'https://www.catalogueoflife.org/data/taxon/7B4RP',
+    },
   ],
 }
 

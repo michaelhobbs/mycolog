@@ -7,10 +7,16 @@ export const hygrocybeCantharellusQ3915439: WikidataSpeciesData = {
   wikidataId: 'Q3915439',
   taxonomy: {
     taxonName: 'Hygrocybe cantharellus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q520530', label: 'Hygrocybe' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q105048108', label: 'Agaricus cantharellus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q520530', labels: { en: 'Hygrocybe', de: 'Saftlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q105048108',
+        labels: { en: 'Agaricus cantharellus', de: 'Agaricus cantharellus' },
+      },
+    ],
     authorCitation: '(Schwein.) Murrill',
     shortName: 'H. cantharellus',
   },
@@ -30,8 +36,8 @@ export const hygrocybeCantharellusQ3915439: WikidataSpeciesData = {
   ecology: {},
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -40,14 +46,44 @@ export const hygrocybeCantharellusQ3915439: WikidataSpeciesData = {
     commonsGallery: 'Hygrocybe cantharellus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '355720' },
-    { pid: 'P846', source: 'GBIF', value: '2538595' },
-    { pid: 'P962', source: 'MycoBank', value: '355720' },
-    { pid: 'P3151', source: 'iNaturalist', value: '63282' },
-    { pid: 'P838', source: 'BioLib', value: '348498' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1008011' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '80589' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3NB5H' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '355720',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=355720',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2538595', url: 'https://www.gbif.org/species/2538595' },
+    { pid: 'P962', source: 'MycoBank', value: '355720', url: 'https://www.mycobank.org/MB/355720' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '63282',
+      url: 'https://inaturalist.org/taxa/63282',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '348498',
+      url: 'https://www.biolib.cz/cz/taxon/id348498',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1008011',
+      url: 'https://eol.org/pages/1008011',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '80589',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/80589',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3NB5H',
+      url: 'https://www.catalogueoflife.org/data/taxon/3NB5H',
+    },
   ],
 }
 

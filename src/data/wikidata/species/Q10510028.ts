@@ -7,9 +7,9 @@ export const mycenaViridimarginataQ10510028: WikidataSpeciesData = {
   wikidataId: 'Q10510028',
   taxonomy: {
     taxonName: 'Mycena viridimarginata',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1124575', label: 'Mycena' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q1124575', labels: { en: 'Mycena', de: 'Helmlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     shortName: 'M. viridimarginata',
   },
   names: {
@@ -33,14 +33,44 @@ export const mycenaViridimarginataQ10510028: WikidataSpeciesData = {
     commonsGallery: 'Mycena viridimarginata',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '235997' },
-    { pid: 'P846', source: 'GBIF', value: '2527145' },
-    { pid: 'P962', source: 'MycoBank', value: '235997' },
-    { pid: 'P3151', source: 'iNaturalist', value: '738968' },
-    { pid: 'P838', source: 'BioLib', value: '317563' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188439' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '41249' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6RQFF' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '235997',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=235997',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2527145', url: 'https://www.gbif.org/species/2527145' },
+    { pid: 'P962', source: 'MycoBank', value: '235997', url: 'https://www.mycobank.org/MB/235997' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '738968',
+      url: 'https://inaturalist.org/taxa/738968',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '317563',
+      url: 'https://www.biolib.cz/cz/taxon/id317563',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188439',
+      url: 'https://eol.org/pages/188439',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '41249',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/41249',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6RQFF',
+      url: 'https://www.catalogueoflife.org/data/taxon/6RQFF',
+    },
   ],
 }
 

@@ -7,11 +7,13 @@ export const cantharellusCibariusQ188749: WikidataSpeciesData = {
   wikidataId: 'Q188749',
   taxonomy: {
     taxonName: 'Cantharellus cibarius',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q922335', label: 'Cantharellus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q922335', labels: { en: 'Cantharellus', de: 'Pfifferlinge' } },
+    ],
     instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q11619941', label: 'mycorrhizal fungus' },
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      { pid: 'P31', qid: 'Q11619941', labels: { en: 'mycorrhizal fungus' } },
     ],
     authorCitation: 'Fr.',
     shortName: 'C. cibarius',
@@ -54,20 +56,40 @@ export const cantharellusCibariusQ188749: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861551', label: 'ridges' },
-    capShape: [{ pid: 'P784', qid: 'Q19887958', label: 'infundibuliform mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q943', label: 'yellow' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861551', labels: { en: 'ridges' } },
+    capShape: [
+      {
+        pid: 'P784',
+        qid: 'Q19887958',
+        labels: { en: 'infundibuliform mushroom cap', de: 'trichterförmig' },
+      },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q943', labels: { en: 'yellow', de: 'Gelb' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888517', label: 'choice mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q19888517',
+        labels: { en: 'choice mushroom', de: 'hervorragender Speisepilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -76,14 +98,44 @@ export const cantharellusCibariusQ188749: WikidataSpeciesData = {
     commonsGallery: 'Cantharellus cibarius',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '200345' },
-    { pid: 'P846', source: 'GBIF', value: '5249504' },
-    { pid: 'P962', source: 'MycoBank', value: '200345' },
-    { pid: 'P3151', source: 'iNaturalist', value: '47347' },
-    { pid: 'P838', source: 'BioLib', value: '59853' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '6666298' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '36066' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'QMKY' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '200345',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=200345',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5249504', url: 'https://www.gbif.org/species/5249504' },
+    { pid: 'P962', source: 'MycoBank', value: '200345', url: 'https://www.mycobank.org/MB/200345' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '47347',
+      url: 'https://inaturalist.org/taxa/47347',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59853',
+      url: 'https://www.biolib.cz/cz/taxon/id59853',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '6666298',
+      url: 'https://eol.org/pages/6666298',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '36066',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/36066',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'QMKY',
+      url: 'https://www.catalogueoflife.org/data/taxon/QMKY',
+    },
   ],
 }
 

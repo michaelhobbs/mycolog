@@ -7,10 +7,18 @@ export const macrolepiotaProceraQ243381: WikidataSpeciesData = {
   wikidataId: 'Q243381',
   taxonomy: {
     taxonName: 'Macrolepiota procera',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19748', label: 'Macrolepiota' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q100460078', label: 'Agaricus procerus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q19748', labels: { en: 'Macrolepiota', de: 'Riesenschirmlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q100460078',
+        labels: { en: 'Agaricus procerus', de: 'Agaricus procerus' },
+      },
+    ],
     authorCitation: '(Scop.) Singer',
     shortName: 'M. procera',
   },
@@ -49,20 +57,32 @@ export const macrolepiotaProceraQ243381: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q19887964', label: 'umbonate mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544563', label: 'free hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544582', label: 'ring stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q19887964', labels: { en: 'umbonate mushroom cap', de: 'gebuckelt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544563',
+      labels: { en: 'free hymenium attachment' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q14544582', labels: { en: 'ring stipe' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q62102033', label: 'edible when cooked' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q62102033',
+        labels: { en: 'edible when cooked', de: 'nur zubereitet essbar' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -71,15 +91,50 @@ export const macrolepiotaProceraQ243381: WikidataSpeciesData = {
     commonsGallery: 'Macrolepiota procera',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '287857' },
-    { pid: 'P846', source: 'GBIF', value: '3339766' },
-    { pid: 'P962', source: 'MycoBank', value: '287857' },
-    { pid: 'P3151', source: 'iNaturalist', value: '63401' },
-    { pid: 'P3151', source: 'iNaturalist', value: '63394' },
-    { pid: 'P838', source: 'BioLib', value: '60527' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '2870280' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '56183' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3X5NV' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '287857',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=287857',
+    },
+    { pid: 'P846', source: 'GBIF', value: '3339766', url: 'https://www.gbif.org/species/3339766' },
+    { pid: 'P962', source: 'MycoBank', value: '287857', url: 'https://www.mycobank.org/MB/287857' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '63401',
+      url: 'https://inaturalist.org/taxa/63401',
+    },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '63394',
+      url: 'https://inaturalist.org/taxa/63394',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60527',
+      url: 'https://www.biolib.cz/cz/taxon/id60527',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '2870280',
+      url: 'https://eol.org/pages/2870280',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '56183',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/56183',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3X5NV',
+      url: 'https://www.catalogueoflife.org/data/taxon/3X5NV',
+    },
   ],
 }
 

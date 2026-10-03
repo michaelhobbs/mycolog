@@ -7,10 +7,18 @@ export const craterellusTubaeformisQ371126: WikidataSpeciesData = {
   wikidataId: 'Q371126',
   taxonomy: {
     taxonName: 'Craterellus tubaeformis',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2097845', label: 'Craterellus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q105050279', label: 'Cantharellus tubaeformis' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q2097845', labels: { en: 'Craterellus', de: 'Kraterellen' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q105050279',
+        labels: { en: 'Cantharellus tubaeformis', de: 'Cantharellus tubaeformis' },
+      },
+    ],
     authorCitation: '(Fr.) Quél.',
     shortName: 'C. tubaeformis',
   },
@@ -32,19 +40,39 @@ export const craterellusTubaeformisQ371126: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861551', label: 'ridges' },
-    capShape: [{ pid: 'P784', qid: 'Q19887958', label: 'infundibuliform mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q2730433', label: 'cream' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861551', labels: { en: 'ridges' } },
+    capShape: [
+      {
+        pid: 'P784',
+        qid: 'Q19887958',
+        labels: { en: 'infundibuliform mushroom cap', de: 'trichterförmig' },
+      },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q2730433', labels: { en: 'cream', de: 'cremefarben' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888517', label: 'choice mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q19888517',
+        labels: { en: 'choice mushroom', de: 'hervorragender Speisepilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
   },
   media: {
@@ -53,14 +81,44 @@ export const craterellusTubaeformisQ371126: WikidataSpeciesData = {
     commonsGallery: 'Craterellus tubaeformis',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '455453' },
-    { pid: 'P846', source: 'GBIF', value: '2554536' },
-    { pid: 'P962', source: 'MycoBank', value: '455453' },
-    { pid: 'P3151', source: 'iNaturalist', value: '350511' },
-    { pid: 'P838', source: 'BioLib', value: '59857' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '11446829' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '57200' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'Z8TV' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '455453',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=455453',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2554536', url: 'https://www.gbif.org/species/2554536' },
+    { pid: 'P962', source: 'MycoBank', value: '455453', url: 'https://www.mycobank.org/MB/455453' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '350511',
+      url: 'https://inaturalist.org/taxa/350511',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59857',
+      url: 'https://www.biolib.cz/cz/taxon/id59857',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '11446829',
+      url: 'https://eol.org/pages/11446829',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '57200',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/57200',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'Z8TV',
+      url: 'https://www.catalogueoflife.org/data/taxon/Z8TV',
+    },
   ],
 }
 

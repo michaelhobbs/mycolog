@@ -7,10 +7,18 @@ export const craterellusLutescensQ1478429: WikidataSpeciesData = {
   wikidataId: 'Q1478429',
   taxonomy: {
     taxonName: 'Craterellus lutescens',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2097845', label: 'Craterellus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q100378193', label: 'Cantharellus lutescens' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q2097845', labels: { en: 'Craterellus', de: 'Kraterellen' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q100378193',
+        labels: { en: 'Cantharellus lutescens', de: 'Cantharellus lutescens' },
+      },
+    ],
     shortName: 'C. lutescens',
   },
   names: {
@@ -45,19 +53,39 @@ export const craterellusLutescensQ1478429: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861551', label: 'ridges' },
-    capShape: [{ pid: 'P784', qid: 'Q19887958', label: 'infundibuliform mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q2730433', label: 'cream' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861551', labels: { en: 'ridges' } },
+    capShape: [
+      {
+        pid: 'P784',
+        qid: 'Q19887958',
+        labels: { en: 'infundibuliform mushroom cap', de: 'trichterförmig' },
+      },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q2730433', labels: { en: 'cream', de: 'cremefarben' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888517', label: 'choice mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q19888517',
+        labels: { en: 'choice mushroom', de: 'hervorragender Speisepilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
   },
   media: {
@@ -66,13 +94,38 @@ export const craterellusLutescensQ1478429: WikidataSpeciesData = {
     commonsGallery: 'Craterellus lutescens',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '184644' },
-    { pid: 'P846', source: 'GBIF', value: '8871787' },
-    { pid: 'P962', source: 'MycoBank', value: '184644' },
-    { pid: 'P3151', source: 'iNaturalist', value: '514218' },
-    { pid: 'P3151', source: 'iNaturalist', value: '350293' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '11524954' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'Z8SW' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '184644',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=184644',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8871787', url: 'https://www.gbif.org/species/8871787' },
+    { pid: 'P962', source: 'MycoBank', value: '184644', url: 'https://www.mycobank.org/MB/184644' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '514218',
+      url: 'https://inaturalist.org/taxa/514218',
+    },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '350293',
+      url: 'https://inaturalist.org/taxa/350293',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '11524954',
+      url: 'https://eol.org/pages/11524954',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'Z8SW',
+      url: 'https://www.catalogueoflife.org/data/taxon/Z8SW',
+    },
   ],
 }
 

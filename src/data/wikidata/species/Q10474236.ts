@@ -7,10 +7,16 @@ export const diatrypeDisciformisQ10474236: WikidataSpeciesData = {
   wikidataId: 'Q10474236',
   taxonomy: {
     taxonName: 'Diatrype disciformis',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q3767761', label: 'Diatrype' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59503472', label: 'Sphaeria disciformis' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q3767761', labels: { en: 'Diatrype', de: 'Diatrype' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q59503472',
+        labels: { en: 'Sphaeria disciformis', de: 'Sphaeria disciformis' },
+      },
+    ],
     shortName: 'D. disciformis',
   },
   names: {
@@ -36,14 +42,44 @@ export const diatrypeDisciformisQ10474236: WikidataSpeciesData = {
     commonsCategory: 'Diatrype disciformis',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '233766' },
-    { pid: 'P846', source: 'GBIF', value: '2575263' },
-    { pid: 'P962', source: 'MycoBank', value: '233766' },
-    { pid: 'P3151', source: 'iNaturalist', value: '382151' },
-    { pid: 'P838', source: 'BioLib', value: '59774' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188570' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '42366' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6CR7W' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '233766',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=233766',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2575263', url: 'https://www.gbif.org/species/2575263' },
+    { pid: 'P962', source: 'MycoBank', value: '233766', url: 'https://www.mycobank.org/MB/233766' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '382151',
+      url: 'https://inaturalist.org/taxa/382151',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59774',
+      url: 'https://www.biolib.cz/cz/taxon/id59774',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188570',
+      url: 'https://eol.org/pages/188570',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '42366',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/42366',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6CR7W',
+      url: 'https://www.catalogueoflife.org/data/taxon/6CR7W',
+    },
   ],
 }
 

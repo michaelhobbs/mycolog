@@ -7,10 +7,16 @@ export const inocybeSindoniaQ10431265: WikidataSpeciesData = {
   wikidataId: 'Q10431265',
   taxonomy: {
     taxonName: 'Inocybe sindonia',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q784343', label: 'Inocybe' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59529404', label: 'Agaricus sindonius' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q784343', labels: { en: 'Inocybe', de: 'Risspilze' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q59529404',
+        labels: { en: 'Agaricus sindonius', de: 'Agaricus sindonius' },
+      },
+    ],
     shortName: 'I. sindonia',
   },
   names: {
@@ -33,14 +39,44 @@ export const inocybeSindoniaQ10431265: WikidataSpeciesData = {
     commonsGallery: 'Inocybe sindonia',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '235443' },
-    { pid: 'P846', source: 'GBIF', value: '2527869' },
-    { pid: 'P962', source: 'MycoBank', value: '235443' },
-    { pid: 'P3151', source: 'iNaturalist', value: '416745' },
-    { pid: 'P838', source: 'BioLib', value: '126301' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188634' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '166043' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3PRM3' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '235443',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=235443',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2527869', url: 'https://www.gbif.org/species/2527869' },
+    { pid: 'P962', source: 'MycoBank', value: '235443', url: 'https://www.mycobank.org/MB/235443' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '416745',
+      url: 'https://inaturalist.org/taxa/416745',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '126301',
+      url: 'https://www.biolib.cz/cz/taxon/id126301',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188634',
+      url: 'https://eol.org/pages/188634',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '166043',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/166043',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3PRM3',
+      url: 'https://www.catalogueoflife.org/data/taxon/3PRM3',
+    },
   ],
 }
 

@@ -7,10 +7,18 @@ export const coprinopsisPseudoniveaQ10459215: WikidataSpeciesData = {
   wikidataId: 'Q10459215',
   taxonomy: {
     taxonName: 'Coprinopsis pseudonivea',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2253036', label: 'Coprinopsis' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59471590', label: 'Coprinus pseudoniveus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q2253036', labels: { en: 'Coprinopsis', de: 'Coprinopsis' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q59471590',
+        labels: { en: 'Coprinus pseudoniveus', de: 'Coprinus pseudoniveus' },
+      },
+    ],
     authorCitation: '(Bender & Uljé) Redhead, Vilgalys & Moncalvo (2001)',
     shortName: 'C. pseudonivea',
   },
@@ -29,14 +37,44 @@ export const coprinopsisPseudoniveaQ10459215: WikidataSpeciesData = {
     images: [],
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '474121' },
-    { pid: 'P846', source: 'GBIF', value: '5242715' },
-    { pid: 'P962', source: 'MycoBank', value: '474121' },
-    { pid: 'P3151', source: 'iNaturalist', value: '481367' },
-    { pid: 'P838', source: 'BioLib', value: '343231' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '243041' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '230787' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'Y59V' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '474121',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=474121',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5242715', url: 'https://www.gbif.org/species/5242715' },
+    { pid: 'P962', source: 'MycoBank', value: '474121', url: 'https://www.mycobank.org/MB/474121' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '481367',
+      url: 'https://inaturalist.org/taxa/481367',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '343231',
+      url: 'https://www.biolib.cz/cz/taxon/id343231',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '243041',
+      url: 'https://eol.org/pages/243041',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '230787',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/230787',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'Y59V',
+      url: 'https://www.catalogueoflife.org/data/taxon/Y59V',
+    },
   ],
 }
 

@@ -7,10 +7,18 @@ export const gomphidiusGlutinosusQ790626: WikidataSpeciesData = {
   wikidataId: 'Q790626',
   taxonomy: {
     taxonName: 'Gomphidius glutinosus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1631217', label: 'Gomphidius' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q12229296', label: 'Agaricus glutinosus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1631217', labels: { en: 'Gomphidius', de: 'Schmierlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q12229296',
+        labels: { en: 'Agaricus glutinosus', de: 'Agaricus glutinosus' },
+      },
+    ],
     shortName: 'G. glutinosus',
   },
   names: {
@@ -28,18 +36,32 @@ export const gomphidiusGlutinosusQ790626: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q19887957', label: 'flat mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544582', label: 'ring stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888339', label: 'blackish-brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q19887957', labels: { en: 'flat mushroom cap', de: 'ausgebreitet' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q14544582', labels: { en: 'ring stipe' } },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888339',
+      labels: { en: 'blackish-brown', de: 'schwarz-braun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
-    conservationStatus: [{ pid: 'P141', qid: 'Q211005', label: 'least concern' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
+    conservationStatus: [
+      { pid: 'P141', qid: 'Q211005', labels: { en: 'least concern', de: 'nicht gefährdet' } },
+    ],
   },
   media: {
     images: ['Gomphidius glutinosus 131007.jpg'],
@@ -47,14 +69,44 @@ export const gomphidiusGlutinosusQ790626: WikidataSpeciesData = {
     commonsGallery: 'Gomphidius glutinosus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '209017' },
-    { pid: 'P846', source: 'GBIF', value: '2525027' },
-    { pid: 'P962', source: 'MycoBank', value: '209017' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48424' },
-    { pid: 'P838', source: 'BioLib', value: '60197' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1017422' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '5393' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3GSMW' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '209017',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=209017',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2525027', url: 'https://www.gbif.org/species/2525027' },
+    { pid: 'P962', source: 'MycoBank', value: '209017', url: 'https://www.mycobank.org/MB/209017' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48424',
+      url: 'https://inaturalist.org/taxa/48424',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60197',
+      url: 'https://www.biolib.cz/cz/taxon/id60197',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1017422',
+      url: 'https://eol.org/pages/1017422',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '5393',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/5393',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3GSMW',
+      url: 'https://www.catalogueoflife.org/data/taxon/3GSMW',
+    },
   ],
 }
 

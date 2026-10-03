@@ -7,10 +7,16 @@ export const amanitaMuscariaQ131227: WikidataSpeciesData = {
   wikidataId: 'Q131227',
   taxonomy: {
     taxonName: 'Amanita muscaria',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q213938', label: 'Amanita' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q21870095', label: 'Agaricus muscarius' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q213938', labels: { en: 'Amanita', de: 'Wulstlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q21870095',
+        labels: { en: 'Agaricus muscarius', de: 'Agaricus muscarius' },
+      },
+    ],
     authorCitation: '(L.) Lam.',
     shortName: 'A. muscaria',
   },
@@ -65,23 +71,33 @@ export const amanitaMuscariaQ131227: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
     capShape: [
-      { pid: 'P784', qid: 'Q19887957', label: 'flat mushroom cap' },
-      { pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' },
+      { pid: 'P784', qid: 'Q19887957', labels: { en: 'flat mushroom cap', de: 'ausgebreitet' } },
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
     ],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544563', label: 'free hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q19887987', label: 'ring and volva stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544563',
+      labels: { en: 'free hymenium attachment' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q19887987', labels: { en: 'ring and volva stipe' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q359511', label: 'poisonous mushroom' },
-      { pid: 'P789', qid: 'Q1169875', label: 'psychoactive mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q359511', labels: { en: 'poisonous mushroom', de: 'Giftpilz' } },
+      {
+        pid: 'P789',
+        qid: 'Q1169875',
+        labels: { en: 'psychoactive mushroom', de: 'psychoaktive Pilze' },
+      },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -93,14 +109,44 @@ export const amanitaMuscariaQ131227: WikidataSpeciesData = {
     commonsGallery: 'Amanita muscaria',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '161267' },
-    { pid: 'P846', source: 'GBIF', value: '8168319' },
-    { pid: 'P962', source: 'MycoBank', value: '161267' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48715' },
-    { pid: 'P838', source: 'BioLib', value: '60470' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '2866150' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '41956' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '5TYZ9' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '161267',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=161267',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8168319', url: 'https://www.gbif.org/species/8168319' },
+    { pid: 'P962', source: 'MycoBank', value: '161267', url: 'https://www.mycobank.org/MB/161267' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48715',
+      url: 'https://inaturalist.org/taxa/48715',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60470',
+      url: 'https://www.biolib.cz/cz/taxon/id60470',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '2866150',
+      url: 'https://eol.org/pages/2866150',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '41956',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/41956',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '5TYZ9',
+      url: 'https://www.catalogueoflife.org/data/taxon/5TYZ9',
+    },
   ],
 }
 

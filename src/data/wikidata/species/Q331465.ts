@@ -7,10 +7,14 @@ export const albatrellusOvinusQ331465: WikidataSpeciesData = {
   wikidataId: 'Q331465',
   taxonomy: {
     taxonName: 'Albatrellus ovinus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1073187', label: 'Albatrellus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59419388', label: 'Boletus ovinus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1073187', labels: { en: 'Albatrellus', de: 'Schafporlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q59419388', labels: { en: 'Boletus ovinus', de: 'Boletus ovinus' } },
+    ],
     authorCitation: '(Schaeff.) Kotl. & Pouzar (1957)',
     shortName: 'A. ovinus',
   },
@@ -26,17 +30,29 @@ export const albatrellusOvinusQ331465: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
   },
   media: {
     images: ['Schaf-Porling Albatrellus ovinus.jpg'],
@@ -44,14 +60,44 @@ export const albatrellusOvinusQ331465: WikidataSpeciesData = {
     commonsGallery: 'Albatrellus ovinus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '292351' },
-    { pid: 'P846', source: 'GBIF', value: '2551823' },
-    { pid: 'P962', source: 'MycoBank', value: '292351' },
-    { pid: 'P3151', source: 'iNaturalist', value: '123891' },
-    { pid: 'P838', source: 'BioLib', value: '59889' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '190125' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '139090' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'BFM3' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '292351',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=292351',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2551823', url: 'https://www.gbif.org/species/2551823' },
+    { pid: 'P962', source: 'MycoBank', value: '292351', url: 'https://www.mycobank.org/MB/292351' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '123891',
+      url: 'https://inaturalist.org/taxa/123891',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59889',
+      url: 'https://www.biolib.cz/cz/taxon/id59889',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '190125',
+      url: 'https://eol.org/pages/190125',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '139090',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/139090',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'BFM3',
+      url: 'https://www.catalogueoflife.org/data/taxon/BFM3',
+    },
   ],
 }
 

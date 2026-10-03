@@ -7,9 +7,11 @@ export const cortinariusLargusQ10570865: WikidataSpeciesData = {
   wikidataId: 'Q10570865',
   taxonomy: {
     taxonName: 'Cortinarius largus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q306495', label: 'Cortinarius' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q306495', labels: { en: 'Cortinarius', de: 'Schleierlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Fr. (1838)',
     shortName: 'C. largus',
   },
@@ -28,13 +30,38 @@ export const cortinariusLargusQ10570865: WikidataSpeciesData = {
     commonsCategory: 'Cortinarius largus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '224983' },
-    { pid: 'P846', source: 'GBIF', value: '2529520' },
-    { pid: 'P962', source: 'MycoBank', value: '224983' },
-    { pid: 'P3151', source: 'iNaturalist', value: '381926' },
-    { pid: 'P838', source: 'BioLib', value: '343480' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188363' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'YLB6' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '224983',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=224983',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2529520', url: 'https://www.gbif.org/species/2529520' },
+    { pid: 'P962', source: 'MycoBank', value: '224983', url: 'https://www.mycobank.org/MB/224983' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '381926',
+      url: 'https://inaturalist.org/taxa/381926',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '343480',
+      url: 'https://www.biolib.cz/cz/taxon/id343480',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188363',
+      url: 'https://eol.org/pages/188363',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'YLB6',
+      url: 'https://www.catalogueoflife.org/data/taxon/YLB6',
+    },
   ],
 }
 

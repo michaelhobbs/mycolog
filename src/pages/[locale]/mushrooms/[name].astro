@@ -2,8 +2,12 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
+import Block from '../../../components/Block.astro'
 import MiniMap from '../../../components/MiniMap.astro'
 import LinkRow from '../../../components/LinkRow.astro'
+import SpeciesData from '../../../components/SpeciesData.astro'
+import SpeciesSources from '../../../components/SpeciesSources.astro'
+import { speciesWikidata } from '../../../data/wikidata/species'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import { buildLocationMap, locationName } from '../../../lib/sightings'
@@ -47,6 +51,16 @@ const coverKey = sp?.cover ? `${sp.cover.sighting}#${sp.cover.index}` : null
 const fullSrcs = await Promise.all(
   allImages.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
 )
+
+// The Wikidata snapshot for this species, joined on the resolved QID rather
+// than the slug. `wikidataId` is optional in the schema, so this can be
+// undefined for a species that has no Wikidata item yet.
+const wikidata = sp?.wikidataId ? speciesWikidata[sp.wikidataId] : undefined
+
+// Built here rather than inline in the template: a newline inside a JSX text
+// node collapses away, so `{t.mushrooms.sightings} ({entries.length})` on its
+// own line would render as "8Sightings" the moment Prettier wrapped it.
+const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
 ---
 
 <Layout title={`${species ? l10n(sp?.commonName, locale) : name} — myco.log`} locale={locale}>
@@ -109,18 +123,31 @@ const fullSrcs = await Promise.all(
 
           {dev && <span id="cover-status" class="cover-status" role="status" />}
 
-          <div class="facts">
-            <div class="fact-row">
-              <span class="fact-lbl">{t.mushrooms.edibility}</span>
-              <span class="fact-dot" />
-              <span class="fact-val">{edibility ? l10n(edibility, locale) : '—'}</span>
-            </div>
-            <div class="fact-row">
-              <span class="fact-lbl">{t.mushrooms.habitat}</span>
-              <span class="fact-dot" />
-              <span class="fact-val">{habitat ? l10n(habitat, locale) : '—'}</span>
-            </div>
-          </div>
+          <SpeciesData
+            data={wikidata}
+            locale={locale}
+            t={t}
+            scientificName={sp.scientificName}
+            commonName={sp.commonName}
+            habitat={habitat}
+            edibility={edibility}
+          />
+
+          {features.length > 0 && (
+            <Block title={t.mushrooms.features}>
+              <ul class="block__list">
+                {features.map((f) => (
+                  <li>▸ {l10n(f, locale)}</li>
+                ))}
+              </ul>
+            </Block>
+          )}
+
+          {sharedNotes && (
+            <Block title={t.mushrooms.notes}>
+              <p class="block__notes">{l10n(sharedNotes, locale)}</p>
+            </Block>
+          )}
 
           {entries.length > 0 && (
             <MiniMap
@@ -132,28 +159,7 @@ const fullSrcs = await Promise.all(
             />
           )}
 
-          {sharedNotes && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
-              <p class="block__notes">{l10n(sharedNotes, locale)}</p>
-            </section>
-          )}
-
-          {features.length > 0 && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.features}</div>
-              <ul class="block__list">
-                {features.map((f) => (
-                  <li>▸ {l10n(f, locale)}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-
-          <section class="block">
-            <div class="block__hdr">
-              ╔═ {t.mushrooms.sightings} ({entries.length})
-            </div>
+          <Block title={sightingsTitle}>
             <ul class="block__sightings">
               {entries.map((e) => {
                 const sd = e.data
@@ -192,7 +198,9 @@ const fullSrcs = await Promise.all(
                 )
               })}
             </ul>
-          </section>
+          </Block>
+
+          <SpeciesSources data={wikidata} locale={locale} t={t} />
         </>
       )
     }
@@ -259,7 +267,7 @@ const fullSrcs = await Promise.all(
   }
 
   .page-header {
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
   }
 
   .page-header__tag {
@@ -385,50 +393,6 @@ const fullSrcs = await Promise.all(
 
   .cover-status[data-state='pending'] {
     color: var(--fg-dim);
-  }
-
-  .facts {
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 1.25rem;
-    font-size: 0.8125rem;
-  }
-
-  .fact-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    line-height: 1.8;
-  }
-
-  .fact-lbl {
-    color: var(--fg-dim);
-    flex-shrink: 0;
-    font-size: 0.75rem;
-  }
-
-  .fact-dot {
-    flex: 1;
-    border-bottom: 1px dotted var(--fg-muted);
-    min-width: 0.5rem;
-    margin-bottom: 0.2em;
-  }
-
-  .fact-val {
-    color: var(--fg-bright);
-    text-align: right;
-  }
-
-  .block {
-    margin-bottom: 1.25rem;
-  }
-
-  .block__hdr {
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.8125rem;
-    margin-bottom: 0.5rem;
   }
 
   .block__list {

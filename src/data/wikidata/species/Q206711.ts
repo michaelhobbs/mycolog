@@ -7,10 +7,18 @@ export const pseudohydnumGelatinosumQ206711: WikidataSpeciesData = {
   wikidataId: 'Q206711',
   taxonomy: {
     taxonName: 'Pseudohydnum gelatinosum',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q7254872', label: 'Pseudohydnum' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q54370181', label: 'Hydnum gelatinosum' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q7254872', labels: { en: 'Pseudohydnum', de: 'Pseudohydnum' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q54370181',
+        labels: { en: 'Hydnum gelatinosum', de: 'Hydnum gelatinosum' },
+      },
+    ],
     authorCitation: '(Scop.) P.Karst.',
     shortName: 'P. gelatinosum',
   },
@@ -27,19 +35,35 @@ export const pseudohydnumGelatinosumQ206711: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861552', label: 'teeth' },
-    capShape: [{ pid: 'P784', qid: 'Q19887955', label: 'depressed mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861552', labels: { en: 'teeth', de: 'Stacheln' } },
+    capShape: [
+      {
+        pid: 'P784',
+        qid: 'Q19887955',
+        labels: { en: 'depressed mushroom cap', de: 'Mitte niedergedrückt' },
+      },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -48,14 +72,44 @@ export const pseudohydnumGelatinosumQ206711: WikidataSpeciesData = {
     commonsGallery: 'Pseudohydnum gelatinosum',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '120525' },
-    { pid: 'P846', source: 'GBIF', value: '5249353' },
-    { pid: 'P962', source: 'MycoBank', value: '120525' },
-    { pid: 'P3151', source: 'iNaturalist', value: '54164' },
-    { pid: 'P838', source: 'BioLib', value: '59805' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '133565' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '29895' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '4NYCM' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '120525',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=120525',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5249353', url: 'https://www.gbif.org/species/5249353' },
+    { pid: 'P962', source: 'MycoBank', value: '120525', url: 'https://www.mycobank.org/MB/120525' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '54164',
+      url: 'https://inaturalist.org/taxa/54164',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59805',
+      url: 'https://www.biolib.cz/cz/taxon/id59805',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '133565',
+      url: 'https://eol.org/pages/133565',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '29895',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/29895',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '4NYCM',
+      url: 'https://www.catalogueoflife.org/data/taxon/4NYCM',
+    },
   ],
 }
 

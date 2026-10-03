@@ -1,0 +1,41 @@
+---
+// The `╔═ Title` section panel used across the species, location and sighting
+// pages, plus the two Wikidata-driven components on the species page.
+//
+// This shell is a component rather than a class in the global stylesheet
+// because Astro scopes a component's <style> to that component's own template.
+// A `.block` rule written in a page's <style> therefore does NOT reach a
+// <section class="block"> rendered inside another component -- the sections a
+// component owns silently lose their spacing. Owning the shell here means one
+// definition covers every caller, and Astro still only emits this CSS onto the
+// pages that actually render a block.
+//
+// Content styling (`.block__list`, `.block__notes`, `.block__sightings`) stays
+// with the pages: those rules apply to the slotted markup below, which Astro
+// attributes to the calling component, not to this one.
+interface Props {
+  title: string
+  /** Extra classes on the <section>, e.g. a page-specific hook. */
+  class?: string
+}
+
+const { title, class: className } = Astro.props
+---
+
+<section class:list={['block', className]}>
+  <div class="block__hdr">╔═ {title}</div>
+  <slot />
+</section>
+
+<style>
+  .block {
+    margin-bottom: 1.25rem;
+  }
+
+  .block__hdr {
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+</style>

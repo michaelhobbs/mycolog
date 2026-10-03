@@ -7,10 +7,14 @@ export const caloboletusCalopusQ29784429: WikidataSpeciesData = {
   wikidataId: 'Q29784429',
   taxonomy: {
     taxonName: 'Caloboletus calopus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19277034', label: 'Caloboletus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q1137151', label: 'Boletus calopus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q19277034', labels: { en: 'Caloboletus', de: 'Caloboletus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q1137151', labels: { en: 'Boletus calopus', de: 'Boletus calopus' } },
+    ],
     authorCitation: '(Pers.) Vizzini',
     shortName: 'C. calopus',
   },
@@ -35,19 +39,35 @@ export const caloboletusCalopusQ29784429: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888352', label: 'olive brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888352',
+      labels: { en: 'olive brown', de: 'olivbraun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' },
-      { pid: 'P789', qid: 'Q19888537', label: 'caution mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
+      { pid: 'P789', qid: 'Q19888537', labels: { en: 'caution mushroom' } },
     ],
   },
   media: {
@@ -56,12 +76,32 @@ export const caloboletusCalopusQ29784429: WikidataSpeciesData = {
     commonsGallery: 'Caloboletus calopus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '550547' },
-    { pid: 'P846', source: 'GBIF', value: '8203051' },
-    { pid: 'P962', source: 'MycoBank', value: '550547' },
-    { pid: 'P3151', source: 'iNaturalist', value: '701434' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '141855' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '5X7DN' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '550547',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=550547',
+    },
+    { pid: 'P846', source: 'GBIF', value: '8203051', url: 'https://www.gbif.org/species/8203051' },
+    { pid: 'P962', source: 'MycoBank', value: '550547', url: 'https://www.mycobank.org/MB/550547' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '701434',
+      url: 'https://inaturalist.org/taxa/701434',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '141855',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/141855',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '5X7DN',
+      url: 'https://www.catalogueoflife.org/data/taxon/5X7DN',
+    },
   ],
 }
 

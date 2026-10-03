@@ -7,10 +7,21 @@ export const rubroboletusRhodoxanthusQ26203742: WikidataSpeciesData = {
   wikidataId: 'Q26203742',
   taxonomy: {
     taxonName: 'Rubroboletus rhodoxanthus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19299411', label: 'Rubroboletus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q108571820', label: 'Boletus sanguineus var. rhodoxanthus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q19299411', labels: { en: 'Rubroboletus', de: 'Rubroboletus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q108571820',
+        labels: {
+          en: 'Boletus sanguineus var. rhodoxanthus',
+          de: 'Boletus sanguineus var. rhodoxanthus',
+        },
+      },
+    ],
     authorCitation: '(Krombh.) Kuan Zhao & Zhu L. Yang',
     shortName: 'R. rhodoxanthus',
   },
@@ -25,30 +36,62 @@ export const rubroboletusRhodoxanthusQ26203742: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q62023127', label: 'semi-spherical mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q131915205', label: 'reticulate' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888352', label: 'olive brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [{ pid: 'P784', qid: 'Q62023127', labels: { en: 'semi-spherical mushroom cap' } }],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: { pid: 'P786', qid: 'Q131915205', labels: { en: 'reticulate' } },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888352',
+      labels: { en: 'olive brown', de: 'olivbraun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q359511', label: 'poisonous mushroom' }],
-    conservationStatus: [{ pid: 'P141', qid: 'Q719675', label: 'near threatened' }],
+    values: [{ pid: 'P789', qid: 'Q359511', labels: { en: 'poisonous mushroom', de: 'Giftpilz' } }],
+    conservationStatus: [
+      {
+        pid: 'P141',
+        qid: 'Q719675',
+        labels: { en: 'near threatened', de: 'potenziell gefährdet' },
+      },
+    ],
   },
   media: {
     images: ['Boletus rhodoxanthus.JPG'],
     commonsCategory: 'Rubroboletus rhodoxanthus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '809243' },
-    { pid: 'P846', source: 'GBIF', value: '7487519' },
-    { pid: 'P962', source: 'MycoBank', value: '809243' },
-    { pid: 'P3151', source: 'iNaturalist', value: '824010' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '178457' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '6X9KP' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '809243',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=809243',
+    },
+    { pid: 'P846', source: 'GBIF', value: '7487519', url: 'https://www.gbif.org/species/7487519' },
+    { pid: 'P962', source: 'MycoBank', value: '809243', url: 'https://www.mycobank.org/MB/809243' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '824010',
+      url: 'https://inaturalist.org/taxa/824010',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '178457',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/178457',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '6X9KP',
+      url: 'https://www.catalogueoflife.org/data/taxon/6X9KP',
+    },
   ],
 }
 

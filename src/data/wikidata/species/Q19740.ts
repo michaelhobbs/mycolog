@@ -7,12 +7,12 @@ export const boletusEdulisQ19740: WikidataSpeciesData = {
   wikidataId: 'Q19740',
   taxonomy: {
     taxonName: 'Boletus edulis',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
     parentTaxon: [
-      { pid: 'P171', qid: 'Q142945', label: 'Boletus sect. Boletus' },
-      { pid: 'P171', qid: 'Q19744', label: 'Boletus' },
+      { pid: 'P171', qid: 'Q142945', labels: { en: 'Boletus sect. Boletus', de: 'Steinpilze' } },
+      { pid: 'P171', qid: 'Q19744', labels: { en: 'Boletus', de: 'Steinpilze' } },
     ],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Bull.',
     shortName: 'B. edulis',
   },
@@ -45,21 +45,39 @@ export const boletusEdulisQ19740: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544569', label: 'adnate hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q47071', label: 'brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544569',
+      labels: { en: 'adnate hymenium attachment', de: 'Lamellen breit angewachsen' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q47071', labels: { en: 'brown', de: 'Braun' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888517', label: 'choice mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q19888517',
+        labels: { en: 'choice mushroom', de: 'hervorragender Speisepilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
-    conservationStatus: [{ pid: 'P141', qid: 'Q211005', label: 'least concern' }],
+    conservationStatus: [
+      { pid: 'P141', qid: 'Q211005', labels: { en: 'least concern', de: 'nicht gefährdet' } },
+    ],
   },
   media: {
     images: ['(Gemeine Steinpilz) Boletus edulis.jpg'],
@@ -67,14 +85,44 @@ export const boletusEdulisQ19740: WikidataSpeciesData = {
     commonsGallery: 'Boletus edulis',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '356530' },
-    { pid: 'P846', source: 'GBIF', value: '5954958' },
-    { pid: 'P962', source: 'MycoBank', value: '356530' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48701' },
-    { pid: 'P838', source: 'BioLib', value: '60135' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '195761' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '36056' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'MCH9' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '356530',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=356530',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5954958', url: 'https://www.gbif.org/species/5954958' },
+    { pid: 'P962', source: 'MycoBank', value: '356530', url: 'https://www.mycobank.org/MB/356530' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48701',
+      url: 'https://inaturalist.org/taxa/48701',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60135',
+      url: 'https://www.biolib.cz/cz/taxon/id60135',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '195761',
+      url: 'https://eol.org/pages/195761',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '36056',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/36056',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'MCH9',
+      url: 'https://www.catalogueoflife.org/data/taxon/MCH9',
+    },
   ],
 }
 

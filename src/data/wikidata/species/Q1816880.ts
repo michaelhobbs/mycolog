@@ -7,9 +7,9 @@ export const thelephoraTerrestrisQ1816880: WikidataSpeciesData = {
   wikidataId: 'Q1816880',
   taxonomy: {
     taxonName: 'Thelephora terrestris',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q4248134', label: 'Thelephora' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q4248134', labels: { en: 'Thelephora', de: 'Thelephora' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Ehrh.',
     shortName: 'T. terrestris',
   },
@@ -26,7 +26,9 @@ export const thelephoraTerrestrisQ1816880: WikidataSpeciesData = {
   morphology: {},
   ecology: {},
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' }],
+    values: [
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
+    ],
   },
   media: {
     images: ['DSCN2270 resize.JPG'],
@@ -34,14 +36,44 @@ export const thelephoraTerrestrisQ1816880: WikidataSpeciesData = {
     commonsGallery: 'Thelephora terrestris',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '193195' },
-    { pid: 'P846', source: 'GBIF', value: '2522935' },
-    { pid: 'P962', source: 'MycoBank', value: '193195' },
-    { pid: 'P3151', source: 'iNaturalist', value: '118102' },
-    { pid: 'P838', source: 'BioLib', value: '60631' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '158943' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '56493' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '56846' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '193195',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=193195',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2522935', url: 'https://www.gbif.org/species/2522935' },
+    { pid: 'P962', source: 'MycoBank', value: '193195', url: 'https://www.mycobank.org/MB/193195' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '118102',
+      url: 'https://inaturalist.org/taxa/118102',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60631',
+      url: 'https://www.biolib.cz/cz/taxon/id60631',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '158943',
+      url: 'https://eol.org/pages/158943',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '56493',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/56493',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '56846',
+      url: 'https://www.catalogueoflife.org/data/taxon/56846',
+    },
   ],
 }
 

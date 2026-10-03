@@ -7,13 +7,15 @@ export const coprinusComatusQ275125: WikidataSpeciesData = {
   wikidataId: 'Q275125',
   taxonomy: {
     taxonName: 'Coprinus comatus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q289890', label: 'Coprinus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q289890', labels: { en: 'Coprinus', de: 'Tintlinge' } }],
     instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q76749327', label: 'cultivated mushroom' },
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      { pid: 'P31', qid: 'Q76749327', labels: { en: 'cultivated mushroom', de: 'Kulturpilz' } },
     ],
-    basionym: [{ pid: 'P566', qid: 'Q59452882', label: 'Agaricus comatus' }],
+    basionym: [
+      { pid: 'P566', qid: 'Q59452882', labels: { en: 'Agaricus comatus', de: 'Agaricus comatus' } },
+    ],
     authorCitation: '(O.F.Müll.) Pers. (1797)',
     shortName: 'C. comatus',
   },
@@ -41,25 +43,41 @@ export const coprinusComatusQ275125: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    capShape: [{ pid: 'P784', qid: 'Q19887954', label: 'conical mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544563', label: 'free hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544582', label: 'ring stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23445', label: 'black' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q19887954', labels: { en: 'conical mushroom cap', de: 'kegelig' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544563',
+      labels: { en: 'free hymenium attachment' },
+    },
+    stipeCharacter: { pid: 'P786', qid: 'Q14544582', labels: { en: 'ring stipe' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23445', labels: { en: 'black', de: 'schwarz' } },
   },
   ecology: {
     ecologicalType: [
-      { pid: 'P788', qid: 'Q114750', label: 'saprobiont' },
-      { pid: 'P788', qid: 'Q357006', label: 'nematophagous fungus' },
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+      {
+        pid: 'P788',
+        qid: 'Q357006',
+        labels: { en: 'nematophagous fungus', de: 'nematophage Pilze' },
+      },
     ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q19888517', label: 'choice mushroom' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q19888517',
+        labels: { en: 'choice mushroom', de: 'hervorragender Speisepilz' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
-    conservationStatus: [{ pid: 'P141', qid: 'Q211005', label: 'least concern' }],
+    conservationStatus: [
+      { pid: 'P141', qid: 'Q211005', labels: { en: 'least concern', de: 'nicht gefährdet' } },
+    ],
   },
   media: {
     images: ['Coprinus comatus.jpg'],
@@ -67,14 +85,44 @@ export const coprinusComatusQ275125: WikidataSpeciesData = {
     commonsGallery: 'Coprinus comatus',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '148667' },
-    { pid: 'P846', source: 'GBIF', value: '7987658' },
-    { pid: 'P962', source: 'MycoBank', value: '148667' },
-    { pid: 'P3151', source: 'iNaturalist', value: '47392' },
-    { pid: 'P838', source: 'BioLib', value: '60561' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1030658' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '56187' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'Y5DX' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '148667',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=148667',
+    },
+    { pid: 'P846', source: 'GBIF', value: '7987658', url: 'https://www.gbif.org/species/7987658' },
+    { pid: 'P962', source: 'MycoBank', value: '148667', url: 'https://www.mycobank.org/MB/148667' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '47392',
+      url: 'https://inaturalist.org/taxa/47392',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60561',
+      url: 'https://www.biolib.cz/cz/taxon/id60561',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1030658',
+      url: 'https://eol.org/pages/1030658',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '56187',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/56187',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'Y5DX',
+      url: 'https://www.catalogueoflife.org/data/taxon/Y5DX',
+    },
   ],
 }
 

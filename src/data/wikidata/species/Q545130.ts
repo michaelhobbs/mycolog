@@ -7,9 +7,9 @@ export const lycoperdonPerlatumQ545130: WikidataSpeciesData = {
   wikidataId: 'Q545130',
   taxonomy: {
     taxonName: 'Lycoperdon perlatum',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1335970', label: 'Lycoperdon' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q1335970', labels: { en: 'Lycoperdon', de: 'Stäublinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     authorCitation: 'Pers.',
     shortName: 'L. perlatum',
   },
@@ -57,21 +57,31 @@ export const lycoperdonPerlatumQ545130: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q2034230', label: 'gleba' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', label: 'no hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q47071', label: 'brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q2034230', labels: { en: 'gleba', de: 'Gleba' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q47071', labels: { en: 'brown', de: 'Braun' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
-    conservationStatus: [{ pid: 'P141', qid: 'Q211005', label: 'least concern' }],
+    conservationStatus: [
+      { pid: 'P141', qid: 'Q211005', labels: { en: 'least concern', de: 'nicht gefährdet' } },
+    ],
   },
   media: {
     images: ['Single lycoperdon perlatum.jpg'],
@@ -79,14 +89,44 @@ export const lycoperdonPerlatumQ545130: WikidataSpeciesData = {
     commonsGallery: 'Lycoperdon perlatum',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '220647' },
-    { pid: 'P846', source: 'GBIF', value: '5243258' },
-    { pid: 'P962', source: 'MycoBank', value: '220647' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48443' },
-    { pid: 'P838', source: 'BioLib', value: '60754' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '162875' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '90686' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3WLKC' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '220647',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=220647',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5243258', url: 'https://www.gbif.org/species/5243258' },
+    { pid: 'P962', source: 'MycoBank', value: '220647', url: 'https://www.mycobank.org/MB/220647' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48443',
+      url: 'https://inaturalist.org/taxa/48443',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60754',
+      url: 'https://www.biolib.cz/cz/taxon/id60754',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '162875',
+      url: 'https://eol.org/pages/162875',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '90686',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/90686',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3WLKC',
+      url: 'https://www.catalogueoflife.org/data/taxon/3WLKC',
+    },
   ],
 }
 

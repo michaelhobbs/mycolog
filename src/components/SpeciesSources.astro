@@ -1,0 +1,115 @@
+---
+// The external databases this species is listed in, as a list of sources.
+//
+// These are the identifier properties Wikidata carries for the taxon, each with
+// a link built from the property's own formatter URL. Wikidata's coverage is
+// partial and varies per source (Catalogue of Life is missing on some species),
+// so this is a list of what exists rather than a fixed set of citations.
+import Block from './Block.astro'
+import type { WikidataSpeciesData } from '../data/wikidata/species/types'
+import type { Locale } from '../i18n'
+import type { Translations } from '../i18n'
+
+interface Props {
+  data: WikidataSpeciesData | undefined
+  locale: Locale
+  t: Translations
+}
+
+const { data, locale, t } = Astro.props
+
+const ids = data?.externalIds ?? []
+const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : null
+---
+
+{
+  ids.length > 0 && (
+    <Block title={t.mushrooms.sources} class="sources">
+      <p class="note">{t.mushrooms.sourcesNote}</p>
+      <ul class="list">
+        {wikidataUrl && (
+          <li>
+            <a class="src" href={wikidataUrl} rel="noopener noreferrer" target="_blank">
+              <span class="src__name">Wikidata</span>
+              <span class="src__dots" />
+              <span class="src__id">{data?.wikidataId}</span>
+            </a>
+          </li>
+        )}
+        {ids.map((entry) => (
+          <li>
+            <a class="src" href={entry.url} rel="noopener noreferrer" target="_blank">
+              <span class="src__name">{entry.source}</span>
+              <span class="src__dots" />
+              <span class="src__id">{entry.value}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Block>
+  )
+}
+
+<style>
+  .note {
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    margin: 0 0 0.4rem;
+  }
+
+  .list {
+    list-style: none;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  /* The whole row is the link, source name and identifier alike. Anchoring only
+     the name left a bare number sitting outside the link: not clickable, and
+     invisible to anyone tabbing through the page, which is the only way to tell
+     where a source actually leads. It also makes the target big enough to hit
+     reliably on touch, which a four-word label is not. */
+  .src {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    line-height: 1.8;
+    color: var(--accent-dim);
+    text-decoration: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .src__name {
+    flex-shrink: 0;
+  }
+
+  .src__dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--fg-muted);
+    min-width: 0.5rem;
+    margin-bottom: 0.2em;
+  }
+
+  /* No colour of its own: it inherits the link's accent, so the name and the
+     identifier cannot drift apart and both brighten on hover from the single
+     `.src` rule above. Only the size still distinguishes them. */
+  .src__id {
+    font-size: 0.75rem;
+  }
+
+  .src:hover {
+    color: var(--accent);
+  }
+
+  .src:hover .src__dots {
+    border-bottom-color: var(--accent-dim);
+  }
+
+  /* Matches MapAttribution's external-link focus ring. */
+  .src:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>

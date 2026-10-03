@@ -7,10 +7,14 @@ export const rubroboletusSatanasQ26203731: WikidataSpeciesData = {
   wikidataId: 'Q26203731',
   taxonomy: {
     taxonName: 'Rubroboletus satanas',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19299411', label: 'Rubroboletus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q274407', label: 'Boletus satanas' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q19299411', labels: { en: 'Rubroboletus', de: 'Rubroboletus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q274407', labels: { en: 'Boletus satanas', de: 'Boletus satanas' } },
+    ],
     authorCitation: '(Lenz) Kuan Zhao & Zhu L. Yang',
     shortName: 'R. satanas',
   },
@@ -31,17 +35,29 @@ export const rubroboletusSatanasQ26203731: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q14544569', label: 'adnate hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q864152', label: 'olive' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q14544569',
+      labels: { en: 'adnate hymenium attachment', de: 'Lamellen breit angewachsen' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q864152', labels: { en: 'olive', de: 'Oliv' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q359511', label: 'poisonous mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q359511', labels: { en: 'poisonous mushroom', de: 'Giftpilz' } }],
   },
   media: {
     images: ['Boletus satanas.JPG'],
@@ -49,14 +65,44 @@ export const rubroboletusSatanasQ26203731: WikidataSpeciesData = {
     commonsGallery: 'Rubroboletus satanas',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '809241' },
-    { pid: 'P846', source: 'GBIF', value: '9217295' },
-    { pid: 'P962', source: 'MycoBank', value: '809241' },
-    { pid: 'P3151', source: 'iNaturalist', value: '544554' },
-    { pid: 'P838', source: 'BioLib', value: '60154' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '52249173' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '5370' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '4TJ9C' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '809241',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=809241',
+    },
+    { pid: 'P846', source: 'GBIF', value: '9217295', url: 'https://www.gbif.org/species/9217295' },
+    { pid: 'P962', source: 'MycoBank', value: '809241', url: 'https://www.mycobank.org/MB/809241' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '544554',
+      url: 'https://inaturalist.org/taxa/544554',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60154',
+      url: 'https://www.biolib.cz/cz/taxon/id60154',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '52249173',
+      url: 'https://eol.org/pages/52249173',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '5370',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/5370',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '4TJ9C',
+      url: 'https://www.catalogueoflife.org/data/taxon/4TJ9C',
+    },
   ],
 }
 

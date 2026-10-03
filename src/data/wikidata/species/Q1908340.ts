@@ -7,9 +7,9 @@ export const hydnellumPeckiiQ1908340: WikidataSpeciesData = {
   wikidataId: 'Q1908340',
   taxonomy: {
     taxonName: 'Hydnellum peckii',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2065044', label: 'Hydnellum' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q2065044', labels: { en: 'Hydnellum', de: 'Hydnellum' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     shortName: 'H. peckii',
   },
   names: {
@@ -22,8 +22,8 @@ export const hydnellumPeckiiQ1908340: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861552', label: 'teeth' },
-    capShape: [{ pid: 'P784', qid: 'Q62023127', label: 'semi-spherical mushroom cap' }],
+    hymeniumType: { pid: 'P783', qid: 'Q19861552', labels: { en: 'teeth', de: 'Stacheln' } },
+    capShape: [{ pid: 'P784', qid: 'Q62023127', labels: { en: 'semi-spherical mushroom cap' } }],
   },
   ecology: {},
   edibility: {
@@ -35,14 +35,44 @@ export const hydnellumPeckiiQ1908340: WikidataSpeciesData = {
     commonsGallery: 'Hydnellum peckii',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '414442' },
-    { pid: 'P846', source: 'GBIF', value: '2522210' },
-    { pid: 'P962', source: 'MycoBank', value: '414442' },
-    { pid: 'P3151', source: 'iNaturalist', value: '154949' },
-    { pid: 'P838', source: 'BioLib', value: '306395' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '198192' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '268283' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3MZF9' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '414442',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=414442',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2522210', url: 'https://www.gbif.org/species/2522210' },
+    { pid: 'P962', source: 'MycoBank', value: '414442', url: 'https://www.mycobank.org/MB/414442' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '154949',
+      url: 'https://inaturalist.org/taxa/154949',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '306395',
+      url: 'https://www.biolib.cz/cz/taxon/id306395',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '198192',
+      url: 'https://eol.org/pages/198192',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '268283',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/268283',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3MZF9',
+      url: 'https://www.catalogueoflife.org/data/taxon/3MZF9',
+    },
   ],
 }
 

@@ -7,10 +7,16 @@ export const laccariaAmethystinaQ28492278: WikidataSpeciesData = {
   wikidataId: 'Q28492278',
   taxonomy: {
     taxonName: 'Laccaria amethystina',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q2666545', label: 'Laccaria' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q41415270', label: 'Agaricus amethystinus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q2666545', labels: { en: 'Laccaria', de: 'Laccaria' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q41415270',
+        labels: { en: 'Agaricus amethystinus', de: 'Agaricus amethystinus' },
+      },
+    ],
     authorCitation: 'Cooke',
     shortName: 'L. amethystina',
   },
@@ -27,15 +33,19 @@ export const laccariaAmethystinaQ28492278: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {},
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
-      { pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
     ],
   },
   media: {
@@ -44,14 +54,44 @@ export const laccariaAmethystinaQ28492278: WikidataSpeciesData = {
     commonsGallery: 'Laccaria amethystina',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '433576' },
-    { pid: 'P846', source: 'GBIF', value: '2530983' },
-    { pid: 'P962', source: 'MycoBank', value: '433576' },
-    { pid: 'P3151', source: 'iNaturalist', value: '55899' },
-    { pid: 'P838', source: 'BioLib', value: '60715' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '198567' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '89243' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3RLDM' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '433576',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=433576',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2530983', url: 'https://www.gbif.org/species/2530983' },
+    { pid: 'P962', source: 'MycoBank', value: '433576', url: 'https://www.mycobank.org/MB/433576' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '55899',
+      url: 'https://inaturalist.org/taxa/55899',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60715',
+      url: 'https://www.biolib.cz/cz/taxon/id60715',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '198567',
+      url: 'https://eol.org/pages/198567',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '89243',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/89243',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3RLDM',
+      url: 'https://www.catalogueoflife.org/data/taxon/3RLDM',
+    },
   ],
 }
 

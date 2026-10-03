@@ -7,13 +7,21 @@ export const auriculariaAuriculaJudaeQ321342: WikidataSpeciesData = {
   wikidataId: 'Q321342',
   taxonomy: {
     taxonName: 'Auricularia auricula-judae',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1633488', label: 'Auricularia' }],
-    instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q76749327', label: 'cultivated mushroom' },
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1633488', labels: { en: 'Auricularia', de: 'Ohrlappenpilze' } },
     ],
-    basionym: [{ pid: 'P566', qid: 'Q64667999', label: 'Tremella auricula-judae' }],
+    instanceOf: [
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      { pid: 'P31', qid: 'Q76749327', labels: { en: 'cultivated mushroom', de: 'Kulturpilz' } },
+    ],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q64667999',
+        labels: { en: 'Tremella auricula-judae', de: 'Tremella auricula-judae' },
+      },
+    ],
     shortName: 'A. auricula-judae',
   },
   names: {
@@ -51,16 +59,16 @@ export const auriculariaAuriculaJudaeQ321342: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
     ecologicalType: [
-      { pid: 'P788', qid: 'Q114750', label: 'saprobiont' },
-      { pid: 'P788', qid: 'Q186517', label: 'parasitism' },
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+      { pid: 'P788', qid: 'Q186517', labels: { en: 'parasitism', de: 'Parasitismus' } },
     ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q654236', label: 'edible mushroom' }],
+    values: [{ pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } }],
   },
   media: {
     images: ['Auricularia auricula-judae (xndr).jpg'],
@@ -68,14 +76,44 @@ export const auriculariaAuriculaJudaeQ321342: WikidataSpeciesData = {
     commonsGallery: 'Auricularia auricula-judae',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '102281' },
-    { pid: 'P846', source: 'GBIF', value: '5249271' },
-    { pid: 'P962', source: 'MycoBank', value: '102281' },
-    { pid: 'P3151', source: 'iNaturalist', value: '50813' },
-    { pid: 'P838', source: 'BioLib', value: '59817' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '152249' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '29892' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '5W9WJ' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '102281',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=102281',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5249271', url: 'https://www.gbif.org/species/5249271' },
+    { pid: 'P962', source: 'MycoBank', value: '102281', url: 'https://www.mycobank.org/MB/102281' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '50813',
+      url: 'https://inaturalist.org/taxa/50813',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59817',
+      url: 'https://www.biolib.cz/cz/taxon/id59817',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '152249',
+      url: 'https://eol.org/pages/152249',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '29892',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/29892',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '5W9WJ',
+      url: 'https://www.catalogueoflife.org/data/taxon/5W9WJ',
+    },
   ],
 }
 

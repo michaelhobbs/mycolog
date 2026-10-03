@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
 import MiniMap from '../../../components/MiniMap.astro'
 import Notice from '../../../components/Notice.astro'
+import Block from '../../../components/Block.astro'
 import LinkRow from '../../../components/LinkRow.astro'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
@@ -34,6 +35,10 @@ const entries = sightings
   .filter((s) => s.data.locationSlug === slug)
   .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1))
 
+// Built here, not inline: a newline inside a JSX text node collapses away, so
+// `{t.locations.sightings} ({entries.length})` would render as "1Sightings"
+// the moment Prettier wrapped the line.
+const sightingsTitle = `${t.locations.sightings} (${entries.length})`
 const name = location ? locationName(locMap, location.id, locale) : slug
 const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
 ---
@@ -60,10 +65,9 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
       location && (
         <>
           {location.data.description && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.locations.description}</div>
+            <Block title={t.locations.description}>
               <p class="block__notes">{l10n(location.data.description, locale)}</p>
-            </section>
+            </Block>
           )}
 
           <div class="facts">
@@ -99,10 +103,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
           )}
 
           {entries.length > 0 && (
-            <section class="block">
-              <div class="block__hdr">
-                ╔═ {t.locations.sightings} ({entries.length})
-              </div>
+            <Block title={sightingsTitle}>
               <ul class="block__sightings">
                 {entries.map((e) => {
                   const sd = e.data
@@ -128,7 +129,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
                   )
                 })}
               </ul>
-            </section>
+            </Block>
           )}
         </>
       )
@@ -189,17 +190,6 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
   .fact-val {
     color: var(--fg-bright);
     text-align: right;
-  }
-
-  .block {
-    margin-bottom: 1.25rem;
-  }
-
-  .block__hdr {
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.8125rem;
-    margin-bottom: 0.5rem;
   }
 
   .block__notes {

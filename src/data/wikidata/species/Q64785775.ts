@@ -7,10 +7,14 @@ export const caloboletusRadicansQ64785775: WikidataSpeciesData = {
   wikidataId: 'Q64785775',
   taxonomy: {
     taxonName: 'Caloboletus radicans',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q19277034', label: 'Caloboletus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q1478484', label: 'Boletus radicans' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q19277034', labels: { en: 'Caloboletus', de: 'Caloboletus' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q1478484', labels: { en: 'Boletus radicans', de: 'Boletus radicans' } },
+    ],
     authorCitation: '(Pers.) Vizzini',
     shortName: 'C. radicans',
   },
@@ -29,17 +33,39 @@ export const caloboletusRadicansQ64785775: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q14544535', label: 'convex mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887923', label: 'adnexed hymenium attachment' },
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q19888352', label: 'olive brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [
+      { pid: 'P784', qid: 'Q14544535', labels: { en: 'convex mushroom cap', de: 'gewölbt' } },
+    ],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887923',
+      labels: { en: 'adnexed hymenium attachment' },
+    },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: {
+      pid: 'P787',
+      qid: 'Q19888352',
+      labels: { en: 'olive brown', de: 'olivbraun' },
+    },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q99974', label: 'mycorrhiza' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q99974', labels: { en: 'mycorrhiza', de: 'Mykorrhiza' } },
+    ],
   },
   edibility: {
-    values: [{ pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' }],
+    values: [
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
+    ],
   },
   media: {
     images: ['Bol006.jpg'],
@@ -47,13 +73,38 @@ export const caloboletusRadicansQ64785775: WikidataSpeciesData = {
     commonsGallery: 'Caloboletus radicans',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '550548' },
-    { pid: 'P846', source: 'GBIF', value: '7550396' },
-    { pid: 'P962', source: 'MycoBank', value: '550548' },
-    { pid: 'P3151', source: 'iNaturalist', value: '507493' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '46705962' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '150783' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'PWYN' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '550548',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=550548',
+    },
+    { pid: 'P846', source: 'GBIF', value: '7550396', url: 'https://www.gbif.org/species/7550396' },
+    { pid: 'P962', source: 'MycoBank', value: '550548', url: 'https://www.mycobank.org/MB/550548' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '507493',
+      url: 'https://inaturalist.org/taxa/507493',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '46705962',
+      url: 'https://eol.org/pages/46705962',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '150783',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/150783',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'PWYN',
+      url: 'https://www.catalogueoflife.org/data/taxon/PWYN',
+    },
   ],
 }
 

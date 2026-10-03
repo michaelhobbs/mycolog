@@ -7,10 +7,12 @@ export const otideaAlutaceaQ3913798: WikidataSpeciesData = {
   wikidataId: 'Q3913798',
   taxonomy: {
     taxonName: 'Otidea alutacea',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q294761', label: 'Otidea' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q109061627', label: 'Peziza alutacea' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q294761', labels: { en: 'Otidea', de: 'Öhrlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      { pid: 'P566', qid: 'Q109061627', labels: { en: 'Peziza alutacea', de: 'Peziza alutacea' } },
+    ],
     shortName: 'O. alutacea',
   },
   names: {
@@ -33,14 +35,44 @@ export const otideaAlutaceaQ3913798: WikidataSpeciesData = {
     commonsCategory: 'Otidea alutacea',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '118687' },
-    { pid: 'P846', source: 'GBIF', value: '2593795' },
-    { pid: 'P962', source: 'MycoBank', value: '118687' },
-    { pid: 'P3151', source: 'iNaturalist', value: '118009' },
-    { pid: 'P838', source: 'BioLib', value: '59679' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '133449' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '88576' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '75CQ5' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '118687',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=118687',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2593795', url: 'https://www.gbif.org/species/2593795' },
+    { pid: 'P962', source: 'MycoBank', value: '118687', url: 'https://www.mycobank.org/MB/118687' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '118009',
+      url: 'https://inaturalist.org/taxa/118009',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '59679',
+      url: 'https://www.biolib.cz/cz/taxon/id59679',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '133449',
+      url: 'https://eol.org/pages/133449',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '88576',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/88576',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '75CQ5',
+      url: 'https://www.catalogueoflife.org/data/taxon/75CQ5',
+    },
   ],
 }
 

@@ -19,7 +19,16 @@
 import { promises as fs, existsSync, readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { format } from 'prettier'
-import { ROOT, entities, qidsOf, stringsOf, valuesOf, labelMap } from './lib/wikidata.mjs'
+import {
+  ROOT,
+  entities,
+  qidsOf,
+  stringsOf,
+  valuesOf,
+  labelMap,
+  formatterUrls,
+  formatExternalUrl,
+} from './lib/wikidata.mjs'
 
 const SPECIES_DIR = path.join(ROOT, 'src', 'content', 'species')
 const OUT_DIR = path.join(ROOT, 'src', 'data', 'wikidata', 'species')
@@ -126,13 +135,21 @@ function refs(entity, pid, labels) {
     .filter(live)
     .map((c) => c.mainsnak?.datavalue?.value?.id)
     .filter(Boolean)
-    .map((qid) => ({ pid, qid, label: labels.get(qid) ?? qid }))
+    .map((qid) => ({ pid, qid, labels: labels.get(qid) ?? {} }))
 }
 
 const j = JSON.stringify
 
 function refLiteral(r) {
-  return `{ pid: ${j(r.pid)}, qid: ${j(r.qid)}, label: ${j(r.label)} }`
+  return `{ pid: ${j(r.pid)}, qid: ${j(r.qid)}, labels: ${labelsLiteral(r.labels)} }`
+}
+
+/** `{ en: '...', de: '...' }`, omitting languages the item has no label for. */
+function labelsLiteral(labels) {
+  const entries = Object.entries(labels ?? {})
+    .filter(([, v]) => v)
+    .map(([k, v]) => `${k}: ${j(v)}`)
+  return entries.length ? `{ ${entries.join(', ')} }` : '{}'
 }
 
 function refArray(list) {
@@ -180,7 +197,7 @@ function localized(entity, pid) {
  * loudly on the missing required property, which is the correct outcome: the
  * fix is to add the QID to morphology-types.ts.
  */
-function render(slug, scientificName, qid, e, labels, unknown) {
+function render(slug, scientificName, qid, e, labels, unknown, formatters, unlinkable) {
   const name = exportName(slug, qid)
 
   const constrained = (pid, array = false) => {
@@ -290,8 +307,17 @@ function render(slug, scientificName, qid, e, labels, unknown) {
 
   const ids = []
   for (const [pid, source] of Object.entries(EXTERNAL_IDS)) {
+    const template = formatters.get(pid)
     for (const v of stringsOf(e, pid)) {
-      ids.push(`{ pid: ${j(pid)}, source: ${j(source)}, value: ${j(v)} }`)
+      if (!template) {
+        // No formatter URL means we cannot build a link, and an unlinkable id
+        // is not a useful "source". Skip it rather than emit a broken one.
+        unlinkable.add(pid)
+        continue
+      }
+      ids.push(
+        `{ pid: ${j(pid)}, source: ${j(source)}, value: ${j(v)}, url: ${j(formatExternalUrl(template, v))} }`,
+      )
     }
   }
   lines.push(`  externalIds: [${ids.join(', ')}],`)
@@ -389,16 +415,25 @@ async function main() {
     for (const { qid } of species) for (const q of qidsOf(ents.get(qid), pid)) referenced.add(q)
   }
   console.log(`[species-data] resolving ${referenced.size} referenced item labels`)
-  const labels = await labelMap([...referenced])
+  const labels = await labelMap([...referenced], { languages: LANGS })
+
+  // Formatter URLs come from the identifier properties themselves (P1630), so a
+  // source that reorganises its site does not leave 47 dead links behind.
+  console.log('[species-data] reading formatter URLs from the identifier properties')
+  const formatters = await formatterUrls(Object.keys(EXTERNAL_IDS))
 
   await fs.mkdir(OUT_DIR, { recursive: true })
   const unknown = new Map()
+  const unlinkable = new Set()
   const opts = { parser: 'typescript', semi: false, singleQuote: true, printWidth: 100 }
 
   let written = 0
   for (const { slug, scientificName, qid } of species) {
     const e = ents.get(qid)
-    const text = await format(render(slug, scientificName, qid, e, labels, unknown), opts)
+    const text = await format(
+      render(slug, scientificName, qid, e, labels, unknown, formatters, unlinkable),
+      opts,
+    )
     const file = path.join(OUT_DIR, `${qid}.ts`)
     if (!FORCE && existsSync(file) && (await fs.readFile(file, 'utf8')) === text) continue
     await fs.writeFile(file, text)
@@ -432,6 +467,12 @@ async function main() {
     for (const [qid, where] of unknown) console.log(`  ${qid}  ${where}`)
   } else {
     console.log('[species-data] every constrained value is a known enum member')
+  }
+  for (const pid of unlinkable) {
+    console.log(
+      `[species-data] ${pid} has no formatter URL (P1630); its ids were skipped rather ` +
+        'than emitted without a link',
+    )
   }
   if (skipped.length) console.log(`[species-data] ${skipped.length} species left without data`)
 }

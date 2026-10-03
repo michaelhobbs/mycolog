@@ -7,10 +7,16 @@ export const cordycepsMilitarisQ2118699: WikidataSpeciesData = {
   wikidataId: 'Q2118699',
   taxonomy: {
     taxonName: 'Cordyceps militaris',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q312238', label: 'Cordyceps' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q21872391', label: 'Clavaria militaris' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q312238', labels: { en: 'Cordyceps', de: 'Cordyceps' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q21872391',
+        labels: { en: 'Clavaria militaris', de: 'Clavaria militaris' },
+      },
+    ],
     shortName: 'C. militaris',
   },
   names: {
@@ -31,8 +37,8 @@ export const cordycepsMilitarisQ2118699: WikidataSpeciesData = {
   ecology: {},
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
   },
   media: {
@@ -41,14 +47,44 @@ export const cordycepsMilitarisQ2118699: WikidataSpeciesData = {
     commonsGallery: 'Cordyceps militaris',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '237604' },
-    { pid: 'P846', source: 'GBIF', value: '7567077' },
-    { pid: 'P962', source: 'MycoBank', value: '237604' },
-    { pid: 'P3151', source: 'iNaturalist', value: '119118' },
-    { pid: 'P838', source: 'BioLib', value: '300329' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '188679' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '73501' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'YCG6' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '237604',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=237604',
+    },
+    { pid: 'P846', source: 'GBIF', value: '7567077', url: 'https://www.gbif.org/species/7567077' },
+    { pid: 'P962', source: 'MycoBank', value: '237604', url: 'https://www.mycobank.org/MB/237604' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '119118',
+      url: 'https://inaturalist.org/taxa/119118',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '300329',
+      url: 'https://www.biolib.cz/cz/taxon/id300329',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '188679',
+      url: 'https://eol.org/pages/188679',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '73501',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/73501',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'YCG6',
+      url: 'https://www.catalogueoflife.org/data/taxon/YCG6',
+    },
   ],
 }
 

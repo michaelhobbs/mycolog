@@ -7,9 +7,9 @@ export const cordycepsOphioglossoidesQ54366414: WikidataSpeciesData = {
   wikidataId: 'Q54366414',
   taxonomy: {
     taxonName: 'Cordyceps ophioglossoides',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q312238', label: 'Cordyceps' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q312238', labels: { en: 'Cordyceps', de: 'Cordyceps' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
     shortName: 'C. ophioglossoides',
   },
   names: {
@@ -26,11 +26,26 @@ export const cordycepsOphioglossoidesQ54366414: WikidataSpeciesData = {
     images: [],
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '164093' },
-    { pid: 'P846', source: 'GBIF', value: '2564391' },
-    { pid: 'P962', source: 'MycoBank', value: '164093' },
-    { pid: 'P3151', source: 'iNaturalist', value: '217587' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'YCHN' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '164093',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=164093',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2564391', url: 'https://www.gbif.org/species/2564391' },
+    { pid: 'P962', source: 'MycoBank', value: '164093', url: 'https://www.mycobank.org/MB/164093' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '217587',
+      url: 'https://inaturalist.org/taxa/217587',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'YCHN',
+      url: 'https://www.catalogueoflife.org/data/taxon/YCHN',
+    },
   ],
 }
 

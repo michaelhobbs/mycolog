@@ -2,6 +2,7 @@
 import Layout from '../../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image, getImage } from 'astro:assets'
+import Block from '../../../../components/Block.astro'
 import Notice from '../../../../components/Notice.astro'
 import LinkRow from '../../../../components/LinkRow.astro'
 import MiniMap from '../../../../components/MiniMap.astro'
@@ -191,42 +192,37 @@ const pageTitle = sighting
           </div>
 
           {sighting.notes && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.sighting.sightingNotes}</div>
+            <Block title={t.sighting.sightingNotes}>
               <p class="block__notes">{l10n(sighting.notes, locale)}</p>
-            </section>
+            </Block>
           )}
 
           {sighting.species.habitat && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.habitat}</div>
+            <Block title={t.mushrooms.habitat}>
               <p class="block__notes">{l10n(sighting.species.habitat, locale)}</p>
-            </section>
+            </Block>
           )}
 
           {sighting.species.edibility && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.edibility}</div>
+            <Block title={t.mushrooms.edibility}>
               <p class="block__notes">{l10n(sighting.species.edibility, locale)}</p>
-            </section>
+            </Block>
           )}
 
           {sighting.species.determiningFeatures.length > 0 && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.features}</div>
+            <Block title={t.mushrooms.features}>
               <ul class="block__list">
                 {sighting.species.determiningFeatures.map((f) => (
                   <li>▸ {l10n(f, locale)}</li>
                 ))}
               </ul>
-            </section>
+            </Block>
           )}
 
           {sighting.species.notes && (
-            <section class="block">
-              <div class="block__hdr">╔═ {t.mushrooms.notes}</div>
+            <Block title={t.mushrooms.notes}>
               <p class="block__notes">{l10n(sighting.species.notes, locale)}</p>
-            </section>
+            </Block>
           )}
         </>
       )
@@ -463,17 +459,6 @@ const pageTitle = sighting
 
   .fact-val-link:hover {
     color: var(--accent);
-  }
-
-  .block {
-    margin-bottom: 1.25rem;
-  }
-
-  .block__hdr {
-    color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.8125rem;
-    margin-bottom: 0.5rem;
   }
 
   .block__list {

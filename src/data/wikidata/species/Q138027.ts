@@ -7,10 +7,16 @@ export const clavulinaCoralloidesQ138027: WikidataSpeciesData = {
   wikidataId: 'Q138027',
   taxonomy: {
     taxonName: 'Clavulina coralloides',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q336963', label: 'Clavulina' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q21872381', label: 'Clavaria coralloides' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q336963', labels: { en: 'Clavulina', de: 'Clavulina' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q21872381',
+        labels: { en: 'Clavaria coralloides', de: 'Clavaria coralloides' },
+      },
+    ],
     authorCitation: '(L.) J.Schröt.',
     shortName: 'C. coralloides',
   },
@@ -40,18 +46,28 @@ export const clavulinaCoralloidesQ138027: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861550', label: 'smooth' },
-    capShape: [{ pid: 'P784', qid: 'Q19887965', label: 'no mushroom cap' }],
-    stipeCharacter: { pid: 'P786', qid: 'Q14544581', label: 'bare stipe' },
-    sporePrintColor: { pid: 'P787', qid: 'Q23444', label: 'white' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861550', labels: { en: 'smooth' } },
+    capShape: [{ pid: 'P784', qid: 'Q19887965', labels: { en: 'no mushroom cap' } }],
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q114750', label: 'saprobiont' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q62102033', label: 'edible when cooked' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
+      {
+        pid: 'P789',
+        qid: 'Q62102033',
+        labels: { en: 'edible when cooked', de: 'nur zubereitet essbar' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
     ],
   },
   media: {
@@ -60,14 +76,44 @@ export const clavulinaCoralloidesQ138027: WikidataSpeciesData = {
     commonsGallery: 'Clavulina coralloides',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '114573' },
-    { pid: 'P846', source: 'GBIF', value: '5249883' },
-    { pid: 'P962', source: 'MycoBank', value: '114573' },
-    { pid: 'P3151', source: 'iNaturalist', value: '63260' },
-    { pid: 'P3151', source: 'iNaturalist', value: '63258' },
-    { pid: 'P838', source: 'BioLib', value: '125725' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '300056' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '1329069' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '114573',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=114573',
+    },
+    { pid: 'P846', source: 'GBIF', value: '5249883', url: 'https://www.gbif.org/species/5249883' },
+    { pid: 'P962', source: 'MycoBank', value: '114573', url: 'https://www.mycobank.org/MB/114573' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '63260',
+      url: 'https://inaturalist.org/taxa/63260',
+    },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '63258',
+      url: 'https://inaturalist.org/taxa/63258',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '125725',
+      url: 'https://www.biolib.cz/cz/taxon/id125725',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '300056',
+      url: 'https://eol.org/pages/300056',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '1329069',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/1329069',
+    },
   ],
 }
 

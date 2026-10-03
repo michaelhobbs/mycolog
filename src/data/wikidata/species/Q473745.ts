@@ -7,13 +7,19 @@ export const armillariaMelleaQ473745: WikidataSpeciesData = {
   wikidataId: 'Q473745',
   taxonomy: {
     taxonName: 'Armillaria mellea',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q952036', label: 'Armillaria' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q952036', labels: { en: 'Armillaria', de: 'Hallimasche' } }],
     instanceOf: [
-      { pid: 'P31', qid: 'Q16521', label: 'taxon' },
-      { pid: 'P31', qid: 'Q765940', label: 'cryptic species complex' },
+      { pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } },
+      {
+        pid: 'P31',
+        qid: 'Q765940',
+        labels: { en: 'cryptic species complex', de: 'Kryptospezies' },
+      },
     ],
-    basionym: [{ pid: 'P566', qid: 'Q62071518', label: 'Agaricus melleus' }],
+    basionym: [
+      { pid: 'P566', qid: 'Q62071518', labels: { en: 'Agaricus melleus', de: 'Agaricus melleus' } },
+    ],
     authorCitation: '(Vahl) P.Kumm. (1871)',
     shortName: 'A. mellea',
   },
@@ -42,14 +48,18 @@ export const armillariaMelleaQ473745: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q269345', label: 'lamella' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
   },
   ecology: {},
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q62102033', label: 'edible when cooked' },
-      { pid: 'P789', qid: 'Q654236', label: 'edible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q62102033',
+        labels: { en: 'edible when cooked', de: 'nur zubereitet essbar' },
+      },
+      { pid: 'P789', qid: 'Q654236', labels: { en: 'edible mushroom', de: 'Speisepilz' } },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -62,14 +72,44 @@ export const armillariaMelleaQ473745: WikidataSpeciesData = {
     commonsGallery: 'Armillaria mellea',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '190066' },
-    { pid: 'P846', source: 'GBIF', value: '2536891' },
-    { pid: 'P962', source: 'MycoBank', value: '190066' },
-    { pid: 'P3151', source: 'iNaturalist', value: '55950' },
-    { pid: 'P838', source: 'BioLib', value: '60288' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '1029436' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '47429' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'GSMV' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '190066',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=190066',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2536891', url: 'https://www.gbif.org/species/2536891' },
+    { pid: 'P962', source: 'MycoBank', value: '190066', url: 'https://www.mycobank.org/MB/190066' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '55950',
+      url: 'https://inaturalist.org/taxa/55950',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60288',
+      url: 'https://www.biolib.cz/cz/taxon/id60288',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '1029436',
+      url: 'https://eol.org/pages/1029436',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '47429',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/47429',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'GSMV',
+      url: 'https://www.catalogueoflife.org/data/taxon/GSMV',
+    },
   ],
 }
 

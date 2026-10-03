@@ -92,10 +92,44 @@ export const valuesOf = (entity, pid) =>
 
 export const labelOf = (entity) => entity?.labels?.en?.value ?? null
 
-/** Build a lookup of English labels, for when only a handful of ids are wanted. */
-export async function labelMap(qids, { log = console.log } = {}) {
-  const ents = await entities(qids, { props: 'labels', log })
+/**
+ * Build a lookup of labels per id, keyed by language.
+ *
+ * Returns `Map<qid, { en?: string, de?: string }>` rather than a bare English
+ * string, because these values have to render on a German page too and the
+ * fungal terms are all German-authored on Wikidata.
+ */
+export async function labelMap(qids, { languages = ['en', 'de'], log = console.log } = {}) {
+  const ents = await entities(qids, { props: 'labels', languages: languages.join('|'), log })
   const out = new Map()
-  for (const qid of new Set(qids)) out.set(qid, labelOf(ents.get(qid)) ?? qid)
+  for (const qid of new Set(qids)) {
+    const labels = ents.get(qid)?.labels ?? {}
+    const picked = {}
+    for (const lang of languages) if (labels[lang]?.value) picked[lang] = labels[lang].value
+    out.set(qid, picked)
+  }
   return out
 }
+
+/**
+ * The formatter URL templates (`formatter URL`, P1630) for identifier
+ * properties, keyed by pid.
+ *
+ * This is how a link to an external database is derived without guessing:
+ * Wikidata maintains the template for each identifier property and uses `$1`
+ * as the placeholder. Hardcoding patterns in this repo would mean freezing a
+ * guess about a dozen sites' URL conventions, and a wrong one is a 404 in
+ * production that nobody notices until a reader clicks it.
+ */
+export async function formatterUrls(pids, { log = console.log } = {}) {
+  const ents = await entities(pids, { props: 'labels|claims', languages: 'en', log })
+  const out = new Map()
+  for (const pid of pids) {
+    const template = stringsOf(ents.get(pid), 'P1630')[0]
+    if (template) out.set(pid, template)
+  }
+  return out
+}
+
+/** Substitute the single `$1` placeholder Wikidata uses in a formatter URL. */
+export const formatExternalUrl = (template, value) => template.replace('$1', value)

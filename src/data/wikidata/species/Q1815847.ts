@@ -7,10 +7,16 @@ export const coprinusNiveusQ1815847: WikidataSpeciesData = {
   wikidataId: 'Q1815847',
   taxonomy: {
     taxonName: 'Coprinus niveus',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q289890', label: 'Coprinus' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q63033721', label: 'Agaricus niveus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [{ pid: 'P171', qid: 'Q289890', labels: { en: 'Coprinus', de: 'Tintlinge' } }],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q63033721',
+        labels: { en: 'Agaricus niveus', de: 'Agaricus niveus Pers. (1801)' },
+      },
+    ],
     authorCitation: '(Pers.) Fr.',
     shortName: 'C. niveus',
   },
@@ -28,11 +34,26 @@ export const coprinusNiveusQ1815847: WikidataSpeciesData = {
     images: [],
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '232960' },
-    { pid: 'P846', source: 'GBIF', value: '2534475' },
-    { pid: 'P962', source: 'MycoBank', value: '232960' },
-    { pid: 'P3151', source: 'iNaturalist', value: '348091' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: 'Y5JG' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '232960',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=232960',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2534475', url: 'https://www.gbif.org/species/2534475' },
+    { pid: 'P962', source: 'MycoBank', value: '232960', url: 'https://www.mycobank.org/MB/232960' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '348091',
+      url: 'https://inaturalist.org/taxa/348091',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: 'Y5JG',
+      url: 'https://www.catalogueoflife.org/data/taxon/Y5JG',
+    },
   ],
 }
 

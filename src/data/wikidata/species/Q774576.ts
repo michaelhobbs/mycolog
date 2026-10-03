@@ -7,10 +7,18 @@ export const ganodermaApplanatumQ774576: WikidataSpeciesData = {
   wikidataId: 'Q774576',
   taxonomy: {
     taxonName: 'Ganoderma applanatum',
-    taxonRank: { pid: 'P105', qid: 'Q7432', label: 'species' },
-    parentTaxon: [{ pid: 'P171', qid: 'Q1799774', label: 'Ganoderma' }],
-    instanceOf: [{ pid: 'P31', qid: 'Q16521', label: 'taxon' }],
-    basionym: [{ pid: 'P566', qid: 'Q59511576', label: 'Boletus applanatus' }],
+    taxonRank: { pid: 'P105', qid: 'Q7432', labels: { en: 'species', de: 'Art' } },
+    parentTaxon: [
+      { pid: 'P171', qid: 'Q1799774', labels: { en: 'Ganoderma', de: 'Lackporlinge' } },
+    ],
+    instanceOf: [{ pid: 'P31', qid: 'Q16521', labels: { en: 'taxon', de: 'Taxon' } }],
+    basionym: [
+      {
+        pid: 'P566',
+        qid: 'Q59511576',
+        labels: { en: 'Boletus applanatus', de: 'Boletus applanatus' },
+      },
+    ],
     authorCitation: '(Pers.) Pat.',
     shortName: 'G. applanatum',
   },
@@ -27,18 +35,28 @@ export const ganodermaApplanatumQ774576: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', label: 'pores' },
-    capShape: [{ pid: 'P784', qid: 'Q19887965', label: 'no mushroom cap' }],
-    hymeniumAttachment: { pid: 'P785', qid: 'Q19887925', label: 'decurrent hymenium attachment' },
-    sporePrintColor: { pid: 'P787', qid: 'Q47071', label: 'brown' },
+    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
+    capShape: [{ pid: 'P784', qid: 'Q19887965', labels: { en: 'no mushroom cap' } }],
+    hymeniumAttachment: {
+      pid: 'P785',
+      qid: 'Q19887925',
+      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    },
+    sporePrintColor: { pid: 'P787', qid: 'Q47071', labels: { en: 'brown', de: 'Braun' } },
   },
   ecology: {
-    ecologicalType: [{ pid: 'P788', qid: 'Q186517', label: 'parasitism' }],
+    ecologicalType: [
+      { pid: 'P788', qid: 'Q186517', labels: { en: 'parasitism', de: 'Parasitismus' } },
+    ],
   },
   edibility: {
     values: [
-      { pid: 'P789', qid: 'Q4317894', label: 'inedible mushroom' },
-      { pid: 'P789', qid: 'Q1686195', label: 'medicinal mushrooms' },
+      {
+        pid: 'P789',
+        qid: 'Q4317894',
+        labels: { en: 'inedible mushroom', de: 'ungenießbarer Pilz' },
+      },
+      { pid: 'P789', qid: 'Q1686195', labels: { en: 'medicinal mushrooms', de: 'Mykotherapie' } },
     ],
   },
   media: {
@@ -47,14 +65,44 @@ export const ganodermaApplanatumQ774576: WikidataSpeciesData = {
     commonsGallery: 'Ganoderma applanatum',
   },
   externalIds: [
-    { pid: 'P1391', source: 'Index Fungorum', value: '119872' },
-    { pid: 'P846', source: 'GBIF', value: '2549834' },
-    { pid: 'P962', source: 'MycoBank', value: '119872' },
-    { pid: 'P3151', source: 'iNaturalist', value: '48473' },
-    { pid: 'P838', source: 'BioLib', value: '60746' },
-    { pid: 'P830', source: 'Encyclopedia of Life', value: '133532' },
-    { pid: 'P685', source: 'NCBI Taxonomy', value: '29884' },
-    { pid: 'P10585', source: 'Catalogue of Life', value: '3F96J' },
+    {
+      pid: 'P1391',
+      source: 'Index Fungorum',
+      value: '119872',
+      url: 'https://www.indexfungorum.org/names/NamesRecord.asp?RecordID=119872',
+    },
+    { pid: 'P846', source: 'GBIF', value: '2549834', url: 'https://www.gbif.org/species/2549834' },
+    { pid: 'P962', source: 'MycoBank', value: '119872', url: 'https://www.mycobank.org/MB/119872' },
+    {
+      pid: 'P3151',
+      source: 'iNaturalist',
+      value: '48473',
+      url: 'https://inaturalist.org/taxa/48473',
+    },
+    {
+      pid: 'P838',
+      source: 'BioLib',
+      value: '60746',
+      url: 'https://www.biolib.cz/cz/taxon/id60746',
+    },
+    {
+      pid: 'P830',
+      source: 'Encyclopedia of Life',
+      value: '133532',
+      url: 'https://eol.org/pages/133532',
+    },
+    {
+      pid: 'P685',
+      source: 'NCBI Taxonomy',
+      value: '29884',
+      url: 'https://www.ncbi.nlm.nih.gov/taxonomy/29884',
+    },
+    {
+      pid: 'P10585',
+      source: 'Catalogue of Life',
+      value: '3F96J',
+      url: 'https://www.catalogueoflife.org/data/taxon/3F96J',
+    },
   ],
 }
 

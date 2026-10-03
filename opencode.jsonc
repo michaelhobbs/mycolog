@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "wiki-data": {
+      "type": "remote",
+      "url": "https://wd-mcp.wmcloud.org/mcp/",
+      "enabled": true
+    }
+  }
+}

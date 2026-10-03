@@ -422,6 +422,53 @@ node scripts/api.mjs        # identify API on http://localhost:4322
 - Backlog items live in the `backlog` content collection (`src/content/backlog/{n}`,
   numeric slug, `authors` + `dateSpotted` + `images`, optional EXIF-GPS `location`).
 
+## Wikidata morphology data
+
+`src/data/wikidata/` holds a typed snapshot of the fungal morphology properties
+Wikidata models, plus the Commons drawings that illustrate them. It is **not** a
+content collection — it is plain TS so `astro check` validates it.
+
+- `morphology-types.ts` is the single source of truth: one `as const` map per
+  property, keyed by a readable name and valued by QID, derived from the
+  property's `one-of constraint` (`P2302` → `P21510859` → items at `P2305`).
+  Because these are literal-typed `as const` objects, a QID that is not a legal
+  value of its property is a **compile error**, not a runtime surprise. Adding a
+  value here is all that is needed for `fetch-wikidata-icons.mjs` to pick it up.
+  - `P783` hymenium type, `P784` cap shape, `P785` hymenium attachment,
+    `P786` stipe character, `P787` spore print color, `P788` ecological type,
+    `P789` edibility.
+  - **`P787` spore print color has no icons at all** (0 of 22 values carry one),
+    and a colour is CSS anyway, so it is excluded from the icon groups. Do not
+    "fix" its absence by treating a colour name as an image.
+- `icons.ts` is **generated** — `npm run update-wikidata-icons`, never hand-edit.
+  Each entry carries its Commons `source` URL, `license` and `author`, because
+  37 of the 43 files are CC BY-SA and need attribution. The local files under
+  `icons/` are the **unmodified originals**, byte-identical to Commons, kept that
+  way on purpose so they can be restyled later without re-downloading.
+- Icons come from `icon (P2910)` **only**. Do **not** fall back to `image (P18)`:
+  on these value items P18 is whatever photo or clipart illustrates the article,
+  so the fallbacks are a field photo of _Harposporium_ on a dead nematode
+  ("nematophagous fungus"), a photo of a plate of fried mushrooms ("edible when
+  cooked") and a cooking icon ("edible mushroom"). A value with no `P2910` is
+  recorded in `missingIcons` instead, which is the honest outcome.
+- Wikidata's own data has gaps; both lists are exported so the UI can degrade
+  deliberately rather than rendering a broken image:
+  - `missingIcons` (4) — no `P2910`: `Q357006` (nematophagous fungus) and three
+    edibility values (`Q654236`, `Q62102033`, `Q1686195`).
+  - `iconsToReview` (1) — `Q62023127` (semi-spherical cap) has no `P2910`, and
+    its `P18` is the _convex_ cap icon, i.e. a different value. Deliberately not
+    downloaded.
+- The script imports `../src/data/wikidata/morphology-types.ts` directly, so it
+  relies on Node's type stripping (as `generate-thumbnails.mjs` already does).
+- `commons.wikimedia.org` answers **429** readily from a shared IP. The script
+  batches metadata lookups 20 titles at a time, throttles, and backs off
+  exponentially (honouring `Retry-After`); a run of 43 files takes ~1 min.
+  Metadata is fetched for every file even when the file already exists, so a
+  plain re-run still costs two API calls per batch but downloads nothing.
+- This is the only build-independent network fetch besides `prebuild`
+  thumbnails, and it is **not** wired into `prebuild`/`predev` — it needs
+  Commons, so a network failure must never be able to fail a build.
+
 ## Content collections
 
 - `species` — shared species data (scientific/common name, determining features,

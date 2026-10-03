@@ -17,7 +17,8 @@
     "format:check": "prettier --check .",
     "astro": "astro",
     "prepare": "husky",
-    "api": "node scripts/api.mjs"
+    "api": "node scripts/api.mjs",
+    "update-wikidata-icons": "node scripts/fetch-wikidata-icons.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

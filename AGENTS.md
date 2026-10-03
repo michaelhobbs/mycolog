@@ -422,6 +422,40 @@ node scripts/api.mjs        # identify API on http://localhost:4322
 - Backlog items live in the `backlog` content collection (`src/content/backlog/{n}`,
   numeric slug, `authors` + `dateSpotted` + `images`, optional EXIF-GPS `location`).
 
+## Species Wikidata QIDs
+
+Every entry in `src/content/species/` carries a `wikidataId`. `npm run
+resolve-species-wikidata` re-derives them and reports anything it could not
+resolve; `--write` persists. All 47 populated entries currently resolve.
+
+- **Verification is exact, not fuzzy.** `scripts/resolve-species-wikidata.mjs`
+  runs `wbsearchentities` per scientific name, then requires a candidate's
+  `taxon name (P225)` to equal that name case-insensitively, and checks
+  `taxon rank (P105)` is species `Q7432`. A search hit can be a synonym, a
+  misspelt name or a homonym, so a hit is only ever a _candidate_ — the claims
+  are what decide. Never store a QID off a search result alone.
+- **Do not use `P1420` to decide whether an item is a synonym.** On a species
+  item it means "this taxon _has_ synonyms", which is true of nearly every real
+  species, so flagging on it marks all 47 entries and tells you nothing. "Is a
+  synonym" is the inverse property, which is not queryable from the item.
+- **`P141` taxon status is reported, not rejected.** The five entries carrying
+  it have IUCN statuses (least concern, near threatened), not taxonomic
+  problems; treating any `P141` as disqualifying would reject valid species.
+- **The write path splices one line into the file, it does not re-serialise.**
+  `JSON.stringify(doc, null, 2)` followed by Prettier expanded objects that were
+  deliberately kept inline (`"commonName": { "en": "Cep", "de": "Steinpilz" }`),
+  turning a one-line change into a reformat of all 47 files — Prettier preserves
+  the line breaking it is handed and will not collapse them back. `upsert()`
+  inserts the key textually; keep it that way.
+- Searches are cached in `.cache/wikidata-species-search.json` (gitignored)
+  because the endpoint rate-limits; the two calls during a dry run do return
+  `429`, which the retry handles with `Retry-After`. Claims are fetched in
+  batches of 50, not per item.
+- Three directories have **no `index.json`** and so are not collection entries:
+  `coprinopsis-nivea`, `guepinia-helvelloides`, `tolypocladium-ophioglossoides`.
+  The resolver prints them so a genuinely empty entry is not mistaken for a
+  lookup failure.
+
 ## Wikidata morphology data
 
 `src/data/wikidata/` holds a typed snapshot of the fungal morphology properties

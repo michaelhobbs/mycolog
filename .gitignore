@@ -10,6 +10,9 @@ src/assets/thumbnails/
 # dependencies
 node_modules/
 
+# throwaway caches from maintenance scripts
+.cache/
+
 # logs
 npm-debug.log*
 yarn-debug.log*

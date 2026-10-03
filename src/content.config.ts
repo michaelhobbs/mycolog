@@ -11,6 +11,10 @@ const species = defineCollection({
   loader: glob({ base: './src/content/species', pattern: '**/index.json' }),
   schema: z.object({
     scientificName: z.string(),
+    wikidataId: z
+      .string()
+      .regex(/^Q\d+$/, 'must be a Wikidata QID, e.g. Q131227')
+      .optional(),
     commonName: localizedString,
     determiningFeatures: z.array(localizedString),
     notes: localizedString.optional(),

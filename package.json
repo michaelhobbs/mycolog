@@ -18,7 +18,8 @@
     "astro": "astro",
     "prepare": "husky",
     "api": "node scripts/api.mjs",
-    "update-wikidata-icons": "node scripts/fetch-wikidata-icons.mjs"
+    "update-wikidata-icons": "node scripts/fetch-wikidata-icons.mjs",
+    "resolve-species-wikidata": "node scripts/resolve-species-wikidata.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

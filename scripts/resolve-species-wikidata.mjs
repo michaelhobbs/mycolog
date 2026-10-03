@@ -12,41 +12,17 @@
 // --write to persist the QID into each species' index.json.
 //
 // Usage:
-//   node scripts/resolve-species-wikidata.mjs           # report only
-//   node scripts/resolve-species-wikidata.mjs --write   # also update index.json
+//   npm run resolve-species-wikidata
+//   node scripts/resolve-species-wikidata.mjs --write
 import { promises as fs } from 'fs'
 import path from 'path'
-import { fileURLToPath } from 'url'
+import { WD_API, ROOT, sleep, fetchRetry, entities, qidsOf, stringsOf } from './lib/wikidata.mjs'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const ROOT = path.resolve(__dirname, '..')
 const SPECIES_DIR = path.join(ROOT, 'src', 'content', 'species')
 const CACHE_FILE = path.join(ROOT, '.cache', 'wikidata-species-search.json')
 
-const WD_API = 'https://www.wikidata.org/w/api.php'
-const USER_AGENT =
-  'mushrooms-astro-site/1.0 (species/Wikidata resolver; https://github.com/) node-fetch'
-
 const WRITE = process.argv.includes('--write')
 const SPECIES_QID = 'Q7432'
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
-
-async function fetchRetry(url, tries = 4) {
-  for (let attempt = 1; ; attempt++) {
-    const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
-    if (res.ok) return res
-    if ((res.status === 429 || res.status >= 500) && attempt < tries) {
-      const hinted = Number(res.headers.get('retry-after'))
-      const pause =
-        Number.isFinite(hinted) && hinted > 0 ? hinted * 1000 : 1000 * 2 ** (attempt - 1)
-      console.log(`  ${res.status}, retrying in ${Math.round(pause / 1000)}s`)
-      await sleep(pause)
-      continue
-    }
-    throw new Error(`${res.status} ${res.statusText}`)
-  }
-}
 
 async function readSpecies() {
   const slugs = (await fs.readdir(SPECIES_DIR, { withFileTypes: true }))
@@ -73,48 +49,9 @@ async function search(name) {
   const url =
     `${WD_API}?action=wbsearchentities&format=json&language=en&uselang=en` +
     `&type=item&limit=10&continue=0&search=${encodeURIComponent(name)}`
-  const res = await fetchRetry(url)
-  const json = await res.json()
+  const json = await (await fetchRetry(url)).json()
   return (json.search ?? []).map((r) => r.id)
 }
-
-/** Fetch the claims we verify against for a batch of QIDs (50 per request). */
-async function claims(qids) {
-  const out = new Map()
-  for (let i = 0; i < qids.length; i += 50) {
-    const chunk = qids.slice(i, i + 50)
-    const url =
-      `${WD_API}?action=wbgetentities&format=json&props=labels|claims` +
-      `&languages=en&ids=${chunk.join('|')}`
-    const res = await fetchRetry(url)
-    const json = await res.json()
-    for (const [qid, entity] of Object.entries(json.entities ?? {})) {
-      out.set(qid, entity)
-    }
-    await sleep(150)
-  }
-  return out
-}
-
-/** The value ids of an entity's claims for one property. */
-const qidsOf = (entity, pid) =>
-  (entity?.claims?.[pid] ?? []).map((c) => c.mainsnak?.datavalue?.value?.id).filter(Boolean)
-
-/**
- * The string values of an entity's claims for one property. P225 is a string
- * property and the API returns `datavalue.value` as a bare string, not the
- * `{ text, language }` object that monolingual values used to be shaped like --
- * so accept both.
- */
-const stringsOf = (entity, pid) =>
-  (entity?.claims?.[pid] ?? [])
-    .map((c) => {
-      const v = c.mainsnak?.datavalue?.value
-      if (typeof v === 'string') return v
-      if (v && typeof v.text === 'string') return v.text
-      return null
-    })
-    .filter((v) => v !== null)
 
 /**
  * Insert `key` into a JSON document as a single new line, leaving every other
@@ -175,10 +112,10 @@ async function main() {
   await fs.writeFile(CACHE_FILE, JSON.stringify(cache, null, 2) + '\n')
   console.log(`[species] search cache: ${CACHE_FILE.replace(ROOT + '/', '')}`)
 
-  // 2. Pull every candidate's claims in one batch of 50-item requests.
+  // 2. Pull every candidate's claims in batched requests.
   const allQids = [...new Set([...candidates.values()].flat())]
   console.log(`[species] verifying ${allQids.length} candidate items`)
-  const entities = await claims(allQids)
+  const ents = await entities(allQids, { props: 'labels|claims' })
 
   // 3. Accept only a candidate whose taxon name matches ours exactly and whose
   //    rank is species; everything else is reported, never guessed.
@@ -190,7 +127,7 @@ async function main() {
     const name = doc.scientificName
     const exact = []
     for (const qid of candidates.get(slug) ?? []) {
-      const e = entities.get(qid)
+      const e = ents.get(qid)
       const taxonNames = stringsOf(e, 'P225')
       if (!taxonNames.some((t) => t.toLowerCase() === name.toLowerCase())) continue
       exact.push({
@@ -256,8 +193,10 @@ async function main() {
     // Resolve what the taxon status actually says, so the report names it.
     let statusLabels = new Map()
     if (statusQids.size) {
-      const ents = await claims([...statusQids])
-      statusLabels = new Map([...statusQids].map((q) => [q, ents.get(q)?.labels?.en?.value ?? q]))
+      const statusEnts = await entities([...statusQids], { props: 'labels' })
+      statusLabels = new Map(
+        [...statusQids].map((q) => [q, statusEnts.get(q)?.labels?.en?.value ?? q]),
+      )
     }
     console.log(`\n[species] ${flagged.length} to review:`)
     for (const f of flagged) {

@@ -9,9 +9,18 @@ import MapAttribution from './MapAttribution.astro'
 interface Props {
   points: { lat: number; lng: number; label?: string }[]
   region?: { lat: number; lng: number; radiusKm?: number }
+  /**
+   * Grow the map into whatever vertical slack the container has, instead of
+   * sitting at a fixed 320px. Only useful where the map shares a row with a
+   * column that can be taller -- the species page's reference column. A no-op
+   * wherever the container is only as tall as its content (the stacked mobile
+   * layout, and the other two pages that use this component), because there is
+   * no free space to grow into.
+   */
+  fill?: boolean
 }
 
-const { points, region } = Astro.props
+const { points, region, fill = false } = Astro.props
 const count = points.length
 const center = region
   ? [region.lng, region.lat]
@@ -28,7 +37,7 @@ const data = JSON.stringify({
 const regionData = region ? JSON.stringify(region) : ''
 ---
 
-<div class="mini-map-frame">
+<div class="mini-map-frame" data-fill={fill ? '' : undefined}>
   <div class="mini-map-frame__title">
     <span class="mini-map-frame__title-text">[ map ]</span>
     <span class="mini-map-frame__title-coords">{coords}</span>
@@ -260,6 +269,29 @@ const regionData = region ? JSON.stringify(region) : ''
       console.error('[minimap] maplibre error:', e?.error)
     })
 
+    // The container can change size without the viewport doing anything. In
+    // `fill` mode it takes its height from the taller sibling column, and that
+    // column's height is not final until its images have decoded -- which can be
+    // after DOMContentLoaded, when the map is constructed. MapLibre measures the
+    // container once at construction and caches it, so a later reflow would
+    // leave the canvas at the old size, stretched or letterboxed against the new
+    // box. Resize fires on plain viewport changes already, so only the
+    // non-viewport case needs handling. Guarding on a real size change keeps this
+    // from re-entering: `resize` resizes the absolutely positioned canvas, not
+    // the observed container.
+    if (typeof ResizeObserver === 'function') {
+      let lastW = 0
+      let lastH = 0
+      new ResizeObserver(() => {
+        const w = container.clientWidth
+        const h = container.clientHeight
+        if (w === lastW && h === lastH) return
+        lastW = w
+        lastH = h
+        map.resize()
+      }).observe(container)
+    }
+
     // iOS Safari (iPhone/iPad) has no element Fullscreen API, so the ⛶ button
     // emulates fullscreen there by pinning the frame as a fixed overlay.
     const canFullscreen =
@@ -383,6 +415,26 @@ const regionData = region ? JSON.stringify(region) : ''
     height: auto;
   }
 
+  /* Opt-in fill mode, same mechanism as the fullscreen rules above: the frame
+     becomes a flex column and the map takes the leftover height. Two links in the
+     chain have to grow, not one -- the frame is itself a flex item of whatever
+     column it sits in, so growing only the map inside it does nothing while the
+     frame stays at its content height. `flex: 1 0 auto` grows into slack but
+     refuses to shrink, so a container that is only as tall as its content keeps
+     the 320px it has always had; and on the map `height: auto` is required too,
+     since the fixed height would win over `flex-basis` and pin it. */
+  .mini-map-frame[data-fill] {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
+  }
+
+  .mini-map-frame[data-fill] .mini-map-frame__map {
+    flex: 1 0 auto;
+    height: auto;
+    min-height: 320px;
+  }
+
   :global(.maplibregl-map) {
     font-family: var(--font-mono);
   }
@@ -394,6 +446,12 @@ const regionData = region ? JSON.stringify(region) : ''
   @media (max-width: 768px) {
     .mini-map-frame__map {
       height: 240px;
+    }
+
+    /* Same floor as the height above, or the map would jump to 320px on a
+       phone. */
+    .mini-map-frame[data-fill] .mini-map-frame__map {
+      min-height: 240px;
     }
   }
 </style>

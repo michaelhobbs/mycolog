@@ -152,6 +152,23 @@ const galleryHref = `/${locale}/mushrooms/${slug}/gallery`
     margin-top: 0.5rem;
   }
 
+  /* One row, always. `auto-fill` picks floor(width / 110px) columns, so a phone
+     column gets three and the fourth thumbnail wraps onto a second row. Implicit
+     columns are placed in a single row by `column` flow, and `minmax(0, 1fr)`
+     lets those tracks drop below the 110px floor and share the width equally, so
+     all of them fit on one line. The `0` is load-bearing: a plain `1fr` track
+     floors at `auto` (min-content), which the "see all" tile's label would push
+     back past the viewport. Scrolling horizontally instead would hide
+     thumbnails behind a gesture with no affordance, and there are never more
+     than five items here to justify it. */
+  @media (max-width: 900px) {
+    .strip {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(0, 1fr);
+    }
+  }
+
   .thumb,
   .more {
     aspect-ratio: 4 / 3;

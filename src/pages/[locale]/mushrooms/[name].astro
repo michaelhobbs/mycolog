@@ -100,6 +100,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
                   lng: e.data.location.lng,
                   label: locationName(locMap, e.data.locationSlug, locale),
                 }))}
+                fill
               />
             )}
           </div>
@@ -250,9 +251,21 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     grid-row: 1;
   }
 
+  /* `align-self: stretch` opts this band out of the grid's `align-items: start`.
+     Without it the band is only as tall as the gallery plus a 320px map, so
+     whenever the prose column is taller -- which is most species, now that the
+     morphology and ecology icons are 78px -- the leftover space is dead space
+     under the map. Stretching gives the band the full row height, and the flex
+     column hands that slack to the map, which grows into it (MiniMap's `fill`).
+     The main band keeps `start`: it is the one that defines the row height, and
+     stretching it would only matter if the aside were taller, which it must not
+     stretch into. */
   .band--aside {
     grid-column: 2;
     grid-row: 1;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
   }
 
   .band--sightings {
@@ -292,11 +305,14 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     font-size: 0.8125rem;
   }
 
-  /* The sightings are a full-width row, so the list splits into two columns of
-     its own rather than leaving one long ribbon down the middle of the page. */
+  /* The sightings are a full-width row, so the list splits into three columns of
+     its own rather than leaving one long ribbon down the middle of the page.
+     Three, not two: the row's content is a fixed 72px thumbnail plus a wrapping
+     body, so narrowing the column costs a wrapped location line and no
+     truncation. */
   .block__sightings {
     list-style: none;
-    column-count: 2;
+    column-count: 3;
     column-gap: 1.5rem;
   }
 

@@ -76,9 +76,11 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
   }
 
   /* Only the list splits, never the note above it: the note is prose and reads
-     wrong broken across a column break. */
+     wrong broken across a column break. Three columns to match the sightings
+     list beside it; the rows are short enough that a third column costs no
+     truncation. */
   .list--split {
-    column-count: 2;
+    column-count: 3;
     column-gap: 1.5rem;
   }
 

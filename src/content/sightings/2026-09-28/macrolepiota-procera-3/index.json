@@ -1,0 +1,12 @@
+{
+  "species": "macrolepiota-procera",
+  "locationSlug": "kochelberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.47428,
+    "lng": 11.10817
+  },
+  "images": ["./images/macrolepiota-procera1.jpg", "./images/macrolepiota-procera2.jpg"]
+}

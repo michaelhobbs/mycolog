@@ -1,0 +1,16 @@
+{
+  "species": "amanita-muscaria",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48231,
+    "lng": 11.15128
+  },
+  "images": ["./images/amanita-muscaria1.jpg", "./images/amanita-muscaria2.jpg"],
+  "notes": {
+    "en": "End of life, decaying.",
+    "de": ""
+  }
+}

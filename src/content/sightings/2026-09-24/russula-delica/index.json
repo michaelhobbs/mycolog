@@ -1,0 +1,18 @@
+{
+  "species": "russula-delica",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.4655,
+    "lng": 11.03296
+  },
+  "images": [
+    "./images/russula-delica1.jpg",
+    "./images/russula-delica2.jpg",
+    "./images/russula-delica3.jpg",
+    "./images/russula-delica4.jpg",
+    "./images/russula-delica5.jpg"
+  ]
+}

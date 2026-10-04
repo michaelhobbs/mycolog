@@ -1,0 +1,20 @@
+{
+  "species": "armillaria-mellea",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.46534,
+    "lng": 11.03276
+  },
+  "images": [
+    "./images/armillaria-mellea1.jpg",
+    "./images/armillaria-mellea2.jpg",
+    "./images/armillaria-mellea3.jpg"
+  ],
+  "notes": {
+    "en": "Decaying. There were so many clusters of dead and decaying mushrooms on stumps, they chances of them being honey fungus are quite high, as those seen living are usually honey fungus.",
+    "de": ""
+  }
+}

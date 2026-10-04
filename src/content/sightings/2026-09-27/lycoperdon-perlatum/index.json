@@ -1,0 +1,16 @@
+{
+  "species": "lycoperdon-perlatum",
+  "locationSlug": "philisophenweg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-27",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.51158,
+    "lng": 11.11311
+  },
+  "images": [
+    "./images/lycoperdon-perlatum1.jpg",
+    "./images/lycoperdon-perlatum2.jpg",
+    "./images/lycoperdon-perlatum3.jpg"
+  ]
+}

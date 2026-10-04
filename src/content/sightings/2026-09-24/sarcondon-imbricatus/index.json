@@ -1,0 +1,17 @@
+{
+  "species": "sarcondon-imbricatus",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.46715,
+    "lng": 11.03046
+  },
+  "images": [
+    "./images/sarcondon-imbricatus1.jpg",
+    "./images/sarcondon-imbricatus2.jpg",
+    "./images/sarcondon-imbricatus3.jpg",
+    "./images/sarcondon-imbricatus4.jpg"
+  ]
+}

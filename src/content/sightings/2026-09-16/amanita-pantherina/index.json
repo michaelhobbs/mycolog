@@ -1,0 +1,26 @@
+{
+  "species": "amanita-pantherina",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-16",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48176,
+    "lng": 11.14912
+  },
+  "images": [
+    "./images/amanita-pantherina1.jpg",
+    "./images/amanita-pantherina2.jpg",
+    "./images/amanita-pantherina3.jpg",
+    "./images/amanita-pantherina4.jpg",
+    "./images/amanita-pantherina5.jpg",
+    "./images/amanita-pantherina6.jpg",
+    "./images/amanita-pantherina7.jpg",
+    "./images/amanita-pantherina8.jpg",
+    "./images/amanita-pantherina9.jpg"
+  ],
+  "notes": {
+    "en": "A week or so later, these had been harvested. This is reported in a later sighting.",
+    "de": ""
+  }
+}

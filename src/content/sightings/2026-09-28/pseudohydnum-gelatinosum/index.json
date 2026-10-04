@@ -1,0 +1,16 @@
+{
+  "species": "pseudohydnum-gelatinosum",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48419,
+    "lng": 11.15239
+  },
+  "images": [
+    "./images/pseudohydnum-gelatinosum1.jpg",
+    "./images/pseudohydnum-gelatinosum2.jpg",
+    "./images/pseudohydnum-gelatinosum3.jpg"
+  ]
+}

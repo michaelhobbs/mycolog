@@ -1,0 +1,16 @@
+{
+  "species": "sarcondon-imbricatus",
+  "locationSlug": "philisophenweg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-27",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.51425,
+    "lng": 11.1144
+  },
+  "images": [
+    "./images/sarcondon-imbricatus1.jpg",
+    "./images/sarcondon-imbricatus2.jpg",
+    "./images/sarcondon-imbricatus3.jpg"
+  ]
+}

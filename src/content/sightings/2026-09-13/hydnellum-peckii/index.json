@@ -1,0 +1,12 @@
+{
+  "species": "hydnellum-peckii",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48255,
+    "lng": 11.14969
+  },
+  "images": ["./images/hydnellum-peckii1.jpg", "./images/hydnellum-peckii2.jpg"]
+}

@@ -1,0 +1,12 @@
+{
+  "species": "sarcondon-imbricatus",
+  "locationSlug": "kochelberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.4755,
+    "lng": 11.10737
+  },
+  "images": ["./images/sarcondon-imbricatus1.jpg", "./images/sarcondon-imbricatus2.jpg"]
+}

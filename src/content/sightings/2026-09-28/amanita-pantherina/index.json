@@ -1,0 +1,22 @@
+{
+  "species": "amanita-pantherina",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48182,
+    "lng": 11.14912
+  },
+  "images": [
+    "./images/amanita-pantherina1.jpg",
+    "./images/amanita-pantherina2.jpg",
+    "./images/amanita-pantherina3.jpg",
+    "./images/amanita-pantherina4.jpg",
+    "./images/amanita-pantherina5.jpg"
+  ],
+  "notes": {
+    "en": "Most had been harvested. There is a sighting of the same cluster as babies a week or so earlier.",
+    "de": ""
+  }
+}

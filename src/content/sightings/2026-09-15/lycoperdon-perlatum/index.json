@@ -1,0 +1,17 @@
+{
+  "species": "lycoperdon-perlatum",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.48322,
+    "lng": 11.14937
+  },
+  "images": [
+    "./images/lycoperdon-perlatum1.jpg",
+    "./images/lycoperdon-perlatum2.jpg",
+    "./images/lycoperdon-perlatum3.jpg",
+    "./images/lycoperdon-perlatum4.jpg"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "species": "lactarius-deterrimus",
+  "locationSlug": "schlattan",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.49246,
+    "lng": 11.15476
+  },
+  "images": ["./images/lactarius-deterrimus1.jpg", "./images/lactarius-deterrimus2.jpg"]
+}

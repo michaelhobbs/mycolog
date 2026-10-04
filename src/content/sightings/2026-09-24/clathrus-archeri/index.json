@@ -1,0 +1,12 @@
+{
+  "species": "clathrus-archeri",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.46554,
+    "lng": 11.03283
+  },
+  "images": ["./images/clathrus-archeri1.jpg", "./images/clathrus-archeri2.jpg"]
+}

@@ -1,0 +1,21 @@
+{
+  "species": "clathrus-archeri",
+  "locationSlug": "philisophenweg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-27",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.50578,
+    "lng": 11.10644
+  },
+  "images": [
+    "./images/clathrus-archeri1.jpg",
+    "./images/clathrus-archeri2.jpg",
+    "./images/clathrus-archeri3.jpg",
+    "./images/clathrus-archeri4.jpg",
+    "./images/clathrus-archeri5.jpg",
+    "./images/clathrus-archeri6.jpg",
+    "./images/clathrus-archeri7.jpg",
+    "./images/clathrus-archeri8.jpg"
+  ]
+}

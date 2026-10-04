@@ -1,0 +1,12 @@
+{
+  "species": "lycoperdon-perlatum",
+  "locationSlug": "schweinbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-02",
+  "dateIdentified": "2026-10-04",
+  "location": {
+    "lat": 47.50944,
+    "lng": 11.11174
+  },
+  "images": ["./images/lycoperdon-perlatum1.jpg"]
+}

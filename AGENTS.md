@@ -557,13 +557,33 @@ content collection — it is plain TS so `astro check` validates it.
   - **Rendered through `ValueMark.astro`**, which prefers the drawing and falls
     back to a disc of the colour, so a value is never bare text when Wikidata
     gives us either. It is drawn as an actual spore print: `border-radius: 50%`
-    with a `repeating-conic-gradient` of ~100 radiating gill lines over the fill,
-    and a `radial-gradient` rim that feathers into the paper. A transform cannot
-    draw a gill pattern — it moves and scales a picture — hence the conic
-    gradient. Where a value has several triplets the fill is banded into equal
-    stripes of all of them rather than picking one, and the element's
-    `aria-label`/`title` carry the raw codes: "buff", "tan" and "cream" are
-    ambiguous in a way their hex codes are not.
+    with a `repeating-conic-gradient` of ~120 gill lines converging on the
+    centre. A transform cannot draw a gill pattern — it moves and scales a
+    picture — hence the conic gradient.
+    - **The gills live on `::before`, not on the element**, because they are
+      masked and a mask applies to the whole element: putting them on the element
+      would drag the fill and the inset ring into the mask too. The fill keeps its
+      exact colour instead of being tinted towards the paper by a rim fade.
+    - **Two mask layers, multiplied with `mask-composite: intersect`**, since both
+      effects vary with radius and one layer cannot express them. A radial one
+      carries the density gradient (dense at the middle, tapering to the rim, and
+      clearing the very centre where lines that close would merge into a blob); a
+      `repeating-radial-gradient` one cuts them into dashes, whose pixel lengths
+      subtend a shrinking angle inwards, so they read as dots near the middle and
+      as short strokes further out. Its absence degrades to `add` — the dashes
+      union back in and only the taper is lost, never a broken mark. The `-webkit-`
+      keywords differ (`source-in`), hence both declarations.
+    - **Assert the profile by measuring, not by eye** — at 78px the inner gills
+      are sub-pixel and antialiased, so tuning by eye is unreliable. Sample the
+      rendered disc: the luminance stddev per annulus should peak around 10-16px
+      and fall monotonically to the rim, and a ray outward along one gill should
+      show ~14 brightness alternations with a solid line showing 0-1. Beware a
+      share-of-paper-pixel threshold as the metric: it reads faint texture on a
+      dark fill as absent.
+      Where a value has several triplets the fill is banded into equal
+      stripes of all of them rather than picking one, and the element's
+      `aria-label`/`title` carry the raw codes: "buff", "tan" and "cream" are
+      ambiguous in a way their hex codes are not.
   - **The paper is picked per value by measured WCAG contrast**, not by
     thresholding on luminance: near-black under a light print, near-white under a
     dark one. The two candidates are not symmetric about 0.5 — the +0.05 offset

@@ -124,34 +124,73 @@ const label = colors.join(' ')
   }
 
   /* Drawn as a spore print rather than a flat chip: a cap pressed gill-down
-     leaves fine lines radiating from the centre and a rim that feathers out
-     where the paper lifted.
+     leaves fine lines converging under the stem, denser at the middle and
+     fading towards the rim of the cap, and broken into dashes rather than solid.
 
-     Three layers, painted top to bottom. The spokes and the rim fade are the
-     *paper* colour -- `--spore-paper`, picked per value by measured contrast --
-     because in a real print the gaps between gills are bare paper and the edge
-     feathers into the sheet. Painting the fill instead would tint it, and the
-     triplets would stop being the colour Wikidata recorded. `--spore-fill` comes
-     from the inline style: one triplet, or a banded gradient when the value has
-     several and none is canonical.
+     `--spore-fill` is the sheet's colour and `--spore-paper` the sheet itself,
+     both from the inline style: one triplet, or a banded gradient when the value
+     has several and none is canonical. A `repeating-conic-gradient` draws the
+     lines because a transform can move and scale a picture but cannot draw the
+     hundred or so of them a gill pattern has.
 
-     A `repeating-conic-gradient` rather than a `transform`: a transform can move
-     and scale a picture but cannot draw the hundred or so lines a gill pattern
-     has. At 78px a 3.6deg period is ~100 of them, which is the right density --
-     any finer and they alias into a grey wash at this size. */
+     The lines go on a pseudo-element so they can be masked without taking the
+     fill and the ring with them — the fill keeps its exact colour instead of
+     being tinted towards the paper by a rim fade. */
   .swatch {
+    position: relative;
     border-radius: 50%;
-    background-image:
-      radial-gradient(circle at 50% 50%, transparent 58%, var(--spore-paper) 100%),
-      repeating-conic-gradient(
-        from 0deg at 50% 50%,
-        var(--spore-paper) 0 5.9deg,
-        transparent 5.9deg 22.6deg
-      ),
-      var(--spore-fill);
-    /* A hairline border, or a white or cream swatch vanishes into the row's
-       surface, and a near-black one loses its shape against it. It is inset so
-       the ring does not enlarge the disc. */
+    background: var(--spore-fill);
+    /* A hairline border, or a near-black fill loses its shape against the
+       surface. It is inset so the ring does not enlarge the disc. */
     box-shadow: inset 0 0 0 1px var(--border-char);
+  }
+
+  .swatch::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: repeating-conic-gradient(
+      from 0deg at 50% 50%,
+      var(--spore-paper) 0 1.5deg,
+      transparent 1.5deg 3deg
+    );
+    /* Two masks, multiplied, because both effects vary with radius and one
+       layer cannot express them:
+
+     - a radial one carries the density gradient. The lines converge on their own
+       — a conic gradient spaces them by r·θ, so they crowd the centre — and
+       this turns that into something visible, fading them out towards the rim. It
+       also clears the very centre, where lines that close would merge into a
+       blob.
+     - a repeating radial one cuts them into dashes. Its lengths are in pixels, so
+       the same dash subtends a shrinking angle towards the middle: dots near the
+       centre, short strokes further out.
+
+     `mask-composite` is what multiplies them. Its absence degrades to `add`, i.e.
+     the dashes union back in and the rim fade is lost — the flat disc of the
+     first version, not a broken mark. The `-webkit-` keywords differ, hence both. */
+    -webkit-mask-image:
+      radial-gradient(
+        circle at 50% 50%,
+        transparent 0 3%,
+        #000 10%,
+        rgba(0, 0, 0, 0.6) 45%,
+        rgba(0, 0, 0, 0.16) 82%,
+        transparent 100%
+      ),
+      repeating-radial-gradient(circle at 50% 50%, #000 0 1.2px, transparent 1.2px 3.6px);
+    mask-image:
+      radial-gradient(
+        circle at 50% 50%,
+        transparent 0 3%,
+        #000 10%,
+        rgba(0, 0, 0, 0.6) 45%,
+        rgba(0, 0, 0, 0.16) 82%,
+        transparent 100%
+      ),
+      repeating-radial-gradient(circle at 50% 50%, #000 0 1.2px, transparent 1.2px 3.6px);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 </style>

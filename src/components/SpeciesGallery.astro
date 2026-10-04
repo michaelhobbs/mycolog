@@ -1,0 +1,195 @@
+---
+// The species page's photo block: one hero shot, a short strip of the next few,
+// and a tile linking to the full gallery.
+//
+// Only a handful of photos appear here because a species can have dozens (the
+// largest group is 33), and a species page is a reference page, not a browsing
+// page -- the full set lives one click away on the gallery route, which is also
+// where the dev-only "set as main photo" buttons live, since only there can
+// every photo be reached.
+//
+// Every tile stays inside a single `data-lightbox-group`, so the hero, the
+// thumbnails and the gallery page all open the same lightbox at the right
+// index. The per-tile `data-lightbox-src` values are 1600px derivatives, never
+// the originals; see the lightbox section of AGENTS.md.
+//
+// `.gallery` carries no bottom margin: the species page wraps this in a Block,
+// whose own margin is the spacing. Both together would leave a double gap.
+import { Image } from 'astro:assets'
+import type { ImageMetadata } from 'astro'
+import type { Locale } from '../i18n'
+import type { Translations } from '../i18n'
+import type { LocalizedString } from '../types/mushroom'
+import { l10n } from '../i18n/helpers'
+
+/** How many of the *next* photos to show as thumbnails beside the hero. */
+const THUMBS = 4
+
+interface Props {
+  locale: Locale
+  t: Translations
+  slug: string
+  commonName: LocalizedString
+  /** Flattened across sightings, so the position here is the lightbox's index. */
+  items: ImageMetadata[]
+  /** 1600px derivative per item, parallel to `items`. */
+  fullSrcs: string[]
+}
+
+const { locale, t, slug, commonName, items, fullSrcs } = Astro.props
+
+const total = items.length
+const hero = items[0]
+const thumbs = items.slice(1, 1 + THUMBS)
+
+// Built in frontmatter, not inline: a newline inside a JSX text node collapses
+// away, so "see all {total} photos" on its own line renders as "33photos" the
+// moment Prettier wraps it.
+const seeAllLabel = `${t.mushrooms.seeAll} ${total} ${t.mushrooms.photos}`
+
+const galleryHref = `/${locale}/mushrooms/${slug}/gallery`
+---
+
+<div class="gallery" data-lightbox-group>
+  {
+    hero && (
+      <figure class="hero" data-lightbox-src={fullSrcs[0]}>
+        <button
+          type="button"
+          class="tile"
+          data-lightbox-trigger
+          data-index="0"
+          aria-label={`${t.mushrooms.fullscreen} 1`}
+          title={t.mushrooms.fullscreen}
+        >
+          <Image
+            src={hero}
+            alt={`${l10n(commonName, locale)} — 1`}
+            widths={[640, 1280]}
+            width={1280}
+            fetchpriority="high"
+          />
+        </button>
+      </figure>
+    )
+  }
+
+  {
+    total > 1 && (
+      <div class="strip">
+        {thumbs.map((img, n) => {
+          const i = n + 1
+          return (
+            <figure class="thumb" data-lightbox-src={fullSrcs[i]}>
+              <button
+                type="button"
+                class="tile"
+                data-lightbox-trigger
+                data-index={i}
+                aria-label={`${t.mushrooms.fullscreen} ${i + 1}`}
+                title={t.mushrooms.fullscreen}
+              >
+                <Image
+                  src={img}
+                  alt={`${l10n(commonName, locale)} — ${i + 1}`}
+                  loading="lazy"
+                  widths={[160, 320]}
+                  width={320}
+                />
+              </button>
+            </figure>
+          )
+        })}
+
+        <a class="more" href={galleryHref} aria-label={seeAllLabel} title={seeAllLabel}>
+          <span class="more__count">{total}</span>
+          <span class="more__label">{t.mushrooms.photos}</span>
+        </a>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  figure {
+    margin: 0;
+    position: relative;
+    border: 1px solid var(--border-char);
+    background: var(--bg-highlight);
+    overflow: hidden;
+  }
+
+  .tile {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+    /* Opts out of the iOS double-tap-to-zoom delay so one tap fires click. */
+    touch-action: manipulation;
+  }
+
+  /* An absolute cap, not a `vh` one. This hero is a fixed-width column now, so
+     its height already tracks the column: a viewport-relative cap would make
+     the hero *taller* on a tall window instead of shorter, which is the
+     opposite of what a hero in a sidebar wants. The root font-size is 14px
+     (Layout.astro), so this is 336px -- roughly 3:2 for the ~610px column. A
+     portrait original therefore gets cropped to a landscape frame instead of
+     running the length of the page. */
+  .hero .tile img {
+    display: block;
+    width: 100%;
+    max-height: 24rem;
+    object-fit: cover;
+  }
+
+  .strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .thumb,
+  .more {
+    aspect-ratio: 4 / 3;
+  }
+
+  .thumb .tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* The "see all N photos" tile. Sized like a thumbnail so the strip reads as
+     one row of photographs, with the link as its final frame. */
+  .more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    border: 1px dashed var(--fg-muted);
+    color: var(--accent-dim);
+    text-decoration: none;
+    text-align: center;
+    padding: 0.25rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .more__count {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+
+  .more__label {
+    font-size: 0.6875rem;
+    color: var(--fg-dim);
+  }
+</style>

@@ -6,6 +6,7 @@ import Block from '../../../components/Block.astro'
 import MiniMap from '../../../components/MiniMap.astro'
 import LinkRow from '../../../components/LinkRow.astro'
 import SpeciesData from '../../../components/SpeciesData.astro'
+import SpeciesGallery from '../../../components/SpeciesGallery.astro'
 import SpeciesSources from '../../../components/SpeciesSources.astro'
 import { speciesWikidata } from '../../../data/wikidata/species'
 import { getTranslations, formatDate, locales } from '../../../i18n'
@@ -24,7 +25,6 @@ export function getStaticPaths() {
 
 const { locale, name } = Astro.params as { locale: Locale; name: string }
 const t = getTranslations(locale)
-const dev = import.meta.env.DEV
 
 const [all, speciesList, locations] = await Promise.all([
   getCollection('sightings'),
@@ -39,15 +39,13 @@ const entries = all
   .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1))
 
 const sp = species?.data
-const items = entries.flatMap((e) =>
-  e.data.images.map((img, index) => ({ sighting: e.id, index, img })),
-)
-const allImages = items.map((item) => item.img)
+// Flattened across sightings, so a photo's position here is the lightbox's own
+// index on both this page and the gallery route.
+const allImages = entries.flatMap((e) => e.data.images)
 const sharedNotes = sp?.notes
 const habitat = sp?.habitat
 const edibility = sp?.edibility
 const features = sp?.determiningFeatures ?? []
-const coverKey = sp?.cover ? `${sp.cover.sighting}#${sp.cover.index}` : null
 const fullSrcs = await Promise.all(
   allImages.map(async (img) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
 )
@@ -78,187 +76,114 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
 
     {
       sp && (
-        <>
-          <div class="gallery" data-lightbox-group>
-            {items.map((item, i) => {
-              const key = `${item.sighting}#${item.index}`
-              return (
-                <figure
-                  class:list={['gallery__item', dev && coverKey === key && 'gallery__item--cover']}
-                  data-lightbox-src={fullSrcs[i]}
-                >
-                  <button
-                    type="button"
-                    class="gallery__zoom"
-                    data-lightbox-trigger
-                    data-index={i}
-                    aria-label={`${t.mushrooms.fullscreen} ${i + 1}`}
-                    title={t.mushrooms.fullscreen}
-                  >
-                    <Image
-                      src={item.img}
-                      alt={`${l10n(sp.commonName, locale)} — ${i + 1}`}
-                      loading="lazy"
-                      width={640}
-                      widths={[320, 640]}
-                    />
-                  </button>
-                  {dev && (
-                    <button
-                      type="button"
-                      class="gallery__cover"
-                      data-cover
-                      data-sighting={item.sighting}
-                      data-index={item.index}
-                      disabled={coverKey === key}
-                      title={coverKey === key ? t.sighting.mainPhoto : t.sighting.setMainPhoto}
-                    >
-                      {coverKey === key ? t.sighting.mainPhoto : t.sighting.setMainPhoto}
-                    </button>
-                  )}
-                </figure>
-              )
-            })}
+        <div class="layout">
+          {/* The gallery leads the DOM but sits in the right-hand column: the
+              stacked page should still open on the photographs, and `order`
+              handles that below rather than duplicating the markup. The map
+              travels with it. */}
+          <div class="band band--aside">
+            <Block title={t.mushrooms.photosTitle}>
+              <SpeciesGallery
+                locale={locale}
+                t={t}
+                slug={name}
+                commonName={sp.commonName}
+                items={allImages}
+                fullSrcs={fullSrcs}
+              />
+            </Block>
+
+            {entries.length > 0 && (
+              <MiniMap
+                points={entries.map((e) => ({
+                  lat: e.data.location.lat,
+                  lng: e.data.location.lng,
+                  label: locationName(locMap, e.data.locationSlug, locale),
+                }))}
+              />
+            )}
           </div>
 
-          {dev && <span id="cover-status" class="cover-status" role="status" />}
+          <div class="band band--main">
+            <SpeciesData
+              data={wikidata}
+              locale={locale}
+              t={t}
+              scientificName={sp.scientificName}
+              commonName={sp.commonName}
+              habitat={habitat}
+              edibility={edibility}
+            />
 
-          <SpeciesData
-            data={wikidata}
-            locale={locale}
-            t={t}
-            scientificName={sp.scientificName}
-            commonName={sp.commonName}
-            habitat={habitat}
-            edibility={edibility}
-          />
+            {features.length > 0 && (
+              <Block title={t.mushrooms.features}>
+                <ul class="block__list">
+                  {features.map((f) => (
+                    <li>▸ {l10n(f, locale)}</li>
+                  ))}
+                </ul>
+              </Block>
+            )}
 
-          {features.length > 0 && (
-            <Block title={t.mushrooms.features}>
-              <ul class="block__list">
-                {features.map((f) => (
-                  <li>▸ {l10n(f, locale)}</li>
-                ))}
+            {sharedNotes && (
+              <Block title={t.mushrooms.notes}>
+                <p class="block__notes">{l10n(sharedNotes, locale)}</p>
+              </Block>
+            )}
+          </div>
+
+          <div class="band band--sightings">
+            <Block title={sightingsTitle}>
+              <ul class="block__sightings">
+                {entries.map((e) => {
+                  const sd = e.data
+                  const cover = sd.images?.[0]
+                  return (
+                    <li class="sighting">
+                      {cover && (
+                        <a href={`/${locale}/log/${e.id}`} class="sighting__img">
+                          <Image
+                            src={cover}
+                            alt={l10n(sp.commonName, locale)}
+                            loading="lazy"
+                            width={96}
+                          />
+                        </a>
+                      )}
+                      <div class="sighting__body">
+                        <a href={`/${locale}/log/${e.id}`} class="sighting__date">
+                          {formatDate(sd.dateSpotted, locale)}
+                        </a>
+                        <span class="sighting__loc">
+                          @
+                          {sd.locationSlug ? (
+                            <a
+                              href={`/${locale}/locations/${sd.locationSlug}`}
+                              class="sighting__loc-link"
+                            >
+                              {locationName(locMap, sd.locationSlug, locale) || t.mushrooms.unknown}
+                            </a>
+                          ) : (
+                            t.mushrooms.unknown
+                          )}
+                        </span>
+                      </div>
+                    </li>
+                  )
+                })}
               </ul>
             </Block>
-          )}
+          </div>
 
-          {sharedNotes && (
-            <Block title={t.mushrooms.notes}>
-              <p class="block__notes">{l10n(sharedNotes, locale)}</p>
-            </Block>
-          )}
-
-          {entries.length > 0 && (
-            <MiniMap
-              points={entries.map((e) => ({
-                lat: e.data.location.lat,
-                lng: e.data.location.lng,
-                label: locationName(locMap, e.data.locationSlug, locale),
-              }))}
-            />
-          )}
-
-          <Block title={sightingsTitle}>
-            <ul class="block__sightings">
-              {entries.map((e) => {
-                const sd = e.data
-                const cover = sd.images?.[0]
-                return (
-                  <li class="sighting">
-                    {cover && (
-                      <a href={`/${locale}/log/${e.id}`} class="sighting__img">
-                        <Image
-                          src={cover}
-                          alt={l10n(sp.commonName, locale)}
-                          loading="lazy"
-                          width={96}
-                        />
-                      </a>
-                    )}
-                    <div class="sighting__body">
-                      <a href={`/${locale}/log/${e.id}`} class="sighting__date">
-                        {formatDate(sd.dateSpotted, locale)}
-                      </a>
-                      <span class="sighting__loc">
-                        @
-                        {sd.locationSlug ? (
-                          <a
-                            href={`/${locale}/locations/${sd.locationSlug}`}
-                            class="sighting__loc-link"
-                          >
-                            {locationName(locMap, sd.locationSlug, locale) || t.mushrooms.unknown}
-                          </a>
-                        ) : (
-                          t.mushrooms.unknown
-                        )}
-                      </span>
-                    </div>
-                  </li>
-                )
-              })}
-            </ul>
-          </Block>
-
-          <SpeciesSources data={wikidata} locale={locale} t={t} />
-        </>
+          {/* The sources are a full-width row of their own at the foot of the
+              page, below the sightings. */}
+          <div class="band band--sources">
+            <SpeciesSources data={wikidata} locale={locale} t={t} columns />
+          </div>
+        </div>
       )
     }
   </section>
-
-  <script
-    is:inline
-    define:vars={{
-      coverEnabled: dev,
-      coverSpecies: name,
-      coverT: {
-        updating: t.sighting.updating,
-        updated: t.sighting.mainUpdated,
-        error: t.sighting.error,
-      },
-    }}
-  >
-    if (coverEnabled) {
-      const statusEl = document.getElementById('cover-status')
-      document.querySelectorAll('[data-cover]').forEach((btn) => {
-        btn.addEventListener('click', async () => {
-          const payload = {
-            sighting: btn.dataset.sighting,
-            index: Number(btn.dataset.index),
-          }
-          btn.disabled = true
-          if (statusEl) {
-            statusEl.textContent = coverT.updating
-            statusEl.dataset.state = 'pending'
-          }
-          try {
-            const res = await fetch(`/myco/api/species/${coverSpecies}/cover`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-            })
-            if (!res.ok) {
-              const err = await res.json().catch(() => ({}))
-              throw new Error(err.error || 'HTTP ' + res.status)
-            }
-            if (statusEl) {
-              statusEl.textContent = coverT.updated
-              statusEl.dataset.state = 'ok'
-            }
-            window.location.reload()
-          } catch (err) {
-            console.error('[cover] failed:', err)
-            if (statusEl) {
-              statusEl.textContent =
-                coverT.error + (err instanceof Error ? ' — ' + err.message : '')
-              statusEl.dataset.state = 'error'
-            }
-            btn.disabled = false
-          }
-        })
-      })
-    }
-  </script>
 </Layout>
 
 <style>
@@ -304,96 +229,45 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     color: var(--accent);
   }
 
-  .gallery {
+  /* Two columns on top, one full-width row underneath. Grid, not CSS multicol:
+     the columns are chosen bands rather than a flow that fills, because the
+     gallery has to sit in the right column *and* come first in the DOM (it is
+     the hero of the stacked page). Multicol cannot express "this group here,
+     that group there" -- it just balances whatever it is given, which would
+     scatter the map and the sources away from the photographs. */
+  .layout {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 1.5rem;
+    align-items: start;
   }
 
-  .gallery__item {
-    margin: 0;
-    border: 1px solid var(--fg-muted);
-    overflow: hidden;
-    background: var(--bg-highlight);
-    aspect-ratio: 4 / 3;
-    position: relative;
+  /* Rows are named explicitly: with only `grid-column` set, auto-placement has
+     to reason about the aside band coming first, and the sightings band is
+     easier to reason about as "row 2" than as "the next free row". */
+  .band--main {
+    grid-column: 1;
+    grid-row: 1;
   }
 
-  .gallery__item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: filter 0.15s;
+  .band--aside {
+    grid-column: 2;
+    grid-row: 1;
   }
 
-  .gallery__zoom {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 0;
-    border: none;
-    background: none;
-    cursor: zoom-in;
-    -webkit-tap-highlight-color: transparent;
-    /* Opts out of iOS double-tap-to-zoom, so a single tap fires click. */
-    touch-action: manipulation;
+  .band--sightings {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 
-  .gallery__zoom:hover img {
-    filter: brightness(1.08);
+  .band--sources {
+    grid-column: 1 / -1;
+    grid-row: 3;
   }
 
-  .gallery__item.gallery__item--cover {
-    border-color: var(--accent);
-  }
-
-  .gallery__cover {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #0e120b;
-    border: none;
-    border-top: 1px solid var(--border-char);
-    color: var(--accent);
-    font-family: var(--font-mono);
-    font-size: 0.6875rem;
-    padding: 0.25rem 0.5rem;
-    cursor: pointer;
-    transition:
-      background 0.1s,
-      color 0.1s;
-  }
-
-  .gallery__cover:hover:not(:disabled) {
-    background: var(--accent);
-    color: var(--bg);
-  }
-
-  .gallery__cover:disabled {
-    color: var(--yellow);
-    cursor: default;
-  }
-
-  .cover-status {
-    display: block;
-    margin: -0.25rem 0 1.25rem;
-    font-size: 0.75rem;
-  }
-
-  .cover-status[data-state='error'] {
-    color: var(--red);
-  }
-
-  .cover-status[data-state='ok'] {
-    color: var(--accent);
-  }
-
-  .cover-status[data-state='pending'] {
-    color: var(--fg-dim);
-  }
+  /* The stacked override lives at the end of this stylesheet, not here: the
+     rules it has to beat (`.block__sightings`) are defined further down, and
+     equal-specificity media queries do not win by being a media query. */
 
   .block__list {
     list-style: none;
@@ -418,20 +292,25 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     font-size: 0.8125rem;
   }
 
+  /* The sightings are a full-width row, so the list splits into two columns of
+     its own rather than leaving one long ribbon down the middle of the page. */
   .block__sightings {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    column-count: 2;
+    column-gap: 1.5rem;
   }
 
+  /* A row must not be cut in half by the column break, and multicol gives no
+     vertical `gap` to block boxes, so the spacing moves onto the rows. */
   .sighting {
     display: flex;
     gap: 0.75rem;
     padding: 0.5rem;
+    margin-bottom: 0.5rem;
     border: 1px solid var(--border-char);
     background: var(--bg-surface);
     font-size: 0.8125rem;
+    break-inside: avoid;
   }
 
   .sighting__img {
@@ -480,5 +359,47 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
 
   .sighting__loc-link:hover {
     color: var(--accent);
+  }
+
+  /* One column: below this width the right column cannot hold the hero photo
+     at a readable size, so the page stacks. It reads in the order the bands
+     occupy on the desktop grid: the left column top to bottom (names,
+     morphology, ecology, edibility, key features, notes), then the second
+     column (photos, map), then the full-width rows (sightings, sources).
+     `order` rather than reordering the markup keeps the gallery first in the
+     DOM, which is what the desktop grid places second -- so the two layouts
+     share one set of elements. `grid-column`/`grid-row` are ignored once the
+     grid becomes a flex column, so only `display` and `order` need
+     overriding. The sources list drops its own two columns here too, in
+     SpeciesSources. */
+  @media (max-width: 900px) {
+    .layout {
+      display: flex;
+      flex-direction: column;
+      /* `align-items: start` from the grid rules above means "do not stretch"
+         on a cross-axis-aligned flex container too, which shrank every band to
+         its content's width and left the sightings list half the page. */
+      align-items: stretch;
+    }
+
+    .band--main {
+      order: 1;
+    }
+
+    .band--aside {
+      order: 2;
+    }
+
+    .band--sightings {
+      order: 3;
+    }
+
+    .band--sources {
+      order: 4;
+    }
+
+    .block__sightings {
+      column-count: 1;
+    }
   }
 </style>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <style>
+      .bg { fill: #0c0c0c; }
+      .border { stroke: #2d4a2d; stroke-width: 2; fill: none; }
+      .cap-stem { fill: #8cb48c; stroke: #2d4a2d; stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+    </style>
+  </defs>
+  <rect class="bg" width="300" height="300" />
+  <rect class="border" x="10" y="10" width="280" height="280" rx="4" />
+  <!-- Smooth trumpet/chanterelle structure without distinct gill paths -->
+  <path class="cap-stem" d="
+    M 124 275
+    L 176 275
+    C 172 230, 190 190, 242 100
+    C 255 75, 190 25, 150 25
+    C 110 25, 45 75, 58 100
+    C 110 190, 128 230, 124 275
+    Z
+  " />
+</svg>

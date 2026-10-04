@@ -14,9 +14,19 @@ interface Props {
   data: WikidataSpeciesData | undefined
   locale: Locale
   t: Translations
+  /**
+   * Split the identifier list across two columns. For the full-width block at
+   * foot of the species page: a source row is a name, leader dots and a short
+   * identifier, so one per line down a half-page ribbon is mostly dots.
+   *
+   * The flag lands on the `<ul>` rather than on the Block, because that section
+   * is rendered by Block.astro and carries *its* scope id -- a `.list` rule
+   * qualified by a class passed to Block would never match.
+   */
+  columns?: boolean
 }
 
-const { data, locale, t } = Astro.props
+const { data, locale, t, columns = false } = Astro.props
 
 const ids = data?.externalIds ?? []
 const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : null
@@ -26,7 +36,7 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
   ids.length > 0 && (
     <Block title={t.mushrooms.sources} class="sources">
       <p class="note">{t.mushrooms.sourcesNote}</p>
-      <ul class="list">
+      <ul class:list={['list', columns && 'list--split']}>
         {wikidataUrl && (
           <li>
             <a class="src" href={wikidataUrl} rel="noopener noreferrer" target="_blank">
@@ -63,6 +73,25 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
     background: var(--bg-surface);
     padding: 0.5rem 0.75rem;
     font-size: 0.8125rem;
+  }
+
+  /* Only the list splits, never the note above it: the note is prose and reads
+     wrong broken across a column break. */
+  .list--split {
+    column-count: 2;
+    column-gap: 1.5rem;
+  }
+
+  /* A source row is one line of name + dots + identifier, so it must not be
+     split across the break. */
+  .list--split > li {
+    break-inside: avoid;
+  }
+
+  @media (max-width: 900px) {
+    .list--split {
+      column-count: 1;
+    }
   }
 
   /* The whole row is the link, source name and identifier alike. Anchoring only

@@ -1,0 +1,309 @@
+---
+// Every photo for one species, as a browsable grid.
+//
+// The species page shows a hero shot, a short thumbnail strip and a link here,
+// so this is the page that has to hold a large group (the biggest is 33 photos)
+// without becoming unusable. One `data-lightbox-group` covers the whole page, so
+// the lightbox can page through all of them; the per-photo sources are 1600px
+// derivatives rather than the originals, per the lightbox notes in AGENTS.md.
+//
+// This is also where the dev-only "set as main photo" buttons live. The species
+// page used to carry them, but it only shows five of the photos, so choosing a
+// main photo was limited to that selection; here every photo is reachable.
+// The main photo drives the species index card (the species page's hero is
+// simply the first photo of the earliest sighting either way).
+import Layout from '../../../../layouts/Layout.astro'
+import { getCollection } from 'astro:content'
+import { Image, getImage } from 'astro:assets'
+import Block from '../../../../components/Block.astro'
+import LinkRow from '../../../../components/LinkRow.astro'
+import { getTranslations, locales } from '../../../../i18n'
+import { l10n } from '../../../../i18n/helpers'
+import type { Locale } from '../../../../i18n'
+
+export function getStaticPaths() {
+  return Promise.resolve(
+    (async () => {
+      const species = await getCollection('species')
+      return species.flatMap((sp) => locales.map((locale) => ({ params: { locale, name: sp.id } })))
+    })(),
+  )
+}
+
+const { locale, name } = Astro.params as { locale: Locale; name: string }
+const t = getTranslations(locale)
+const dev = import.meta.env.DEV
+
+const [speciesList, sightings] = await Promise.all([
+  getCollection('species'),
+  getCollection('sightings'),
+])
+const sp = speciesList.find((s) => s.id === name)?.data
+
+// The sighting and image index travel with each photo: a species does not own
+// its images, so the cover is a reference to one image of one of its sightings.
+const items = sightings
+  .filter((s) => s.data.species === name)
+  .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1))
+  .flatMap((e) => e.data.images.map((img, index) => ({ sighting: e.id, index, img })))
+
+const fullSrcs = await Promise.all(
+  items.map(async ({ img }) => (await getImage({ src: img, width: 1600 }))?.src ?? ''),
+)
+
+const total = items.length
+const coverKey = sp?.cover ? `${sp.cover.sighting}#${sp.cover.index}` : null
+const coverTitle = (isCover: boolean) => (isCover ? t.sighting.mainPhoto : t.sighting.setMainPhoto)
+
+// Built in frontmatter for the same reason as everywhere else: a newline inside a
+// JSX text node collapses away, so this would render as "33photos".
+const title = `${total} ${t.mushrooms.photos}`
+---
+
+<Layout
+  title={`${sp ? l10n(sp.commonName, locale) : name} — ${t.mushrooms.gallery}`}
+  locale={locale}
+>
+  <section class="gallery-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {sp ? l10n(sp.commonName, locale) : name}</span>
+      <span class="page-header__sub">{sp?.scientificName}</span>
+    </div>
+
+    <LinkRow
+      locale={locale}
+      fallback={`/${locale}/mushrooms`}
+      links={[
+        { href: `/${locale}/mushrooms/${name}`, label: t.mushrooms.backToSpecies },
+        { href: `/${locale}/mushrooms`, label: t.mushrooms.backToIndex },
+      ]}
+    />
+
+    {dev && <span id="cover-status" class="cover-status" role="status" />}
+
+    <Block title={`${t.mushrooms.gallery} — ${title}`}>
+      {
+        items.length ? (
+          <div class="grid" data-lightbox-group>
+            {items.map(({ sighting, index, img }, i) => {
+              const isCover = coverKey === `${sighting}#${index}`
+              return (
+                <figure class="cell" data-lightbox-src={fullSrcs[i]}>
+                  <button
+                    type="button"
+                    class="tile"
+                    data-lightbox-trigger
+                    data-index={i}
+                    aria-label={`${t.mushrooms.fullscreen} ${i + 1}`}
+                    title={t.mushrooms.fullscreen}
+                  >
+                    <Image
+                      src={img}
+                      alt={`${sp ? l10n(sp.commonName, locale) : name} — ${i + 1}`}
+                      loading="lazy"
+                      widths={[320, 640]}
+                      width={640}
+                    />
+                  </button>
+                  {dev && (
+                    <button
+                      type="button"
+                      class="cover"
+                      data-cover
+                      data-sighting={sighting}
+                      data-index={index}
+                      disabled={isCover}
+                      title={coverTitle(isCover)}
+                      aria-label={coverTitle(isCover)}
+                    >
+                      {isCover ? '★' : '☆'}
+                    </button>
+                  )}
+                </figure>
+              )
+            })}
+          </div>
+        ) : (
+          <p class="empty">{t.mushrooms.noData}</p>
+        )
+      }
+    </Block>
+  </section>
+
+  <script
+    is:inline
+    define:vars={{
+      coverEnabled: dev,
+      coverSpecies: name,
+      coverT: {
+        updating: t.sighting.updating,
+        updated: t.sighting.mainUpdated,
+        error: t.sighting.error,
+      },
+    }}
+  >
+    if (coverEnabled) {
+      const statusEl = document.getElementById('cover-status')
+      document.querySelectorAll('[data-cover]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const payload = {
+            sighting: btn.dataset.sighting,
+            index: Number(btn.dataset.index),
+          }
+          btn.disabled = true
+          if (statusEl) {
+            statusEl.textContent = coverT.updating
+            statusEl.dataset.state = 'pending'
+          }
+          try {
+            const res = await fetch(`/myco/api/species/${coverSpecies}/cover`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            })
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}))
+              throw new Error(err.error || 'HTTP ' + res.status)
+            }
+            if (statusEl) {
+              statusEl.textContent = coverT.updated
+              statusEl.dataset.state = 'ok'
+            }
+            window.location.reload()
+          } catch (err) {
+            console.error('[cover] failed:', err)
+            if (statusEl) {
+              statusEl.textContent =
+                coverT.error + (err instanceof Error ? ' — ' + err.message : '')
+              statusEl.dataset.state = 'error'
+            }
+            btn.disabled = false
+          }
+        })
+      })
+    }
+  </script>
+</Layout>
+
+<style>
+  .gallery-page {
+    padding-bottom: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--accent-dim);
+    font-size: 0.8125rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .cell {
+    margin: 0;
+    position: relative;
+    border: 1px solid var(--border-char);
+    background: var(--bg-highlight);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .tile {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .tile img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cover-status {
+    display: block;
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .cover-status[data-state='error'] {
+    color: var(--red);
+  }
+
+  .cover-status[data-state='ok'] {
+    color: var(--accent);
+  }
+
+  .cover-status[data-state='pending'] {
+    color: var(--fg-dim);
+  }
+
+  /* A corner badge rather than a full-width bar: at ~220px a cell has no room
+     for the label, so the star carries the state and the accessible name
+     carries the meaning. Kept clear of the lightbox trigger so the two never
+     compete for the same tap. */
+  .cover {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #0e120b;
+    border: none;
+    border-left: 1px solid var(--border-char);
+    border-bottom: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1;
+    padding: 0.15rem 0.35rem;
+    cursor: pointer;
+    transition:
+      background 0.1s,
+      color 0.1s;
+    /* An invisible control still swallows taps meant for the photo beneath it,
+       so the badge opts out of the hover/tap highlight and handles a tap itself
+       rather than letting it fall through. */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cover:hover:not(:disabled) {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .cover:disabled {
+    color: var(--yellow);
+    cursor: default;
+  }
+
+  .empty {
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    color: var(--fg-muted);
+    font-style: italic;
+    font-size: 0.8125rem;
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+  }
+</style>

@@ -160,17 +160,17 @@ const aliases = dedupe([
             <span class="row__value">
               {row.vals.map((v) => (
                 <span class="value">
+                  <span class="value__text">{v.text}</span>
                   {v.icon && (
                     <img
-                      class="value__icon"
+                      class="value__icon value__icon--row"
                       src={v.icon}
                       alt=""
                       loading="lazy"
-                      width="28"
-                      height="28"
+                      width="112"
+                      height="112"
                     />
                   )}
-                  <span class="value__text">{v.text}</span>
                 </span>
               ))}
             </span>
@@ -193,17 +193,17 @@ const aliases = dedupe([
           <span class="row__value">
             {ecoVals.map((v) => (
               <span class="value">
+                <span class="value__text">{v.text}</span>
                 {v.icon && (
                   <img
-                    class="value__icon"
+                    class="value__icon value__icon--row"
                     src={v.icon}
                     alt=""
                     loading="lazy"
-                    width="28"
-                    height="28"
+                    width="112"
+                    height="112"
                   />
                 )}
-                <span class="value__text">{v.text}</span>
               </span>
             ))}
           </span>
@@ -305,6 +305,16 @@ const aliases = dedupe([
     height: 1.4rem;
     flex-shrink: 0;
     object-fit: contain;
+  }
+
+  /* The enlarged variant, for the morphology and ecology rows. It trails the
+     value rather than leading it, which also fixes the row's baseline: a flex
+     container takes its baseline from its first item, so with the icon first the
+     whole row hung off the image's bottom edge instead of the text's. Edibility
+     keeps the compact size -- its icons sit in a chip list, not in a row. */
+  .value__icon--row {
+    width: 5.6rem;
+    height: 5.6rem;
   }
 
   .value__text {

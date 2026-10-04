@@ -23,21 +23,55 @@ const icon = iconUrlFor(qid)
 const colors = colorsFor(qid)
 
 // Wikidata stores a bare triplet; the generator normalises it to `#RRGGBB`.
-const band = (i: number) => [(i * 100) / colors.length, ((i + 1) * 100) / colors.length]
-
-const style =
+// This is the *fill* only. The spokes and the rim are painted by CSS on top of
+// it, so the value is passed as a custom property rather than as `background`.
+//
+// It must always be an <image>, never a bare colour: a colour is not valid in a
+// `background-image` list, and because `var()` resolves at computed-value time,
+// one bad layer silently drops the *whole* declaration and leaves `none`.
+const fill =
   colors.length === 0
     ? null
     : colors.length === 1
-      ? `background: ${colors[0]}`
-      : // No triplet is canonical, so rather than pick one, band the square into
+      ? `linear-gradient(${colors[0]}, ${colors[0]})`
+      : // No triplet is canonical, so rather than pick one, band the fill into
         // equal stripes of all of them. At one colour this is a flat fill.
-        `background: linear-gradient(90deg, ${colors
+        `linear-gradient(90deg, ${colors
           .map((c, i) => {
-            const [from, to] = band(i)
-            return `${c} ${from.toFixed(2)}% ${to.toFixed(2)}%`
+            const from = ((i * 100) / colors.length).toFixed(2)
+            const to = (((i + 1) * 100) / colors.length).toFixed(2)
+            return `${c} ${from}% ${to}%`
           })
           .join(', ')})`
+
+// The sheet the print is taken on, chosen per value so the powder always reads:
+// a near-black sheet under a light spore print, a near-white one under a dark
+// one. Comparing measured contrast beats thresholding on luminance — the two
+// candidates are not symmetric about 0.5, because WCAG's +0.05 offset pulls the
+// crossover down to ~0.22, and a mid-tone like `tan` (0.48) is far more legible
+// on near-black than on near-white. With several triplets the sheet must suit the
+// *worst* of them, or a band of the fill would disappear into the paper.
+const PAPER_DARK = '#0a0a0a'
+const PAPER_LIGHT = '#f7f7f4'
+
+/** WCAG relative luminance of a `#RRGGBB` triplet. */
+function luminance(hex: string): number {
+  const lin = (i: number) => {
+    const c = parseInt(hex.slice(i, i + 2), 16) / 255
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+  }
+  return 0.2126 * lin(1) + 0.7152 * lin(3) + 0.0722 * lin(5)
+}
+
+/** WCAG contrast ratio between two relative luminances. */
+const ratio = (a: number, b: number) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05)
+
+const paper = (() => {
+  const lit = colors.map(luminance).filter(Number.isFinite)
+  if (lit.length === 0) return PAPER_DARK
+  const worstOn = (hex: string) => Math.min(...lit.map((l) => ratio(l, luminance(hex))))
+  return worstOn(PAPER_LIGHT) >= worstOn(PAPER_DARK) ? PAPER_LIGHT : PAPER_DARK
+})()
 
 // Named on the element so the exact triplets reach a screen reader and a hover:
 // "buff", "tan" and "cream" are ambiguous in a way their hex codes are not.
@@ -54,10 +88,10 @@ const label = colors.join(' ')
       width={variant === 'row' ? 112 : 28}
       height={variant === 'row' ? 112 : 28}
     />
-  ) : style ? (
+  ) : fill ? (
     <span
       class:list={['mark', `mark--${variant}`, 'swatch']}
-      style={style}
+      style={`--spore-fill: ${fill}; --spore-paper: ${paper}`}
       role="img"
       aria-label={label}
       title={label}
@@ -89,9 +123,35 @@ const label = colors.join(' ')
     height: 1.4rem;
   }
 
-  /* A hairline border, or a white or cream swatch vanishes into the row's
-     surface. It is inset so the border does not enlarge the square. */
+  /* Drawn as a spore print rather than a flat chip: a cap pressed gill-down
+     leaves fine lines radiating from the centre and a rim that feathers out
+     where the paper lifted.
+
+     Three layers, painted top to bottom. The spokes and the rim fade are the
+     *paper* colour -- `--spore-paper`, picked per value by measured contrast --
+     because in a real print the gaps between gills are bare paper and the edge
+     feathers into the sheet. Painting the fill instead would tint it, and the
+     triplets would stop being the colour Wikidata recorded. `--spore-fill` comes
+     from the inline style: one triplet, or a banded gradient when the value has
+     several and none is canonical.
+
+     A `repeating-conic-gradient` rather than a `transform`: a transform can move
+     and scale a picture but cannot draw the hundred or so lines a gill pattern
+     has. At 78px a 3.6deg period is ~100 of them, which is the right density --
+     any finer and they alias into a grey wash at this size. */
   .swatch {
+    border-radius: 50%;
+    background-image:
+      radial-gradient(circle at 50% 50%, transparent 58%, var(--spore-paper) 100%),
+      repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        var(--spore-paper) 0 5.9deg,
+        transparent 5.9deg 22.6deg
+      ),
+      var(--spore-fill);
+    /* A hairline border, or a white or cream swatch vanishes into the row's
+       surface, and a near-black one loses its shape against it. It is inset so
+       the ring does not enlarge the disc. */
     box-shadow: inset 0 0 0 1px var(--border-char);
   }
 </style>

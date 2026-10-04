@@ -555,12 +555,33 @@ content collection — it is plain TS so `astro check` validates it.
     stable, and without it a re-run produced a spurious diff. Assert idempotence
     by re-running the fetcher and diffing `icons.ts` — it must be byte-identical.
   - **Rendered through `ValueMark.astro`**, which prefers the drawing and falls
-    back to a square of the colour, so a value is never bare text when Wikidata
-    gives us either. Where a value has several triplets the square is banded into
-    equal stripes of all of them rather than picking one, and the element's
+    back to a disc of the colour, so a value is never bare text when Wikidata
+    gives us either. It is drawn as an actual spore print: `border-radius: 50%`
+    with a `repeating-conic-gradient` of ~100 radiating gill lines over the fill,
+    and a `radial-gradient` rim that feathers into the paper. A transform cannot
+    draw a gill pattern — it moves and scales a picture — hence the conic
+    gradient. Where a value has several triplets the fill is banded into equal
+    stripes of all of them rather than picking one, and the element's
     `aria-label`/`title` carry the raw codes: "buff", "tan" and "cream" are
-    ambiguous in a way their hex codes are not. A 1px inset `box-shadow` keeps a
-    white or cream swatch from vanishing into the row's surface.
+    ambiguous in a way their hex codes are not.
+  - **The paper is picked per value by measured WCAG contrast**, not by
+    thresholding on luminance: near-black under a light print, near-white under a
+    dark one. The two candidates are not symmetric about 0.5 — the +0.05 offset
+    moves the crossover to ~0.22 relative luminance — so `olive` (0.21) and `tan`
+    (0.48) both take near-black even though `tan` reads as a light colour. A
+    value with several triplets is scored on its **worst** one, so no band can
+    disappear into the sheet. Worst case across all 18 values is 4.72:1 (`olive`,
+    against 3.91:1 on the other sheet). The spokes and rim fade use the paper
+    colour, never the fill: painting the fill would tint it, and the disc would
+    stop being the colour Wikidata recorded.
+  - **A `var()` holding a bare colour silently drops a whole
+    `background-image` list.** A colour is not a valid `<image>`, and because
+    substitution happens at computed-value time, one bad layer invalidates the
+    whole declaration and leaves `background-image: none` with no error.
+    `--spore-fill` is therefore always a gradient, even for one triplet.
+  - The disc is 78px on a `--bg-surface` page, so a near-black sheet has no edge
+    of its own; the 1px inset `box-shadow` ring is what defines it. Keep that ring
+    if the paper choice is ever revisited.
   - **The mark's sizing lives in `ValueMark`, not in the caller.** Astro's scoped
     styles carry the _rendering_ component's scope attribute, so a class a caller
     passes to `<ValueMark class=...>` matches nothing in the caller's stylesheet.

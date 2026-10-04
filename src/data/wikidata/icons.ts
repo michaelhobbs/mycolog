@@ -25,6 +25,15 @@ export interface WikidataIcon {
   author: string | null
 }
 
+export interface WikidataValueColor {
+  prop: string
+  /** The enum key in src/data/wikidata/morphology-types.ts. */
+  key: string
+  qid: string
+  /** CSS sRGB triplets from `sRGB color hex triplet (P465)`, sorted. */
+  colors: string[]
+}
+
 export interface MissingIcon {
   prop: string
   key: string
@@ -381,6 +390,100 @@ export const stipeCharacterIcons: WikidataIcon[] = [
   },
 ]
 
+/** 9 icons for sporePrintColor. */
+export const sporePrintColorIcons: WikidataIcon[] = [
+  {
+    key: 'BlackishBrown',
+    qid: 'Q19888339',
+    label: 'blackish-brown',
+    file: 'src/data/wikidata/icons/sporePrintColor/BlackishBrown.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Blackish-brown_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: null,
+  },
+  {
+    key: 'Buff',
+    qid: 'Q2085487',
+    label: 'buff',
+    file: 'src/data/wikidata/icons/sporePrintColor/Buff.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Buff_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: null,
+  },
+  {
+    key: 'Olive',
+    qid: 'Q864152',
+    label: 'olive',
+    file: 'src/data/wikidata/icons/sporePrintColor/Olive.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Olive_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: 'Debivort on EN wiki',
+  },
+  {
+    key: 'OliveBrown',
+    qid: 'Q19888352',
+    label: 'olive brown',
+    file: 'src/data/wikidata/icons/sporePrintColor/OliveBrown.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Olive-brown_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: 'Debivort (talk)',
+  },
+  {
+    key: 'Pink',
+    qid: 'Q429220',
+    label: 'pink',
+    file: 'src/data/wikidata/icons/sporePrintColor/Pink.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Pink_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: 'Debivort on EN wiki',
+  },
+  {
+    key: 'PinkishBrown',
+    qid: 'Q19888366',
+    label: 'pinkish-brown',
+    file: 'src/data/wikidata/icons/sporePrintColor/PinkishBrown.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Pinkish-brown_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: null,
+  },
+  {
+    key: 'Purple',
+    qid: 'Q3257809',
+    label: 'purple',
+    file: 'src/data/wikidata/icons/sporePrintColor/Purple.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Purple_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: null,
+  },
+  {
+    key: 'PurpleBlack',
+    qid: 'Q19888373',
+    label: 'purple-black',
+    file: 'src/data/wikidata/icons/sporePrintColor/PurpleBlack.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Purple-black_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: 'Original uploader was Debivort at en.wikipedia',
+  },
+  {
+    key: 'Yellow',
+    qid: 'Q943',
+    label: 'yellow',
+    file: 'src/data/wikidata/icons/sporePrintColor/Yellow.png',
+    format: 'png',
+    source: 'https://commons.wikimedia.org/wiki/File:Yellow_spore_print_icon.png',
+    license: 'CC BY-SA 3.0',
+    author: 'Debivort on EN wiki',
+  },
+]
+
 /** 3 icons for mushroomEcologicalType. */
 export const mushroomEcologicalTypeIcons: WikidataIcon[] = [
   {
@@ -524,6 +627,15 @@ export const iconsByQid: Record<string, WikidataIcon> = {
   Q19887987: stipeCharacterIcons[3],
   Q19887988: stipeCharacterIcons[4],
   Q131915205: stipeCharacterIcons[5],
+  Q19888339: sporePrintColorIcons[0],
+  Q2085487: sporePrintColorIcons[1],
+  Q864152: sporePrintColorIcons[2],
+  Q19888352: sporePrintColorIcons[3],
+  Q429220: sporePrintColorIcons[4],
+  Q19888366: sporePrintColorIcons[5],
+  Q3257809: sporePrintColorIcons[6],
+  Q19888373: sporePrintColorIcons[7],
+  Q943: sporePrintColorIcons[8],
   Q99974: mushroomEcologicalTypeIcons[0],
   Q114750: mushroomEcologicalTypeIcons[1],
   Q186517: mushroomEcologicalTypeIcons[2],
@@ -536,8 +648,79 @@ export const iconsByQid: Record<string, WikidataIcon> = {
   Q359511: edibilityIcons[6],
 }
 
+/**
+ * Values carrying an `sRGB color hex triplet (P465)`, icon or not. A value may
+ * have more than one triplet (salmon has two, purple-brown five), so these are
+ * all of Wikidata's answers, sorted, not a single canonical colour.
+ */
+export const valueColors: WikidataValueColor[] = [
+  { prop: 'sporePrintColor', key: 'Black', qid: 'Q23445', colors: ['#000000'] },
+  { prop: 'sporePrintColor', key: 'Brown', qid: 'Q47071', colors: ['#964B00'] },
+  { prop: 'sporePrintColor', key: 'Buff', qid: 'Q2085487', colors: ['#E0AB76', '#F0DC82'] },
+  { prop: 'sporePrintColor', key: 'Cream', qid: 'Q2730433', colors: ['#FFFDD0'] },
+  { prop: 'sporePrintColor', key: 'Green', qid: 'Q3133', colors: ['#00FF00'] },
+  { prop: 'sporePrintColor', key: 'Ochre', qid: 'Q194191', colors: ['#CC7722'] },
+  { prop: 'sporePrintColor', key: 'Olive', qid: 'Q864152', colors: ['#808000'] },
+  { prop: 'sporePrintColor', key: 'OliveBrown', qid: 'Q19888352', colors: ['#645403'] },
+  { prop: 'sporePrintColor', key: 'Pink', qid: 'Q429220', colors: ['#FFC0DB'] },
+  { prop: 'sporePrintColor', key: 'Purple', qid: 'Q3257809', colors: ['#800080'] },
+  {
+    prop: 'sporePrintColor',
+    key: 'PurpleBrown',
+    qid: 'Q19888381',
+    colors: ['#67393F', '#673A3F', '#6A4540', '#6B3B44', '#6D4146'],
+  },
+  { prop: 'sporePrintColor', key: 'Salmon', qid: 'Q2015138', colors: ['#FA8072', '#FF91A4'] },
+  { prop: 'sporePrintColor', key: 'Tan', qid: 'Q1670336', colors: ['#D2B48C'] },
+  { prop: 'sporePrintColor', key: 'White', qid: 'Q23444', colors: ['#FFFFFF'] },
+  { prop: 'sporePrintColor', key: 'Yellow', qid: 'Q943', colors: ['#FFFF00'] },
+  {
+    prop: 'sporePrintColor',
+    key: 'YellowOrange',
+    qid: 'Q16645086',
+    colors: ['#FFAA33', '#FFAE42'],
+  },
+  { prop: 'sporePrintColor', key: 'Bordeaux', qid: 'Q10859033', colors: ['#800032'] },
+  { prop: 'sporePrintColor', key: 'RedOrange', qid: 'Q62058583', colors: ['#FF5349'] },
+]
+
+/** Every sRGB triplet, keyed by QID. */
+export const colorsByQid: Record<string, string[]> = {
+  Q23445: ['#000000'],
+  Q47071: ['#964B00'],
+  Q2085487: ['#E0AB76', '#F0DC82'],
+  Q2730433: ['#FFFDD0'],
+  Q3133: ['#00FF00'],
+  Q194191: ['#CC7722'],
+  Q864152: ['#808000'],
+  Q19888352: ['#645403'],
+  Q429220: ['#FFC0DB'],
+  Q3257809: ['#800080'],
+  Q19888381: ['#67393F', '#673A3F', '#6A4540', '#6B3B44', '#6D4146'],
+  Q2015138: ['#FA8072', '#FF91A4'],
+  Q1670336: ['#D2B48C'],
+  Q23444: ['#FFFFFF'],
+  Q943: ['#FFFF00'],
+  Q16645086: ['#FFAA33', '#FFAE42'],
+  Q10859033: ['#800032'],
+  Q62058583: ['#FF5349'],
+}
+
 /** Values Wikimedia Commons has no icon for. */
 export const missingIcons: MissingIcon[] = [
+  { prop: 'sporePrintColor', key: 'Black', qid: 'Q23445' },
+  { prop: 'sporePrintColor', key: 'Brown', qid: 'Q47071' },
+  { prop: 'sporePrintColor', key: 'Cream', qid: 'Q2730433' },
+  { prop: 'sporePrintColor', key: 'Green', qid: 'Q3133' },
+  { prop: 'sporePrintColor', key: 'Ochre', qid: 'Q194191' },
+  { prop: 'sporePrintColor', key: 'PurpleBrown', qid: 'Q19888381' },
+  { prop: 'sporePrintColor', key: 'Salmon', qid: 'Q2015138' },
+  { prop: 'sporePrintColor', key: 'Tan', qid: 'Q1670336' },
+  { prop: 'sporePrintColor', key: 'White', qid: 'Q23444' },
+  { prop: 'sporePrintColor', key: 'YellowOrange', qid: 'Q16645086' },
+  { prop: 'sporePrintColor', key: 'YellowBrown', qid: 'Q19888422' },
+  { prop: 'sporePrintColor', key: 'Bordeaux', qid: 'Q10859033' },
+  { prop: 'sporePrintColor', key: 'RedOrange', qid: 'Q62058583' },
   { prop: 'mushroomEcologicalType', key: 'NematophagousFungus', qid: 'Q357006' },
   { prop: 'edibility', key: 'EdibleMushroom', qid: 'Q654236' },
   { prop: 'edibility', key: 'EdibleWhenCooked', qid: 'Q62102033' },

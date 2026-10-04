@@ -31,6 +31,7 @@ import {
   MushroomCapShape,
   HymeniumAttachment,
   StipeCharacter,
+  SporePrintColor,
   MushroomEcologicalType,
   Edibility,
   WikidataMushroomProperties,
@@ -55,8 +56,12 @@ const THROTTLE_MS = 1500
 const MAX_TRIES = 6
 
 // The properties whose values are drawn as structure icons. Spore print colour
-// (P787) is deliberately absent: Wikidata has no icon for any of its 22 values,
-// and a colour is carried by CSS, not by a glyph.
+// (P787) is here too, and was not always: Wikidata gained `icon (P2910)` drawings
+// for 9 of its 22 values (yellow, pink, olive, buff, purple, blackish-brown,
+// olive-brown, pinkish-brown, purple-black), so the group is no longer empty. The
+// other 13 still have none and are reported as missing rather than substituted --
+// a colour with no glyph stays a word, and `image (P18)` is never a fallback
+// (see REVIEW above for why).
 const GROUPS = [
   { prop: 'hymeniumType', pid: WikidataMushroomProperties.HymeniumType, values: HymeniumType },
   {
@@ -73,6 +78,11 @@ const GROUPS = [
     prop: 'stipeCharacter',
     pid: WikidataMushroomProperties.StipeCharacter,
     values: StipeCharacter,
+  },
+  {
+    prop: 'sporePrintColor',
+    pid: WikidataMushroomProperties.SporePrintColor,
+    values: SporePrintColor,
   },
   {
     prop: 'mushroomEcologicalType',
@@ -111,11 +121,20 @@ async function fetchRetry(url, tries = MAX_TRIES) {
   }
 }
 
-/** SPARQL: English label + icon (P2910) for a set of QIDs. */
+/** Wikidata stores a bare 6-digit uppercase triplet (FFFF00); CSS needs the `#`. */
+function normalizeHex(raw, qid) {
+  const v = String(raw).trim().replace(/^#/, '').toUpperCase()
+  if (/^[0-9A-F]{6}$/.test(v)) return '#' + v
+  console.log(`[icons] ${qid} has an unusable sRGB triplet ${JSON.stringify(raw)} — ignored`)
+  return null
+}
+
+/** SPARQL: English label, icon (P2910) and sRGB triplets (P465) for a set of QIDs. */
 async function queryIcons(qids) {
-  const sparql = `SELECT ?item ?itemLabel ?icon WHERE {
+  const sparql = `SELECT ?item ?itemLabel ?icon ?hex WHERE {
   VALUES ?item { ${qids.map((q) => `wd:${q}`).join(' ')} }
   OPTIONAL { ?item wdt:P2910 ?icon }
+  OPTIONAL { ?item wdt:P465 ?hex }
   SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
 }`
   const res = await fetchRetry(`${SPARQL_URL}?format=json&query=${encodeURIComponent(sparql)}`, 3)
@@ -127,11 +146,17 @@ async function queryIcons(qids) {
   // SPARQL gives URIs; the filename is the last, percent-encoded segment.
   const fileOf = (uri) => decodeURIComponent(uri.split('/').pop())
   for (const b of json.results.bindings) {
-    rows.set(b.item.value.split('/').pop(), {
-      label: b.itemLabel?.value ?? '',
-      icon: b.icon ? fileOf(b.icon.value) : null,
-    })
+    const qid = b.item.value.split('/').pop()
+    let row = rows.get(qid)
+    if (!row) rows.set(qid, (row = { label: b.itemLabel?.value ?? '', icon: null, colors: [] }))
+    // Both OPTIONALs multiply rows, so accumulate rather than overwrite.
+    if (b.icon && !row.icon) row.icon = fileOf(b.icon.value)
+    const hex = b.hex && normalizeHex(b.hex.value, qid)
+    if (hex && !row.colors.includes(hex)) row.colors.push(hex)
   }
+  // No statement carries a rank we can lean on (several values are all `normal`),
+  // so the order is ours to fix: sorted, which makes a re-run a no-op diff.
+  for (const row of rows.values()) row.colors.sort()
   return rows
 }
 
@@ -212,6 +237,17 @@ async function main() {
     wanted.push({ group, key, qid, fileName })
   }
 
+  // Colour is recorded for every value that has one, icon or not — a swatch is
+  // the only representation 13 of the 22 spore print colours can ever have.
+  const colors = targets
+    .map(({ group, key, qid }) => ({
+      prop: group.prop,
+      key,
+      qid,
+      colors: rows.get(qid)?.colors ?? [],
+    }))
+    .filter((c) => c.colors.length > 0)
+
   console.log(`[icons] fetching Commons metadata for ${wanted.length} files`)
   const info = await commonsInfo([...new Set(wanted.map((w) => w.fileName))])
 
@@ -251,7 +287,7 @@ async function main() {
     })
   }
 
-  await writeIndex(entries, missing, review)
+  await writeIndex(entries, missing, review, colors)
 
   console.log(`[icons] ${downloaded} downloaded, ${reused} already present`)
   if (review.length) {
@@ -262,10 +298,12 @@ async function main() {
     console.log(`[icons] ${missing.length} have no icon on Wikimedia Commons:`)
     for (const m of missing) console.log(`         ${m.prop}.${m.key} (${m.qid})`)
   }
+  const withColor = colors.reduce((n, c) => n + c.colors.length, 0)
+  console.log(`[icons] ${colors.length} values carry an sRGB colour (${withColor} triplets)`)
   console.log(`[icons] wrote ${path.relative(ROOT, ICON_INDEX)}`)
 }
 
-async function writeIndex(entries, missing, review) {
+async function writeIndex(entries, missing, review, colors) {
   const byProp = new Map()
   for (const e of entries) {
     if (!byProp.has(e.prop)) byProp.set(e.prop, [])
@@ -301,6 +339,15 @@ async function writeIndex(entries, missing, review) {
   p('  source: string')
   p('  license: string | null')
   p('  author: string | null')
+  p('}')
+  p()
+  p('export interface WikidataValueColor {')
+  p('  prop: string')
+  p('  /** The enum key in src/data/wikidata/morphology-types.ts. */')
+  p('  key: string')
+  p('  qid: string')
+  p('  /** CSS sRGB triplets from `sRGB color hex triplet (P465)`, sorted. */')
+  p('  colors: string[]')
   p('}')
   p()
   p('export interface MissingIcon {')
@@ -339,6 +386,27 @@ async function writeIndex(entries, missing, review) {
     for (const [i, e] of list.entries()) {
       p(`  ${e.qid}: ${prop}Icons[${i}],`)
     }
+  }
+  p('}')
+  p()
+  p('/**')
+  p(' * Values carrying an `sRGB color hex triplet (P465)`, icon or not. A value may')
+  p(' * have more than one triplet (salmon has two, purple-brown five), so these are')
+  p(" * all of Wikidata's answers, sorted, not a single canonical colour.")
+  p(' */')
+  p('export const valueColors: WikidataValueColor[] = [')
+  for (const c of colors) {
+    p(
+      `  { prop: ${JSON.stringify(c.prop)}, key: ${JSON.stringify(c.key)}, ` +
+        `qid: ${JSON.stringify(c.qid)}, colors: ${JSON.stringify(c.colors)} },`,
+    )
+  }
+  p(']')
+  p()
+  p('/** Every sRGB triplet, keyed by QID. */')
+  p('export const colorsByQid: Record<string, string[]> = {')
+  for (const c of colors) {
+    p(`  ${c.qid}: ${JSON.stringify(c.colors)},`)
   }
   p('}')
   p()

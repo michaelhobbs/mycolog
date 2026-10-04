@@ -511,12 +511,22 @@ content collection — it is plain TS so `astro check` validates it.
   - `P783` hymenium type, `P784` cap shape, `P785` hymenium attachment,
     `P786` stipe character, `P787` spore print color, `P788` ecological type,
     `P789` edibility.
-  - **`P787` spore print color has no icons at all** (0 of 22 values carry one),
-    and a colour is CSS anyway, so it is excluded from the icon groups. Do not
-    "fix" its absence by treating a colour name as an image.
+  - **`P787` spore print color is only partly illustrated** — 9 of its 22 values
+    carry an `icon (P2910)` (yellow, pink, olive, buff, purple, blackish-brown,
+    olive-brown, pinkish-brown, purple-black) and the group is fetched; the other
+    13 are reported in `missingIcons`. Wikidata gained these drawings after this
+    group was first written as empty, so the count is data-dependent, not a
+    constant: re-run the fetcher rather than assuming it. Never fill the gap by
+    treating a colour name as an image, and never reach for `P18` — see the
+    `P18` fallback warning above.
+  - Three of the nine spore-print files (blackish-brown, pinkish-brown, purple)
+    have an **empty `Artist` field on Commons**, so their generated entry is
+    `author: null` while `license` is `CC BY-SA 3.0`. That is faithful to the
+    source, not a parsing gap — checked against the API — but it means those
+    three cannot be credited by name from the metadata alone.
 - `icons.ts` is **generated** — `npm run update-wikidata-icons`, never hand-edit.
   Each entry carries its Commons `source` URL, `license` and `author`, because
-  37 of the 43 files are CC BY-SA and need attribution. The local files under
+  52 of the 61 files are CC BY-SA and need attribution. The local files under
   `icons/` are the **unmodified originals**, byte-identical to Commons, kept that
   way on purpose so they can be restyled later without re-downloading.
 - Icons come from `icon (P2910)` **only**. Do **not** fall back to `image (P18)`:
@@ -525,10 +535,33 @@ content collection — it is plain TS so `astro check` validates it.
   ("nematophagous fungus"), a photo of a plate of fried mushrooms ("edible when
   cooked") and a cooking icon ("edible mushroom"). A value with no `P2910` is
   recorded in `missingIcons` instead, which is the honest outcome.
+- **`sRGB color hex triplet (P465)` is fetched for every targeted value, icon or
+  not**, and written to `valueColors` plus a `colorsByQid` lookup. A swatch is the
+  only representation 13 of the 22 spore print colours can ever have, so this is
+  stored independently of the icon: 18 of the 22 values carry a colour (25
+  triplets). The other groups carry none — only colour values have one.
+  - **Icon and colour are independent, so neither is universal.** Three spore
+    print values have a drawing but no triplet (blackish-brown, pinkish-brown,
+    yellow-brown), and the 13 with no drawing mostly do have one. A value can have
+    a glyph, a colour, or both, so never treat one as implying the other.
+  - **Some values have several triplets** (salmon 2, buff 2, yellow-orange 2,
+    purple-brown 5), all at `normal` rank — there is no preferred statement to
+    prefer. Every triplet is kept, sorted, and the array is documented as "not a
+    single canonical colour"; picking one would be our invention, not Wikidata's.
+  - Wikidata stores a bare uppercase triplet (`FFFF00`); the generator adds the
+    `#` for CSS and **rejects anything that is not 6 hex digits**, logging the QID
+    rather than emitting an invalid colour.
+  - The sorting is what makes the export deterministic: SPARQL row order is not
+    stable, and without it a re-run produced a spurious diff. Assert idempotence
+    by re-running the fetcher and diffing `icons.ts` — it must be byte-identical.
+  - Not rendered yet. Nothing in the site reads `valueColors`, so a colour is
+    stored but never shown; the export is currently the only consumer.
 - Wikidata's own data has gaps; both lists are exported so the UI can degrade
   deliberately rather than rendering a broken image:
-  - `missingIcons` (4) — no `P2910`: `Q357006` (nematophagous fungus) and three
-    edibility values (`Q654236`, `Q62102033`, `Q1686195`).
+  - `missingIcons` (17) — no `P2910`: `Q357006` (nematophagous fungus), three
+    edibility values (`Q654236`, `Q62102033`, `Q1686195`) and 13 spore print
+    colours. Both counts are data-dependent, not constants: re-run the fetcher
+    rather than hard-coding them.
   - `iconsToReview` (1) — `Q62023127` (semi-spherical cap) has no `P2910`, and
     its `P18` is the _convex_ cap icon, i.e. a different value. Deliberately not
     downloaded.
@@ -536,7 +569,7 @@ content collection — it is plain TS so `astro check` validates it.
   relies on Node's type stripping (as `generate-thumbnails.mjs` already does).
 - `commons.wikimedia.org` answers **429** readily from a shared IP. The script
   batches metadata lookups 20 titles at a time, throttles, and backs off
-  exponentially (honouring `Retry-After`); a run of 43 files takes ~1 min.
+  exponentially (honouring `Retry-After`); a run of 52 files takes ~1 min.
   Metadata is fetched for every file even when the file already exists, so a
   plain re-run still costs two API calls per batch but downloads nothing.
 - This is the only build-independent network fetch besides `prebuild`

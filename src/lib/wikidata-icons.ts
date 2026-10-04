@@ -22,7 +22,7 @@
 // which one a QID actually resolves to, and a caller rendering attribution must
 // ask for the source it is about to display rather than assuming Commons.
 
-import { iconsByQid } from '../data/wikidata/icons'
+import { colorsByQid, iconsByQid } from '../data/wikidata/icons'
 import {
   HymeniumAttachment,
   HymeniumType,
@@ -82,6 +82,7 @@ for (const [key, url] of Object.entries(generated)) {
 }
 
 const cache = new Map<string, string | null>()
+const colorCache = new Map<string, string[]>()
 
 /**
  * The icon URL for a value QID, or `null` when there is no usable picture.
@@ -123,4 +124,26 @@ export function generatedIconFor(
  */
 export function iconFor(qid: string) {
   return iconsByQid[qid] ?? null
+}
+
+/**
+ * Every sRGB triplet Wikidata records for a value, or `[]` when it records none.
+ *
+ * This is independent of the drawing: three spore print values are drawn but
+ * carry no triplet, and 13 carry a triplet but no drawing, so a caller must ask
+ * for both rather than treat one as evidence of the other. Colours exist only for
+ * the colour-valued properties (spore print colour), which is why the other five
+ * groups always return an empty array.
+ *
+ * The array is **not** a single canonical colour. Some values have several
+ * triplets -- purple-brown has five -- all at `normal` rank, so there is no
+ * preferred statement to pick. Every one is returned, sorted; choosing one would
+ * be our invention, not Wikidata's.
+ */
+export function colorsFor(qid: string): string[] {
+  const hit = colorCache.get(qid)
+  if (hit !== undefined) return hit
+  const colors = colorsByQid[qid] ?? []
+  colorCache.set(qid, colors)
+  return colors
 }

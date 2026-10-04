@@ -554,8 +554,21 @@ content collection — it is plain TS so `astro check` validates it.
   - The sorting is what makes the export deterministic: SPARQL row order is not
     stable, and without it a re-run produced a spurious diff. Assert idempotence
     by re-running the fetcher and diffing `icons.ts` — it must be byte-identical.
-  - Not rendered yet. Nothing in the site reads `valueColors`, so a colour is
-    stored but never shown; the export is currently the only consumer.
+  - **Rendered through `ValueMark.astro`**, which prefers the drawing and falls
+    back to a square of the colour, so a value is never bare text when Wikidata
+    gives us either. Where a value has several triplets the square is banded into
+    equal stripes of all of them rather than picking one, and the element's
+    `aria-label`/`title` carry the raw codes: "buff", "tan" and "cream" are
+    ambiguous in a way their hex codes are not. A 1px inset `box-shadow` keeps a
+    white or cream swatch from vanishing into the row's surface.
+  - **The mark's sizing lives in `ValueMark`, not in the caller.** Astro's scoped
+    styles carry the _rendering_ component's scope attribute, so a class a caller
+    passes to `<ValueMark class=...>` matches nothing in the caller's stylesheet.
+    `variant="row"` (5.6rem) and `variant="chip"` (1.4rem) own it instead; do not
+    move those rules back into `SpeciesData.astro`.
+  - `colorsFor()` returns every triplet, sorted, and caches; a caller must handle
+    the empty array (four values have neither a drawing nor a colour) rather than
+    assuming one of the two exists.
 - Wikidata's own data has gaps; both lists are exported so the UI can degrade
   deliberately rather than rendering a broken image:
   - `missingIcons` (17) — no `P2910`: `Q357006` (nematophagous fungus), three

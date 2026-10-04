@@ -1,0 +1,97 @@
+---
+// The picture that stands for a Wikidata value: the drawing if there is one,
+// otherwise a square of the colour Wikidata records for it, otherwise nothing.
+//
+// A value can have a glyph, a colour, or both — three spore print values are
+// drawn but carry no triplet, and 13 carry a triplet but no drawing — so this asks
+// for both and prefers the drawing. Rendering nothing is still a real outcome
+// (four values have neither) and the caller must live with it.
+//
+// The sizing lives here rather than in the caller's stylesheet because Astro's
+// scoped styles do not reach an element rendered by another component: a class
+// the caller passes in would carry the caller's scope attribute, not this one's.
+import { colorsFor, iconUrlFor } from '../lib/wikidata-icons'
+
+interface Props {
+  qid: string
+  /** `row` is the large morphology/ecology size, `chip` the compact edibility one. */
+  variant?: 'row' | 'chip'
+}
+
+const { qid, variant = 'row' } = Astro.props
+const icon = iconUrlFor(qid)
+const colors = colorsFor(qid)
+
+// Wikidata stores a bare triplet; the generator normalises it to `#RRGGBB`.
+const band = (i: number) => [(i * 100) / colors.length, ((i + 1) * 100) / colors.length]
+
+const style =
+  colors.length === 0
+    ? null
+    : colors.length === 1
+      ? `background: ${colors[0]}`
+      : // No triplet is canonical, so rather than pick one, band the square into
+        // equal stripes of all of them. At one colour this is a flat fill.
+        `background: linear-gradient(90deg, ${colors
+          .map((c, i) => {
+            const [from, to] = band(i)
+            return `${c} ${from.toFixed(2)}% ${to.toFixed(2)}%`
+          })
+          .join(', ')})`
+
+// Named on the element so the exact triplets reach a screen reader and a hover:
+// "buff", "tan" and "cream" are ambiguous in a way their hex codes are not.
+const label = colors.join(' ')
+---
+
+{
+  icon ? (
+    <img
+      class:list={['mark', `mark--${variant}`]}
+      src={icon}
+      alt=""
+      loading="lazy"
+      width={variant === 'row' ? 112 : 28}
+      height={variant === 'row' ? 112 : 28}
+    />
+  ) : style ? (
+    <span
+      class:list={['mark', `mark--${variant}`, 'swatch']}
+      style={style}
+      role="img"
+      aria-label={label}
+      title={label}
+    />
+  ) : null
+}
+
+<style>
+  /* Commons drawings are 300px and arrive in mixed PNG/SVG; constrain both axes
+     so neither a square PNG nor a tall drawing stretches a row. `flex-shrink`
+     keeps a long value from squashing it. */
+  .mark {
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  /* The enlarged variant, for the morphology and ecology rows. It trails the
+     value rather than leading it, which also fixes the row's baseline: a flex
+     container takes its baseline from its first item, so with the mark first the
+     whole row hung off the image's bottom edge instead of the text's. Edibility
+     keeps the compact size — its marks sit in a chip list, not in a row. */
+  .mark--row {
+    width: 5.6rem;
+    height: 5.6rem;
+  }
+
+  .mark--chip {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  /* A hairline border, or a white or cream swatch vanishes into the row's
+     surface. It is inset so the border does not enlarge the square. */
+  .swatch {
+    box-shadow: inset 0 0 0 1px var(--border-char);
+  }
+</style>

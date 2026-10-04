@@ -9,11 +9,11 @@
 // than rendered as a negative, and a section with no rows at all says so
 // explicitly.
 //
-// Icons come from `iconsByQid`, which only contains values Commons actually has
-// a drawing for. An unknown QID renders as text with no image, never a broken
-// one -- 4 values have no icon and 1 has an icon belonging to a different value.
+// The mark beside each value is a drawing or a colour swatch (see `ValueMark`).
+// An unknown QID renders as text with neither, never a broken image -- 4 values
+// have neither and 1 has a drawing belonging to a different value.
 import Block from './Block.astro'
-import { iconUrlFor } from '../lib/wikidata-icons'
+import ValueMark from './ValueMark.astro'
 import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
 import type { Locale } from '../i18n'
 import type { Translations } from '../i18n'
@@ -41,14 +41,14 @@ const labelOf = (ref: AnyRef) => ref.labels[locale] ?? ref.labels.en ?? ref.labe
 interface Value {
   qid: string
   text: string
-  /** Null when Commons has no drawing for this value. */
-  icon: string | null
 }
 
+// The mark is not resolved here: ValueMark looks the drawing and the colour up
+// from the QID, so a value with only a colour is not a special case at the call
+// site.
 const val = (ref: AnyRef): Value => ({
   qid: ref.qid,
   text: labelOf(ref),
-  icon: iconUrlFor(ref.qid),
 })
 
 const morphology = data?.morphology
@@ -161,16 +161,7 @@ const aliases = dedupe([
               {row.vals.map((v) => (
                 <span class="value">
                   <span class="value__text">{v.text}</span>
-                  {v.icon && (
-                    <img
-                      class="value__icon value__icon--row"
-                      src={v.icon}
-                      alt=""
-                      loading="lazy"
-                      width="112"
-                      height="112"
-                    />
-                  )}
+                  <ValueMark qid={v.qid} />
                 </span>
               ))}
             </span>
@@ -194,16 +185,7 @@ const aliases = dedupe([
             {ecoVals.map((v) => (
               <span class="value">
                 <span class="value__text">{v.text}</span>
-                {v.icon && (
-                  <img
-                    class="value__icon value__icon--row"
-                    src={v.icon}
-                    alt=""
-                    loading="lazy"
-                    width="112"
-                    height="112"
-                  />
-                )}
+                <ValueMark qid={v.qid} />
               </span>
             ))}
           </span>
@@ -235,9 +217,7 @@ const aliases = dedupe([
       <ul class="values">
         {edibilityVals.map((v) => (
           <li class="value">
-            {v.icon && (
-              <img class="value__icon" src={v.icon} alt="" loading="lazy" width="28" height="28" />
-            )}
+            <ValueMark qid={v.qid} variant="chip" />
             <span class="value__text">{v.text}</span>
           </li>
         ))}
@@ -296,25 +276,6 @@ const aliases = dedupe([
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
-  }
-
-  .value__icon {
-    /* Commons drawings are 300px and arrive in mixed PNG/SVG; constrain both
-       axes so neither a square PNG nor a tall drawing stretches a row. */
-    width: 1.4rem;
-    height: 1.4rem;
-    flex-shrink: 0;
-    object-fit: contain;
-  }
-
-  /* The enlarged variant, for the morphology and ecology rows. It trails the
-     value rather than leading it, which also fixes the row's baseline: a flex
-     container takes its baseline from its first item, so with the icon first the
-     whole row hung off the image's bottom edge instead of the text's. Edibility
-     keeps the compact size -- its icons sit in a chip list, not in a row. */
-  .value__icon--row {
-    width: 5.6rem;
-    height: 5.6rem;
   }
 
   .value__text {

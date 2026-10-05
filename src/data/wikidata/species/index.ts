@@ -8,11 +8,15 @@ import { diatrypeDisciformisQ10474236 } from './Q10474236'
 import { mycenaViridimarginataQ10510028 } from './Q10510028'
 import { cortinariusLargusQ10570865 } from './Q10570865'
 import { cudoniellaAcicularisQ10682294 } from './Q10682294'
+import { marasmiellusVaillantiiQ10725914 } from './Q10725914'
 import { amanitaMuscariaQ131227 } from './Q131227'
+import { hydnumRepandumQ13684 } from './Q13684'
 import { clavulinaCoralloidesQ138027 } from './Q138027'
+import { clavulinopsisHelvolaQ138029 } from './Q138029'
 import { tremiscusHelvelloidesQ1473292 } from './Q1473292'
 import { craterellusLutescensQ1478429 } from './Q1478429'
 import { ramariaAureaQ1479710 } from './Q1479710'
+import { caloceraCorneaQ175548 } from './Q175548'
 import { clathrusArcheriQ1757951 } from './Q1757951'
 import { rickenellaFibulaQ1770667 } from './Q1770667'
 import { coprinusNiveusQ1815847 } from './Q1815847'
@@ -20,6 +24,7 @@ import { thelephoraTerrestrisQ1816880 } from './Q1816880'
 import { amanitaPhalloidesQ188643 } from './Q188643'
 import { cantharellusCibariusQ188749 } from './Q188749'
 import { hydnellumPeckiiQ1908340 } from './Q1908340'
+import { panellusMitisQ1934540 } from './Q1934540'
 import { boletusEdulisQ19740 } from './Q19740'
 import { pseudohydnumGelatinosumQ206711 } from './Q206711'
 import { cordycepsMilitarisQ2118699 } from './Q2118699'
@@ -32,12 +37,15 @@ import { sarcondonImbricatusQ262105 } from './Q262105'
 import { coprinusComatusQ275125 } from './Q275125'
 import { laccariaAmethystinaQ28492278 } from './Q28492278'
 import { caloboletusCalopusQ29784429 } from './Q29784429'
+import { lepiotaClypeolariaQ300967 } from './Q300967'
 import { auriculariaAuriculaJudaeQ321342 } from './Q321342'
 import { albatrellusOvinusQ331465 } from './Q331465'
 import { craterellusTubaeformisQ371126 } from './Q371126'
 import { otideaAlutaceaQ3913798 } from './Q3913798'
+import { mycenaFlavoalbaQ3914302 } from './Q3914302'
 import { hygrocybeCantharellusQ3915439 } from './Q3915439'
 import { amanitaPantherinaQ45547 } from './Q45547'
+import { clitocybeGibbaQ46795429 } from './Q46795429'
 import { armillariaMelleaQ473745 } from './Q473745'
 import { lactariusDeterrimusQ498221 } from './Q498221'
 import { cordycepsOphioglossoidesQ54366414 } from './Q54366414'
@@ -46,8 +54,11 @@ import { tricholomaSulphureumQ583388 } from './Q583388'
 import { caloboletusRadicansQ64785775 } from './Q64785775'
 import { suillellusLuridusQ752494 } from './Q752494'
 import { ganodermaApplanatumQ774576 } from './Q774576'
+import { oudemansiellaMucidaQ783554 } from './Q783554'
 import { gomphidiusGlutinosusQ790626 } from './Q790626'
 import { russulaDelicaQ843177 } from './Q843177'
+import { russulaParazureaQ882885 } from './Q882885'
+import { clitocybePhyllophilaQ883698 } from './Q883698'
 import { schizophyllumCommuneQ941733 } from './Q941733'
 
 export interface SpeciesSnapshotMeta {
@@ -67,11 +78,15 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q10510028: mycenaViridimarginataQ10510028,
   Q10570865: cortinariusLargusQ10570865,
   Q10682294: cudoniellaAcicularisQ10682294,
+  Q10725914: marasmiellusVaillantiiQ10725914,
   Q131227: amanitaMuscariaQ131227,
+  Q13684: hydnumRepandumQ13684,
   Q138027: clavulinaCoralloidesQ138027,
+  Q138029: clavulinopsisHelvolaQ138029,
   Q1473292: tremiscusHelvelloidesQ1473292,
   Q1478429: craterellusLutescensQ1478429,
   Q1479710: ramariaAureaQ1479710,
+  Q175548: caloceraCorneaQ175548,
   Q1757951: clathrusArcheriQ1757951,
   Q1770667: rickenellaFibulaQ1770667,
   Q1815847: coprinusNiveusQ1815847,
@@ -79,6 +94,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q188643: amanitaPhalloidesQ188643,
   Q188749: cantharellusCibariusQ188749,
   Q1908340: hydnellumPeckiiQ1908340,
+  Q1934540: panellusMitisQ1934540,
   Q19740: boletusEdulisQ19740,
   Q206711: pseudohydnumGelatinosumQ206711,
   Q2118699: cordycepsMilitarisQ2118699,
@@ -91,12 +107,15 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q275125: coprinusComatusQ275125,
   Q28492278: laccariaAmethystinaQ28492278,
   Q29784429: caloboletusCalopusQ29784429,
+  Q300967: lepiotaClypeolariaQ300967,
   Q321342: auriculariaAuriculaJudaeQ321342,
   Q331465: albatrellusOvinusQ331465,
   Q371126: craterellusTubaeformisQ371126,
   Q3913798: otideaAlutaceaQ3913798,
+  Q3914302: mycenaFlavoalbaQ3914302,
   Q3915439: hygrocybeCantharellusQ3915439,
   Q45547: amanitaPantherinaQ45547,
+  Q46795429: clitocybeGibbaQ46795429,
   Q473745: armillariaMelleaQ473745,
   Q498221: lactariusDeterrimusQ498221,
   Q54366414: cordycepsOphioglossoidesQ54366414,
@@ -105,8 +124,11 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q64785775: caloboletusRadicansQ64785775,
   Q752494: suillellusLuridusQ752494,
   Q774576: ganodermaApplanatumQ774576,
+  Q783554: oudemansiellaMucidaQ783554,
   Q790626: gomphidiusGlutinosusQ790626,
   Q843177: russulaDelicaQ843177,
+  Q882885: russulaParazureaQ882885,
+  Q883698: clitocybePhyllophilaQ883698,
   Q941733: schizophyllumCommuneQ941733,
 }
 
@@ -117,11 +139,15 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q10510028: { slug: 'mycena-viridimarginata', scientificName: 'Mycena viridimarginata' },
   Q10570865: { slug: 'cortinarius-largus', scientificName: 'Cortinarius largus' },
   Q10682294: { slug: 'cudoniella-acicularis', scientificName: 'Cudoniella acicularis' },
+  Q10725914: { slug: 'marasmiellus-vaillantii', scientificName: 'Marasmiellus Vaillantii' },
   Q131227: { slug: 'amanita-muscaria', scientificName: 'Amanita muscaria' },
+  Q13684: { slug: 'hydnum-repandum', scientificName: 'Hydnum repandum' },
   Q138027: { slug: 'clavulina-coralloides', scientificName: 'Clavulina coralloides' },
+  Q138029: { slug: 'clavulinopsis-helvola', scientificName: 'Clavulinopsis Helvola' },
   Q1473292: { slug: 'tremiscus-helvelloides', scientificName: 'Tremiscus helvelloides' },
   Q1478429: { slug: 'craterellus-lutescens', scientificName: 'Craterellus lutescens' },
   Q1479710: { slug: 'ramaria-aurea', scientificName: 'Ramaria aurea' },
+  Q175548: { slug: 'calocera-cornea', scientificName: 'Calocera Cornea' },
   Q1757951: { slug: 'clathrus-archeri', scientificName: 'Clathrus archeri' },
   Q1770667: { slug: 'rickenella-fibula', scientificName: 'Rickenella fibula' },
   Q1815847: { slug: 'coprinus-niveus', scientificName: 'Coprinus niveus' },
@@ -129,6 +155,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q188643: { slug: 'amanita-phalloides', scientificName: 'Amanita phalloides' },
   Q188749: { slug: 'cantharellus-cibarius', scientificName: 'Cantharellus cibarius' },
   Q1908340: { slug: 'hydnellum-peckii', scientificName: 'Hydnellum peckii' },
+  Q1934540: { slug: 'panellus-mitis', scientificName: 'Panellus Mitis' },
   Q19740: { slug: 'boletus-edulis', scientificName: 'Boletus edulis' },
   Q206711: { slug: 'pseudohydnum-gelatinosum', scientificName: 'Pseudohydnum gelatinosum' },
   Q2118699: { slug: 'cordyceps-militaris', scientificName: 'Cordyceps militaris' },
@@ -144,12 +171,15 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q275125: { slug: 'coprinus-comatus', scientificName: 'Coprinus comatus' },
   Q28492278: { slug: 'laccaria-amethystina', scientificName: 'Laccaria amethystina' },
   Q29784429: { slug: 'caloboletus-calopus', scientificName: 'Caloboletus calopus' },
+  Q300967: { slug: 'lepiota-clypeolaria', scientificName: 'Lepiota Clypeolaria' },
   Q321342: { slug: 'auricularia-auricula-judae', scientificName: 'Auricularia auricula-judae' },
   Q331465: { slug: 'albatrellus-ovinus', scientificName: 'Albatrellus ovinus' },
   Q371126: { slug: 'craterellus-tubaeformis', scientificName: 'Craterellus tubaeformis' },
   Q3913798: { slug: 'otidea-alutacea', scientificName: 'Otidea alutacea' },
+  Q3914302: { slug: 'mycena-flavoalba', scientificName: 'Mycena Flavoalba' },
   Q3915439: { slug: 'hygrocybe-cantharellus', scientificName: 'Hygrocybe cantharellus' },
   Q45547: { slug: 'amanita-pantherina', scientificName: 'Amanita pantherina' },
+  Q46795429: { slug: 'clitocybe-gibba', scientificName: 'Clitocybe Gibba' },
   Q473745: { slug: 'armillaria-mellea', scientificName: 'Armillaria mellea' },
   Q498221: { slug: 'lactarius-deterrimus', scientificName: 'Lactarius deterrimus' },
   Q54366414: { slug: 'cordyceps-ophioglossoides', scientificName: 'Cordyceps ophioglossoides' },
@@ -158,8 +188,11 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q64785775: { slug: 'caloboletus-radicans', scientificName: 'Caloboletus radicans' },
   Q752494: { slug: 'suillellus-luridus', scientificName: 'Suillellus luridus' },
   Q774576: { slug: 'ganoderma-applanatum', scientificName: 'Ganoderma applanatum' },
+  Q783554: { slug: 'oudemansiella-mucida', scientificName: 'Oudemansiella Mucida' },
   Q790626: { slug: 'gomphidius-glutinosus', scientificName: 'Gomphidius glutinosus' },
   Q843177: { slug: 'russula-delica', scientificName: 'Russula delica' },
+  Q882885: { slug: 'russula-parazurea', scientificName: 'Russula Parazurea' },
+  Q883698: { slug: 'clitocybe-phyllophila', scientificName: 'Clitocybe Phyllophila' },
   Q941733: { slug: 'schizophyllum-commune', scientificName: 'Schizophyllum commune' },
 }
 

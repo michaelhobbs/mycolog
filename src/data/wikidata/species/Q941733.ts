@@ -32,20 +32,20 @@ export const schizophyllumCommuneQ941733: WikidataSpeciesData = {
     ],
   },
   morphology: {
-    hymeniumType: { pid: 'P783', qid: 'Q19861549', labels: { en: 'pores', de: 'Poren' } },
-    capShape: [
-      { pid: 'P784', qid: 'Q14544541', labels: { en: 'offset mushroom cap', de: 'versetzt' } },
-    ],
-    hymeniumAttachment: {
-      pid: 'P785',
-      qid: 'Q19887925',
-      labels: { en: 'decurrent hymenium attachment', de: 'Lamellen herablaufend' },
+    hymeniumType: { pid: 'P783', qid: 'Q269345', labels: { en: 'lamella', de: 'Lamelle' } },
+    capShape: [{ pid: 'P784', qid: 'Q19887965', labels: { en: 'no mushroom cap' } }],
+    hymeniumAttachment: { pid: 'P785', qid: 'Q19887932', labels: { en: 'no hymenium attachment' } },
+    stipeCharacter: {
+      pid: 'P786',
+      qid: 'Q14544581',
+      labels: { en: 'bare stipe', de: 'ringloser Stiel' },
     },
     sporePrintColor: { pid: 'P787', qid: 'Q23444', labels: { en: 'white', de: 'Weiß' } },
   },
   ecology: {
     ecologicalType: [
       { pid: 'P788', qid: 'Q114750', labels: { en: 'saprobiont', de: 'Saprobiont' } },
+      { pid: 'P788', qid: 'Q186517', labels: { en: 'parasitism', de: 'Parasitismus' } },
     ],
   },
   edibility: {

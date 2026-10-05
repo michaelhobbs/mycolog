@@ -129,6 +129,7 @@ export default {
     sporePrintColor: 'Spore print',
     ecology: 'Ecology',
     ecologicalType: 'Lifestyle',
+    location: 'Location',
     conservationStatus: 'Conservation status',
     sources: 'Sources',
     sourcesNote: 'This page draws its species data from Wikidata.',
@@ -139,6 +140,15 @@ export default {
     backToSpecies: 'back to species',
     notStated: 'not stated',
     noData: 'not recorded',
+  },
+  filter: {
+    title: 'Filter',
+    hint: 'Select values to narrow the list. Only entries with every selected value are shown.',
+    reset: 'Reset filter',
+    resultsSpecies: '{matched} of {total} species',
+    resultsSightings: '{matched} of {total} sightings',
+    emptySpecies: 'No species match this filter.',
+    emptySightings: 'No sightings match this filter.',
   },
   locations: {
     title: 'Locations',

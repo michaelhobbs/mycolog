@@ -325,6 +325,34 @@ const sightingsJSON = JSON.stringify(clientSightings)
     })
     const source = map.getSource('sightings') as maplibregl.GeoJSONSource
 
+    // Species and location filtering is owned by <SpeciesFilter> on the page,
+    // which publishes the surviving sighting ids on <html> and fires
+    // `myco:filter` on every change. setData re-clusters, so the cluster counts
+    // follow the selection without any layer needing a filter expression.
+    function applyFilter() {
+      const raw = document.documentElement.dataset.mycoFilter
+      if (!raw) return
+      let slugs: string[]
+      try {
+        slugs = JSON.parse(raw) as string[]
+      } catch (err) {
+        console.error('[map] unreadable filter state:', err)
+        return
+      }
+      const allowed = new Set(slugs)
+      source.setData({
+        type: 'FeatureCollection',
+        features: features.filter((f) => allowed.has(f.properties.slug)),
+      })
+    }
+    if (document.querySelector('[data-species-filter]')) {
+      // Read once here as well as on the event: the map's style usually takes
+      // longer to load than it takes to change the filter, so the first paint
+      // would otherwise show everything.
+      applyFilter()
+      document.addEventListener('myco:filter', applyFilter)
+    }
+
     // --- cluster circle + count badge ---
     map.addLayer({
       id: 'sighting-cluster',

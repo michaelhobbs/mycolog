@@ -1,0 +1,694 @@
+---
+// Drill-down filtering for the two pages that list species by property: the
+// mushroom index (unit: species) and the sighting map (unit: sightings).
+//
+// A selection is a list of chosen values per property, and the rule is one
+// conjunction: an item has to carry every selected value. No mode, no exclusion,
+// no precedence -- so a chip is a two-state toggle and the panel needs no
+// explanation of its own semantics. The model, the URL grammar and the counting
+// all live in ../lib/species-facets, which this component's <script> imports --
+// so the two pages cannot drift in how they match, and the snapshots stay out of
+// the client bundle (see ../lib/species-facets-build for the build-time half).
+//
+// Progressive enhancement, following the mobile rail toggle in Layout.astro:
+// the panel ships `hidden` and this script reveals it, so with JS off the pages
+// simply show everything, which is the correct fallback for a filter.
+//
+// Every chip is a real <button>, because selecting has to work by tap and on a
+// keyboard -- there is no hover-only affordance anywhere in here.
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import { buildFilterPayload } from '../lib/species-facets-build'
+import { getTranslations } from '../i18n'
+import type { Locale } from '../i18n'
+
+interface Props {
+  species: CollectionEntry<'species'>[]
+  sightings: CollectionEntry<'sightings'>[]
+  /**
+   * What the page filters. Chip counts are counted in this unit, so the same
+   * property reads truthfully on both pages ("gills (31)" species, "gills (68)"
+   * markers).
+   */
+  unit: 'species' | 'sighting'
+  locale: Locale
+}
+
+const { species, sightings, unit, locale } = Astro.props
+const t = getTranslations(locale)
+
+// Only needed for the property labels; the collection is 14 small entries.
+const locations = await getCollection('locations')
+const payload = buildFilterPayload({ species, sightings, locations, locale, unit })
+
+const resultsTemplate = unit === 'species' ? t.filter.resultsSpecies : t.filter.resultsSightings
+const emptyText = unit === 'species' ? t.filter.emptySpecies : t.filter.emptySightings
+// `<` cannot appear raw: it would close the script element. \u003c is JSON-legal
+// and parses back to the same string.
+const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
+---
+
+{
+  /* The whole panel is a <details> and ships *closed*, not just the properties
+    inside it: 71 chips is a lot of chrome above the content, and on /mushrooms it
+    pushes the actual grid off the first screen. Collapsed it is one summary line,
+    and a reader who never filters sees a page that looks unfiltered. */
+}
+<details
+  class="filter"
+  data-species-filter
+  data-unit={unit}
+  data-results={resultsTemplate}
+  data-empty-text={emptyText}
+  data-label-sightings={t.log.sightingsCount}
+  hidden
+>
+  <summary class="filter__hdr">
+    <span class="filter__title">{t.filter.title}</span>
+    {
+      /* The selection in words, so a *closed* panel still says what is filtered.
+        Plain text on purpose: the chips inside carry the state, and a second set
+        of controls up here would be two places to read and two ways to disagree. */
+    }
+    <span class="filter__names" data-filter-names hidden></span>
+    <output class="filter__count" data-filter-count></output>
+    {
+      /* A real <button> so clearing is keyboard reachable; preventDefault in the
+        handler keeps the enclosing <summary> from also toggling the panel. */
+    }
+    <button type="button" class="filter__reset" data-filter-reset data-visible="false">
+      [ {t.filter.reset} ]
+    </button>
+  </summary>
+
+  <div class="filter__body">
+    <p class="filter__hint">{t.filter.hint}</p>
+
+    {
+      payload.facets.map((facet) => (
+        /* Shipped *closed*: opening the panel shows one line per property, which
+          is a list you can read, rather than 71 chips at once. The script opens
+          only the properties that hold a selection, and never re-closes one the
+          reader opened by hand. */
+        <details class="facet" data-facet-group={facet.key}>
+          <summary class="facet__summary">
+            <span class="facet__label">{facet.label}</span>
+            <span class="facet__badge" data-facet-badge aria-hidden="true" hidden />
+          </summary>
+          <div class="facet__values">
+            {facet.values.map((value) => (
+              <button
+                type="button"
+                class="value"
+                aria-pressed="false"
+                data-value={value.id}
+                data-facet={facet.key}
+              >
+                <span class="value__label">{value.label}</span>
+                {/* Start at the static total; the script replaces it on load with
+                  the "how many if I selected this" count, which is equal to this
+                  until anything is selected. */}
+                <span class="value__count" data-empty="false">
+                  {value.count}
+                </span>
+              </button>
+            ))}
+          </div>
+        </details>
+      ))
+    }
+  </div>
+
+  <script type="application/json" is:inline data-filter-payload set:html={payloadJson} />
+</details>
+
+<script>
+  import {
+    FACET_KEYS,
+    countSurvivors,
+    countWithValue,
+    decodeSelection,
+    encodeSelection,
+    selectionIsEmpty,
+    toggleValue,
+    type FacetKey,
+    type FilterPayload,
+    type Selection,
+  } from '../lib/species-facets'
+
+  const PARAM = 'f'
+
+  const roots = document.querySelectorAll<HTMLDetailsElement>('[data-species-filter]')
+  if (roots.length > 1) {
+    console.error('[filter] expected one filter per page, found', roots.length)
+  }
+  const root = roots[0]
+  if (root) {
+    const payload = readPayload(root)
+    if (payload) init(root, payload)
+  }
+
+  function readPayload(el: HTMLDetailsElement): FilterPayload | undefined {
+    const script = el.querySelector<HTMLScriptElement>('[data-filter-payload]')
+    if (!script?.textContent) return undefined
+    try {
+      return JSON.parse(script.textContent) as FilterPayload
+    } catch (err) {
+      console.error('[filter] unreadable payload:', err)
+      return undefined
+    }
+  }
+
+  function init(root: HTMLDetailsElement, payload: FilterPayload) {
+    // Cards carry their own species slug and sighting count, so the same script
+    // can drive the index grid and the map: hiding an element that is not there
+    // is a no-op, and MapVector listens for the event published below.
+    const cards = document.querySelectorAll<HTMLElement>('[data-species]')
+    const countEls = document.querySelectorAll<HTMLElement>('[data-species-count]')
+    const emptyState = document.querySelector<HTMLElement>('[data-filter-empty]')
+    const resultsEl = root.querySelector<HTMLElement>('[data-filter-count]')
+    const resetBtn = root.querySelector<HTMLElement>('[data-filter-reset]')
+    const namesEl = root.querySelector<HTMLElement>('[data-filter-names]')
+
+    /*
+     * Properties the reader has shut by hand.
+     *
+     * Everything ships closed, so there is no shipped-open state to preserve and
+     * the set starts empty, filled only by a real collapse. `paintFacets` opens a
+     * property that holds a selection -- so a shared link arrives showing exactly
+     * the chips that are set -- and never touches one in this set, which is what
+     * stops a reader's own collapse being undone by a later click elsewhere.
+     */
+    const closedByUser = new Set<string>()
+    root.querySelectorAll<HTMLDetailsElement>('[data-facet-group]').forEach((el) => {
+      el.addEventListener('toggle', () => {
+        const key = el.dataset.facetGroup
+        if (!key) return
+        if (el.open) closedByUser.delete(key)
+        else closedByUser.add(key)
+      })
+    })
+
+    const selection: Selection = decodeSelection(new URLSearchParams(location.search).get(PARAM))
+
+    // Chip counts are recomputed on every apply(), so they are memoised per
+    // paint: 71 values x 139 sightings is 9,869 matches, and `apply()` also runs
+    // once on load. Keyed on the encoded selection so one map serves both the
+    // counts and the "what would I get" lookup.
+    let countsFor = ''
+    let countCache = new Map<string, number>()
+
+    root.hidden = false
+    // A shared link arrives with the panel closed, which would hide the very
+    // thing that made the results look filtered. Open it when the URL carries a
+    // selection, so the reader can see which chips are set and undo them.
+    if (!selectionIsEmpty(selection)) root.open = true
+    root.addEventListener('click', onClick)
+    window.addEventListener('popstate', () => hydrate())
+    apply()
+
+    function onClick(event: Event) {
+      const target = event.target as HTMLElement | null
+      if (!target) return
+
+      if (target.closest('[data-filter-reset]')) {
+        // The clear control lives in the <summary>, so the click would also
+        // toggle the panel shut as it handled the clear.
+        event.preventDefault()
+        event.stopPropagation()
+        for (const key of FACET_KEYS) delete selection[key]
+        writeUrl()
+        apply()
+        return
+      }
+
+      const chip = target.closest<HTMLElement>('[data-value]')
+      if (!chip) return
+      const facet = chip.dataset.facet as FacetKey | undefined
+      const value = chip.dataset.value
+      if (!facet || !value) return
+      setValue(facet, value)
+    }
+
+    /**
+     * Select or deselect one value, then republish everything.
+     *
+     * The single write path, so the URL, the counts, the cards and the map can
+     * never be updated by one click path and not another.
+     */
+    function setValue(facet: FacetKey, value: string) {
+      const next = toggleValue(selection[facet] ?? [], value)
+      // An empty property is deleted rather than kept as an empty list, so
+      // `selectionIsEmpty` and `encodeSelection` do not each have to know that an
+      // empty selection and no selection are the same thing.
+      if (next.length === 0) delete selection[facet]
+      else selection[facet] = next
+
+      writeUrl()
+      apply()
+    }
+
+    /**
+     * replaceState, not pushState: a value costs one click and a drill-down is
+     * half a dozen of them, so pushing each would fill the history stack with
+     * filter states. The URL stays shareable and popstate still re-reads it,
+     * which is what returning to the page needs.
+     */
+    function writeUrl() {
+      const url = new URL(location.href)
+      const encoded = encodeSelection(selection)
+      if (encoded) url.searchParams.set(PARAM, encoded)
+      else url.searchParams.delete(PARAM)
+      history.replaceState(null, '', url)
+    }
+
+    /** Re-read the URL (popstate) and repaint, without writing it back. */
+    function hydrate() {
+      for (const key of FACET_KEYS) delete selection[key]
+      Object.assign(selection, decodeSelection(new URLSearchParams(location.search).get(PARAM)))
+      apply()
+    }
+
+    function apply() {
+      // One pass, because a sighting is the finest grain either page filters:
+      // its species' Wikidata values AND its own location. A species card is
+      // then shown when at least one of its sightings survives -- which is also
+      // true with no filter at all (every species has a sighting), so the same
+      // rule covers both cases. This is what makes the location property work on
+      // the index: a card whose sightings are all filtered out disappears.
+      //
+      // `countSurvivors` is the shared implementation, so the number in the
+      // header, the number behind each chip, and the cards on screen are three
+      // views of one pass and cannot disagree.
+      const survivors = countSurvivors(payload, selection)
+      const perSpecies = survivors.perSpecies
+      const sightingsOk = survivors.sightingIds
+
+      // `perSpecies` is keyed by species and only holds the ones that kept
+      // at least one sighting, so it doubles as the card-visibility set.
+      for (const card of cards) card.hidden = !perSpecies.has(card.dataset.species ?? '')
+
+      // Only the location property can make the printed count wrong: it is the one
+      // filter that removes sightings of a species the card is still showing.
+      const locationSelected = selection.location
+      if (locationSelected && locationSelected.length > 0) {
+        const unit = root.dataset.labelSightings ?? ''
+        for (const el of countEls) {
+          const slug = el.closest<HTMLElement>('[data-species]')?.dataset.species
+          if (!slug) continue
+          const n = perSpecies.get(slug) ?? 0
+          el.textContent = `${n} ${unit}`
+        }
+      }
+
+      // Published on <html> rather than only in the event detail so MapVector can
+      // read it on `map.on('load')`: a filter applied before the style finishes
+      // loading would otherwise be missed, since the map is the slower half.
+      document.documentElement.dataset.mycoFilter = JSON.stringify([...sightingsOk])
+      document.dispatchEvent(new CustomEvent('myco:filter'))
+
+      paintChips()
+      paintFacets()
+      paintNames()
+
+      // `visibility` rather than `hidden`, so the button keeps its box and the page
+      // does not jump the first time a value is selected.
+      if (resetBtn) resetBtn.dataset.visible = String(!selectionIsEmpty(selection))
+
+      const total = survivors.total
+      const matched = survivors.matched
+      if (resultsEl) {
+        resultsEl.textContent = (root.dataset.results ?? '')
+          .replace('{matched}', String(matched))
+          .replace('{total}', String(total))
+      }
+      if (emptyState) {
+        // Guarded on `total`: with nothing to filter, an empty result is an
+        // empty page, not a failed filter.
+        emptyState.hidden = !(matched === 0 && total > 0)
+        emptyState.textContent = root.dataset.emptyText ?? ''
+      }
+    }
+
+    function paintChips() {
+      // Recomputed once per paint, keyed on the encoded selection so a no-op
+      // repaint (popstate back to the same state) reuses the whole map.
+      const key = encodeSelection(selection)
+      if (key !== countsFor) {
+        countsFor = key
+        countCache = new Map()
+        for (const facet of payload.facets) {
+          for (const value of facet.values) {
+            countCache.set(
+              `${facet.key}\u0000${value.id}`,
+              countWithValue(payload, selection, facet.key, value.id),
+            )
+          }
+        }
+      }
+
+      root.querySelectorAll<HTMLElement>('[data-value]').forEach((chip) => {
+        const facetKey = chip.dataset.facet as FacetKey | undefined
+        const value = chip.dataset.value ?? ''
+        const on = !!facetKey && !!selection[facetKey]?.includes(value)
+        chip.setAttribute('aria-pressed', on ? 'true' : 'false')
+
+        // "How many would match if I selected this", not the static total. The
+        // number has to move as the selection narrows the page, otherwise it
+        // answers a question nobody is asking after the first click.
+        const countEl = chip.querySelector<HTMLElement>('.value__count')
+        if (!countEl) return
+        // A selected value is no longer a question, it is a fact -- and the
+        // number is already in the header. Leaving it on double-reports it.
+        if (on) {
+          countEl.textContent = ''
+          countEl.dataset.empty = 'false'
+          return
+        }
+        const count = facetKey ? countCache.get(`${facetKey}\u0000${value}`) : undefined
+        if (count !== undefined) {
+          countEl.textContent = String(count)
+          // Zero is worth saying out loud, and it is the whole early-warning
+          // system for an impossible combination: with AND everywhere, selecting
+          // gills *and* pores is empty, and this is where that shows up before
+          // the click rather than after it.
+          countEl.dataset.empty = count === 0 ? 'true' : 'false'
+        }
+      })
+    }
+
+    /**
+     * The selection, restated in words in the collapsed header.
+     *
+     * A closed panel that says only "12 of 47 species" leaves the reader unable
+     * to tell a filter from a broken page. Text, not chips: the chips inside
+     * already carry the state, and a second set of controls here would be two
+     * places to read and two things that can disagree.
+     */
+    function paintNames() {
+      if (!namesEl) return
+      const labels: string[] = []
+      for (const facet of payload.facets) {
+        for (const value of facet.values) {
+          if (selection[facet.key]?.includes(value.id)) labels.push(value.label)
+        }
+      }
+      namesEl.textContent = labels.length > 0 ? `${labels.join(', ')} ·` : ''
+      namesEl.hidden = labels.length === 0
+    }
+
+    function paintFacets() {
+      root.querySelectorAll<HTMLDetailsElement>('[data-facet-group]').forEach((group) => {
+        const key = group.dataset.facetGroup
+        if (!key) return
+        const active = selection[key as FacetKey]?.length ?? 0
+        const badge = group.querySelector<HTMLElement>('[data-facet-badge]')
+        if (badge) {
+          badge.textContent = String(active)
+          badge.hidden = active === 0
+        }
+        // Open a property that holds a selection, so a shared link arrives showing
+        // the chips that are set -- but never touch one the reader shut by hand,
+        // or their collapse would be undone by the next click anywhere else.
+        if (active > 0 && !closedByUser.has(key)) group.open = true
+      })
+    }
+  }
+</script>
+
+<style>
+  .filter {
+    margin-bottom: 1.25rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    padding: 0.625rem 0.75rem;
+  }
+
+  /* 2.25rem = 36px, and the coarse-pointer bump below takes touch to 44px.
+     Every control in here is a tap target: chips are the whole point of the
+     panel, and a 24px-tall chip is a miss on a phone. */
+  .filter__hdr {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    cursor: pointer;
+    list-style: none;
+    /* Matches the property summaries, so the two levels read as one control set. */
+    min-height: 2.25rem;
+    padding: 0.25rem 0;
+  }
+
+  .filter__hdr::-webkit-details-marker {
+    display: none;
+  }
+
+  .filter__hdr::before {
+    content: '+';
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    width: 0.75rem;
+  }
+
+  .filter[open] > .filter__hdr::before {
+    content: '−';
+  }
+
+  .filter__title {
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 0.8125rem;
+  }
+
+  /* The selection in words. It is allowed to shrink and clip rather than push
+     the count and [clear] off the line: on a narrow phone the count matters
+     more than the full list of names, and the chips still carry the state. */
+  .filter__names {
+    color: var(--fg);
+    font-size: 0.75rem;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .filter__count {
+    color: var(--accent);
+    font-size: 0.75rem;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .filter__reset {
+    background: none;
+    border: 1px solid var(--border-char);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1;
+    min-height: 2.25rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    touch-action: manipulation;
+    white-space: nowrap;
+    transition:
+      background 0.1s,
+      color 0.1s;
+  }
+
+  /*
+   * Reserved, not absent.
+   *
+   * `hidden` (display: none) removes the box, so the first selection pushed the
+   * button into the header and shoved the page down by a line — the first click
+   * of a filter moved everything under it. `visibility: hidden` keeps the space
+   * while taking the control out of the tab order and the accessibility tree, so
+   * an unfiltered panel is unchanged apart from a gap where the button will be.
+   */
+  .filter__reset[data-visible='false'] {
+    visibility: hidden;
+  }
+
+  .filter__reset:hover {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .filter__reset:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .filter__body {
+    padding-top: 0.375rem;
+  }
+
+  /* One line, one sentence. The old legend had to explain three glyphs and a
+     mode; with one rule and an inverted chip there is nothing to decode. */
+  .filter__hint {
+    margin: 0 0 0.5rem;
+    color: var(--fg-subtle);
+    font-size: 0.6875rem;
+    line-height: 1.5;
+  }
+
+  .facet {
+    border-top: 1px solid var(--border-char);
+  }
+
+  .facet__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    /* A property row is a tap target too, and it is the first thing a reader
+       touches, so it gets the same height as a chip. */
+    min-height: 2.25rem;
+    padding: 0.25rem 0;
+  }
+
+  .facet__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .facet__summary::before {
+    content: '+';
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    width: 0.75rem;
+  }
+
+  .facet[open] > .facet__summary::before {
+    content: '−';
+  }
+
+  .facet__summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .facet__label {
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* No dotted leader between a property and its count: the row is a disclosure
+     control, not a line of prose, and a rule across the panel read as a
+     separator between sections rather than as a value count. `margin-left: auto`
+     keeps the count hard right without needing a spacer element. */
+  .facet__badge {
+    margin-left: auto;
+    color: var(--accent);
+    font-size: 0.6875rem;
+  }
+
+  .facet__values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    padding: 0.25rem 0 0.75rem;
+  }
+
+  /*
+   * The chip: a square, bordered target that inverts when it is on.
+   *
+   * A flat `--bg` rectangle on the `--bg-surface` panel with a `--border-char`
+   * outline was indistinguishable from body text, which is why the old one read
+   * as a label rather than a control. The border is one step brighter, the fill
+   * inverts to accent, and the size is a real target. No radius: the site sets
+   * `--radius: 0` everywhere and draws its structure with box characters.
+   */
+  .value {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    padding: 0.5rem 0.625rem;
+    background: var(--bg);
+    border: 1px solid var(--fg-muted);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    text-align: left;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      background 0.1s,
+      border-color 0.1s,
+      color 0.1s;
+  }
+
+  .value:hover {
+    border-color: var(--accent-dim);
+    color: var(--fg-bright);
+  }
+
+  .value:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .value__label {
+    min-width: 0;
+  }
+
+  /*
+   * The count slot is reserved, and deliberately never collapses.
+   *
+   * The number is live — it changes on every click, and it goes blank on the
+   * selected chip — so a count sized to its own content re-flows all 71 chips
+   * (and the rows below them) on each selection. `min-width` is the widest count
+   * any facet can render, plus the gap; `tabular-nums` keeps digit count from
+   * changing the glyph width; and the `:empty` `display: none` that used to be
+   * here is gone, because a selected chip's empty count is exactly the case
+   * that would otherwise shrink the button under the cursor.
+   */
+  .value__count {
+    color: var(--fg-subtle);
+    flex: none;
+    font-variant-numeric: tabular-nums;
+    min-width: 1.75rem;
+    text-align: right;
+  }
+
+  /* A count of 0 is the one number worth flagging: with every selected value
+     required, it is how a reader discovers that an impossible combination is
+     impossible *before* selecting it. */
+  .value__count[data-empty='true'] {
+    color: var(--red);
+  }
+
+  /* Selected: fill, not outline. An inverted chip survives greyscale and
+     colour-blindness, which an accent-coloured outline alone does not -- and it
+     is the same invert `.tui-card__arrow` uses on hover. */
+  .value[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .value[aria-pressed='true']:hover {
+    background: var(--accent-dim);
+    border-color: var(--accent-dim);
+    color: var(--bg);
+  }
+
+  /* The count is blank while selected (the header already carries the number),
+     so this only ever paints the on-state of a chip that is about to be filled
+     by the script -- keeping the count legible against the accent. */
+  .value[aria-pressed='true'] .value__count {
+    color: var(--bg);
+  }
+
+  @media (pointer: coarse) {
+    .filter__hdr,
+    .filter__reset,
+    .facet__summary,
+    .value {
+      min-height: 2.75rem;
+    }
+  }
+</style>

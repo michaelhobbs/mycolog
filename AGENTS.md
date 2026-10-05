@@ -630,6 +630,137 @@ content collection — it is plain TS so `astro check` validates it.
   thumbnails, and it is **not** wired into `prebuild`/`predev` — it needs
   Commons, so a network failure must never be able to fail a build.
 
+## Species & location filtering
+
+`SpeciesFilter.astro` filters the two pages that list species by property: the
+mushroom index and the sighting map. Both pass `unit` (`species` | `sighting`)
+and the result is that the same facet reads truthfully on each page — "gills (31)"
+species on the index, "gills (68)" markers on the map. Add a third page, and it
+must pass a unit rather than reuse the counts.
+
+- **The matching rules live in `src/lib/species-facets.ts` and nowhere else.**
+  That module is imported by the component's `<script>` _and_ by
+  `species-facets-build.ts`, so the two pages cannot drift on how a selection is
+  matched or encoded. Do not re-implement it inside a page or a component.
+- **`species-facets-build.ts` is the only build-time half, and it must stay out of
+  the client bundle.** The seven Wikidata facets are read at build time and
+  flattened into a JSON payload embedded in the panel as a `<script
+type="application/json">`. The 232 KB of species snapshots never reach the
+  browser; `SpeciesFilter`'s own chunk is ~4 KB. Note the `<` → `\u003c` escape on
+  that payload, which is JSON-legal and would otherwise close the script element.
+- **Semantics: one conjunction, everywhere.** `Selection` is
+  `Partial<Record<FacetKey, string[]>>` — a plain list of chosen values per
+  property, with no include/exclude split and no mode. An item has to carry
+  **every** selected value, so selecting gills _and_ pores in one property
+  matches nothing; a property absent from the selection passes everything, so an
+  empty selection keeps every unit. There is no `FacetSelection`, `MatchMode`,
+  `DEFAULT_MODE` or `MODE_PARAM` any more — do not reintroduce them. This was
+  deliberately simplified from a tri-state AND/OR filter: the extra states were
+  the main thing standing between a reader and using it.
+  - **The chip counts are the early-warning system for that.** A chip's number is
+    `countWithValue()` — _how many would match if I selected this_ — so an
+    impossible combination reads `0` in red **before** the click, not after. Do
+    not "fix" a zero count by making the intersection permissive; the zero is the
+    honest reading of AND and the reader deserves to see it coming.
+  - **Missing data is a first-class value** — `NO_DATA` (`~`), selectable like
+    any other, because "no claim on Wikidata" is a real answer to "what are the
+    edible ones". `~` under AND is a real conjunction, not a special case:
+    `[~, 'Q1']` is "no claim _and_ Q1", which nothing can satisfy, so it yields 0
+    like any other impossible pair.
+  - `toggleValue(list, value)` is a two-state membership toggle and is the single
+    write path behind the chips. A property whose list empties is **deleted**
+    rather than kept as `[]`, so `selectionIsEmpty` and `encodeSelection` do not
+    each have to know that "empty list" and "no key" are the same thing.
+- **The unit is decided per sighting, not per species.** `matchesSighting` takes
+  one sighting row and tests its species' Wikidata values _and_ its own location;
+  a species card is then shown when at least one of its sightings survives. That
+  is what makes the location property work on the index, and it is also why
+  selecting a location cannot blank the map: each marker is tested on its own
+  (sibling sightings of a surviving species are not pulled in).
+- **A sighting's identity is its Astro collection id (`{date}/{species-slug}`),
+  and `MapVector` features carry that same string as `properties.slug`.** The
+  filter and the map meet on those ids, so the two must stay the shape Astro's
+  loader produces — a hand-rolled `path.basename` of the parent directory
+  collapses every sighting of a species onto one key and silently drops markers.
+  Assert the intersection is the full sighting count after touching either side.
+- **Filtering republishes, it never refits.** `MapVector` listens for
+  `myco:filter` and calls `source.setData()` so clusters recompute; the fixed
+  15 km extent stays. The selection is _also_ written to
+  `document.documentElement.dataset.mycoFilter`, because the map may not have
+  loaded yet when the first selection happens and the map's `load` handler then
+  has to catch up. Removing either channel breaks one of the two orderings.
+- **URL state is `?f=facet:value,value2;facet2:…`** — `;` between facets, `,`
+  between values, `~` for no data. It uses `history.replaceState`, because a
+  drill-down is half a dozen clicks and pushing each would fill the history stack
+  with filter states; `popstate` re-reads it. `decodeSelection` rejects unknown
+  facet keys but trusts unknown _value_ ids, so a stale shared link can select a
+  chip that no longer exists. It also **drops any `!`-prefixed token**, so a link
+  written before exclusion was removed still loads — minus the exclusions, which
+  are no longer a thing the panel can express.
+- **Progressive enhancement, like the mobile rail toggle:** the panel ships
+  `hidden` and the script reveals it, so with JS off both pages simply show
+  everything — the correct fallback for a filter. Every chip is a real `<button>`
+  with `aria-pressed`; there is no hover-only affordance, and the one rule is
+  stated in a single `filter.hint` sentence rather than a legend of glyphs.
+- **Counts are per unit, dynamic, and hidden once selected.** A chip's number is
+  `countWithValue()`: _how many would match if I selected this_, not the value's
+  static total. With nothing selected it equals the static total, and every click
+  narrows all 71 chips to the question actually being asked. Two consequences
+  that look like bugs and are not: a number can go **up** as the page narrows
+  (`medicinal` selected ⇒ the `poisonous` chip reads 19, because that is now the
+  count of species that are both), and a value already in the selection is blank
+  so it cannot shift under the cursor. A selected chip shows **no** count at all —
+  it is no longer a question, and the number is already in the header.
+  `countSurvivors()` is the single pass behind the header, the per-card counts
+  and the published sighting set, so the three cannot disagree; it is in
+  `species-facets.ts`, not the component, because a chip count computed from a
+  different pass than the card visibility is a silent off-by-one.
+- **Targets are sized for touch, not just for looks.** Chips, property summaries,
+  the header summary and `[ Reset ]` are all `min-height: 2.25rem` (36px) and go
+  to `2.75rem` (44px) under `@media (pointer: coarse)`. A chip is the whole point
+  of the panel; at 24px it is a miss on a phone. Selected chips **invert** —
+  `--accent` fill with `--bg` text — rather than taking an accent-coloured
+  outline, because a fill survives greyscale and colour-blindness the way an
+  outline does not (the same invert `.tui-card__arrow` uses on hover).
+- **The panel reserves the space its own state changes.** A filter that
+  reflows as it is used makes the reader chase the control they just pressed, so
+  two slots are fixed rather than sized to their content. `.value__count` keeps
+  `min-width: 1.75rem` + `tabular-nums` and **must not** regain a
+  `.value__count:empty { display: none }` rule: the count changes on every click
+  and goes blank on the selected chip, so a content-sized slot re-flows all 71
+  chips. `[ Reset ]` is toggled with `data-visible` → `visibility: hidden`, not
+  the `hidden` attribute — `display: none` removed its box, so the first
+  selection pushed a button into the header and dropped the page by a line.
+  `visibility: hidden` also keeps it out of the tab order and the accessibility
+  tree, so an unfiltered panel shows a gap where the button will appear.
+  Anything else in the header that appears on selection (`[data-filter-names]`,
+  a section's `[data-facet-badge]`) has to be pinned by `margin-left: auto` on
+  what follows it, so its arrival does not move its neighbours.
+- **`setValue(facet, value)` is the single write path**, so the URL, counts,
+  cards and map always follow from one click handler. Do not add a second.
+- **`paintFacets` only ever opens a section, never closes one.** It opens a
+  property that holds a selection — so a shared `?f=…` link arrives showing
+  exactly the chips that are set — and never touches a section in
+  `closedByUser`, which is populated from each section's own `toggle` event.
+  Otherwise a reader's collapse would be undone by the next click anywhere else
+  in the panel.
+- **The panel is a `<details>` that ships closed, and so do its eight sections.**
+  Collapsed it is one summary line, and a reader who never filters sees content
+  rather than 71 chips; the sections are closed so expanding the panel once
+  reveals a readable list of eight properties instead of every chip at once. A
+  shared `?f=…` link force-opens the panel, because arriving at a mysteriously
+  filtered page with the filter hidden is the one outcome worth avoiding.
+- **The selection is restated in words, not as a second control set.** The
+  header carries `[data-filter-names]` — the labels of the selected values,
+  comma-joined, clipped with `text-overflow: ellipsis` so a long selection cannot
+  push the count and `[ Reset ]` off the line. `paintNames()` is the only writer.
+  It is deliberately not chips: the chips inside already carry the state, and a
+  removable copy in the summary would be two places to read and two things that
+  can disagree.
+- **A bare `/* */` in an Astro template is not a comment** — it renders as text.
+  It must be `{/* */}`, or the comment is printed on the page. `astro check` does
+  not catch it, so assert it by scanning `dist` bodies for `/*`.
+
 ## Content collections
 
 - `species` — shared species data (scientific/common name, determining features,

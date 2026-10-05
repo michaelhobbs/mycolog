@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import MapVector from '../../components/MapVector.astro'
+import SpeciesFilter from '../../components/SpeciesFilter.astro'
 import { getCollection } from 'astro:content'
 import { enrichSightings } from '../../lib/sightings'
 import { getTranslations, locales } from '../../i18n'
@@ -26,6 +27,15 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
       <span class="page-header__tag">╔══ {t.map.title}</span>
       <span class="page-header__sub">{t.map.subtitle}</span>
     </div>
+
+    <SpeciesFilter
+      species={speciesEntries}
+      sightings={sightingEntries}
+      unit="sighting"
+      locale={locale}
+    />
+
+    <p class="map-empty" data-filter-empty hidden></p>
 
     <MapVector sightings={sightings} locale={locale} center={[47.4917, 11.0922]} />
 
@@ -54,6 +64,15 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
   }
 
   .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .map-empty {
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
     color: var(--fg-dim);
     font-size: 0.8125rem;
   }

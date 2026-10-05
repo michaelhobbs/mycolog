@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro'
 import { getCollection } from 'astro:content'
 import { Image } from 'astro:assets'
+import SpeciesFilter from '../../../components/SpeciesFilter.astro'
 import { enrichSightings } from '../../../lib/sightings'
 import { getTranslations, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
@@ -54,30 +55,45 @@ const species = speciesEntries
       >
     </div>
 
+    <SpeciesFilter
+      species={speciesEntries}
+      sightings={sightingEntries}
+      unit="species"
+      locale={locale}
+    />
+
+    <p class="mushrooms-empty" data-filter-empty hidden></p>
+
     <div class="grid">
       {
-        species.map((m) => (
-          <a href={`/${locale}/mushrooms/${m.id}`} class="card">
-            <div class="card__img">
-              {m.cover && (
-                <Image
-                  src={m.cover}
-                  alt={l10n(m.commonName, locale)}
-                  loading="lazy"
-                  width={640}
-                  widths={[320, 640]}
-                />
-              )}
-            </div>
-            <div class="card__body">
-              <span class="card__species">{m.scientificName}</span>
-              <span class="card__name">{l10n(m.commonName, locale)}</span>
-              <span class="card__meta">
-                {m.count} {t.log.sightingsCount}
-              </span>
-            </div>
-          </a>
-        ))
+        species.map((m) => {
+          // One string, never a number next to a label across a line break:
+          // Prettier would wrap it and JSX would collapse the newline away,
+          // rendering "22Sightings". The filter rewrites this node too.
+          const countLabel = `${m.count} ${t.log.sightingsCount}`
+          return (
+            <a href={`/${locale}/mushrooms/${m.id}`} class="card" data-species={m.id}>
+              <div class="card__img">
+                {m.cover && (
+                  <Image
+                    src={m.cover}
+                    alt={l10n(m.commonName, locale)}
+                    loading="lazy"
+                    width={640}
+                    widths={[320, 640]}
+                  />
+                )}
+              </div>
+              <div class="card__body">
+                <span class="card__species">{m.scientificName}</span>
+                <span class="card__name">{l10n(m.commonName, locale)}</span>
+                <span class="card__meta" data-species-count>
+                  {countLabel}
+                </span>
+              </div>
+            </a>
+          )
+        })
       }
     </div>
   </section>
@@ -105,6 +121,15 @@ const species = speciesEntries
     font-size: 0.8125rem;
   }
 
+  .mushrooms-empty {
+    margin: 0 0 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -117,6 +142,13 @@ const species = speciesEntries
     text-decoration: none;
     overflow: hidden;
     transition: border-color 0.1s;
+  }
+
+  /* Restated because an author `display` would beat the UA's `[hidden]` rule, and
+     .filter sets none here -- but the filter hides cards through `hidden`, so a
+     later `display` on .card would silently make the filter a no-op. */
+  .card[hidden] {
+    display: none;
   }
 
   .card:hover {

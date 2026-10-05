@@ -1,0 +1,19 @@
+{
+  "species": "hydnum-repandum",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48365,
+    "lng": 11.15353
+  },
+  "images": [
+    "./images/hydnum-repandum1.jpg",
+    "./images/hydnum-repandum2.jpg",
+    "./images/hydnum-repandum3.jpg",
+    "./images/hydnum-repandum4.jpg",
+    "./images/hydnum-repandum5.jpg",
+    "./images/hydnum-repandum6.jpg"
+  ]
+}

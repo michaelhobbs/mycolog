@@ -1,0 +1,17 @@
+{
+  "species": "lepiota-clypeolaria",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-02",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48435,
+    "lng": 11.15309
+  },
+  "images": [
+    "./images/lepiota-clypeolaria1.jpg",
+    "./images/lepiota-clypeolaria2.jpg",
+    "./images/lepiota-clypeolaria3.jpg",
+    "./images/lepiota-clypeolaria4.jpg"
+  ]
+}

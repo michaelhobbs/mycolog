@@ -1,0 +1,16 @@
+{
+  "species": "clavulinopsis-helvola",
+  "locationSlug": "schlattan",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48869,
+    "lng": 11.16032
+  },
+  "images": ["./images/clavulinopsis-helvola1.jpg", "./images/clavulinopsis-helvola2.jpg"],
+  "notes": {
+    "en": "Alt. Apricot Club (Clavulinopsis luteoalba), deemed less likely due to growth on moss.",
+    "de": ""
+  }
+}

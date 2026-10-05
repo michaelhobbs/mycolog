@@ -1,0 +1,17 @@
+{
+  "species": "hydnum-repandum",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.4828,
+    "lng": 11.14972
+  },
+  "images": [
+    "./images/hydnum-repandum1.jpg",
+    "./images/hydnum-repandum2.jpg",
+    "./images/hydnum-repandum3.jpg",
+    "./images/hydnum-repandum4.jpg"
+  ]
+}

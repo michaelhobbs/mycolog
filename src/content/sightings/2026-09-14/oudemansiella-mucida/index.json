@@ -1,0 +1,17 @@
+{
+  "species": "oudemansiella-mucida",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.52022,
+    "lng": 11.08467
+  },
+  "images": [
+    "./images/oudemansiella-mucida1.jpg",
+    "./images/oudemansiella-mucida2.jpg",
+    "./images/oudemansiella-mucida3.jpg",
+    "./images/oudemansiella-mucida4.jpg"
+  ]
+}

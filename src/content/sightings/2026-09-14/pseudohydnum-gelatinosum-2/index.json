@@ -1,0 +1,17 @@
+{
+  "species": "pseudohydnum-gelatinosum",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.52023,
+    "lng": 11.08465
+  },
+  "images": [
+    "./images/pseudohydnum-gelatinosum1.jpg",
+    "./images/pseudohydnum-gelatinosum2.jpg",
+    "./images/pseudohydnum-gelatinosum3.jpg",
+    "./images/pseudohydnum-gelatinosum4.jpg"
+  ]
+}

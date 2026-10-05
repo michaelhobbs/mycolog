@@ -1,0 +1,16 @@
+{
+  "species": "oudemansiella-mucida",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48403,
+    "lng": 11.15316
+  },
+  "images": [
+    "./images/oudemansiella-mucida1.jpg",
+    "./images/oudemansiella-mucida2.jpg",
+    "./images/oudemansiella-mucida3.jpg"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "species": "calocera-cornea",
+  "locationSlug": "schlattan",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.49575,
+    "lng": 11.14551
+  },
+  "images": ["./images/calocera-cornea1.jpg"],
+  "notes": {
+    "en": "There are a few other options of small yellow club/coral/jelly fungi. This one was chosen due to not growing so densely, being so short, and only occasionally forking.",
+    "de": ""
+  }
+}

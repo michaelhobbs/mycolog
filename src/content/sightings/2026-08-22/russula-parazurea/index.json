@@ -1,0 +1,12 @@
+{
+  "species": "russula-parazurea",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-08-22",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48435,
+    "lng": 11.15305
+  },
+  "images": ["./images/russula-parazurea1.jpg", "./images/russula-parazurea2.jpg"]
+}

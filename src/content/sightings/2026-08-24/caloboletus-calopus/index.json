@@ -1,0 +1,18 @@
+{
+  "species": "caloboletus-calopus",
+  "locationSlug": "katzenstein",
+  "authors": ["michael"],
+  "dateSpotted": "2026-08-24",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.47864,
+    "lng": 11.0751
+  },
+  "images": [
+    "./images/caloboletus-calopus1.jpg",
+    "./images/caloboletus-calopus2.jpg",
+    "./images/caloboletus-calopus3.jpg",
+    "./images/caloboletus-calopus4.jpg",
+    "./images/caloboletus-calopus5.jpg"
+  ]
+}

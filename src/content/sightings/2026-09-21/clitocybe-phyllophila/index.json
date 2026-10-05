@@ -1,0 +1,16 @@
+{
+  "species": "clitocybe-phyllophila",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.49155,
+    "lng": 11.05957
+  },
+  "images": [
+    "./images/clitocybe-phyllophila1.jpg",
+    "./images/clitocybe-phyllophila2.jpg",
+    "./images/clitocybe-phyllophila3.jpg"
+  ]
+}

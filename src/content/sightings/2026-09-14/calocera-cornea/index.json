@@ -1,0 +1,16 @@
+{
+  "species": "calocera-cornea",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.52054,
+    "lng": 11.08308
+  },
+  "images": [
+    "./images/calocera-cornea1.jpg",
+    "./images/calocera-cornea2.jpg",
+    "./images/calocera-cornea3.jpg"
+  ]
+}

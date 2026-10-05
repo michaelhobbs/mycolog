@@ -1,0 +1,24 @@
+{
+  "species": "panellus-mitis",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.46541,
+    "lng": 11.03338
+  },
+  "images": [
+    "./images/panellus-mitis1.jpg",
+    "./images/panellus-mitis2.jpg",
+    "./images/panellus-mitis3.jpg",
+    "./images/panellus-mitis4.jpg",
+    "./images/panellus-mitis5.jpg",
+    "./images/panellus-mitis6.jpg",
+    "./images/panellus-mitis7.jpg"
+  ],
+  "notes": {
+    "en": "This could be another type of oysterling. This one says it can be white to grey, which would match these which are sort of grey. These seem to have short stems attaching the mushrooms to the deadwood, which could see this sighting moving to another type of mushroom entirely in the future.",
+    "de": ""
+  }
+}

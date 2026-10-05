@@ -38,11 +38,6 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
     <p class="map-empty" data-filter-empty hidden></p>
 
     <MapVector sightings={sightings} locale={locale} center={[47.4917, 11.0922]} />
-
-    <div class="legend">
-      <span>@@</span>
-      <span class="legend__text">{t.map.legendHint}</span>
-    </div>
   </section>
 </Layout>
 
@@ -75,21 +70,5 @@ const sightings = enrichSightings(sightingEntries, speciesEntries)
     background: var(--bg-surface);
     color: var(--fg-dim);
     font-size: 0.8125rem;
-  }
-
-  .legend {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-    padding: 0.375rem 0.75rem;
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
-    font-size: 0.75rem;
-    color: var(--accent);
-  }
-
-  .legend__text {
-    color: var(--fg-dim);
   }
 </style>

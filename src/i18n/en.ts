@@ -38,8 +38,6 @@ export default {
   map: {
     title: 'Sighting Map',
     subtitle: 'All documented finds at a glance',
-    legend: 'Legend',
-    legendHint: 'Click a marker for details',
     determiningFeatures: 'Key Features',
     habitat: 'Habitat',
     labels: {

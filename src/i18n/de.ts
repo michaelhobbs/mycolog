@@ -38,8 +38,6 @@ export default {
   map: {
     title: 'Fundkarte',
     subtitle: 'Alle Beobachtungen auf einen Blick',
-    legend: 'Legende',
-    legendHint: 'Auf Marker klicken für Details',
     determiningFeatures: 'Bestimmungsmerkmale',
     habitat: 'Lebensraum',
     labels: {

@@ -761,6 +761,75 @@ type="application/json">`. The 232 KB of species snapshots never reach the
   It must be `{/* */}`, or the comment is printed on the page. `astro check` does
   not catch it, so assert it by scanning `dist` bodies for `/*`.
 
+## Header search
+
+`SiteSearch.astro` is a jump-to-species combobox in the shared header. It is
+**not a filter**: it has no `?q=`, and it neither reads nor writes the facet
+selection's `?f=`. The two features share nothing but the bar they sit in, so
+there is no coupling to keep in sync.
+
+- **The index is a static file, fetched on first focus** — `/search-index.json`
+  from `src/pages/search-index.json.ts`. Do **not** inline the payload into
+  `Layout.astro`: the component ships on every one of the built pages, so that
+  would add ~6.5 KB raw / 2.1 KB gzipped to all of them, mostly to the backlog
+  day pages that never search. The invariant to assert after touching this is
+  that no built HTML contains the payload (`"scientific":`).
+- **It is not localized.** Every record carries `en` and `de`, and the client
+  already knows the locale, so one file serves both locales and stays cached
+  when the reader switches. Nine of the 58 entries have no German name, so each
+  name falls back to the other — never render an empty suggestion.
+- **`search-index-build.ts` is the only build-time half and must stay out of the
+  client bundle**, mirroring `species-facets-build.ts`. Neither of its imports is
+  a runtime import, which is also what lets `node --experimental-strip-types`
+  load it from a plain script.
+- **`fuzzy-search.ts` is the only half the browser runs**, and it is DOM-free so
+  `scripts/check-search-ranking.mjs` can rank with the _same_ function. Run
+  `npm run check:search` after touching the matcher or any species name: the
+  thresholds are tuned, and loosening `MIN_DICE` or dropping `MIN_FUZZY_LEN`
+  makes the search feel cleverer while making it wrong, with nothing in the type
+  system objecting.
+- **The scorer has four layers, and two rules that are there because of
+  measurement, not convention.** Layers are substring → whole-token → all-tokens
+  → fuzzy (trigram Dice, boosted by an OSA distance of 1), so a real word match
+  can never be outranked by trigram luck. Then:
+  - **Fuzzy matching requires a query token of ≥ 4 characters.** Below that a
+    trigram means almost nothing — without the floor, `gift` matches _Common
+    Split Gill_ on two trigrams. Short queries stay substring-only and silently
+    find nothing, which is the honest reading of a query that asks nothing.
+  - **Every query token must clear the threshold, and the worst one decides.**
+    Taking the best token would let `edulis zzzz` match _Boletus edulis_.
+- **Never say "no species found" when there is no answer to give.** The empty
+  row appears only for a query long enough to have been asked. A one-character
+  query, and the window before the index has loaded, both stay silent — the
+  first has not been asked anything, and the second would otherwise flash a lie
+  at the reader for the length of the request.
+- **The empty row is a sibling of the listbox, not an `<li>` inside it.** A
+  `role="listbox"` may only contain options, and a list with no options must be
+  `aria-expanded="false"`, not expanded onto a message.
+- **Focus never leaves the input.** The active option is tracked with
+  `aria-activedescendant`, so `Enter` is the only way to commit one and
+  `Escape` always has something to return to. `Enter` always `preventDefault`s:
+  there is no search _page_, so submitting the form would GET a URL that does
+  not exist.
+- **Options carry an explicit `aria-label`.** The two visible lines are
+  `display: block`, so `textContent` concatenates them — and that concatenation
+  _is_ the accessible name, which a screen reader announces as one run-on word
+  ("Oak boleteAnhängsel-Röhrling").
+- **The control ships `hidden` and its script reveals it**, the same contract as
+  `.nav__date` and `SpeciesFilter`: with JS off there is no search box rather
+  than a field that goes nowhere.
+- **Below 768px the field overlays the bar instead of growing it.** Growing it
+  would change `--header-h`, and the sticky rail, the mobile drawer's top and
+  `:target` scroll-margin all derive from that token. `align-self: stretch` on
+  `.search` is what puts the listbox's `top: 100%` on the bottom of the _bar_
+  rather than the bottom of the input.
+- **The fetch is lazy, memoised and fired on `pointerdown` of the mobile glyph as
+  well as `focus`.** Assert by counting `performance.getEntriesByType` for
+  `search-index`: 0 before the first interaction, 1 after, 1 for the rest of the
+  session — including a locale switch.
+- `dist/index.html` is Astro's i18n redirect stub and renders no header, so it is
+  the one built page legitimately without the control.
+
 ## Content collections
 
 - `species` — shared species data (scientific/common name, determining features,

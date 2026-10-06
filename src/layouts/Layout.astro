@@ -3,6 +3,7 @@ import type { Locale } from '../i18n'
 import { getTranslations, locales, defaultLocale } from '../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import Lightbox from '../components/Lightbox.astro'
+import SiteSearch from '../components/SiteSearch.astro'
 
 interface Props {
   title: string
@@ -83,6 +84,17 @@ function localizedPath(targetLocale: Locale): string {
             ]}>[{t.nav.identifications}]</a
           >
         </div>
+
+        <!--
+          Immediately before `.nav__lang`, which keeps the field to the left of
+          the language selector as the reader expects on desktop. `.search` then
+          carries the `margin-left: auto` that parks the pair hard right — it
+          precedes `.nav__lang`'s own, so the free space all lands before the
+          field rather than between field and switcher. Below 768px `.nav__lang`
+          is hidden and this is the only `auto` left, so the glyph sits with
+          `[=]` and the date control on the right instead of after the logo.
+        -->
+        <SiteSearch locale={locale} />
 
         <div class="nav__lang">
           {
@@ -380,6 +392,24 @@ function localizedPath(targetLocale: Locale): string {
     font-size: 1rem;
     cursor: pointer;
     padding: 0.25rem;
+  }
+
+  /*
+    `.search` and this bar's other flush-right anchors both claim the free space,
+    and a flex container *splits* it between every `margin-left: auto` it finds
+    rather than giving it all to the first -- which parked the search glyph
+    mid-bar with a second, equal gap before `[=]`. Exactly one may claim it: the
+    field once the script has revealed it, and these two before then. The
+    `:not([hidden])` is load-bearing in both directions: without it a JS-off
+    reader would get two `auto` margins again, and a page with no `SiteSearch`
+    at all would lose its right alignment entirely.
+  */
+  .search:not([hidden]) ~ .nav__mobile-toggle {
+    margin-left: 0;
+  }
+
+  .search:not([hidden]) ~ .nav__lang {
+    margin-left: 0;
   }
 
   .nav__date {

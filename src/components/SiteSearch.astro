@@ -1,0 +1,756 @@
+---
+import type { Locale } from '../i18n'
+import { getTranslations } from '../i18n'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getTranslations(locale)
+
+/**
+ * Header search: a jump-to-species combobox.
+ *
+ * Deliberately **not** a filter. It carries no `?q=` and does not read or write
+ * the facet selection's `?f=`, so it cannot drift out of step with
+ * `SpeciesFilter` — the two share nothing but the header they sit in.
+ *
+ * It ships `hidden` and the script below reveals it, matching `.nav__date`: with
+ * JS off there is no search box at all rather than a field that goes nowhere.
+ *
+ * Every string the script needs arrives as a data attribute rather than through
+ * `define:vars`, because a bundled `<script>` cannot see frontmatter scope and
+ * `define:vars` would opt the whole component out of bundling.
+ */
+const strings = {
+  label: t.search.label,
+  placeholder: t.search.placeholder,
+  open: t.search.open,
+  close: t.search.close,
+  empty: t.search.empty,
+  results: t.search.results,
+}
+const listboxId = `search-list-${locale}`
+---
+
+<div class="search" data-search hidden>
+  <button class="search__open" type="button" data-search-open aria-label={strings.open}>
+    <svg
+      class="search__open-icon"
+      viewBox="0 0 16 16"
+      width="14"
+      height="14"
+      stroke-width="1.5"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle cx="7" cy="7" r="4.25" fill="none" stroke="currentColor"></circle>
+      <path d="M10.4 10.4 13.5 13.5" fill="none" stroke="currentColor"></path>
+    </svg>
+  </button>
+
+  <form class="search__field" role="search" data-search-form>
+    <label class="search__label" for={`search-input-${locale}`}>{strings.label}</label>
+    <input
+      class="search__input"
+      id={`search-input-${locale}`}
+      type="search"
+      autocomplete="off"
+      autocorrect="off"
+      autocapitalize="off"
+      spellcheck="false"
+      placeholder={strings.placeholder}
+      role="combobox"
+      aria-expanded="false"
+      aria-controls={listboxId}
+      aria-autocomplete="list"
+      aria-haspopup="listbox"
+      data-search-input
+    />
+    <button class="search__close" type="button" data-search-close aria-label={strings.close}>
+      <span aria-hidden="true">[x]</span>
+    </button>
+  </form>
+
+  <ul class="search__list" id={listboxId} role="listbox" data-search-list></ul>
+
+  <!--
+    A `role="listbox"` may only contain options, so the "nothing found" row is a
+    sibling rather than an `<li>`. It also keeps `aria-expanded` honest: a list
+    with no options is closed, not expanded onto a message.
+  -->
+  <p class="search__empty" data-search-empty hidden>{strings.empty}</p>
+
+  <span class="search__status" role="status" aria-live="polite" data-search-status></span>
+
+  <span
+    hidden
+    data-search-strings
+    data-empty={strings.empty}
+    data-results={strings.results}
+    data-locale={locale}></span>
+</div>
+
+<style>
+  /* `align-self: stretch` so the listbox's `top: 100%` lands exactly on the
+     bottom of the header bar rather than on the bottom of the input, and the
+     panel therefore needs no hard-coded header height.
+
+     `margin-left: auto` parks the field hard right, immediately before the
+     language switcher. It precedes `.nav__lang`'s own `auto`, so all the free
+     space lands before the field rather than between the two -- that ordering is
+     load-bearing, and comes from `SiteSearch`'s position in `Layout.astro`. */
+  .search {
+    align-self: stretch;
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .search[hidden] {
+    display: none;
+  }
+
+  .search__open {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    background: none;
+    border: none;
+    color: var(--fg);
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .search__field {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    width: 11rem;
+    max-width: 42vw;
+    padding: 0.1875rem 0.375rem;
+    border: 1px solid var(--border-char);
+    background: var(--bg-surface);
+  }
+
+  .search__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .search__input {
+    flex: 1;
+    min-width: 0;
+    background: none;
+    border: none;
+    color: var(--fg);
+    font: inherit;
+    font-size: 0.8125rem;
+    padding: 0.125rem 0;
+  }
+
+  /* The UA's own clear button would sit on top of our close affordance. */
+  .search__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  /* The UA would otherwise draw its own ring on the input *inside* the field
+     ring above, leaving two outlines one pixel apart. */
+  .search__input:focus-visible {
+    outline: none;
+  }
+
+  /* Any focus (mouse or keyboard) warms the border, which is the cheap signal
+     that the field is live. The ring is reserved for `:focus-visible`, so
+     clicking into the box does not draw an outline a mouse reader never asked
+     for -- and it matches the `outline` every other control in the panel uses. */
+  .search:focus-within .search__field {
+    border-color: var(--accent-dim);
+  }
+
+  .search:has(.search__input:focus-visible) .search__field {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .search__close {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--fg-subtle);
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0.125rem;
+  }
+
+  .search__close:hover {
+    color: var(--fg-bright);
+  }
+
+  .search__list {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 0.25rem;
+    list-style: none;
+    display: none;
+    /* Anchored to the input's right edge and growing leftwards, which is the
+       only direction with room at the top-right of a 48px bar. */
+    width: max-content;
+    min-width: 100%;
+    max-width: min(22rem, calc(100vw - 2rem));
+    max-height: 60vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-char);
+  }
+
+  .search__list[data-open] {
+    display: block;
+  }
+
+  .search__empty {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1;
+    margin: 0.25rem 0 0;
+    padding: 0.375rem 0.5rem;
+    width: max-content;
+    min-width: 11rem;
+    color: var(--fg-subtle);
+    font-size: 0.8125rem;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-char);
+  }
+
+  .search__option {
+    display: block;
+    padding: 0.375rem 0.5rem;
+    color: var(--fg);
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    text-decoration: none;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  /* Three lines. The listbox is `width: max-content` and `nowrap` is what sizes
+     it, so each line ellipsises only once the 22rem cap actually bites -- a long
+     binomial must not wrap the row taller than the others. */
+  .search__name,
+  .search__sci,
+  .search__alt {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .search__name {
+    color: inherit;
+  }
+
+  .search__sci {
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    font-style: italic;
+  }
+
+  .search__alt {
+    color: var(--fg-subtle);
+    font-size: 0.6875rem;
+  }
+
+  /* Pointer and keyboard land on the same row. The plugin gates `:hover` behind
+     `(hover: hover)` and splits it off the list, leaving `[data-active]` ungated
+     -- so on a touch device the keyboard cursor still has a visible form, and
+     hover does not have to survive a `click`. */
+  .search__option:hover,
+  .search__option[data-active] {
+    background: var(--bg);
+    color: var(--fg-bright);
+  }
+
+  /* The accent rail is what says *this* is where Enter goes. Hover alone cannot:
+     a phone has none, and a reader tabbing through with no pointer would be
+     navigating an unchanged list. */
+  .search__option[data-active] {
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .search__option:hover .search__alt,
+  .search__option[data-active] .search__alt {
+    color: var(--fg-dim);
+  }
+
+  /* The match itself. A filled accent block rather than a colour change or an
+     underline, because it has to survive being read against both `--bg-surface`
+     and the `--bg` a hovered row flips to -- and because the site already
+     inverts to `--accent` on `--bg` wherever a row is selected. */
+  .search__hl {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0 0.0625rem;
+  }
+
+  /* The live region must stay in the layout tree: a `hidden` status element is
+     not announced, and `display: none` would take the suggestion rows' anchor
+     out of the accessibility tree with it. */
+  .search__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Below 900px the bar cannot afford the field.
+
+     Measured, not guessed: the header's contents need 841px (logo + separator +
+     seven links + a 154px field + the language switcher, plus four 10.5px gaps),
+     while the nav only collapses at 768 -- so between 769 and 883 the document
+     carried a horizontal scrollbar purely because of this control. Swapping the
+     field for the glyph takes the total to 709px, which fits at 769 with 19px to
+     spare, and 900 is the round number at which the full field is safe again
+     (17px of slack, measured).
+
+     The field then expands *over* the bar rather than growing it. Growing it
+     would change `--header-h`, and the sticky rail, the drawer top and `:target`
+     scroll-margin all derive from that token.
+
+     `position: static` is what makes that overlay usable. In this band `.search`
+     holds nothing but the glyph, so as a containing block it is ~21px wide and
+     `width: 78%` of it resolved to 16px. `.header` is `position: sticky`, hence
+     already positioned, so dropping `relative` here re-anchors every absolute
+     child to the bar itself -- and the width can then be a viewport expression
+     that is always on screen (`100vw - 4rem` leaves 56px of clearance) instead
+     of a percentage of a 21px box. Above 900px nothing changes: `.search` stays
+     `relative` and the field is in flow at its full 11rem. */
+  @media (max-width: 899px) {
+    .search {
+      position: static;
+    }
+
+    .search__open {
+      display: flex;
+    }
+
+    .search__field {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: min(20rem, calc(100vw - 4rem));
+      height: var(--header-h);
+      max-width: none;
+      background: var(--bg);
+      border: none;
+      border-left: 1px solid var(--border-char);
+      padding: 0 0.5rem;
+    }
+
+    .search[data-open] .search__field {
+      display: flex;
+    }
+
+    .search__close {
+      display: block;
+    }
+
+    /* Same clearance as the field: a panel that could reach past the left edge
+       of the viewport would put its first suggestion off screen. */
+    .search__list {
+      right: 0;
+      min-width: min(20rem, calc(100vw - 4rem));
+      max-width: min(22rem, calc(100vw - 4rem));
+    }
+
+    .search__empty {
+      right: 0;
+      min-width: min(20rem, calc(100vw - 4rem));
+      max-width: min(22rem, calc(100vw - 4rem));
+    }
+  }
+</style>
+
+<script>
+  // The scoring rules live in `../lib/fuzzy-search` and are shared with
+  // `scripts/check-search-ranking.mjs`, so the browser and the fixture cannot
+  // disagree about what counts as a match.
+  import { highlightRanges, search } from '../lib/fuzzy-search'
+  import type { SearchRecord, SearchResult } from '../lib/fuzzy-search'
+  import type { Locale } from '../i18n'
+
+  const INDEX_URL = '/search-index.json'
+  /**
+   * Long enough to coalesce a burst of keystrokes, short enough that a reader who
+   * pauses mid-word sees suggestions before they finish it. There is no work to
+   * protect here — scoring 58 records is free — this only stops the list
+   * rebuilding under the cursor on every character.
+   */
+  const DEBOUNCE_MS = 150
+  const MIN_QUERY = 2
+
+  interface Strings {
+    empty: string
+    results: string
+    locale: Locale
+  }
+
+  // Memoised across every instance and every locale on the page: switching
+  // language must not re-fetch, and one broken response must not be retried on
+  // every keystroke.
+  let indexPromise: Promise<SearchRecord[]> | null = null
+
+  function loadIndex(): Promise<SearchRecord[]> {
+    if (!indexPromise) {
+      indexPromise = fetch(INDEX_URL)
+        .then((response) => {
+          if (!response.ok) throw new Error(`search index: ${response.status}`)
+          return response.json() as Promise<SearchRecord[]>
+        })
+        .catch((error: unknown) => {
+          indexPromise = null
+          console.warn('site search unavailable', error)
+          throw error
+        })
+    }
+    return indexPromise
+  }
+
+  function isTypingTarget(target: EventTarget | null): boolean {
+    if (!(target instanceof HTMLElement)) return false
+    if (target.isContentEditable) return true
+    const tag = target.tagName
+    return tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT'
+  }
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-search]')) {
+    const form = root.querySelector<HTMLFormElement>('[data-search-form]')
+    const input = root.querySelector<HTMLInputElement>('[data-search-input]')
+    const list = root.querySelector<HTMLUListElement>('[data-search-list]')
+    const emptyEl = root.querySelector<HTMLElement>('[data-search-empty]')
+    const status = root.querySelector<HTMLElement>('[data-search-status]')
+    const openButton = root.querySelector<HTMLButtonElement>('[data-search-open]')
+    const closeButton = root.querySelector<HTMLButtonElement>('[data-search-close]')
+    const stringsEl = root.querySelector<HTMLElement>('[data-search-strings]')
+    if (
+      !form ||
+      !input ||
+      !list ||
+      !emptyEl ||
+      !status ||
+      !openButton ||
+      !closeButton ||
+      !stringsEl
+    ) {
+      continue
+    }
+
+    const strings: Strings = {
+      empty: stringsEl.dataset.empty ?? '',
+      results: stringsEl.dataset.results ?? '',
+      locale: stringsEl.dataset.locale === 'de' ? 'de' : 'en',
+    }
+    const listId = input.getAttribute('aria-controls') ?? ''
+    const optionId = (index: number) => `${listId}-${index}`
+
+    // Astro scopes this component's stylesheet by annotating the elements in its
+    // *template* with `data-astro-cid-*`. Anything built below at runtime never
+    // sees that attribute, and every scoped rule then matches nothing -- which
+    // is how the suggestion rows shipped unstyled, hover rules and all. Copying
+    // the marker off the root keeps the CSS above scoped; do not reach for
+    // `:global(...)` instead, as that would quietly move the whole stylesheet out
+    // of the component.
+    const scope: [string, string][] = []
+    for (const attribute of Array.from(root.attributes)) {
+      if (attribute.name.startsWith('data-astro-cid')) {
+        scope.push([attribute.name, attribute.value])
+      }
+    }
+    const scoped = (element: Element): void => {
+      for (const [name, value] of scope) element.setAttribute(name, value)
+    }
+
+    /** Append `text` to `parent`, wrapping each matched range in a `<mark>`. */
+    const highlightInto = (parent: HTMLElement, text: string, query: string): void => {
+      const ranges = highlightRanges(text, query)
+      if (ranges.length === 0) {
+        parent.textContent = text
+        return
+      }
+      let at = 0
+      for (const [start, end] of ranges) {
+        if (start > at) parent.append(document.createTextNode(text.slice(at, start)))
+        const mark = document.createElement('mark')
+        mark.className = 'search__hl'
+        scoped(mark)
+        mark.textContent = text.slice(start, end)
+        parent.append(mark)
+        at = end
+      }
+      if (at < text.length) parent.append(document.createTextNode(text.slice(at)))
+    }
+
+    let records: SearchRecord[] | null = null
+    let results: SearchResult[] = []
+    let active = -1
+    let timer: ReturnType<typeof setTimeout> | undefined
+
+    // Arrow consts rather than function declarations, in dependency order: a
+    // hoisted declaration would defeat the null-narrowing from the guard above,
+    // and `astro check` would then reject every `input` / `list` reference below.
+
+    const setActive = (index: number): void => {
+      const previous = list.querySelector<HTMLElement>('[data-active]')
+      if (previous) {
+        delete previous.dataset.active
+        previous.setAttribute('aria-selected', 'false')
+      }
+      active = index
+      if (index < 0 || !results[index]) {
+        input.removeAttribute('aria-activedescendant')
+        return
+      }
+      const option = list.querySelector<HTMLElement>(`#${CSS.escape(optionId(index))}`)
+      if (!option) return
+      option.dataset.active = ''
+      option.setAttribute('aria-selected', 'true')
+      // Focus deliberately never leaves the input, so `Enter` is the only way to
+      // commit an option and `Escape` always has something to return to.
+      input.setAttribute('aria-activedescendant', optionId(index))
+      option.scrollIntoView({ block: 'nearest' })
+    }
+
+    const setOpen = (open: boolean): void => {
+      if (open) list.dataset.open = ''
+      else delete list.dataset.open
+      input.setAttribute('aria-expanded', String(open))
+      if (!open) setActive(-1)
+    }
+
+    const announce = (count: number): void => {
+      // Only on change, so holding a key down does not re-announce every frame.
+      const text = count === 0 ? strings.empty : strings.results.replace('{count}', String(count))
+      if (status.textContent !== text) status.textContent = text
+    }
+
+    const go = (index: number): void => {
+      const result = results[index]
+      if (result) window.location.href = result.href
+    }
+
+    const paint = (query: string): void => {
+      list.textContent = ''
+      if (results.length === 0) {
+        setOpen(false)
+        return
+      }
+
+      const fragment = document.createDocumentFragment()
+      results.forEach((result, index) => {
+        const option = document.createElement('li')
+        option.className = 'search__option'
+        option.id = optionId(index)
+        option.setAttribute('role', 'option')
+        option.setAttribute('aria-selected', 'false')
+        scoped(option)
+
+        // Three lines, in the order a reader checks them: the name they are
+        // reading now, the name a book would use, and the name they may have
+        // typed instead. The scientific line is never omitted — it is the one
+        // string that is identical in both locales.
+        const name = document.createElement('span')
+        name.className = 'search__name'
+        scoped(name)
+        highlightInto(name, result.label, query)
+
+        const scientific = document.createElement('span')
+        scientific.className = 'search__sci'
+        scoped(scientific)
+        highlightInto(scientific, result.record.scientific, query)
+        option.append(name, scientific)
+
+        if (result.altLabel) {
+          const alt = document.createElement('span')
+          alt.className = 'search__alt'
+          scoped(alt)
+          highlightInto(alt, result.altLabel, query)
+          option.append(alt)
+        }
+
+        // The lines are `display: block`, so visually they are separate but
+        // `textContent` concatenates them -- and that concatenation *is* the
+        // accessible name, which a screen reader would announce as one run-on
+        // word ("ChanterelleCantharellus cibarius"). An explicit label fixes the
+        // spoken form, and lists all three lines in the order they are drawn.
+        option.setAttribute(
+          'aria-label',
+          result.altLabel
+            ? `${result.label}, ${result.record.scientific}, ${result.altLabel}`
+            : `${result.label}, ${result.record.scientific}`,
+        )
+
+        option.addEventListener('pointerdown', (event) => {
+          // `pointerdown` rather than `click`, so the document-level
+          // click-outside handler below cannot tear the list down between
+          // pointerdown and the click that would have followed it.
+          event.preventDefault()
+          go(index)
+        })
+        option.addEventListener('pointerenter', () => setActive(index))
+        fragment.append(option)
+      })
+      list.append(fragment)
+      setOpen(true)
+      announce(results.length)
+    }
+
+    const dismiss = (): void => {
+      list.textContent = ''
+      emptyEl.hidden = true
+      status.textContent = ''
+      setOpen(false)
+    }
+
+    const update = (): void => {
+      const query = input.value.trim()
+      // Two cases where there is genuinely nothing to say, and both must stay
+      // silent. Claiming "no species found" while the index is still in flight
+      // would be a lie the reader sees for the length of the request, and a
+      // one-character query has not failed to match — it has not been asked
+      // anything yet.
+      if (records === null || query.length < MIN_QUERY) {
+        results = []
+        list.textContent = ''
+        emptyEl.hidden = true
+        status.textContent = ''
+        setOpen(false)
+        return
+      }
+      results = search(records, query, strings.locale)
+      emptyEl.hidden = results.length > 0
+      paint(query)
+      if (results.length === 0) announce(0)
+    }
+
+    const schedule = (): void => {
+      if (timer) clearTimeout(timer)
+      timer = setTimeout(update, DEBOUNCE_MS)
+    }
+
+    const openField = (): void => {
+      root.dataset.open = ''
+    }
+
+    const closeField = (): void => {
+      delete root.dataset.open
+      openButton.focus()
+    }
+
+    const warm = (): void => {
+      loadIndex()
+        .then((loaded) => {
+          records = loaded
+          // A query typed while the fetch was in flight would otherwise be lost.
+          if (input.value.trim().length >= MIN_QUERY) update()
+        })
+        .catch(() => {
+          input.placeholder = strings.empty
+        })
+    }
+
+    root.removeAttribute('hidden')
+
+    input.addEventListener('focus', warm)
+    openButton.addEventListener('pointerdown', warm)
+    input.addEventListener('input', schedule)
+
+    input.addEventListener('keydown', (event) => {
+      switch (event.key) {
+        case 'ArrowDown':
+          if (results.length === 0) return
+          event.preventDefault()
+          if (!list.hasAttribute('data-open')) setOpen(true)
+          setActive(active + 1 >= results.length ? 0 : active + 1)
+          return
+        case 'ArrowUp':
+          if (results.length === 0) return
+          event.preventDefault()
+          if (!list.hasAttribute('data-open')) setOpen(true)
+          setActive(active <= 0 ? results.length - 1 : active - 1)
+          return
+        case 'Enter': {
+          // Always prevented: there is no search *page*, so submitting the form
+          // would be a GET for a URL that does not exist.
+          event.preventDefault()
+          if (results.length === 0) return
+          go(active >= 0 ? active : 0)
+          return
+        }
+        case 'Escape':
+          if (list.hasAttribute('data-open')) {
+            setOpen(false)
+          } else if (input.value !== '') {
+            input.value = ''
+            update()
+          } else {
+            if (root.hasAttribute('data-open')) closeField()
+            input.blur()
+          }
+          return
+        case 'Tab':
+          dismiss()
+          return
+      }
+    })
+
+    openButton.addEventListener('click', () => {
+      openField()
+      input.focus()
+    })
+
+    closeButton.addEventListener('click', () => {
+      input.value = ''
+      update()
+      closeField()
+    })
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault()
+      if (results.length > 0) go(active >= 0 ? active : 0)
+    })
+
+    document.addEventListener('pointerdown', (event) => {
+      if (root.contains(event.target as Node)) return
+      dismiss()
+      // Closing by tapping elsewhere must not steal focus, so the field is only
+      // collapsed here -- never refocused.
+      if (root.hasAttribute('data-open')) delete root.dataset.open
+    })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey) return
+      if (isTypingTarget(event.target)) return
+      event.preventDefault()
+      openField()
+      input.focus()
+      warm()
+    })
+  }
+</script>

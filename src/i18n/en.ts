@@ -148,6 +148,14 @@ export default {
     emptySpecies: 'No species match this filter.',
     emptySightings: 'No sightings match this filter.',
   },
+  search: {
+    label: 'Search species',
+    placeholder: 'Search species…',
+    open: 'Open search',
+    close: 'Close search',
+    empty: 'No species found',
+    results: '{count} suggestions',
+  },
   locations: {
     title: 'Locations',
     subtitle: 'The areas where mushrooms have been found',

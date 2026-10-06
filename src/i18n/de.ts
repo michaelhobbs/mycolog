@@ -148,6 +148,14 @@ export default {
     emptySpecies: 'Keine Art entspricht diesem Filter.',
     emptySightings: 'Keine Beobachtung entspricht diesem Filter.',
   },
+  search: {
+    label: 'Arten suchen',
+    placeholder: 'Arten suchen…',
+    open: 'Suche öffnen',
+    close: 'Suche schließen',
+    empty: 'Keine Art gefunden',
+    results: '{count} Vorschläge',
+  },
   locations: {
     title: 'Orte',
     subtitle: 'Die Gebiete, in denen Pilze gefunden wurden',

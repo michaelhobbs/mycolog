@@ -152,7 +152,6 @@ export default {
     label: 'Search species',
     placeholder: 'Search species…',
     open: 'Open search',
-    close: 'Close search',
     empty: 'No species found',
     results: '{count} suggestions',
   },

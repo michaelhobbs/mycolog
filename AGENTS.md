@@ -826,10 +826,18 @@ there is no coupling to keep in sync.
   follows needs the swap to be _laid out_ first — an element inside
   `display: none` is not focusable — hence the single forced reflow in
   `openField()`. Assert the round trip: field hidden, glyph shown → click →
-  field shown, glyph gone, `document.activeElement` is the input → `[x]` or an
-  outside `pointerdown` reverses it **and returns focus to the glyph**, because
-  hiding a focused input drops it to `<body>` and restarts <kbd>Tab</kbd> at the
-  top of the page. <kbd>/</kbd> reopens it from anywhere.
+  field shown, glyph gone, `document.activeElement` is the input →
+  <kbd>Esc</kbd> or an outside `pointerdown` reverses it **and returns focus to
+  the glyph**, because hiding a focused input drops it to `<body>` and restarts
+  <kbd>Tab</kbd> at the top of the page. <kbd>/</kbd> reopens it from anywhere.
+- **The field has no close button.** <kbd>Esc</kbd> walks down one step at a
+  time — dismiss the list, then clear the query, then close the field — while an
+  outside `pointerdown` closes it in one step and _keeps_ the query for the next
+  open. Both return focus to the glyph. The UA's own
+  `::-webkit-search-cancel-button` is hidden as well, so the field holds exactly
+  one interactive element. Do not reintroduce an `[x]`: on touch it is the only
+  close affordance that exists (there is no <kbd>Esc</kbd> key), and the logo
+  side of the bar plus the page itself are what the outside tap has to hit.
 - **At 900px and up the opened field sits inline; below that it overlays the
   bar.** Measured: the header's contents need 841px with the field in flow while
   the nav only collapses at 768, so 900 is the first width at which the full
@@ -837,13 +845,19 @@ there is no coupling to keep in sync.
   horizontal scrollbar. Growing the bar would also change `--header-h`, which
   the sticky rail, the mobile drawer's top and `:target` scroll-margin all
   derive from — hence the overlay in that band. The overlay anchors to
-  **`.header`**, not `.search`: in the glyph band `.search` is ~21px wide, so
-  leaving it `position: relative` makes `width: 78%` resolve to 16px;
-  `position: static` re-anchors every absolute child to the bar (already
-  `position: sticky`, hence positioned) and lets the width be
-  `min(20rem, calc(100vw - 4rem))`, which is always on screen. `align-self:
-stretch` on `.search` is what puts the listbox's `top: 100%` on the bottom of
-  the _bar_ rather than the bottom of the input.
+  **`.header`**, not `.search`: in the glyph band `.search` is ~21px wide _and_
+  sits to the left of the language switcher and the mobile toggle, so anything
+  `right`-anchored against it lands in the middle of the bar; `position: static`
+  re-anchors every absolute child to the bar instead (already `position: sticky`,
+  hence positioned). The field is **not restyled** there — it keeps the desktop
+  `11rem`/`42vw` box, border, background and padding, and only moves: `top: 50%`
+  plus `translateY(-50%)` centres it in the bar, and `right: 1.5rem` is the nav's
+  own padding, so the right border (and the UA focus ring drawn inside it) clears
+  the viewport edge instead of running off it. The listbox and the empty row take
+  the same `right: 1.5rem`, and `min-width: 11rem` replaces the base
+  `min-width: 100%`, which here would be 100% of the bar. `align-self: stretch`
+  on `.search` is what puts the listbox's `top: 100%` on the bottom of the _bar_
+  rather than the bottom of the input.
 - **`.search` and the bar's other flush-right anchors cannot both own
   `margin-left: auto`.** A flex container _splits_ the free space between every
   `auto` it finds rather than giving it all to the first, which strands the glyph

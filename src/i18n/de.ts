@@ -152,7 +152,6 @@ export default {
     label: 'Arten suchen',
     placeholder: 'Arten suchen…',
     open: 'Suche öffnen',
-    close: 'Suche schließen',
     empty: 'Keine Art gefunden',
     results: '{count} Vorschläge',
   },

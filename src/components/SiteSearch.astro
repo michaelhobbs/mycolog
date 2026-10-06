@@ -27,7 +27,6 @@ const strings = {
   label: t.search.label,
   placeholder: t.search.placeholder,
   open: t.search.open,
-  close: t.search.close,
   empty: t.search.empty,
   results: t.search.results,
 }
@@ -68,9 +67,6 @@ const listboxId = `search-list-${locale}`
       aria-haspopup="listbox"
       data-search-input
     />
-    <button class="search__close" type="button" data-search-close aria-label={strings.close}>
-      <span aria-hidden="true">[x]</span>
-    </button>
   </form>
 
   <ul class="search__list" id={listboxId} role="listbox" data-search-list></ul>
@@ -118,7 +114,8 @@ const listboxId = `search-list-${locale}`
 
   /* The default state is the glyph, at every width. It is a *button*, not a
      decorative icon: clicking it swaps in the field and moves focus there, and
-     `[x]` puts it back. A field that is always on screen costs 154px of the bar
+     Escape or a tap anywhere outside puts it back. A field that is always on
+     screen costs 154px of the bar
      for a feature most readers never touch, and it is the only control in the
      header that is never used. */
   .search__open {
@@ -177,45 +174,24 @@ const listboxId = `search-list-${locale}`
     padding: 0.125rem 0;
   }
 
-  /* The UA's own clear button would sit on top of our close affordance. */
+  /* The field carries no close or clear button: Escape, or a tap/click outside
+     it, dismisses the whole control and keeps the query for the next open. The
+     UA's own clear button is hidden so nothing inside the input implies that
+     tapping it would reset something. */
   .search__input::-webkit-search-cancel-button {
     display: none;
   }
 
-  /* The UA would otherwise draw its own ring on the input *inside* the field
-     ring above, leaving two outlines one pixel apart. */
-  .search__input:focus-visible {
-    outline: none;
-  }
+  /* Focus indication on the input is the browser's, not ours: an explicit
+     `outline` here would be drawn relative to the *field*, which at the mobile
+     breakpoint sits flush against the right edge of the viewport -- so the ring
+     ran off screen. The UA ring is drawn around the input itself, inside the
+     field's border, and needs no offset to stay on screen.
 
-  /* Any focus (mouse or keyboard) warms the border, which is the cheap signal
-     that the field is live. The ring is reserved for `:focus-visible`, so
-     clicking into the box does not draw an outline a mouse reader never asked
-     for -- and it matches the `outline` every other control in the panel uses. */
+     The border tint below is what covers `:focus-within` from a pointer, where
+     the UA draws no ring. */
   .search:focus-within .search__field {
     border-color: var(--accent-dim);
-  }
-
-  .search:has(.search__input:focus-visible) .search__field {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
-  /* Lives inside the field, so it inherits the field's own visibility and needs
-     no matching `.search[data-open]` rule of its own. */
-  .search__close {
-    display: block;
-    background: none;
-    border: none;
-    color: var(--fg-subtle);
-    font: inherit;
-    font-size: 0.75rem;
-    cursor: pointer;
-    padding: 0.125rem;
-  }
-
-  .search__close:hover {
-    color: var(--fg-bright);
   }
 
   .search__list {
@@ -353,15 +329,22 @@ const listboxId = `search-list-${locale}`
      would change `--header-h`, and the sticky rail, the drawer top and `:target`
      scroll-margin all derive from that token. At 900px and up it stays inline
      instead -- that is what `.search__field`'s base rules do, and this block only
-     has to override the two things that make an overlay possible.
+     has to override the things that make an overlay possible.
 
-     `position: static` is what makes the overlay usable. In this band `.search`
+     `position: static` is what makes the anchor correct. In this band `.search`
      holds nothing but the glyph, so as a containing block it is ~21px wide and
-     `width: 78%` of it resolved to 16px. `.header` is `position: sticky`, hence
-     already positioned, so dropping `relative` here re-anchors every absolute
-     child to the bar itself -- and the width can then be a viewport expression
-     that is always on screen (`100vw - 4rem` leaves 56px of clearance) instead
-     of a percentage of a 21px box. */
+     sits to the *left* of the language switcher and the mobile toggle: `right`
+     against it would strand the box in the middle of the bar. `.header` is
+     `position: sticky`, hence already positioned, and spans the whole width of
+     the bar, so dropping `relative` here re-anchors every absolute child to the
+     bar itself.
+
+     The field is deliberately *not* restyled below: it keeps the desktop
+     border, background, padding and 11rem width, and only moves -- centred
+     vertically in the bar and inset `1.5rem`, the nav's own padding, so its
+     right border sits where the logo sits on the other side instead of running
+     off the edge of the screen. The focus ring the browser draws around the
+     input is inside that border, so it inherits the same clearance. */
   @media (max-width: 899px) {
     .search {
       position: static;
@@ -369,29 +352,20 @@ const listboxId = `search-list-${locale}`
 
     .search__field {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: min(20rem, calc(100vw - 4rem));
-      height: var(--header-h);
-      max-width: none;
-      background: var(--bg);
-      border: none;
-      border-left: 1px solid var(--border-char);
-      padding: 0 0.5rem;
+      top: 50%;
+      right: 1.5rem;
+      transform: translateY(-50%);
     }
 
-    /* Same clearance as the field: a panel that could reach past the left edge
-       of the viewport would put its first suggestion off screen. */
+    /* Anchored to the bar, so `min-width: 100%` would be 100% of the bar and
+       `right: 0` would put the panel's edge against the edge of the screen. */
     .search__list {
-      right: 0;
-      min-width: min(20rem, calc(100vw - 4rem));
-      max-width: min(22rem, calc(100vw - 4rem));
+      right: 1.5rem;
+      min-width: 11rem;
     }
 
     .search__empty {
-      right: 0;
-      min-width: min(20rem, calc(100vw - 4rem));
-      max-width: min(22rem, calc(100vw - 4rem));
+      right: 1.5rem;
     }
   }
 </style>
@@ -455,18 +429,8 @@ const listboxId = `search-list-${locale}`
     const emptyEl = root.querySelector<HTMLElement>('[data-search-empty]')
     const status = root.querySelector<HTMLElement>('[data-search-status]')
     const openButton = root.querySelector<HTMLButtonElement>('[data-search-open]')
-    const closeButton = root.querySelector<HTMLButtonElement>('[data-search-close]')
     const stringsEl = root.querySelector<HTMLElement>('[data-search-strings]')
-    if (
-      !form ||
-      !input ||
-      !list ||
-      !emptyEl ||
-      !status ||
-      !openButton ||
-      !closeButton ||
-      !stringsEl
-    ) {
+    if (!form || !input || !list || !emptyEl || !status || !openButton || !stringsEl) {
       continue
     }
 
@@ -735,12 +699,6 @@ const listboxId = `search-list-${locale}`
     openButton.addEventListener('click', () => {
       openField()
       input.focus()
-    })
-
-    closeButton.addEventListener('click', () => {
-      input.value = ''
-      update()
-      closeField()
     })
 
     form.addEventListener('submit', (event) => {

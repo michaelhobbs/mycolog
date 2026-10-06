@@ -1,9 +1,38 @@
 {
-  "scientificName": "Russula Parazurea",
+  "scientificName": "Russula parazurea",
   "wikidataId": "Q882885",
   "commonName": {
     "en": "Powdery Brittlegill",
-    "de": ""
+    "de": "Blaugrüner Reif-Täubling"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "Dull blue-green to grey-green cap with a whitish bloom (pruina) that looks frosted or even mouldy",
+      "de": "Trüb blaugrüner bis graugrüner Hut mit weißlichem Reif, der wie bereift oder gar schimmelig wirkt"
+    },
+    {
+      "en": "Brittle, white to cream gills and a firm white stem, often with ochre spots at the base",
+      "de": "Spröde, weiße bis cremefarbene Lamellen und fester weißer Stiel, an der Basis oft ockerfleckig"
+    },
+    {
+      "en": "Mild taste, the gills occasionally slightly hot",
+      "de": "Milder Geschmack, die Lamellen gelegentlich leicht schärflich"
+    },
+    {
+      "en": "Cream spore print",
+      "de": "Cremefarbenes Sporenpulver"
+    }
+  ],
+  "notes": {
+    "en": "Mild brittlegills are edible — the rule is: take a taste test, only mild specimens go in the basket.",
+    "de": "Milde Täublinge sind essbar — es gilt die Täublingsregel: Geschmacksprobe machen, nur milde Exemplare wandern in den Korb."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with broadleaved trees, especially oak, birch and linden, often on acid, sandy soil in parks and waysides",
+    "de": "Mykorrhiza-Partner von Laubbäumen, besonders Eiche, Birke und Linde, oft auf saurem, sandigem Boden in Parks und an Wegrändern"
+  },
+  "edibility": {
+    "en": "Edible — a decent table mushroom among the mild brittlegills",
+    "de": "Essbar — ein brauchbarer Speisepilz unter den milden Täublingen"
+  }
 }

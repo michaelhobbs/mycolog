@@ -1,9 +1,34 @@
 {
-  "scientificName": "Lepiota Clypeolaria",
+  "scientificName": "Lepiota clypeolaria",
   "wikidataId": "Q300967",
   "commonName": {
     "en": "Shield Dapperling",
-    "de": "Wolliggestiefelte Schirmling"
+    "de": "Wolliggestiefelter Schirmling"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "White cap covered with reddish-brown, woolly scales, denser towards the centre",
+      "de": "Weißer Hut mit rötlich-braunen, wolligen Schuppen, zur Mitte dichter"
+    },
+    {
+      "en": "Slender stem with a fibrous, woolly zone instead of a firm ring and a shaggy, white-felted base ('fleecy boot')",
+      "de": "Schlanker Stiel mit faserig-wolliger Zone statt festem Ring und weißfilzig überfaserten Stielbasis („wollig gestiefelt“)"
+    },
+    {
+      "en": "White, free gills and white spore print",
+      "de": "Weiße, freie Lamellen und weißes Sporenpulver"
+    },
+    {
+      "en": "Cap conical-bell-shaped at first, then expanding to convex",
+      "de": "Hut anfangs glockig-kegelig, dann flach gewölbt"
+    }
+  ],
+  "habitat": {
+    "en": "On leaf litter in deciduous and coniferous woodland, especially under beech and oak",
+    "de": "Auf Laubstreu in Laub- und Nadelwäldern, besonders unter Buche und Eiche"
+  },
+  "edibility": {
+    "en": "Poisonous — like many Lepiota species, suspected of causing gastrointestinal poisoning",
+    "de": "Giftig — wie viele Schirmlinge verdächtig, Magen-Darm-Beschwerden zu verursachen"
+  }
 }

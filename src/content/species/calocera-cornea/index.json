@@ -1,9 +1,38 @@
 {
-  "scientificName": "Calocera Cornea",
+  "scientificName": "Calocera cornea",
   "wikidataId": "Q175548",
   "commonName": {
     "en": "Small Stagshorn",
-    "de": ""
+    "de": "Pfriemlicher Laubholz-Hörnling"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "Tiny, bright yellow, awl- to club-shaped fruit bodies only a few mm tall",
+      "de": "Kleine, leuchtend gelbe, pfriem- bis keulenförmige Fruchtkörper von nur wenigen mm Höhe"
+    },
+    {
+      "en": "Gelatinous to waxy texture, glossy and slightly sticky when moist",
+      "de": "Gelatinös bis wachsartige Konsistenz, feucht glänzend und schwach klebrig"
+    },
+    {
+      "en": "Unbranched or sparingly branched tips",
+      "de": "Ungeteilte oder spärlich verzweigte Spitzen"
+    },
+    {
+      "en": "Grows in dense clusters on damp decaying wood",
+      "de": "Wächst in dichten Büscheln auf feuchtem, morschem Holz"
+    }
+  ],
+  "notes": {
+    "en": "The commonest of the yellow stagshorn fungi; the tiny gelatinous clubs are easily overlooked on damp logs.",
+    "de": "Der häufigste unter den gelben Hörnlingen; die winzigen gelatinösen Keulchen übersieht man auf feuchten Stämmen leicht."
+  },
+  "habitat": {
+    "en": "Damp dead wood of broadleaved trees, especially beech and oak",
+    "de": "Feuchtes Totholz von Laubbäumen, besonders Buche und Eiche"
+  },
+  "edibility": {
+    "en": "Inedible — too small and insignificant",
+    "de": "Ungenießbar — zu klein und unbedeutend"
+  }
 }

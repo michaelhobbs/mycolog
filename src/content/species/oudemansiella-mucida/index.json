@@ -1,9 +1,34 @@
 {
-  "scientificName": "Oudemansiella Mucida",
+  "scientificName": "Oudemansiella mucida",
   "wikidataId": "Q783554",
   "commonName": {
     "en": "Porcelain Fungus",
-    "de": ""
+    "de": "Buchen-Schleimrübling"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "Porcelain-white, shiny, slimy cap, grey-brown towards the centre",
+      "de": "Porzellanweißer, glänzender, schleimiger Hut, zur Mitte hin graubräunlich"
+    },
+    {
+      "en": "Wide, distant, white gills",
+      "de": "Breite, entfernt stehende, weiße Lamellen"
+    },
+    {
+      "en": "Slender white stem with a flimsy ring that soon comes off",
+      "de": "Schlanker weißer Stiel mit hinfälligem, bald abstreifbarem Ring"
+    },
+    {
+      "en": "Grows in clusters on dead and dying beech wood",
+      "de": "Wächst büschelig an totem und absterbendem Buchenholz"
+    }
+  ],
+  "habitat": {
+    "en": "On dead and dying branches and trunks of beech, occasionally oak",
+    "de": "An toten und absterbenden Ästen und Stämmen von Buche, seltener Eiche"
+  },
+  "edibility": {
+    "en": "Edible after thorough cleaning, but of little culinary value because of the slimy cap",
+    "de": "Nach gründlichem Waschen essbar, aber wegen des schleimigen Huts von geringem Speisewert"
+  }
 }

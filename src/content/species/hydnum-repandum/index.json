@@ -3,7 +3,36 @@
   "wikidataId": "Q13684",
   "commonName": {
     "en": "Wood Hedgehog",
-    "de": ""
+    "de": "Semmel-Stoppelpilz"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "Fleshy, irregular cap in warm cream to orange-buff tones",
+      "de": "Fleischiger, unregelmäßiger Hut in warmen Creme- bis orange-beige Tönen"
+    },
+    {
+      "en": "Soft spines (teeth) instead of gills under the cap",
+      "de": "Weiche Stacheln statt Lamellen unter dem Hut"
+    },
+    {
+      "en": "Spines run decurrently down the short, often off-centre stem",
+      "de": "Stacheln laufen am kurzen, oft seitlich ansetzenden Stiel herab"
+    },
+    {
+      "en": "Firm white flesh with a pleasant fruity smell",
+      "de": "Festes weißes Fleisch mit angenehm fruchtigem Geruch"
+    }
+  ],
+  "notes": {
+    "en": "Unmistakable thanks to its spines, which makes it safe to collect; young specimens can be pickled.",
+    "de": "Durch seine Stacheln unverwechselbar und damit sicher zu sammeln; junge Exemplare eignen sich zum Einlegen."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with beech, oak and spruce in broadleaf and mixed forest",
+    "de": "Mykorrhiza-Partner von Buche, Eiche und Fichte in Laub- und Mischwäldern"
+  },
+  "edibility": {
+    "en": "Excellent edible mushroom",
+    "de": "Ausgezeichneter Speisepilz"
+  }
 }

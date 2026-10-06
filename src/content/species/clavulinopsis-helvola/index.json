@@ -1,9 +1,38 @@
 {
-  "scientificName": "Clavulinopsis Helvola",
+  "scientificName": "Clavulinopsis helvola",
   "wikidataId": "Q138029",
   "commonName": {
     "en": "Yellow Club",
-    "de": ""
+    "de": "Goldgelbe Wiesenkeule"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "Slender, cylindrical, unbranched clubs in pale to golden yellow with a more or less pointed tip",
+      "de": "Schlanke, zylindrische, unverzweigte Keulen in Blass- bis Goldgelb mit mehr oder weniger spitzer Spitze"
+    },
+    {
+      "en": "Tough, waxy-fragile fruit bodies that darken with age",
+      "de": "Zähe, wachsartig-bruchfeste Fruchtkörper, die mit dem Alter nachdunkeln"
+    },
+    {
+      "en": "Grow singly or in small clusters on mossy grassland",
+      "de": "Wachsen einzeln oder in kleinen Gruppen auf moosigem Grünland"
+    },
+    {
+      "en": "Small, usually only a few cm tall",
+      "de": "Klein, meist nur wenige cm hoch"
+    }
+  ],
+  "notes": {
+    "en": "An easily overlooked grassland coral; on the German red list, so a special find.",
+    "de": "Eine leicht übersehene Wiesenkoralle; steht in Deutschland auf der Roten Liste und ist daher ein besonderer Fund."
+  },
+  "habitat": {
+    "en": "Nutrient-poor, mossy grassland and heaths, occasionally woodland litter",
+    "de": "Magere, moosige Wiesen und Heiden, gelegentlich in Waldstreu"
+  },
+  "edibility": {
+    "en": "No culinary value",
+    "de": "Ohne Speisewert"
+  }
 }

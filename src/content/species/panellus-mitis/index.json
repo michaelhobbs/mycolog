@@ -1,9 +1,34 @@
 {
-  "scientificName": "Panellus Mitis",
+  "scientificName": "Panellus mitis",
   "wikidataId": "Q1934540",
   "commonName": {
     "en": "Elastic Oysterling",
-    "de": ""
+    "de": "Milder Zwergknäueling"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "White to cream, kidney- to fan-shaped, translucent caps, often with a pinkish tinge",
+      "de": "Weiße bis cremefarbene, nieren- bis fächerförmige, durchscheinende Hüte, oft mit Rosaton"
+    },
+    {
+      "en": "Gelatinous, rubbery cap skin that can be peeled off",
+      "de": "Gelatinöse, gummiartige Huthaut, die sich abziehen lässt"
+    },
+    {
+      "en": "Dense white gills and a short, lateral, rudimentary stem",
+      "de": "Dichte weiße Lamellen und kurzer, seitlicher, stummeliger Stiel"
+    },
+    {
+      "en": "Grows attached to the underside of lying conifer branches, often from autumn to spring",
+      "de": "Wächst an der Unterseite liegender Nadelholzäste, oft von Herbst bis Frühjahr"
+    }
+  ],
+  "habitat": {
+    "en": "Dead conifer wood, especially spruce and fir twigs and branches",
+    "de": "Totes Nadelholz, besonders Fichten- und Tannenzweige und -äste"
+  },
+  "edibility": {
+    "en": "Inedible — tough and gelatinous",
+    "de": "Ungenießbar — zäh und gallertig"
+  }
 }

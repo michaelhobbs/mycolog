@@ -86,13 +86,16 @@ function localizedPath(targetLocale: Locale): string {
         </div>
 
         <!--
-          Immediately before `.nav__lang`, which keeps the field to the left of
+          Immediately before `.nav__lang`, which keeps the control to the left of
           the language selector as the reader expects on desktop. `.search` then
-          carries the `margin-left: auto` that parks the pair hard right — it
-          precedes `.nav__lang`'s own, so the free space all lands before the
-          field rather than between field and switcher. Below 768px `.nav__lang`
-          is hidden and this is the only `auto` left, so the glyph sits with
-          `[=]` and the date control on the right instead of after the logo.
+          carries the `margin-left: auto` that parks it hard right.
+
+          `.nav__lang` has an `auto` of its own and a flex container *splits* the
+          free space between every `auto` it finds, which would strand the glyph
+          mid-bar with an equal gap either side — hence the pair of rules below
+          that zero the neighbours' `auto` while this control is present. They
+          are gated on `:not([hidden])` so a JS-off reader, or a page with no
+          `SiteSearch` at all, keeps its right alignment.
         -->
         <SiteSearch locale={locale} />
 

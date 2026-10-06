@@ -818,15 +818,43 @@ there is no coupling to keep in sync.
 - **The control ships `hidden` and its script reveals it**, the same contract as
   `.nav__date` and `SpeciesFilter`: with JS off there is no search box rather
   than a field that goes nowhere.
-- **Below 768px the field overlays the bar instead of growing it.** Growing it
-  would change `--header-h`, and the sticky rail, the mobile drawer's top and
-  `:target` scroll-margin all derive from that token. `align-self: stretch` on
-  `.search` is what puts the listbox's `top: 100%` on the bottom of the _bar_
-  rather than the bottom of the input.
-- **The fetch is lazy, memoised and fired on `pointerdown` of the mobile glyph as
+- **The default state is a magnifying-glass glyph at every width — the field is
+  opened, never permanent.** `openField()` is the single write path and sets
+  `data-open` on the root; CSS alone decides which of the two is on screen
+  (`.search[data-open] .search__field` / `.search__open`), so desktop and mobile
+  share one state and the script never branches on viewport. The `focus()` that
+  follows needs the swap to be _laid out_ first — an element inside
+  `display: none` is not focusable — hence the single forced reflow in
+  `openField()`. Assert the round trip: field hidden, glyph shown → click →
+  field shown, glyph gone, `document.activeElement` is the input → `[x]` or an
+  outside `pointerdown` reverses it **and returns focus to the glyph**, because
+  hiding a focused input drops it to `<body>` and restarts <kbd>Tab</kbd> at the
+  top of the page. <kbd>/</kbd> reopens it from anywhere.
+- **At 900px and up the opened field sits inline; below that it overlays the
+  bar.** Measured: the header's contents need 841px with the field in flow while
+  the nav only collapses at 768, so 900 is the first width at which the full
+  field is safe (17px of slack) and 769–883 would otherwise give the document a
+  horizontal scrollbar. Growing the bar would also change `--header-h`, which
+  the sticky rail, the mobile drawer's top and `:target` scroll-margin all
+  derive from — hence the overlay in that band. The overlay anchors to
+  **`.header`**, not `.search`: in the glyph band `.search` is ~21px wide, so
+  leaving it `position: relative` makes `width: 78%` resolve to 16px;
+  `position: static` re-anchors every absolute child to the bar (already
+  `position: sticky`, hence positioned) and lets the width be
+  `min(20rem, calc(100vw - 4rem))`, which is always on screen. `align-self:
+stretch` on `.search` is what puts the listbox's `top: 100%` on the bottom of
+  the _bar_ rather than the bottom of the input.
+- **`.search` and the bar's other flush-right anchors cannot both own
+  `margin-left: auto`.** A flex container _splits_ the free space between every
+  `auto` it finds rather than giving it all to the first, which strands the glyph
+  mid-bar with an equal gap either side. `Layout.astro` zeroes `.nav__lang`'s and
+  `.nav__mobile-toggle`'s `auto` via `.search:not([hidden]) ~ …`, so a JS-off
+  reader or a page with no `SiteSearch` at all keeps its right alignment.
+- **The fetch is lazy, memoised and fired on `pointerdown` of the glyph as
   well as `focus`.** Assert by counting `performance.getEntriesByType` for
   `search-index`: 0 before the first interaction, 1 after, 1 for the rest of the
-  session — including a locale switch.
+  session — including a locale switch. The 0 has to be read _before_ the glyph is
+  clicked, since opening the control focuses the input and that is what warms it.
 - `dist/index.html` is Astro's i18n redirect stub and renders no header, so it is
   the one built page legitimately without the control.
 

@@ -97,10 +97,13 @@ const listboxId = `search-list-${locale}`
      bottom of the header bar rather than on the bottom of the input, and the
      panel therefore needs no hard-coded header height.
 
-     `margin-left: auto` parks the field hard right, immediately before the
-     language switcher. It precedes `.nav__lang`'s own `auto`, so all the free
-     space lands before the field rather than between the two -- that ordering is
-     load-bearing, and comes from `SiteSearch`'s position in `Layout.astro`. */
+     `margin-left: auto` parks the control hard right, immediately before the
+     language switcher. `.nav__lang` carries an `auto` of its own, and a flex
+     container *splits* the free space between every `auto` it finds rather than
+     giving it all to the first -- which strands the glyph mid-bar with an equal
+     gap on both sides. `Layout.astro` therefore zeroes `.nav__lang`'s `auto`
+     whenever this control is present; see the note next to `.nav__mobile-toggle`
+     there. */
   .search {
     align-self: stretch;
     position: relative;
@@ -113,8 +116,13 @@ const listboxId = `search-list-${locale}`
     display: none;
   }
 
+  /* The default state is the glyph, at every width. It is a *button*, not a
+     decorative icon: clicking it swaps in the field and moves focus there, and
+     `[x]` puts it back. A field that is always on screen costs 154px of the bar
+     for a feature most readers never touch, and it is the only control in the
+     header that is never used. */
   .search__open {
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     padding: 0.25rem;
@@ -126,8 +134,10 @@ const listboxId = `search-list-${locale}`
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Hidden until opened rather than removed, so `openField()` in the script is
+     the single write path and CSS owns only which of the two is on screen. */
   .search__field {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 0.375rem;
     width: 11rem;
@@ -135,6 +145,14 @@ const listboxId = `search-list-${locale}`
     padding: 0.1875rem 0.375rem;
     border: 1px solid var(--border-char);
     background: var(--bg-surface);
+  }
+
+  .search[data-open] .search__field {
+    display: flex;
+  }
+
+  .search[data-open] .search__open {
+    display: none;
   }
 
   .search__label {
@@ -183,8 +201,10 @@ const listboxId = `search-list-${locale}`
     outline-offset: 2px;
   }
 
+  /* Lives inside the field, so it inherits the field's own visibility and needs
+     no matching `.search[data-open]` rule of its own. */
   .search__close {
-    display: none;
+    display: block;
     background: none;
     border: none;
     color: var(--fg-subtle);
@@ -319,39 +339,35 @@ const listboxId = `search-list-${locale}`
     white-space: nowrap;
   }
 
-  /* Below 900px the bar cannot afford the field.
+  /* Below 900px the bar cannot afford the field *inline*.
 
      Measured, not guessed: the header's contents need 841px (logo + separator +
      seven links + a 154px field + the language switcher, plus four 10.5px gaps),
-     while the nav only collapses at 768 -- so between 769 and 883 the document
-     carried a horizontal scrollbar purely because of this control. Swapping the
-     field for the glyph takes the total to 709px, which fits at 769 with 19px to
-     spare, and 900 is the round number at which the full field is safe again
+     while the nav only collapses at 768 -- so opening the field between 769 and
+     883 would give the document a horizontal scrollbar purely because of this
+     control. With the glyph alone the total is 709px, which fits at 769 with 19px
+     to spare, and 900 is the round number at which the full field is safe again
      (17px of slack, measured).
 
-     The field then expands *over* the bar rather than growing it. Growing it
+     So the field expands *over* the bar here rather than pushing it. Growing it
      would change `--header-h`, and the sticky rail, the drawer top and `:target`
-     scroll-margin all derive from that token.
+     scroll-margin all derive from that token. At 900px and up it stays inline
+     instead -- that is what `.search__field`'s base rules do, and this block only
+     has to override the two things that make an overlay possible.
 
-     `position: static` is what makes that overlay usable. In this band `.search`
+     `position: static` is what makes the overlay usable. In this band `.search`
      holds nothing but the glyph, so as a containing block it is ~21px wide and
      `width: 78%` of it resolved to 16px. `.header` is `position: sticky`, hence
      already positioned, so dropping `relative` here re-anchors every absolute
      child to the bar itself -- and the width can then be a viewport expression
      that is always on screen (`100vw - 4rem` leaves 56px of clearance) instead
-     of a percentage of a 21px box. Above 900px nothing changes: `.search` stays
-     `relative` and the field is in flow at its full 11rem. */
+     of a percentage of a 21px box. */
   @media (max-width: 899px) {
     .search {
       position: static;
     }
 
-    .search__open {
-      display: flex;
-    }
-
     .search__field {
-      display: none;
       position: absolute;
       top: 0;
       right: 0;
@@ -362,14 +378,6 @@ const listboxId = `search-list-${locale}`
       border: none;
       border-left: 1px solid var(--border-char);
       padding: 0 0.5rem;
-    }
-
-    .search[data-open] .search__field {
-      display: flex;
-    }
-
-    .search__close {
-      display: block;
     }
 
     /* Same clearance as the field: a panel that could reach past the left edge
@@ -656,6 +664,10 @@ const listboxId = `search-list-${locale}`
 
     const openField = (): void => {
       root.dataset.open = ''
+      // The callers `focus()` on the very next statement, and an element inside
+      // `display: none` is not focusable -- so the swap has to be laid out
+      // first, not merely applied to the tree. One forced reflow, once per open.
+      void root.offsetWidth
     }
 
     const closeField = (): void => {
@@ -739,9 +751,14 @@ const listboxId = `search-list-${locale}`
     document.addEventListener('pointerdown', (event) => {
       if (root.contains(event.target as Node)) return
       dismiss()
-      // Closing by tapping elsewhere must not steal focus, so the field is only
-      // collapsed here -- never refocused.
-      if (root.hasAttribute('data-open')) delete root.dataset.open
+      if (!root.hasAttribute('data-open')) return
+      delete root.dataset.open
+      // Hiding a focused input drops focus to `<body>`, so the next Tab restarts
+      // at the top of the document. Hand it to the glyph instead -- which is
+      // only *moving* focus within this control, not taking it from wherever
+      // the pointer is about to land: a focusable target under the click wins
+      // the moment the click completes.
+      if (document.activeElement === input) openButton.focus()
     })
 
     document.addEventListener('keydown', (event) => {

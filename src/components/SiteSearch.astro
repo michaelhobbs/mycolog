@@ -132,16 +132,18 @@ const listboxId = `search-list-${locale}`
   }
 
   /* Hidden until opened rather than removed, so `openField()` in the script is
-     the single write path and CSS owns only which of the two is on screen. */
+     the single write path and CSS owns only which of the two is on screen.
+
+     The form is only the wrapper: the border, background and padding belong to
+     the *input* inside it. On the form they sat between the input's focus ring
+     and the outside edge, so the text ended up boxed in by two edges instead of
+     one. */
   .search__field {
     display: none;
     align-items: center;
     gap: 0.375rem;
     width: 11rem;
     max-width: 42vw;
-    padding: 0.1875rem 0.375rem;
-    border: 1px solid var(--border-char);
-    background: var(--bg-surface);
   }
 
   .search[data-open] .search__field {
@@ -163,15 +165,22 @@ const listboxId = `search-list-${locale}`
     white-space: nowrap;
   }
 
+  /* `appearance: none` because Safari rounds `input[type=search]` on its own;
+     without it the corners do not match the rest of the header. The side
+     padding is what keeps the text off the border and off the UA focus ring,
+     which is drawn around *this* element rather than around the form. */
   .search__input {
     flex: 1;
     min-width: 0;
-    background: none;
-    border: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-char);
+    border-radius: 0;
     color: var(--fg);
     font: inherit;
     font-size: 0.8125rem;
-    padding: 0.125rem 0;
+    padding: 0.3125rem 0.5rem;
   }
 
   /* The field carries no close or clear button: Escape, or a tap/click outside
@@ -182,15 +191,16 @@ const listboxId = `search-list-${locale}`
     display: none;
   }
 
-  /* Focus indication on the input is the browser's, not ours: an explicit
-     `outline` here would be drawn relative to the *field*, which at the mobile
-     breakpoint sits flush against the right edge of the viewport -- so the ring
-     ran off screen. The UA ring is drawn around the input itself, inside the
-     field's border, and needs no offset to stay on screen.
+  /* Focus indication on the input is the browser's, not ours: the UA ring is
+     drawn around the input itself, outside the border it carries, and the field
+     it fills is inset `1.5rem` from the viewport edge below 900px -- so the ring
+     stays on screen with no offset. A ring on the *field* would not: at that
+     breakpoint the field is flush against the right edge, which is why the
+     indication was never moved up a level.
 
-     The border tint below is what covers `:focus-within` from a pointer, where
-     the UA draws no ring. */
-  .search:focus-within .search__field {
+     The border tint below is what covers focus from a pointer, where the UA
+     draws no ring. */
+  .search:focus-within .search__input {
     border-color: var(--accent-dim);
   }
 
@@ -340,11 +350,11 @@ const listboxId = `search-list-${locale}`
      bar itself.
 
      The field is deliberately *not* restyled below: it keeps the desktop
-     border, background, padding and 11rem width, and only moves -- centred
-     vertically in the bar and inset `1.5rem`, the nav's own padding, so its
-     right border sits where the logo sits on the other side instead of running
-     off the edge of the screen. The focus ring the browser draws around the
-     input is inside that border, so it inherits the same clearance. */
+     11rem width and only moves -- centred vertically in the bar and inset
+     `1.5rem`, the nav's own padding, so the input's right border sits where the
+     logo sits on the other side instead of running off the edge of the screen.
+     The focus ring the browser draws around that input is therefore inset by the
+     same clearance. */
   @media (max-width: 899px) {
     .search {
       position: static;

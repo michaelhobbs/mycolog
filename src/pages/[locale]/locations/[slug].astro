@@ -160,7 +160,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
   }
 
   .facts {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.5rem 0.75rem;
     margin-bottom: 1.25rem;
@@ -193,7 +193,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
   }
 
   .block__notes {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
     color: var(--fg);
@@ -213,7 +213,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
     display: flex;
     gap: 0.75rem;
     padding: 0.5rem;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     font-size: 0.8125rem;
   }
@@ -222,7 +222,7 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
     width: 72px;
     height: 56px;
     flex-shrink: 0;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     overflow: hidden;
     background: var(--bg-highlight);
   }
@@ -260,6 +260,6 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
   }
 
   .sighting__species:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 </style>

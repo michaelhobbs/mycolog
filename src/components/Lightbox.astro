@@ -426,7 +426,7 @@ const t = getTranslations(locale)
   }
 
   .lightbox::backdrop {
-    background: rgba(8, 10, 8, 0.94);
+    background: var(--backdrop);
   }
 
   .lightbox__frame {
@@ -447,7 +447,9 @@ const t = getTranslations(locale)
     width: auto;
     height: auto;
     object-fit: contain;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
     transform-origin: center center;
     will-change: transform;
     cursor: zoom-in;
@@ -470,20 +472,23 @@ const t = getTranslations(locale)
 
   .lightbox__btn {
     background: var(--bg-surface);
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     padding: 0.5rem 0.875rem;
     line-height: 1;
     cursor: pointer;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   .lightbox__btn:hover:not(:disabled) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   .lightbox__btn:disabled {

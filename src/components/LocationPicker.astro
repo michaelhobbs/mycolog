@@ -39,6 +39,7 @@ const { locale, initial = null } = Astro.props as {
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
+  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
 
@@ -72,32 +73,6 @@ const { locale, initial = null } = Astro.props as {
     const coordsEl = document.getElementById('picker-coords')
     let marker: maplibregl.Marker | null = null
 
-    function paintPalette() {
-      // maplibre-gl v6 narrowed setPaintProperty to `keyof AllPaintProperties` and
-      // dropped its implicit value type. Derive both from the method signature so we
-      // don't need the (transitive) style-spec package just to name the types.
-      type PaintKey = Parameters<maplibregl.Map['setPaintProperty']>[1]
-      type PaintValue = Parameters<maplibregl.Map['setPaintProperty']>[2]
-
-      const paint = (layer: string, props: Partial<Record<PaintKey, PaintValue>>) => {
-        if (!map.getLayer(layer)) return
-        for (const k of Object.keys(props) as PaintKey[]) {
-          map.setPaintProperty(layer, k, props[k] as PaintValue)
-        }
-      }
-      paint('background', { 'background-color': '#0e120b' })
-      paint('landcover_wood', { 'fill-color': '#151a10', 'fill-opacity': 1 })
-      paint('landuse_residential', { 'fill-color': '#11150c', 'fill-opacity': 1 })
-      paint('water', { 'fill-color': '#2a7d94' })
-      paint('waterway', { 'line-color': '#2a6a80' })
-      ;['highway_major_casing', 'highway_motorway_casing'].forEach((l) =>
-        paint(l, { 'line-color': '#151a10' }),
-      )
-      paint('highway_major_inner', { 'line-color': '#d4f0d4' })
-      paint('highway_minor', { 'line-color': '#8fbf8f' })
-      paint('highway_path', { 'line-color': '#33ff33', 'line-dasharray': [1.5, 1.5] })
-    }
-
     function updatePin(lngLat: maplibregl.LngLat) {
       const el = document.createElement('div')
       el.className = 'picker-pin'
@@ -114,7 +89,15 @@ const { locale, initial = null } = Astro.props as {
     }
 
     map.on('load', () => {
-      paintPalette()
+      // The shared palettes (previously a partial inline copy of the dark
+      // one), repainted on a theme change like every other map.
+      const retheme = () => {
+        applyPalette(map)
+        applyOverlayPalette(map)
+      }
+      document.addEventListener('myco:theme', retheme)
+      retheme()
+
       if (initial) updatePin(new maplibregl.LngLat(initial.lng, initial.lat))
       map.on('click', (e) => {
         updatePin(e.lngLat)
@@ -134,8 +117,10 @@ const { locale, initial = null } = Astro.props as {
 
 <style>
   .map-frame {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .map-frame__title {
@@ -170,7 +155,7 @@ const { locale, initial = null } = Astro.props as {
     height: 14px;
     border-radius: 50%;
     background: var(--accent);
-    border: 3px solid var(--bg);
+    border: 3px solid var(--accent-ink);
     box-shadow: 0 0 0 2px var(--accent-dim);
     cursor: crosshair;
   }

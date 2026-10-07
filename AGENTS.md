@@ -268,6 +268,132 @@ TypeScript must compile: run `npm run typecheck` (`astro check`) and keep it at
 0 errors. The pre-commit hook enforces both typecheck and Prettier
 (`.husky/pre-commit`).
 
+## Themes & white-label
+
+Nine complete themes ship: `tui` (dark terminal, default), `mono` (black &
+white minimal), `brut` (raw web brutalism: white paper, black 2px borders,
+default-link blue), `neobrut` (neobrutalist: cream paper, black borders,
+harsh offset drop shadows, signal-yellow fills), and five bring-your-own
+system colours — `nord` (cold arctic blues), `gruvbox` (warm sepia paper),
+`solarized` (amber/cyan on deep teal), `catppuccin` (rounded lavender pastel
+Mocha) and `phosphor` (green-on-black CRT). Every colour goes through a CSS
+custom property — a component must never hardcode one.
+
+- **`src/styles/theme.css` is the white-label configuration file**: fonts, the
+  layout tokens (`--page-max`, `--header-h`, `--rail-w`, `--radius`), the
+  overlay/backdrop/glow knobs, and all nine palettes. Rebranding means editing
+  this file only. The _second_ `:root` block holds the default theme and doubles
+  as the fallback for an unknown `data-theme` — keep it holding the site
+  default. `--radius` is wired to `:where(button, input, select, textarea,
+summary)` at zero specificity, so raising it rounds controls as well as the
+  panels that set `border-radius: var(--radius)` themselves.
+- **Structural tokens do the theming work; the colour tokens only tint.**
+  `--border-w` (`1px` base; `2px` in brut/neobrut) is used by **full-box
+  borders only** — hairline dividers (`border-bottom: 1px`, `border-top: 1px`)
+  deliberately stay `1px` or brut's boxes grow a double border down one edge.
+  `--shadow` / `--shadow-press` are `none` everywhere except neobrut
+  (`4px 4px 0 0 #000000` / `2px 2px 0 0 #000000`) and catppuccin's soft floats
+  (`0 4px 14px` / `0 2px 6px`): surfaces (cards, filter
+  panel, map frames, popups, listbox, lightbox image) carry `--shadow`, and
+  interactive controls (chips, carousel/map arrows, frame-expand buttons,
+  `.nav__date`) **lift on hover** onto `--shadow-press`. A selected chip sits
+  permanently pressed (`--shadow-press`) — hover flips its fill only.
+- **Themes may change geometry, not just colour.** `--radius` rounds the
+  panels too (`.tui-card`, the filter panel, map frames, popup, listbox,
+  lightbox image all set `border-radius: var(--radius)`), so a theme's
+  geometry ranges from tui/mono/brut's `0`-radius squareness and neobrut's 4px
+  to catppuccin's 10px pastel — the original "controls only, never panels"
+  rule was lifted when catppuccin made radius the point of the theme.
+  Components never hardcode a
+  radius either: the handful of `border-radius: 0` stubs are gone, and the
+  only literal radii left are `50%` circles (the map pin, the spore-print
+  disc) and the decorative rotated `.stamp` (2px).
+- **The accent is split three ways, because a fill colour and a text colour
+  are different jobs.** `--accent` is the fill (tui `#33ff33`, mono black,
+  brut `#0000ee`, neobrut `#ffde00`), `--accent-ink` is ink-on-fill (tui
+  `#0c0c0c`, mono/brut white; the dark themes ink with their own `--bg`, and
+  neobrut `#141414` with gruvbox `#282828` fill their yellows), and
+  `--accent-text` is the accent as text on the page (equals `--accent` for
+  tui/mono/brut and most of the system colours, but **not** neobrut or
+  gruvbox — `#ffde00` on cream and `#d79921` on paper are unreadable).
+  Inverted chips and hover-fills pair `--accent` with `--accent-ink`; links
+  and emphasised text use `--accent-text`. Never paint text with `--accent`
+  directly.
+- **The nine themes share one font stack**: the mono UI is drawn from box
+  characters, so a brut "raw" look arrives through colour, borders and `0`
+  radius instead of a typeface change — do not swap fonts per theme.
+- **`LocationPicker.astro` and index thumbnails aside, `--backdrop` (lightbox),
+  `--scrim` (mobile drawer) and `--glow` (hero) are the overlay knobs** a
+  white-label fork most wants to touch; they used to be hardcoded.
+- **The theme is `<html data-theme>`**: server-rendered to `tui` in
+  `Layout.astro`, overridden before first paint by the inline head script from
+  `localStorage['myco-theme']`, and flipped by the header toggle
+  (`.nav__theme`), which persists the choice and fires a `myco:theme`
+  `CustomEvent` on `window`. The head script deliberately does **not** validate
+  the stored value: an unknown theme matches no palette block and renders the
+  default one, which is the correct fallback.
+- **The toggle ships `hidden`** and is revealed by Layout's bundled script once
+  it can also restore the stored choice — the same progressive-enhancement
+  contract as `.search` and `.nav__date`. It is a **cycling** switch over all
+  nine themes in `THEMES` order (`tui → mono → brut → neobrut → nord →
+gruvbox → solarized → catppuccin → phosphor`); its visible
+  label is the theme you would switch _to_, with an unknown stored value
+  resolving to `tui` first so the cycle stays deterministic. Label and
+  `aria-label` both name the action the click performs; the strings come from
+  the `data-label-{theme}` attributes keyed by `nav.themeTui`/`themeMono`/
+  `themeBrut`/`themeNeo`/`themeNord`/`themeGruvbox`/`themeSolarized`/
+  `themeCatppuccin`/`themePhosphor`. Keep the button **between `.search` and `.nav__lang`
+  with no `margin-left: auto` of its own**: the bar's free space belongs to one
+  anchor at a time (see the comment on `.nav__links`), and a third `auto` would
+  split it and strand the toggle mid-bar.
+- **Maps repaint on `myco:theme`; thumbnails do not.**
+  `src/lib/map-palette.ts` carries a base/text palette and an overlay set per
+  theme — `PALETTE`/`LABEL_TEXT` + `OVERLAY_TUI` (tui),
+  `PALETTE_MONO`/`MONO_LABEL_TEXT` + `OVERLAY_MONO`, `PALETTE_BRUT` +
+  `OVERLAY_BRUT` (white-greys-black paper, blue `#0000ee` sightings),
+  `PALETTE_NEOBRUT` + `OVERLAY_NEOBRUT` (cream `#f7ecd8`, pastel water, black
+  ink, yellow `#ffde00` clusters, pink `#ff5ca8` dots, orange `#ff6b35` hiking),
+  plus `PALETTE_NORD`, `PALETTE_GRUVBOX`, `PALETTE_SOLARIZED`,
+  `PALETTE_CATPPUCCIN` and `PALETTE_PHOSPHOR` with matching overlay sets —
+  dispatched through the `BASE_PALETTES`/`LABEL_RECORDS`/`OVERLAY_RECORDS`
+  records, so adding a tenth theme is one map instead of a new branch.
+  `applyPalette(map)` runs at load; `applyOverlayPalette(map)` runs once more
+  at the **end** of each map's load handler — those layers do not exist
+  earlier — and both re-run on `myco:theme`. `currentTheme()` resolves
+  `document.documentElement.dataset.theme` against the nine names with an
+  `unknown → tui` fallback; the head script stores unvalidated values, so any
+  nonmatching `data-theme` is expected to land there. Only colour-ish paint
+  properties live in the overlay records, so a repaint can never disturb radii,
+  dashes or text sizes. Build-time thumbnails import `PALETTE`/`LABEL_TEXT`/
+  `LABEL_LAYERS`/`HIDDEN_LAYERS` and **bake the tui palette**: they stay dark
+  under mono at least, a limitation that is deliberate (a static image cannot
+  follow a visitor's choice) — do not restructure the exports around it.
+- **The light-theme label sweep is `MONO_LABEL_LAYERS`, shared by mono, brut,
+  neobrut and gruvbox.** All four sit on a pale paper (white, cream, sepia),
+  so they all need the wider
+  override list (pale-blue `place_country_*`/`place_state`/`highway_ref` labels
+  would wash out); it is not mono-exclusive despite the name.
+- **The mono base palette must override every coloured fiord layer.** Fiord's
+  own colours are dark navy, so anything `PALETTE` leaves alone bleeds through
+  a light page — which is why `PALETTE_MONO` also lists tunnels, aeroways,
+  railways, piers and the `z0-4` boundary, and why `MONO_LABEL_LAYERS` is wider
+  than `LABEL_LAYERS` (pale-blue `place_country_*`/`place_state`/`highway_ref`
+  labels would wash out on white). Where fiord bakes alpha into the colour
+  string, the mono replacement sets the opacity property explicitly.
+- **`LocationPicker` uses the shared palettes now** (it carried a partial
+  inline copy of the dark ones). Do not re-add an inline palette there.
+- **In mono, `--yellow` and `--red` collapse to black** — strictly ink on
+  paper; warnings and errors still read through their dashed borders and
+  position rather than hue. A white-label fork wanting a functional red edits
+  the mono block.
+- Assert after touching this: built pages carry `data-theme` plus the inline
+  head script and the (hidden) cycling toggle, and the built Layout CSS
+  contains all nine palettes (the tui values live on the bare `:root` block,
+  so only the eight `data-theme=…` selectors appear — mono, brut, neobrut,
+  nord, gruvbox, solarized, catppuccin, phosphor). `dist/index.html`
+  is Astro's redirect stub and has no header, so scope the check to pages with
+  a `.header`.
+
 ## News & RSS
 
 - The `news` content collection (`src/content/news/{date}-{type}-{nn}`) drives

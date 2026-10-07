@@ -155,7 +155,7 @@ const countLabel = `${entries.length} ${t.backlog.items}`
   }
 
   .backlog-item {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
   }
@@ -193,7 +193,7 @@ const countLabel = `${entries.length} ${t.backlog.items}`
   }
 
   .backlog-item__edit:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .backlog-item__images {
@@ -204,7 +204,7 @@ const countLabel = `${entries.length} ${t.backlog.items}`
 
   .backlog-item__fig {
     margin: 0;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     overflow: hidden;
     background: var(--bg-highlight);
     aspect-ratio: 4 / 3;

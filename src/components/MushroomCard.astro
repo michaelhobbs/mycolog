@@ -193,10 +193,12 @@ const fullUrls = await Promise.all(
 
 <style>
   .tui-card {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     font-size: 0.8125rem;
     min-width: 0;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .tui-card__head {
@@ -218,7 +220,7 @@ const fullUrls = await Promise.all(
   }
 
   .tui-card__title:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .tui-card__more {
@@ -230,13 +232,13 @@ const fullUrls = await Promise.all(
   }
 
   .tui-card__more:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .tui-card__carousel {
     position: relative;
     margin: 0.5rem 0.75rem;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     aspect-ratio: 16 / 10;
     overflow: hidden;
     background: var(--bg-highlight);
@@ -285,9 +287,9 @@ const fullUrls = await Promise.all(
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    background: var(--bg-overlay);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.875rem;
     line-height: 1;
@@ -295,13 +297,15 @@ const fullUrls = await Promise.all(
     cursor: pointer;
     z-index: 2;
     opacity: 0;
+    box-shadow: var(--shadow);
     /* Must be none while hidden: opacity:0 alone stays hit-testable and would
        swallow taps on the photo, so the lightbox never opens on the first tap. */
     pointer-events: none;
     transition:
       background 0.1s,
       color 0.1s,
-      opacity 0.15s;
+      opacity 0.15s,
+      box-shadow 0.1s;
   }
 
   .tui-card__carousel:hover .tui-card__arrow {
@@ -311,7 +315,8 @@ const fullUrls = await Promise.all(
 
   .tui-card__arrow:hover {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   .tui-card__arrow--prev {
@@ -336,7 +341,7 @@ const fullUrls = await Promise.all(
     display: inline-block;
     pointer-events: auto;
     background: var(--bg);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     border-top: none;
     border-left: none;
     padding: 0.125rem 0.5rem;
@@ -346,7 +351,7 @@ const fullUrls = await Promise.all(
   }
 
   .tui-card__date:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .tui-card__thumbs {
@@ -360,7 +365,7 @@ const fullUrls = await Promise.all(
     position: relative;
     width: 4rem;
     height: 3rem;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     overflow: hidden;
     background: var(--bg-highlight);
     padding: 0;
@@ -370,7 +375,7 @@ const fullUrls = await Promise.all(
 
   .tui-card__thumb:hover,
   .tui-card__thumb[data-active] {
-    border-color: var(--accent);
+    border-color: var(--accent-text);
   }
 
   .tui-card__thumb img {
@@ -430,7 +435,7 @@ const fullUrls = await Promise.all(
   }
 
   .tui-card__val--link:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .tui-card__divider {

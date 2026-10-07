@@ -346,7 +346,7 @@ const allNamesLabel = t.mushrooms.allNames.replace(
 
 <style>
   .rows {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.5rem 0.75rem;
     font-size: 0.8125rem;
@@ -401,13 +401,13 @@ const allNamesLabel = t.mushrooms.allNames.replace(
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem 1.25rem;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.6rem 0.75rem;
   }
 
   .none {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     color: var(--fg-muted);
     font-style: italic;
@@ -417,7 +417,7 @@ const allNamesLabel = t.mushrooms.allNames.replace(
   }
 
   .prose {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.6rem 0.75rem;
     margin: 0.4rem 0 0;
@@ -465,7 +465,7 @@ const allNamesLabel = t.mushrooms.allNames.replace(
   }
 
   .more__summary:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
   }
 

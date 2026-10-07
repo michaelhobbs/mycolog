@@ -114,7 +114,7 @@ const galleryHref = `/${locale}/mushrooms/${slug}/gallery`
   figure {
     margin: 0;
     position: relative;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-highlight);
     overflow: hidden;
   }
@@ -189,7 +189,7 @@ const galleryHref = `/${locale}/mushrooms/${slug}/gallery`
     align-items: center;
     justify-content: center;
     gap: 0.15rem;
-    border: 1px dashed var(--fg-muted);
+    border: var(--border-w) dashed var(--fg-muted);
     color: var(--accent-dim);
     text-decoration: none;
     text-align: center;
@@ -201,7 +201,7 @@ const galleryHref = `/${locale}/mushrooms/${slug}/gallery`
   .more__count {
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--accent);
+    color: var(--accent-text);
     line-height: 1.1;
   }
 

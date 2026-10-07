@@ -69,7 +69,7 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
 
   .list {
     list-style: none;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.5rem 0.75rem;
     font-size: 0.8125rem;
@@ -131,7 +131,7 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
   }
 
   .src:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .src:hover .src__dots {
@@ -140,7 +140,7 @@ const wikidataUrl = data ? `https://www.wikidata.org/wiki/${data.wikidataId}` : 
 
   /* Matches MapAttribution's external-link focus ring. */
   .src:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
   }
 </style>

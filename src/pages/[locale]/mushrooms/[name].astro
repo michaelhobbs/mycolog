@@ -234,7 +234,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
   }
 
   .tui-link:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   /* Two columns on top, one full-width row underneath. Grid, not CSS multicol:
@@ -291,7 +291,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
 
   .block__list {
     list-style: none;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
   }
@@ -303,7 +303,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
   }
 
   .block__notes {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
     color: var(--fg);
@@ -330,7 +330,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     gap: 0.75rem;
     padding: 0.5rem;
     margin-bottom: 0.5rem;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     font-size: 0.8125rem;
     break-inside: avoid;
@@ -340,7 +340,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
     width: 72px;
     height: 56px;
     flex-shrink: 0;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     overflow: hidden;
     background: var(--bg-highlight);
   }
@@ -381,7 +381,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
   }
 
   .sighting__loc-link:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   /* One column: below this width the right column cannot hold the hero photo

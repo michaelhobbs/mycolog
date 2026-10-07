@@ -359,13 +359,13 @@ const knownLocations = locations
   }
 
   fieldset {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 1rem;
   }
 
   legend {
-    color: var(--accent);
+    color: var(--accent-text);
     font-weight: 700;
     font-size: 0.8125rem;
     padding: 0 0.375rem;
@@ -375,7 +375,7 @@ const knownLocations = locations
     width: 100%;
     background: var(--bg-highlight);
     color: var(--fg);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     padding: 0.5rem;
     font-family: var(--font-mono);
   }
@@ -410,7 +410,7 @@ const knownLocations = locations
     width: 100%;
     background: var(--bg-highlight);
     color: var(--fg);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     padding: 0.5rem;
     font-family: var(--font-mono);
   }
@@ -446,8 +446,8 @@ const knownLocations = locations
 
   .identify__submit {
     background: var(--bg-surface);
-    color: var(--accent);
-    border: 1px solid var(--accent-dim);
+    color: var(--accent-text);
+    border: var(--border-w) solid var(--accent-dim);
     padding: 0.625rem 1.25rem;
     font-family: var(--font-mono);
     font-weight: 700;
@@ -460,7 +460,7 @@ const knownLocations = locations
 
   .identify__submit:hover {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
   }
   .identify__submit:disabled {
     opacity: 0.5;
@@ -474,7 +474,7 @@ const knownLocations = locations
     color: var(--red);
   }
   .identify__status[data-state='ok'] {
-    color: var(--accent);
+    color: var(--accent-text);
   }
   .identify__status[data-state='pending'] {
     color: var(--fg-dim);

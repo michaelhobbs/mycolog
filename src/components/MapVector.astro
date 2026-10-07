@@ -73,7 +73,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
-  import { applyPalette } from '../lib/map-palette'
+  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
   import mlcontour from 'maplibre-contour'
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
@@ -701,6 +701,14 @@ const sightingsJSON = JSON.stringify(clientSightings)
     })
 
     map.on('load', () => {
+      // Repaint on a theme change: the base recolours plus this site's own
+      // layers (which do not exist until the end of this handler, hence the
+      // second pass below).
+      document.addEventListener('myco:theme', () => {
+        applyPalette(map)
+        applyOverlayPalette(map)
+      })
+
       applyPalette(map)
       addHikingLayers(map)
       addContours(map)
@@ -755,6 +763,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
       } catch (err) {
         console.error('[map] addSightings failed:', err)
       }
+
+      // Masks, contours, hiking and sighting layers now exist: colour them
+      // for the active theme (they were added with the tui values).
+      applyOverlayPalette(map)
     })
 
     map.on('error', (e: any) => {
@@ -808,8 +820,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
 
 <style>
   .map-frame {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .map-frame:fullscreen {
@@ -851,22 +865,25 @@ const sightingsJSON = JSON.stringify(clientSightings)
   }
 
   .map-frame__full {
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    background: var(--bg-overlay);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   .map-frame__full:hover {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   .map {
@@ -898,9 +915,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
   :global(.tui-map-popup .maplibregl-popup-content) {
     background: var(--bg-surface);
     color: var(--fg);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     padding: 0;
-    box-shadow: none;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   :global(.tui-map-popup .maplibregl-popup-tip) {
@@ -932,23 +950,26 @@ const sightingsJSON = JSON.stringify(clientSightings)
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    background: var(--bg-overlay);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
     padding: 0.75rem 0.75rem;
     cursor: pointer;
     z-index: 2;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   :global(.tpopup__arrow:hover) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   :global(.tpopup__arrow--prev) {
@@ -971,7 +992,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   }
 
   :global(.tpopup__species:hover) {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
   }
 
@@ -984,7 +1005,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   }
 
   :global(.tpopup__name:hover) {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
   }
 
@@ -1038,23 +1059,26 @@ const sightingsJSON = JSON.stringify(clientSightings)
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    background: var(--bg-overlay);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
     padding: 0.75rem 0.75rem;
     cursor: pointer;
     z-index: 2;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   :global(.cpopup__arrow:hover) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   :global(.cpopup__arrow--prev) {
@@ -1077,7 +1101,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   }
 
   :global(.cpopup__species:hover) {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
   }
 
@@ -1090,7 +1114,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   }
 
   :global(.cpopup__name:hover) {
-    color: var(--accent);
+    color: var(--accent-text);
     text-decoration: underline;
   }
 
@@ -1111,21 +1135,24 @@ const sightingsJSON = JSON.stringify(clientSightings)
 
   :global(.cpopup__btn) {
     background: none;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   :global(.cpopup__btn:hover) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   @media (max-width: 768px) {

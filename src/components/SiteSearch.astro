@@ -175,8 +175,8 @@ const listboxId = `search-list-${locale}`
     appearance: none;
     -webkit-appearance: none;
     background: var(--bg-surface);
-    border: 1px solid var(--border-char);
-    border-radius: 0;
+    border: var(--border-w) solid var(--border-char);
+    border-radius: var(--radius);
     color: var(--fg);
     font: inherit;
     font-size: 0.8125rem;
@@ -221,7 +221,9 @@ const listboxId = `search-list-${locale}`
     max-height: 60vh;
     overflow-y: auto;
     background: var(--bg-surface);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .search__list[data-open] {
@@ -240,7 +242,9 @@ const listboxId = `search-list-${locale}`
     color: var(--fg-subtle);
     font-size: 0.8125rem;
     background: var(--bg-surface);
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .search__option {
@@ -309,7 +313,7 @@ const listboxId = `search-list-${locale}`
      inverts to `--accent` on `--bg` wherever a row is selected. */
   .search__hl {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
     padding: 0 0.0625rem;
   }
 

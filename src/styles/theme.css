@@ -1,0 +1,380 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   White-label configuration
+   ═══════════════════════════════════════════════════════════════════════
+
+   Everything a deployer realistically edits lives in this file:
+
+     1. Fonts and layout tokens (below) — theme-independent.
+     2. The theme palettes — `tui` (dark terminal, default), `mono` (black &
+        white minimal), `brut` (raw web brutalism), `neobrut` (cream / hard
+        shadows / saturated fills), plus five bring-your-own-system colours:
+        `nord` (cold arctic blues), `gruvbox` (warm sepia paper), `solarized`
+        (amber/cyan on deep teal), `catppuccin` (rounded lavender pastel) and
+        `phosphor` (green-on-black CRT). Each is complete: a theme must define
+        every token, because components only ever reference `var(--…)`.
+
+   The active theme is the `data-theme` attribute on `<html>`:
+   server-rendered to the default (`Layout.astro`), overridden before first
+   paint from `localStorage['myco-theme']` by an inline head script, and
+   changed at runtime by the header toggle (which cycles the theme list in
+   `Layout.astro` and fires `myco:theme` on `window` so live maps can
+   repaint). An unrecognised `data-theme` value falls back to the `:root`
+   palette — keep that block holding the site's default theme.
+
+   Components must never hardcode a colour (or a border width, or a shadow):
+   reach for a token here instead. The exceptions are data-as-colour
+   (Wikidata swatches in `ValueMark`) and the map palettes in
+   `src/lib/map-palette.ts`, which are runtime paint properties CSS cannot
+   reach.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* — Fonts — mono for both themes: the UI is built from box characters
+     (╔═, [=], leader dots) that need a fixed grid. — */
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+
+  /* — Layout — */
+  --page-max: 1280px;
+  --header-h: 48px;
+  --rail-w: 240px;
+
+  /* Corner radius, applied to chrome AND controls (`:where` below keeps the
+     control rule at zero specificity). The base is square because the
+     structure is drawn with borders and box characters; themes that want a
+     softer geometry raise it here and panels, cards, map frames and the
+     lightbox image round along with the buttons. */
+  --radius: 0;
+
+  /* — Major-chrome border width. Full-box borders use this; the fine
+     hairline dividers (border-bottom/top on rows and separators) stay 1px
+     so heavy themes change the frame, not the texture. — */
+  --border-w: 1px;
+
+  /* — Hard drop shadows for cards, panels, buttons and chips. A zero blur
+     and offset pair is the neobrutalist signature (`4px 4px 0 #000`); `none`
+     keeps a flat theme flat. `--shadow-press` replaces the base on hover,
+     so interactive surfaces visibly "arm" without any JS. — */
+  --shadow: none;
+  --shadow-press: none;
+
+  /* — Lightbox backdrop (kept dark in every theme so photos pop; also a
+     white-label knob for a lighter scrim). — */
+  --backdrop: rgba(8, 10, 8, 0.94);
+
+  /* — Mobile drawer dim over the page content. A dim stays ink in both themes
+     (even a paper page gets a dark veil behind the drawer), so this is a
+     white-label knob, not a palette token. — */
+  --scrim: rgb(0 0 0 / 0.65);
+
+  /* — Hero glow on the home page (an accent-coloured text-shadow). — */
+  --glow: rgba(51, 255, 51, 0.3);
+}
+
+/* ═══ Theme: tui — the dark terminal palette (default) ═══════════════
+   Also the fallback for a missing or unknown `data-theme`. */
+:root {
+  color-scheme: dark;
+
+  --bg: #0c0c0c;
+  --bg-surface: #141414;
+  --bg-highlight: #1a1a1a;
+  --fg: #b4d4b4;
+  --fg-bright: #d4f0d4;
+  --fg-dim: #8cb48c;
+  --fg-subtle: #8ab28a;
+  --fg-muted: #2d4a2d;
+  --accent: #33ff33;
+  --accent-dim: #28c828;
+  --yellow: #d4d433;
+  --red: #ff8570;
+  --border-char: #2d4a2d;
+
+  /* Overlays on photos & maps — carousel arrows, caption bars, frame
+     buttons: the "sticker" surfaces that sit on top of imagery. */
+  --bg-overlay: #0e120b;
+
+  /* — Accent variants. `--accent` is the *fill* (selected/hover
+     backgrounds, highlights); `--accent-ink` is text or ink seated *on* an
+     accent fill; `--accent-text` is accent used as text or dots on the page
+     background. Keeping them apart is what lets a theme fill with saturated
+     yellow and still read — see `neobrut`. — */
+  --accent-ink: #0c0c0c;
+  --accent-text: #33ff33;
+
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: mono — black & white minimal ═══════════════════════════
+   Strictly ink on paper: `--yellow` and `--red` collapse to black, so the
+   warning/error accents rely on context (dashed borders, position) rather
+   than hue here. Reintroduce colour by editing — or fork this block. */
+:root[data-theme='mono'] {
+  color-scheme: light;
+
+  --bg: #ffffff;
+  --bg-surface: #f4f4f4;
+  --bg-highlight: #ececec;
+  --bg-overlay: #ffffff;
+  --fg: #1c1c1c;
+  --fg-bright: #000000;
+  --fg-dim: #444444;
+  --fg-subtle: #666666;
+  --fg-muted: #999999;
+  --accent: #000000;
+  --accent-dim: #333333;
+  --yellow: #000000;
+  --red: #000000;
+  --border-char: #d9d9d9;
+
+  --accent-ink: #ffffff;
+  --accent-text: #000000;
+
+  --glow: transparent;
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: brut — raw web brutalism ════════════════════════════════
+   Unstyled, harsh, "someone left the default browser up". White paper, pure
+   black 2px chrome, default-link-blue accents and visited purple. The mono
+   font stays because the whole UI is drawn from box characters — the raw
+   look arrives through colour and borders, not the typeface. */
+:root[data-theme='brut'] {
+  color-scheme: light;
+
+  --border-w: 2px;
+
+  --bg: #ffffff;
+  --bg-surface: #f2f2f2;
+  --bg-highlight: #e6e6e6;
+  --bg-overlay: #ffffff;
+  --fg: #000000;
+  --fg-bright: #000000;
+  --fg-dim: #333333;
+  --fg-subtle: #4d4d4d;
+  --fg-muted: #999999;
+  --accent: #0000ee;
+  --accent-dim: #551a8b;
+  --yellow: #7a5c00;
+  --red: #cc0000;
+  --border-char: #000000;
+
+  --accent-ink: #ffffff;
+  --accent-text: #0000ee;
+
+  --backdrop: rgb(0 0 0 / 0.8);
+  --scrim: rgb(0 0 0 / 0.6);
+  --glow: transparent;
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: neobrut — neobrutalist ══════════════════════════════════
+   The current "chunky UI" school: warm cream paper, 2px pure-black borders,
+   hard zero-blur drop shadows that lift under hover, and saturated fills
+   (the accent is the signal yellow). Colours live in fills; text stays ink,
+   which is why `--accent-text` is near-black and `--accent-ink` ink-on-
+   yellow rather than cream-on-yellow. */
+:root[data-theme='neobrut'] {
+  color-scheme: light;
+
+  --radius: 4px;
+  --border-w: 2px;
+  --shadow: 4px 4px 0 0 #000000;
+  --shadow-press: 2px 2px 0 0 #000000;
+
+  --bg: #f6edda;
+  --bg-surface: #f1e4ca;
+  --bg-highlight: #ebdcba;
+  --bg-overlay: #ffde00;
+  --fg: #1a1a1a;
+  --fg-bright: #0a0a0a;
+  --fg-dim: #4a4a4a;
+  --fg-subtle: #6b634f;
+  --fg-muted: #9c927c;
+  --accent: #ffde00;
+  --accent-dim: #c9a800;
+  --yellow: #a67200;
+  --red: #d0253a;
+  --border-char: #000000;
+
+  --accent-ink: #141414;
+  --accent-text: #141414;
+
+  --backdrop: rgb(20 16 10 / 0.85);
+  --scrim: rgb(20 16 10 / 0.6);
+  --glow: transparent;
+}
+
+/* ═══ Theme: nord — cold arctic blues ═══════════════════════════════════
+   The Nord palette (arcticicestudio): Polar Night paper, Snow Storm text,
+   Frost accents — a mountain logbook with a cool, windswept cast. */
+:root[data-theme='nord'] {
+  color-scheme: dark;
+
+  --radius: 4px;
+
+  --bg: #2e3440;
+  --bg-surface: #3b4252;
+  --bg-highlight: #434c5e;
+  --bg-overlay: #3b4252;
+  --fg: #d8dee9;
+  --fg-bright: #eceff4;
+  --fg-dim: #a3aebe;
+  --fg-subtle: #8b96a8;
+  --fg-muted: #4c566a;
+  --accent: #88c0d0;
+  --accent-dim: #5e81ac;
+  --yellow: #ebcb8b;
+  --red: #bf616a;
+  --border-char: #4c566a;
+
+  --accent-ink: #2e3440;
+  --accent-text: #88c0d0;
+
+  --backdrop: rgb(10 13 18 / 0.92);
+  --scrim: rgb(0 0 0 / 0.6);
+  --glow: rgba(136, 192, 208, 0.3);
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: gruvbox — warm sepia paper ═════════════════════════════════
+   The gruvbox light medium: cream ink-and-amber field notes. Acents are the
+   greasy yellows; borders are the tan `dark4`, softer than pure ink. */
+:root[data-theme='gruvbox'] {
+  color-scheme: light;
+
+  --radius: 6px;
+
+  --bg: #fbf1c7;
+  --bg-surface: #f2e5bc;
+  --bg-highlight: #ebdbb2;
+  --bg-overlay: #f2e5bc;
+  --fg: #3c3836;
+  --fg-bright: #282828;
+  --fg-dim: #504945;
+  --fg-subtle: #665c54;
+  --fg-muted: #a89984;
+  --accent: #d79921;
+  --accent-dim: #b57614;
+  --yellow: #fabd2f;
+  --red: #cc241d;
+  --border-char: #bdae93;
+
+  --accent-ink: #282828;
+  --accent-text: #b57614;
+
+  --backdrop: rgb(20 18 12 / 0.8);
+  --scrim: rgb(20 18 12 / 0.6);
+  --glow: transparent;
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: solarized — amber & cyan on deep teal ══════════════════════
+   Ethan Schoonover's design-science palette. The cyan accent sits on base03
+   paper; minimal 2px radius and no shadow keep its precise, clinical mood. */
+:root[data-theme='solarized'] {
+  color-scheme: dark;
+
+  --radius: 2px;
+
+  --bg: #002b36;
+  --bg-surface: #073642;
+  --bg-highlight: #0f4a56;
+  --bg-overlay: #073642;
+  --fg: #839496;
+  --fg-bright: #93a1a1;
+  --fg-dim: #586e75;
+  --fg-subtle: #657b83;
+  --fg-muted: #073642;
+  --accent: #2aa198;
+  --accent-dim: #268bd2;
+  --yellow: #b58900;
+  --red: #dc322f;
+  --border-char: #073642;
+
+  --accent-ink: #002b36;
+  --accent-text: #2aa198;
+
+  --backdrop: rgb(0 33 45 / 0.94);
+  --scrim: rgb(0 0 0 / 0.65);
+  --glow: rgba(42, 161, 152, 0.3);
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* ═══ Theme: catppuccin — rounded lavender pastel ═══════════════════════
+   Catppuccin Mocha: the one theme that dares a soft radius and a floating
+   shadow instead of the flat/square chrome — the largest `--radius` in the
+   set (10px), with a diffuse shadow that lifts under hover. */
+:root[data-theme='catppuccin'] {
+  color-scheme: dark;
+
+  --radius: 10px;
+
+  --bg: #1e1e2e;
+  --bg-surface: #313244;
+  --bg-highlight: #45475a;
+  --bg-overlay: #313244;
+  --fg: #bac2de;
+  --fg-bright: #cdd6f4;
+  --fg-dim: #a6adc8;
+  --fg-subtle: #9399b2;
+  --fg-muted: #6c7086;
+  --accent: #b4befe;
+  --accent-dim: #89b4fa;
+  --yellow: #f9e2af;
+  --red: #f38ba8;
+  --border-char: #6c7086;
+
+  --accent-ink: #1e1e2e;
+  --accent-text: #b4befe;
+
+  --backdrop: rgb(17 17 27 / 0.9);
+  --scrim: rgb(0 0 0 / 0.6);
+  --glow: rgba(180, 190, 254, 0.25);
+  --shadow: 0 4px 14px rgb(0 0 0 / 0.35);
+  --shadow-press: 0 2px 6px rgb(0 0 0 / 0.3);
+}
+
+/* ═══ Theme: phosphor — green-on-black CRT ══════════════════════════════
+   Monochrome P1 green on near-black, square as a raster scan, with a faint
+   `--glow` acting as the bloom around bright text. The `--overlay` stickers
+   are the brightest phosphor, like a second, brighter retrace. */
+:root[data-theme='phosphor'] {
+  color-scheme: dark;
+
+  --radius: 0;
+
+  --bg: #0a0f0a;
+  --bg-surface: #101a10;
+  --bg-highlight: #152915;
+  --bg-overlay: #1a2a1a;
+  --fg: #a8d8a8;
+  --fg-bright: #d4ffd4;
+  --fg-dim: #5f8f5f;
+  --fg-subtle: #4a734a;
+  --fg-muted: #2c4a2c;
+  --accent: #7cfc00;
+  --accent-dim: #58bd00;
+  --yellow: #e8c05a;
+  --red: #ff6b6b;
+  --border-char: #3a6b3a;
+
+  --accent-ink: #0a0f0a;
+  --accent-text: #7cfc00;
+
+  --backdrop: rgb(5 8 5 / 0.94);
+  --scrim: rgb(0 0 0 / 0.7);
+  --glow: rgba(124, 252, 0, 0.35);
+  --shadow: none;
+  --shadow-press: none;
+}
+
+/* `:where` keeps this at zero specificity, so any component rule still wins. */
+:where(button, input, select, textarea, summary) {
+  border-radius: var(--radius);
+}

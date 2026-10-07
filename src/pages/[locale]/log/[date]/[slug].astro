@@ -336,7 +336,7 @@ const pageTitle = sighting
 
   .gallery__item {
     margin: 0;
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     overflow: hidden;
     background: var(--bg-highlight);
     aspect-ratio: 4 / 3;
@@ -344,7 +344,7 @@ const pageTitle = sighting
   }
 
   .gallery__item.gallery__item--cover {
-    border-color: var(--accent);
+    border-color: var(--accent-text);
   }
 
   .gallery__item img {
@@ -377,10 +377,10 @@ const pageTitle = sighting
     left: 0;
     right: 0;
     bottom: 0;
-    background: #0e120b;
+    background: var(--bg-overlay);
     border: none;
     border-top: 1px solid var(--border-char);
-    color: var(--accent);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     padding: 0.25rem 0.5rem;
@@ -392,7 +392,7 @@ const pageTitle = sighting
 
   .gallery__cover:hover:not(:disabled) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
   }
 
   .gallery__cover:disabled {
@@ -411,7 +411,7 @@ const pageTitle = sighting
   }
 
   .cover-status[data-state='ok'] {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .cover-status[data-state='pending'] {
@@ -419,7 +419,7 @@ const pageTitle = sighting
   }
 
   .facts {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.5rem 0.75rem;
     margin-bottom: 1.25rem;
@@ -458,12 +458,12 @@ const pageTitle = sighting
   }
 
   .fact-val-link:hover {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .block__list {
     list-style: none;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
   }
@@ -475,7 +475,7 @@ const pageTitle = sighting
   }
 
   .block__notes {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.75rem;
     color: var(--fg);

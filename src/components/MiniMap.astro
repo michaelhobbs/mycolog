@@ -60,7 +60,7 @@ const regionData = region ? JSON.stringify(region) : ''
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
-  import { applyPalette } from '../lib/map-palette'
+  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
 
   const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
 
@@ -255,6 +255,13 @@ const regionData = region ? JSON.stringify(region) : ''
     })
 
     map.on('load', () => {
+      // Repaint on a theme change; the overlay pass runs again below because
+      // the mask/region/marker layers are added after this point.
+      document.addEventListener('myco:theme', () => {
+        applyPalette(map)
+        applyOverlayPalette(map)
+      })
+
       applyPalette(map)
       if (!region) addMask(map, [w, s, e, n])
       addRegion(map)
@@ -263,6 +270,7 @@ const regionData = region ? JSON.stringify(region) : ''
       } catch (err) {
         console.error('[minimap] addMarkers failed:', err)
       }
+      applyOverlayPalette(map)
     })
 
     map.on('error', (e: any) => {
@@ -338,9 +346,11 @@ const regionData = region ? JSON.stringify(region) : ''
 
 <style>
   .mini-map-frame {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     margin-bottom: 1.25rem;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   .mini-map-frame:fullscreen {
@@ -383,22 +393,25 @@ const regionData = region ? JSON.stringify(region) : ''
   }
 
   .mini-map-frame__full {
-    background: #0e120b;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    background: var(--bg-overlay);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.75rem;
     line-height: 1;
     padding: 0.25rem 0.5rem;
     cursor: pointer;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   .mini-map-frame__full:hover {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   .mini-map-frame__map {

@@ -218,13 +218,13 @@ const coverIdx = entry.data.cover ?? 0
   }
 
   fieldset {
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 1rem;
   }
 
   legend {
-    color: var(--accent);
+    color: var(--accent-text);
     font-weight: 700;
     font-size: 0.8125rem;
     padding: 0 0.375rem;
@@ -250,7 +250,7 @@ const coverIdx = entry.data.cover ?? 0
 
   .gallery__fig {
     margin: 0;
-    border: 1px solid var(--bg-highlight);
+    border: var(--border-w) solid var(--bg-highlight);
     overflow: hidden;
     aspect-ratio: 4 / 3;
     background: var(--bg-highlight);
@@ -258,7 +258,7 @@ const coverIdx = entry.data.cover ?? 0
   }
 
   .gallery__fig.gallery__fig--cover {
-    border-color: var(--accent);
+    border-color: var(--accent-text);
   }
 
   .gallery__fig img {
@@ -290,10 +290,10 @@ const coverIdx = entry.data.cover ?? 0
     left: 0;
     right: 0;
     bottom: 0;
-    background: #0e120b;
+    background: var(--bg-overlay);
     border: none;
     border-top: 1px solid var(--border-char);
-    color: var(--accent);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     padding: 0.25rem 0.5rem;
@@ -305,7 +305,7 @@ const coverIdx = entry.data.cover ?? 0
 
   .gallery__cover:hover:not(:disabled) {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
   }
 
   .gallery__cover:disabled {
@@ -324,7 +324,7 @@ const coverIdx = entry.data.cover ?? 0
   }
 
   .cover-status[data-state='ok'] {
-    color: var(--accent);
+    color: var(--accent-text);
   }
 
   .cover-status[data-state='pending'] {

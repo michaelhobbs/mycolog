@@ -419,9 +419,11 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
 <style>
   .filter {
     margin-bottom: 1.25rem;
-    border: 1px solid var(--border-char);
+    border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
     padding: 0.625rem 0.75rem;
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
   }
 
   /* 2.25rem = 36px, and the coarse-pointer bump below takes touch to 44px.
@@ -472,7 +474,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
   }
 
   .filter__count {
-    color: var(--accent);
+    color: var(--accent-text);
     font-size: 0.75rem;
     margin-left: auto;
     white-space: nowrap;
@@ -480,8 +482,8 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
 
   .filter__reset {
     background: none;
-    border: 1px solid var(--border-char);
-    color: var(--accent);
+    border: var(--border-w) solid var(--border-char);
+    color: var(--accent-text);
     font-family: var(--font-mono);
     font-size: 0.6875rem;
     line-height: 1;
@@ -510,11 +512,11 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
 
   .filter__reset:hover {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--accent-ink);
   }
 
   .filter__reset:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
   }
 
@@ -563,7 +565,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
   }
 
   .facet__summary:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
   }
 
@@ -580,7 +582,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
      keeps the count hard right without needing a spacer element. */
   .facet__badge {
     margin-left: auto;
-    color: var(--accent);
+    color: var(--accent-text);
     font-size: 0.6875rem;
   }
 
@@ -607,7 +609,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
     min-height: 2.25rem;
     padding: 0.5rem 0.625rem;
     background: var(--bg);
-    border: 1px solid var(--fg-muted);
+    border: var(--border-w) solid var(--fg-muted);
     color: var(--fg);
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -615,19 +617,22 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
     text-align: left;
     cursor: pointer;
     touch-action: manipulation;
+    box-shadow: var(--shadow);
     transition:
       background 0.1s,
       border-color 0.1s,
-      color 0.1s;
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
   .value:hover {
     border-color: var(--accent-dim);
     color: var(--fg-bright);
+    box-shadow: var(--shadow-press);
   }
 
   .value:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--accent-text);
     outline-offset: 2px;
   }
 
@@ -666,21 +671,22 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
      is the same invert `.tui-card__arrow` uses on hover. */
   .value[aria-pressed='true'] {
     background: var(--accent);
-    border-color: var(--accent);
-    color: var(--bg);
+    border-color: var(--accent-text);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-press);
   }
 
   .value[aria-pressed='true']:hover {
     background: var(--accent-dim);
     border-color: var(--accent-dim);
-    color: var(--bg);
+    color: var(--accent-ink);
   }
 
   /* The count is blank while selected (the header already carries the number),
      so this only ever paints the on-state of a chip that is about to be filled
      by the script -- keeping the count legible against the accent. */
   .value[aria-pressed='true'] .value__count {
-    color: var(--bg);
+    color: var(--accent-ink);
   }
 
   @media (pointer: coarse) {

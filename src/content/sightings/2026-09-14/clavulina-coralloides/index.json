@@ -1,0 +1,18 @@
+{
+  "species": "clavulina-coralloides",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.5202,
+    "lng": 11.08464
+  },
+  "images": [
+    "./images/clavulina-coralloides1.jpg",
+    "./images/clavulina-coralloides2.jpg",
+    "./images/clavulina-coralloides3.jpg",
+    "./images/clavulina-coralloides4.jpg",
+    "./images/clavulina-coralloides5.jpg"
+  ]
+}

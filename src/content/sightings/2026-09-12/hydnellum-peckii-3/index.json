@@ -1,0 +1,12 @@
+{
+  "species": "hydnellum-peckii",
+  "locationSlug": "schlattan",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.4957,
+    "lng": 11.1476
+  },
+  "images": ["./images/hydnellum-peckii1.jpg"]
+}

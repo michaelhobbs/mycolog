@@ -1,0 +1,16 @@
+{
+  "species": "suillus-bovinus",
+  "locationSlug": "schlattan",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-12",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.49035,
+    "lng": 11.11964
+  },
+  "images": [
+    "./images/suillus-bovinus1.jpg",
+    "./images/suillus-bovinus2.jpg",
+    "./images/suillus-bovinus3.jpg"
+  ]
+}

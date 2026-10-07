@@ -1,0 +1,16 @@
+{
+  "species": "hydnum-repandum",
+  "locationSlug": "kramerplateau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-21",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.49092,
+    "lng": 11.05855
+  },
+  "images": [
+    "./images/hydnum-repandum1.jpg",
+    "./images/hydnum-repandum2.jpg",
+    "./images/hydnum-repandum3.jpg"
+  ]
+}

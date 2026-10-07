@@ -1,0 +1,17 @@
+{
+  "species": "datronia-mollis",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.46516,
+    "lng": 11.03278
+  },
+  "images": [
+    "./images/datronia-mollis1.jpg",
+    "./images/datronia-mollis2.jpg",
+    "./images/datronia-mollis3.jpg",
+    "./images/datronia-mollis4.jpg"
+  ]
+}

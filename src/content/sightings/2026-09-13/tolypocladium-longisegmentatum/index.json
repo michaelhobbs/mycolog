@@ -1,0 +1,16 @@
+{
+  "species": "tolypocladium-longisegmentatum",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.48286,
+    "lng": 11.14977
+  },
+  "images": [
+    "./images/tolypocladium-longisegmentatum1.jpg",
+    "./images/tolypocladium-longisegmentatum2.jpg",
+    "./images/tolypocladium-longisegmentatum3.jpg"
+  ]
+}

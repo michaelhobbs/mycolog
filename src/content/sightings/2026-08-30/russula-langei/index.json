@@ -1,0 +1,20 @@
+{
+  "species": "russula-langei",
+  "locationSlug": "rappenweg-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-08-30",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.47253,
+    "lng": 11.04261
+  },
+  "images": [
+    "./images/russula-langei1.jpg",
+    "./images/russula-langei2.jpg",
+    "./images/russula-langei3.jpg"
+  ],
+  "notes": {
+    "en": "Distinct pink flush on stem. If purple could be Charcoal Burner (Russula cyanoxantha)",
+    "de": ""
+  }
+}

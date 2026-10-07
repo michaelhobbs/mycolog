@@ -1,0 +1,16 @@
+{
+  "species": "dacrymyces-chrysopermus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.48282,
+    "lng": 11.15148
+  },
+  "images": ["./images/dacrymyces-chrysopermus1.jpg", "./images/dacrymyces-chrysopermus2.jpg"],
+  "notes": {
+    "en": "Assumed growing on conifer. If deciduous -> Tremella mesenterica",
+    "de": ""
+  }
+}

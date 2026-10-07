@@ -1,0 +1,50 @@
+---
+// A nomenclatural name with its authority, as the topology blocks show it:
+// the name split so the rank abbreviation stays upright between two italic
+// runs ("Amanita muscaria" var. "muscaria"), then authorship and year.
+//
+// The split happens in the caller (frontmatter helpers cannot return JSX),
+// so this component only renders the parts it is handed.
+interface Parts {
+  base: string
+  marker: string
+  tail: string
+}
+
+interface Props {
+  parts: Parts
+  /** Authorship plus publication year, already joined — may be empty. */
+  cite?: string
+}
+
+const { parts, cite } = Astro.props
+---
+
+<span class="nm">
+  <em>{parts.base}</em>
+  {parts.marker && <span class="nm__rank">{parts.marker}</span>}
+  {parts.tail && <em>{parts.tail}</em>}
+  {cite && <span class="nm__cite">{cite}</span>}
+</span>
+
+<style>
+  .nm {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.3em;
+  }
+
+  .nm__rank {
+    color: var(--fg-bright);
+    font-style: normal;
+    font-size: 0.8125rem;
+  }
+
+  .nm__cite {
+    margin-left: 0.4em;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    font-style: normal;
+  }
+</style>

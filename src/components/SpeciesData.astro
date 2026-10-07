@@ -1,19 +1,26 @@
 ---
-// The four Wikidata-driven blocks on a species page: names, morphology,
-// ecology and edibility.
+// The species-page content blocks: names, morphology, ecology and edibility.
 //
-// Every value here is `optional` on purpose. Wikidata's coverage is partial --
-// `hymenium type` is on 31 of the 47 species, `ecological type` on 29 -- so a
-// missing property means "Wikidata makes no claim", which is not the same as
-// "this species has no pores". A row with no data is therefore omitted rather
-// than rendered as a negative, and a section with no rows at all says so
-// explicitly.
+// The Names block also carries the nomenclature topology (accepted name,
+// basionym, and the toggleable full history) from Index Fungorum, because
+// that is where a reader looks for names. Only the accepted name and the
+// basionym show by default; the variations and synonyms sit behind a
+// `<details>` so the block is usable without JavaScript.
+//
+// Every Wikidata value here is `optional` on purpose. Wikidata's coverage is
+// partial -- `hymenium type` is on 31 of the 47 species, `ecological type` on
+// 29 -- so a missing property means "Wikidata makes no claim", which is not
+// the same as "this species has no pores". A row with no data is therefore
+// omitted rather than rendered as a negative, and a section with no rows at
+// all says so explicitly.
 //
 // The mark beside each value is a drawing or a colour swatch (see `ValueMark`).
 // An unknown QID renders as text with neither, never a broken image -- 4 values
 // have neither and 1 has a drawing belonging to a different value.
 import Block from './Block.astro'
+import NameCite from './NameCite.astro'
 import ValueMark from './ValueMark.astro'
+import type { NameUsage, TaxonomyData } from '../data/taxonomy/types'
 import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
 import type { Locale } from '../i18n'
 import type { Translations } from '../i18n'
@@ -31,9 +38,11 @@ interface Props {
   habitat?: Localized
   edibility?: Localized
   scientificName: string
+  /** The Index Fungorum topology for this species, when one was resolved. */
+  taxonomy?: TaxonomyData
 }
 
-const { data, locale, t, commonName, habitat, edibility, scientificName } = Astro.props
+const { data, locale, t, commonName, habitat, edibility, scientificName, taxonomy } = Astro.props
 
 /** Prefer the requested language, then English, so a value is never blank. */
 const labelOf = (ref: AnyRef) => ref.labels[locale] ?? ref.labels.en ?? ref.labels.de ?? ref.qid
@@ -119,6 +128,47 @@ const aliases = dedupe([
   ...(data?.names.aliases?.[locale] ?? []),
   ...(data?.names.aliases?.en ?? []),
 ]).filter((a) => !statedElsewhere.has(fold(a)))
+
+// --- Nomenclature topology (Index Fungorum via ChecklistBank) -------------
+//
+// Split an infraspecific name so the rank abbreviation can stay upright
+// between two italic runs: "Amanita muscaria var. muscaria" -> base
+// "Amanita muscaria", marker "var.", tail "muscaria". A plain binomial
+// comes back with an empty marker and tail.
+const nameParts = (name: string) => {
+  const m = name.match(/^(.*?)\s+(f\.sp\.|subsp\.|ssp\.|var\.|forma|f\.|lusus)\s+(.+)$/i)
+  return m ? { base: m[1], marker: m[2], tail: m[3] } : { base: name, marker: '', tail: '' }
+}
+
+// Authorship and year, joined for display. The whole string is built here:
+// a newline inside a JSX text node is dropped, so `{authorship} {year}`
+// wrapped by Prettier would render without the separator.
+const authority = (n: NameUsage) => [n.authorship, n.year ?? ''].filter(Boolean).join(', ')
+
+// The two always-visible rows are the accepted name and the basionym; the
+// toggle reveals everything else in `fullHistory`, split into the accepted
+// name's infraspecific children (grouped under it, per their recorded
+// parent) and the remaining synonyms.
+const topIds = new Set(
+  [taxonomy?.accepted?.usageId, taxonomy?.basionym?.usageId].filter(
+    (v): v is string | number => v != null,
+  ),
+)
+const restHistory = (taxonomy?.fullHistory ?? []).filter(
+  (e) => e.usageId != null && !topIds.has(e.usageId),
+)
+const variationIds = new Set((taxonomy?.variations ?? []).map((v) => v.usageId))
+const variationItems = (taxonomy?.variations ?? []).map((n) => ({
+  parts: nameParts(n.scientificName),
+  cite: authority(n),
+}))
+const otherItems = restHistory
+  .filter((e) => !variationIds.has(e.usageId))
+  .map((n) => ({ parts: nameParts(n.scientificName), cite: authority(n) }))
+const allNamesLabel = t.mushrooms.allNames.replace(
+  '{count}',
+  String(taxonomy?.fullHistory.length ?? 0),
+)
 ---
 
 <Block title={t.mushrooms.names}>
@@ -148,6 +198,69 @@ const aliases = dedupe([
     }
   </div>
 </Block>
+
+{
+  taxonomy && (
+    <Block title={t.mushrooms.nomenclature}>
+      <div class="rows">
+        <div class="row">
+          <span class="row__label">{t.mushrooms.acceptedName}</span>
+          <span class="row__dots" />
+          <span class="row__value">
+            <NameCite
+              parts={nameParts(taxonomy.accepted.scientificName)}
+              cite={authority(taxonomy.accepted)}
+            />
+          </span>
+        </div>
+        {taxonomy.basionym && (
+          <div class="row">
+            <span class="row__label">{t.mushrooms.basionym}</span>
+            <span class="row__dots" />
+            <span class="row__value">
+              <NameCite
+                parts={nameParts(taxonomy.basionym.scientificName)}
+                cite={authority(taxonomy.basionym)}
+              />
+            </span>
+          </div>
+        )}
+        {restHistory.length > 0 && (
+          <details class="more">
+            <summary class="more__summary">{allNamesLabel}</summary>
+            <div class="more__body">
+              {variationItems.length > 0 && (
+                <div class="group">
+                  <div class="group__label">{t.mushrooms.variations}</div>
+                  <div class="group__items">
+                    {variationItems.map((i) => (
+                      <div class="item">
+                        <NameCite parts={i.parts} cite={i.cite} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {otherItems.length > 0 && (
+                <div class="group">
+                  <div class="group__label">{t.mushrooms.otherNames}</div>
+                  <div class="group__items">
+                    {otherItems.map((i) => (
+                      <div class="item">
+                        <NameCite parts={i.parts} cite={i.cite} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </details>
+        )}
+      </div>
+      <p class="src-note">{t.mushrooms.nomenclatureNote}</p>
+    </Block>
+  )
+}
 
 <Block title={t.mushrooms.morphology}>
   {
@@ -311,5 +424,78 @@ const aliases = dedupe([
     color: var(--fg);
     line-height: 1.7;
     font-size: 0.8125rem;
+  }
+
+  /* Nomenclature: the toggle is a native <details>, so the full history is
+     reachable without JavaScript and the block ships collapsed with no flash.
+     The summary mirrors SpeciesFilter's facet summaries (+ / − marker,
+     uppercase label) so the two expandable things on the site behave alike. */
+  .more {
+    border-top: 1px solid var(--border-char);
+    margin-top: 0.35rem;
+  }
+
+  .more__summary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    list-style: none;
+    min-height: 2.25rem;
+    padding: 0.35rem 0 0.15rem;
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .more__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .more__summary::before {
+    content: '+';
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    width: 0.75rem;
+  }
+
+  .more[open] > .more__summary::before {
+    content: '−';
+  }
+
+  .more__summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .group__label {
+    color: var(--fg-dim);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0.5rem 0 0.15rem;
+  }
+
+  /* The tree line is what makes the grouping read as nesting: the items hang
+     off it directly beneath the group they belong to. */
+  .group__items {
+    border-left: 1px solid var(--border-char);
+    padding-left: 0.75rem;
+    margin-left: 0.2rem;
+  }
+
+  .item {
+    color: var(--fg-bright);
+    font-size: 0.8125rem;
+    line-height: 1.9;
+  }
+
+  /* Credit line, styled like SpeciesSources' note: muted, small, and kept
+     outside `.rows` so it does not read as a label/value pair. */
+  .src-note {
+    color: var(--fg-muted);
+    font-size: 0.75rem;
+    margin: 0.5rem 0 0;
   }
 </style>

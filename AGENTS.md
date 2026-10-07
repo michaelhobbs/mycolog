@@ -496,6 +496,69 @@ from the collection's `wikidataId`; `--force` rewrites unchanged files.
 - Rendering is incremental: unchanged modules are skipped, and a module whose
   species was deleted is **pruned**, so nothing stale survives a content delete.
 
+## Nomenclature topology (Index Fungorum)
+
+Species pages carry a "Nomenclature" block between the names and the morphology:
+the accepted name, the basionym, and — behind a `<details>` toggle — the
+infraspecific variations plus the remaining synonym history. The data is a
+committed snapshot like the Wikidata one, not a build-time fetch.
+
+- **`src/data/taxonomy/species/`** holds one generated module per species keyed
+  by _collection slug_ (not QID — there is no QID for this data), plus an
+  `index.ts` barrel exporting `speciesTaxonomy`. Types in `src/data/taxonomy/types.ts`.
+  Regenerate with `npm run update-species-taxonomy`; `--force` rewrites
+  unchanged files. Everything under that directory is generated — do not
+  hand-edit.
+- **Not wired into `prebuild`/`predev`, deliberately.** The build has no network
+  (see Thumbnails), so a fresh species simply renders _no_ Nomenclature block
+  until someone runs the script. `speciesTaxonomy[slug]` being undefined is a
+  supported state; the block is gated on it in `SpeciesData.astro`.
+- **The API client is `scripts/lib/col.mjs`; the dataset key lives in
+  `scripts/config/col.mjs`** (`DEFAULT_COL_DATASET_KEY`, currently **1028** —
+  "Index Fungorum API crawl", alias "Species Fungorum"). Dataset 1028 is the
+  only one of four tried that has BASIONYM relations _and_ infraspecific
+  children _and_ authorship _and_ reference years: 3 and 2073 returned empty
+  relation sets, 315304 (COL 2011) lacked authorship and basionym entirely.
+  Don't re-probe them; the config key exists so a change is deliberate.
+- **`usageId` and `nameId` are equal only in this dataset.** The script leans on
+  that (`/name/{id}/relations`, `/nameusage/{id}`, `/reference/{id}` all take
+  either), and on `POST /dataset/1028/tree/{id}/children` for the variations —
+  `taxon/{id}/tree` is 401 without auth. Re-verify both before pointing the
+  script at a different dataset.
+- **Years come from the `reference` endpoint, not the record**, cached in-process
+  (a species' whole history shares references) with a small sleep between
+  distinct fetches. ChecklistBank rate-limits readily.
+- Resolution is exact-scientificName with a preference for accepted usages; the
+  species' `wikidataId` P225 is consulted only to break an ambiguity, never to
+  override. Current state: 58/58 resolved, 0 warnings.
+- **The accepted name may legitimately differ from the page's `scientificName`**
+  — several of our names are synonyms (`clitocybe-gibba` → _Infundibulicybe
+  gibba_, `coprinus-niveus` → _Coprinopsis nivea_). That difference is what the
+  row is for; do not "fix" it. Equally, `basionym: null` is a real answer
+  (15 species have none recorded, _Boletus edulis_ among them) — the row is
+  simply omitted, and the schema marks the field optional on purpose.
+- `fullHistory` is deduped by `usageId` with the basionym pushed first, because
+  Index Fungorum lists the basionym again among its homotypic synonyms.
+- **Rendering lives in `SpeciesData.astro` + `NameCite.astro`.** The position is
+  fixed: the user asked for it below the existing names, and `SpeciesData` is
+  where the names are, so the block goes there rather than in its own
+  component. `NameCite` takes a pre-split `{base, marker, tail}` so the rank
+  abbreviation stays upright between two italic runs — the split is done by a
+  frontmatter helper because a helper cannot return JSX. Authorship and year
+  are joined **in frontmatter** (`authority()`); a newline inside a JSX text
+  node is dropped, so `{authorship} {year}` wrapped by Prettier would render
+  without the separator (the number-next-to-label rule from Date-first
+  navigation applies here too).
+- The toggle is a native `<details>` styled after `SpeciesFilter`'s facet
+  summaries (`+`/`−` marker, uppercase label, focus-visible ring): zero JS, no
+  flash, and the full list stays reachable with scripting off. Its label comes
+  from `mushrooms.allNames` with the `{count}` placeholder `.replace`d in
+  frontmatter — not interpolated in the template.
+- The barrel must stay a **frontmatter-only import** (like `speciesWikidata`);
+  it is never imported by a client script. Assert after touching this that no
+  `dist/**/*.html` contains `colDatasetKey` — the snapshots ship as rendered
+  markup, never as an inlined payload.
+
 ## Wikidata morphology data
 
 `src/data/wikidata/` holds a typed snapshot of the fungal morphology properties

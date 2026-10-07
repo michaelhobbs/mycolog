@@ -9,6 +9,7 @@ import SpeciesData from '../../../components/SpeciesData.astro'
 import SpeciesGallery from '../../../components/SpeciesGallery.astro'
 import SpeciesSources from '../../../components/SpeciesSources.astro'
 import { speciesWikidata } from '../../../data/wikidata/species'
+import { speciesTaxonomy } from '../../../data/taxonomy/species'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import { buildLocationMap, locationName } from '../../../lib/sightings'
@@ -54,6 +55,11 @@ const fullSrcs = await Promise.all(
 // than the slug. `wikidataId` is optional in the schema, so this can be
 // undefined for a species that has no Wikidata item yet.
 const wikidata = sp?.wikidataId ? speciesWikidata[sp.wikidataId] : undefined
+
+// The Index Fungorum topology, keyed by collection slug like every other
+// per-species lookup. Undefined until `update-species-taxonomy` has run for
+// a newly added species.
+const taxonomy = speciesTaxonomy[name]
 
 // Built here rather than inline in the template: a newline inside a JSX text
 // node collapses away, so `{t.mushrooms.sightings} ({entries.length})` on its
@@ -114,6 +120,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
               commonName={sp.commonName}
               habitat={habitat}
               edibility={edibility}
+              taxonomy={taxonomy}
             />
 
             {features.length > 0 && (

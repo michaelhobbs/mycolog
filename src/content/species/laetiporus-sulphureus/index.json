@@ -1,7 +1,10 @@
 {
   "scientificName": "Laetiporus sulphureus",
   "wikidataId": "Q772098",
-  "commonName": { "en": "Chicken of the Woods", "de": "Schwefelporling" },
+  "commonName": {
+    "en": "Chicken of the Woods",
+    "de": "Schwefelporling"
+  },
   "determiningFeatures": [
     {
       "en": "Bright sulphur-yellow bracket fans with an orange centre, in overlapping clusters",
@@ -31,5 +34,9 @@
   "edibility": {
     "en": "Edible when young and properly cooked, though it disagrees with some people",
     "de": "Jung und gut gegart essbar, bei manchen Menschen jedoch unverträglich"
+  },
+  "cover": {
+    "sighting": "2026-09-24/laetiporus-sulphureus",
+    "index": 2
   }
 }

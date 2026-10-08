@@ -1,0 +1,26 @@
+{
+  "species": "gomphidius-glutinosus",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-08",
+  "location": {
+    "lat": 47.46599,
+    "lng": 11.02979
+  },
+  "images": [
+    "./images/gomphidius-glutinosus1.jpg",
+    "./images/gomphidius-glutinosus2.jpg",
+    "./images/gomphidius-glutinosus3.jpg",
+    "./images/gomphidius-glutinosus4.jpg",
+    "./images/gomphidius-glutinosus5.jpg",
+    "./images/gomphidius-glutinosus6.jpg",
+    "./images/gomphidius-glutinosus7.jpg",
+    "./images/gomphidius-glutinosus8.jpg",
+    "./images/gomphidius-glutinosus9.jpg"
+  ],
+  "notes": {
+    "en": "Glutinous veil and yellow base of stem on proud display here.",
+    "de": ""
+  }
+}

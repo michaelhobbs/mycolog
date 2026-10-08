@@ -1,0 +1,18 @@
+{
+  "species": "suillellus-luridus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-08",
+  "location": {
+    "lat": 47.48257,
+    "lng": 11.15076
+  },
+  "images": [
+    "./images/suillellus-luridus1.jpg",
+    "./images/suillellus-luridus2.jpg",
+    "./images/suillellus-luridus3.jpg",
+    "./images/suillellus-luridus4.jpg",
+    "./images/suillellus-luridus5.jpg"
+  ]
+}

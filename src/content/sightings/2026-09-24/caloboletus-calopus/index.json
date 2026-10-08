@@ -1,0 +1,17 @@
+{
+  "species": "caloboletus-calopus",
+  "locationSlug": "sagenhafter-bergwald-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-24",
+  "dateIdentified": "2026-10-08",
+  "location": {
+    "lat": 47.46427,
+    "lng": 11.03208
+  },
+  "images": [
+    "./images/caloboletus-calopus1.jpg",
+    "./images/caloboletus-calopus2.jpg",
+    "./images/caloboletus-calopus3.jpg",
+    "./images/caloboletus-calopus4.jpg"
+  ]
+}

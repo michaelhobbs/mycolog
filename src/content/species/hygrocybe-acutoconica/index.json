@@ -1,7 +1,10 @@
 {
   "scientificName": "Hygrocybe acutoconica",
   "wikidataId": "Q2255842",
-  "commonName": { "en": "Persistent Waxcap", "de": "Safrangelber Saftling" },
+  "commonName": {
+    "en": "Persistent Waxcap",
+    "de": "Safrangelber Saftling"
+  },
   "determiningFeatures": [
     {
       "en": "Conical, acutely pointed cap, bright lemon-yellow when young, fading pale as it dries or ages",
@@ -31,5 +34,9 @@
   "edibility": {
     "en": "Edible but of little culinary value",
     "de": "Essbar, aber ohne nennenswerten Speisewert"
+  },
+  "cover": {
+    "sighting": "2026-09-19/hygrocybe-acutoconica",
+    "index": 2
   }
 }

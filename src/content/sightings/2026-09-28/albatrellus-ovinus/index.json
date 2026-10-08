@@ -1,0 +1,16 @@
+{
+  "species": "albatrellus-ovinus",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-08",
+  "location": {
+    "lat": 47.48423,
+    "lng": 11.15211
+  },
+  "images": [
+    "./images/albatrellus-ovinus1.jpg",
+    "./images/albatrellus-ovinus2.jpg",
+    "./images/albatrellus-ovinus3.jpg"
+  ]
+}

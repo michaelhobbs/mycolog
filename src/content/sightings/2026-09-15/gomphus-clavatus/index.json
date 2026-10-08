@@ -1,0 +1,22 @@
+{
+  "species": "gomphus-clavatus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-10-08",
+  "location": {
+    "lat": 47.48319,
+    "lng": 11.15105
+  },
+  "images": [
+    "./images/gomphus-clavatus1.jpg",
+    "./images/gomphus-clavatus2.jpg",
+    "./images/gomphus-clavatus3.jpg",
+    "./images/gomphus-clavatus4.jpg",
+    "./images/gomphus-clavatus5.jpg",
+    "./images/gomphus-clavatus6.jpg",
+    "./images/gomphus-clavatus7.jpg",
+    "./images/gomphus-clavatus8.jpg",
+    "./images/gomphus-clavatus9.jpg"
+  ]
+}

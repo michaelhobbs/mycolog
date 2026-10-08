@@ -1,7 +1,10 @@
 {
   "scientificName": "Tolypocladium longisegmentatum",
   "wikidataId": "Q108430550",
-  "commonName": { "en": "Long-segment Truffleclub*", "de": "Langsegmentige Kernkeule*" },
+  "commonName": {
+    "en": "Long-segment Truffleclub*",
+    "de": "Langsegmentige Kernkeule*"
+  },
   "determiningFeatures": [
     {
       "en": "Slender, club- to spindle-shaped, pale yellowish-brown fruit body, often tipped with a paler point",
@@ -31,5 +34,9 @@
   "edibility": {
     "en": "Inedible — a small, uncommon parasite without culinary interest",
     "de": "Nicht essbar — kleiner, seltener Parasit ohne Speisewert"
+  },
+  "cover": {
+    "sighting": "2026-09-13/tolypocladium-longisegmentatum",
+    "index": 1
   }
 }

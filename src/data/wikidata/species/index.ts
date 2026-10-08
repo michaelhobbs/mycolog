@@ -10,10 +10,10 @@ import { mycenaViridimarginataQ10510028 } from './Q10510028'
 import { cortinariusLargusQ10570865 } from './Q10570865'
 import { russulaLangeiQ10658025 } from './Q10658025'
 import { cudoniellaAcicularisQ10682294 } from './Q10682294'
-import { atheniellaFlavoalbaQ107504319 } from './Q107504319'
 import { tolypocladiumLongisegmentatumQ108430550 } from './Q108430550'
 import { podofomesMollisQ114852018 } from './Q114852018'
 import { suillusBovinusQ1165762 } from './Q1165762'
+import { mycenaEpipterygiaQ1183020 } from './Q1183020'
 import { amanitaMuscariaQ131227 } from './Q131227'
 import { collybiopsisVaillantiiQ136395649 } from './Q136395649'
 import { hydnumRepandumQ13684 } from './Q13684'
@@ -85,10 +85,10 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q10570865: cortinariusLargusQ10570865,
   Q10658025: russulaLangeiQ10658025,
   Q10682294: cudoniellaAcicularisQ10682294,
-  Q107504319: atheniellaFlavoalbaQ107504319,
   Q108430550: tolypocladiumLongisegmentatumQ108430550,
   Q114852018: podofomesMollisQ114852018,
   Q1165762: suillusBovinusQ1165762,
+  Q1183020: mycenaEpipterygiaQ1183020,
   Q131227: amanitaMuscariaQ131227,
   Q136395649: collybiopsisVaillantiiQ136395649,
   Q13684: hydnumRepandumQ13684,
@@ -154,13 +154,13 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q10570865: { slug: 'cortinarius-largus', scientificName: 'Cortinarius largus' },
   Q10658025: { slug: 'russula-langei', scientificName: 'Russula langei' },
   Q10682294: { slug: 'cudoniella-acicularis', scientificName: 'Cudoniella acicularis' },
-  Q107504319: { slug: 'atheniella-flavoalba', scientificName: 'Atheniella flavoalba' },
   Q108430550: {
     slug: 'tolypocladium-longisegmentatum',
     scientificName: 'Tolypocladium longisegmentatum',
   },
   Q114852018: { slug: 'podofomes-mollis', scientificName: 'Podofomes mollis' },
   Q1165762: { slug: 'suillus-bovinus', scientificName: 'Suillus bovinus' },
+  Q1183020: { slug: 'mycena-epipterygia', scientificName: 'Mycena epipterygia' },
   Q131227: { slug: 'amanita-muscaria', scientificName: 'Amanita muscaria' },
   Q136395649: { slug: 'collybiopsis-vaillantii', scientificName: 'Collybiopsis vaillantii' },
   Q13684: { slug: 'hydnum-repandum', scientificName: 'Hydnum repandum' },

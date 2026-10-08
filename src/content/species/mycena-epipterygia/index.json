@@ -1,0 +1,34 @@
+{
+  "scientificName": "Mycena epipterygia",
+  "wikidataId": "Q1183020",
+  "commonName": {
+    "en": "Yellowleg bonnet",
+    "de": "Dehnbarer Helmling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Lemon-yellow to greenish-yellow stem, slimy when moist, untapering and up to 8 cm tall",
+      "de": "Zitrongelber bis gelbgrüner Stiel, bei Feuchtigkeit schleimig, nicht verjüngt, bis 8 cm hoch"
+    },
+    {
+      "en": "Cap 1–2.5 cm, conical then bell-shaped, greyish-yellow to yellow-brown and translucently striate",
+      "de": "Hut 1–2,5 cm, anfangs glockig, dann glockig bis gewölbt, graugelblich bis gelbbräunlich und durchscheinend gerieft"
+    },
+    {
+      "en": "Thick gelatinous cap cuticle that peels off as a transparent sheet",
+      "de": "Dicke klebrige Huthaut, die sich als durchsichtige gallertartige Haut abziehen lässt"
+    },
+    {
+      "en": "Whitish to greyish gills, fairly widely spaced, edged with a pullable gelatinous thread",
+      "de": "Weißliche bis grau-weißliche Lamellen, relativ weit abstehend, mit abziehbarem gallertartigem Faden auf der Schneide"
+    }
+  ],
+  "habitat": {
+    "en": "On needle and leaf litter, especially under spruce, also on grassy and mossy ground",
+    "de": "Auf Nadel- und Laubstreu, besonders unter Fichten, auch auf grasigem und moosigem Boden"
+  },
+  "edibility": {
+    "en": "Inedible — too small and of no culinary value",
+    "de": "Ungenießbar — zu klein und ohne Speisewert"
+  }
+}

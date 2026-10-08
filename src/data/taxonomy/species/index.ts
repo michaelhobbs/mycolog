@@ -6,7 +6,6 @@ import { taxonomy as amanita_muscariaTaxonomy } from './amanita-muscaria'
 import { taxonomy as amanita_pantherinaTaxonomy } from './amanita-pantherina'
 import { taxonomy as amanita_phalloidesTaxonomy } from './amanita-phalloides'
 import { taxonomy as armillaria_melleaTaxonomy } from './armillaria-mellea'
-import { taxonomy as atheniella_flavoalbaTaxonomy } from './atheniella-flavoalba'
 import { taxonomy as auricularia_auricula_judaeTaxonomy } from './auricularia-auricula-judae'
 import { taxonomy as boletus_edulisTaxonomy } from './boletus-edulis'
 import { taxonomy as butyriboletus_appendiculatusTaxonomy } from './butyriboletus-appendiculatus'
@@ -45,6 +44,7 @@ import { taxonomy as lepiota_clypeolariaTaxonomy } from './lepiota-clypeolaria'
 import { taxonomy as lycoperdon_perlatumTaxonomy } from './lycoperdon-perlatum'
 import { taxonomy as macrolepiota_proceraTaxonomy } from './macrolepiota-procera'
 import { taxonomy as mucidula_mucidaTaxonomy } from './mucidula-mucida'
+import { taxonomy as mycena_epipterygiaTaxonomy } from './mycena-epipterygia'
 import { taxonomy as mycena_viridimarginataTaxonomy } from './mycena-viridimarginata'
 import { taxonomy as otidea_alutaceaTaxonomy } from './otidea-alutacea'
 import { taxonomy as panellus_mitisTaxonomy } from './panellus-mitis'
@@ -72,7 +72,6 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'amanita-pantherina': amanita_pantherinaTaxonomy,
   'amanita-phalloides': amanita_phalloidesTaxonomy,
   'armillaria-mellea': armillaria_melleaTaxonomy,
-  'atheniella-flavoalba': atheniella_flavoalbaTaxonomy,
   'auricularia-auricula-judae': auricularia_auricula_judaeTaxonomy,
   'boletus-edulis': boletus_edulisTaxonomy,
   'butyriboletus-appendiculatus': butyriboletus_appendiculatusTaxonomy,
@@ -111,6 +110,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'lycoperdon-perlatum': lycoperdon_perlatumTaxonomy,
   'macrolepiota-procera': macrolepiota_proceraTaxonomy,
   'mucidula-mucida': mucidula_mucidaTaxonomy,
+  'mycena-epipterygia': mycena_epipterygiaTaxonomy,
   'mycena-viridimarginata': mycena_viridimarginataTaxonomy,
   'otidea-alutacea': otidea_alutaceaTaxonomy,
   'panellus-mitis': panellus_mitisTaxonomy,

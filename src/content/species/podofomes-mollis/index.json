@@ -1,0 +1,35 @@
+{
+  "scientificName": "Podofomes mollis",
+  "wikidataId": "Q114852018",
+  "commonName": { "en": "Common Mazegill", "de": "" },
+  "determiningFeatures": [
+    {
+      "en": "Effused-reflexed brackets and crusts on dead hardwood, grey-brown to fuscous",
+      "de": "Dachziegelig wachsende, oft resupinate Krusten an totem Laubholz, graubraun bis schwärzlich"
+    },
+    {
+      "en": "Pore surface whitish to grey-brown with angular pores that become irregular, maze-like and cracked with age",
+      "de": "Porenschicht weißlich bis graubraun mit eckigen Poren, die mit dem Alter labyrinthartig und rissig werden"
+    },
+    {
+      "en": "Soft and tough when fresh, drying hard and brittle; paler, sterile margin",
+      "de": "Frisch weich und zäh, trocken hart und brüchig; blasser, steriler Rand"
+    },
+    {
+      "en": "Typically at the base of standing trunks and on fallen beech logs, well into winter",
+      "de": "Meist an Stammfüßen und auf liegenden Buchenstämmen, oft bis in den Winter"
+    }
+  ],
+  "notes": {
+    "en": "Long known as Datronia mollis (a name still in wide use); molecular work places the species in Podofomes. The English name Common Mazegill points to its ageing, maze-like pores.",
+    "de": "Lange als Datronia mollis bekannt (der Name wird weiterhin häufig verwendet); molekulare Daten stellen die Art zu Podofomes. Der englische Name Common Mazegill verweist auf die im Alter labyrinthartigen Poren."
+  },
+  "habitat": {
+    "en": "Saprotrophic on dead broadleaf wood, especially beech trunks and stumps",
+    "de": "Saprobiont an totem Laubholz, besonders an Buchenstämmen und -stümpfen"
+  },
+  "edibility": {
+    "en": "Inedible — tough, corky and without culinary value",
+    "de": "Ungenießbar — zäh, korkig, ohne Speisewert"
+  }
+}

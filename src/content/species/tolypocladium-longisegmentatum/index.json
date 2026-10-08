@@ -1,8 +1,35 @@
 {
   "scientificName": "Tolypocladium longisegmentatum",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "wikidataId": "Q108430550",
+  "commonName": { "en": "Long-segment Truffleclub*", "de": "Langsegmentige Kernkeule*" },
+  "determiningFeatures": [
+    {
+      "en": "Slender, club- to spindle-shaped, pale yellowish-brown fruit body, often tipped with a paler point",
+      "de": "Schlanker, keulen- bis spindelförmiger, blass gelbbrauner Fruchtkörper, oft mit hellerer Spitze"
+    },
+    {
+      "en": "Rises from buried deer truffles (Elaphomyces), on which it is parasitic",
+      "de": "Entspringt vergrabenen Hirschtrüffeln (Elaphomyces), auf denen er parasitisch lebt"
+    },
+    {
+      "en": "Smooth, matte surface, only a few centimetres tall, singly or in small groups",
+      "de": "Glatte, matte Oberfläche, nur wenige Zentimeter hoch, einzeln oder in kleinen Gruppen"
+    },
+    {
+      "en": "In mossy conifer forest, growing out of the ground litter rather than from wood",
+      "de": "In moosigem Nadelwald, aus der Bodenstreu wachsend, nicht an Holz"
+    }
+  ],
+  "notes": {
+    "en": "A member of the truffleclub genus, parasitic on underground Elaphomyces (\"deer truffles\") and easily overlooked among moss. The epithet longisegmentatum refers to the long, multisegmented part-spores — hence the literal translation of the name.",
+    "de": "Ein Vertreter der Kernkeulen-Gattung, parasitisch auf vergrabenen Elaphomyces-Arten (Hirschtrüffeln) und im Moos leicht zu übersehen. Das Epitheton longisegmentatum bezieht sich auf die langen, mehrgliedrigen Sekundärsporen — daher die wörtliche Übersetzung des Namens."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "In mossy spruce and fir woodland, parasitic on buried truffles (Elaphomyces), late summer to autumn",
+    "de": "In moosigen Fichten- und Tannenwäldern, parasitisch an vergrabenen Hirschtrüffeln (Elaphomyces), Spätsommer bis Herbst"
+  },
+  "edibility": {
+    "en": "Inedible — a small, uncommon parasite without culinary interest",
+    "de": "Nicht essbar — kleiner, seltener Parasit ohne Speisewert"
+  }
 }

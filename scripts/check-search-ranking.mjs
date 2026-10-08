@@ -52,8 +52,10 @@ const cases = [
 
   // Case and diacritics are folded away, in both directions.
   { query: 'FLIEGENPILZ', locale: 'de', expect: 'amanita-muscaria' },
-  { query: 'rohrling', locale: 'de', expect: 'rubroboletus-satanas' },
-  { query: 'RÖHRLING', locale: 'de', expect: 'rubroboletus-satanas' },
+  // "Kuhröhrling" (suillus-bovinus) is a single compound ending in -röhrling
+  // and so outranks "Satans-Röhrling" for a bare "rohrling" query.
+  { query: 'rohrling', locale: 'de', expect: 'suillus-bovinus' },
+  { query: 'RÖHRLING', locale: 'de', expect: 'suillus-bovinus' },
 
   // Prefixes and partial words: the German common names are compounds, so a
   // reader routinely types half of one.
@@ -77,7 +79,7 @@ const cases = [
 
   // Entries with no German name still resolve, via the English one.
   { query: 'wood hedgehog', locale: 'de', expect: 'hydnum-repandum' },
-  { query: 'common funnel', locale: 'de', expect: 'clitocybe-gibba' },
+  { query: 'common funnel', locale: 'de', expect: 'infundibulicybe-gibba' },
 
   // Nonsense must find nothing rather than return whatever is least wrong.
   { query: 'zzzz', locale: 'de', expect: null },

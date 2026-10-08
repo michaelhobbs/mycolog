@@ -1,0 +1,38 @@
+{
+  "scientificName": "Infundibulicybe gibba",
+  "wikidataId": "Q765631",
+  "commonName": {
+    "en": "Common Funnel",
+    "de": "Ockerbrauner Trichterling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Ochre-brown, funnel-shaped cap with a small central bump (umbo)",
+      "de": "Ockerbrauner, trichterförmiger Hut mit kleinem zentralem Buckel"
+    },
+    {
+      "en": "Far-decurrent, densely crowded, whitish gills",
+      "de": "Weit herablaufende, dicht stehende, weißliche Lamellen"
+    },
+    {
+      "en": "Firm, fibrous stem in the cap colour, paler towards the base",
+      "de": "Fester, faseriger Stiel in Hutfarbe, zur Basis hin heller"
+    },
+    {
+      "en": "Faint smell of bitter almonds; tough, leathery texture",
+      "de": "Schwacher Geruch nach Bittermandel; zäh-lederige Konsistenz"
+    }
+  ],
+  "notes": {
+    "en": "Now placed in the genus Infundibulicybe. The umbo and bitter-almond scent separate it from the white funnel clitocybes, which are best avoided.",
+    "de": "Heute in die Gattung Infundibulicybe gestellt. Buckel und Bittermandelgeruch trennen ihn von den weißen Trichterlingen, die gemieden werden sollten."
+  },
+  "habitat": {
+    "en": "On leaf litter in broadleaf and mixed woodland, often in troops along paths",
+    "de": "Auf Laubstreu in Laub- und Mischwäldern, oft gesellig an Wegrändern"
+  },
+  "edibility": {
+    "en": "Edible but mediocre; only young caps are worth collecting and the stem is tough",
+    "de": "Essbar, aber mittelmäßig; nur junge Hüte lohnen sich, der Stiel ist zäh"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "species": "infundibulicybe-gibba",
+  "locationSlug": "rappenweg-grainau",
+  "authors": ["michael"],
+  "dateSpotted": "2026-08-30",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.47247,
+    "lng": 11.03811
+  },
+  "images": [
+    "./images/infundibulicybe-gibba1.jpg",
+    "./images/infundibulicybe-gibba2.jpg",
+    "./images/infundibulicybe-gibba3.jpg"
+  ]
+}

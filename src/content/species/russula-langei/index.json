@@ -1,8 +1,35 @@
 {
   "scientificName": "Russula langei",
-  "commonName": {
-    "en": "",
-    "de": ""
+  "wikidataId": "Q10658025",
+  "commonName": { "en": "", "de": "Hartfleischiger Frauentäubling" },
+  "determiningFeatures": [
+    {
+      "en": "Cap wine-red to purple-violet, often with an olive or grey flush, smooth and matt",
+      "de": "Hut weinrot bis purpurviolett, oft mit oliv- oder grauem Einschlag, glatt und matt"
+    },
+    {
+      "en": "Firm, hard white flesh with a mild taste",
+      "de": "Festes, hartes weißes Fleisch mit mildem Geschmack"
+    },
+    {
+      "en": "White stem, often flushed pink towards the base",
+      "de": "Weißer Stiel, zur Basis hin oft rosarot überhaucht"
+    },
+    {
+      "en": "Brittle gills that chip rather than smear when pressed — unlike the pliable gills of the Charcoal Burner (Russula cyanoxantha)",
+      "de": "Spröde, splitternde Lamellen — anders als die biegsamen Lamellen des Frauentäublings (Russula cyanoxantha)"
+    }
+  ],
+  "notes": {
+    "en": "A firm-fleshed relative of the Charcoal Burner (Russula cyanoxantha), from which it is separated by hard flesh and the pink-flushed stem base. Cap colour is extremely variable, so a firm white stem and a mild taste carry more weight than the hue.",
+    "de": "Ein hartfleischiger Verwandter des Frauentäublings (Russula cyanoxantha), von dem er sich durch festes Fleisch und die rosafarbene Stielbasis unterscheidet. Da die Hutfarbe stark variiert, zählen ein fester weißer Stiel und milder Geschmack mehr als die Farbtöne."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "Mycorrhizal with deciduous and coniferous trees, late summer to autumn, often in mountain forests",
+    "de": "Mykorrhiza-Partner von Laub- und Nadelbäumen, Spätsommer bis Herbst, oft in Bergwäldern"
+  },
+  "edibility": {
+    "en": "Edible",
+    "de": "Essbar"
+  }
 }

@@ -127,6 +127,9 @@ export default {
     names: 'Namen',
     scientificName: 'Wissenschaftlicher Name',
     commonNames: 'Gebräuchliche Namen',
+    noCommonName: 'Kein gebräuchlicher Name',
+    literalName:
+      'Mit * gekennzeichnete Namen sind wörtliche Übersetzungen des wissenschaftlichen Namens; ein etablierter Trivialname existiert nicht.',
     alternateNames: 'auch bekannt als',
     nomenclature: 'Nomenklatur',
     acceptedName: 'Anerkannter Name',

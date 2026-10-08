@@ -1,8 +1,35 @@
 {
   "scientificName": "Suillus bovinus",
-  "commonName": {
-    "en": "Bovine Bolete",
-    "de": ""
+  "wikidataId": "Q1165762",
+  "commonName": { "en": "Bovine Bolete", "de": "Kuhröhrling" },
+  "determiningFeatures": [
+    {
+      "en": "Convex, ochre, clay-brown to olive cap, slimy when wet, wavy at the margin",
+      "de": "Gewölbter ocker-, lehmbrauner bis olivfarbener Hut, feucht schmierig, am Rand wellig"
+    },
+    {
+      "en": "Large, compound angular pores, olive-grey to dull brown, running down the stem",
+      "de": "Große, zusammengesetzte, eckige Röhrenmündungen, olivgrau bis stumpfbraun, am Stiel herablaufend"
+    },
+    {
+      "en": "Slender, ochre stem without a ring",
+      "de": "Schlanker, ockerfarbener Stiel ohne Ring"
+    },
+    {
+      "en": "Often in close troops under pines, frequently alongside the Rosy Spike (Gomphidius roseus)",
+      "de": "Oft in dichten Trupps unter Kiefern, nicht selten neben dem Rosablättrigen Schmierling (Gomphidius roseus)"
+    }
+  ],
+  "notes": {
+    "en": "A gregarious late-summer and autumn bolete of dry pine woodland. Its unusually large, maze-like compound pores and the absent ring separate it from the Slippery Jack (Suillus luteus).",
+    "de": "Ein geselliger Sommer- und Herbst-Röhrling trockener Kiefernwälder. Die ungewöhnlich großen, labyrinthisch-eckigen Poren und der fehlende Ring unterscheiden ihn vom Butterpilz (Suillus luteus)."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "In troops in dry, open pine woodland; mycorrhizal with pine",
+    "de": "In Trupps in trockenen, lichten Kiefernwäldern; Mykorrhiza-Partner der Kiefer"
+  },
+  "edibility": {
+    "en": "Edible, but soft and little regarded; best when young",
+    "de": "Essbar, aber weich und wenig geschätzt; am besten jung"
+  }
 }

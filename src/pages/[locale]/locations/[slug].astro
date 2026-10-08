@@ -121,8 +121,10 @@ const speciesName = new Map(species.map((sp) => [sp.id, sp.data]))
                           {formatDate(sd.dateSpotted, locale)}
                         </a>
                         <a href={`/${locale}/mushrooms/${sd.species}`} class="sighting__species">
-                          {l10n(sp?.commonName, locale)}
-                          {sp?.scientificName ? ` (${sp.scientificName})` : ''}
+                          {l10n(sp?.commonName, locale) || sp?.scientificName}
+                          {l10n(sp?.commonName, locale) && sp?.scientificName
+                            ? ` (${sp.scientificName})`
+                            : ''}
                         </a>
                       </div>
                     </li>

@@ -1,0 +1,16 @@
+{
+  "species": "collybiopsis-vaillantii",
+  "locationSlug": "schweinbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-10",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.50885,
+    "lng": 11.11168
+  },
+  "images": [
+    "./images/collybiopsis-vaillantii1.jpg",
+    "./images/collybiopsis-vaillantii2.jpg",
+    "./images/collybiopsis-vaillantii3.jpg"
+  ]
+}

@@ -40,6 +40,10 @@ const entries = all
   .sort((a, b) => (a.data.dateSpotted < b.data.dateSpotted ? -1 : 1))
 
 const sp = species?.data
+// A species may have no common name in the current locale ("en": "" is how the
+// absence is stored). Prefer the common name, fall back to the scientific name
+// so the page title, tag and image alt are never blank.
+const pageName = sp ? l10n(sp.commonName, locale) || sp.scientificName : name
 // Flattened across sightings, so a photo's position here is the lightbox's own
 // index on both this page and the gallery route.
 const allImages = entries.flatMap((e) => e.data.images)
@@ -67,10 +71,10 @@ const taxonomy = speciesTaxonomy[name]
 const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
 ---
 
-<Layout title={`${species ? l10n(sp?.commonName, locale) : name} — myco.log`} locale={locale}>
+<Layout title={`${pageName} — myco.log`} locale={locale}>
   <section class="species-page">
     <div class="page-header">
-      <span class="page-header__tag">╔══ {sp ? l10n(sp.commonName, locale) : name}</span>
+      <span class="page-header__tag">╔══ {pageName}</span>
       <span class="page-header__sub">{sp?.scientificName}</span>
     </div>
 
@@ -150,12 +154,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
                     <li class="sighting">
                       {cover && (
                         <a href={`/${locale}/log/${e.id}`} class="sighting__img">
-                          <Image
-                            src={cover}
-                            alt={l10n(sp.commonName, locale)}
-                            loading="lazy"
-                            width={96}
-                          />
+                          <Image src={cover} alt={pageName} loading="lazy" width={96} />
                         </a>
                       )}
                       <div class="sighting__body">

@@ -55,18 +55,19 @@ const total = items.length
 const coverKey = sp?.cover ? `${sp.cover.sighting}#${sp.cover.index}` : null
 const coverTitle = (isCover: boolean) => (isCover ? t.sighting.mainPhoto : t.sighting.setMainPhoto)
 
+// A species may have no common name in the current locale; fall back to the
+// scientific name so the page title, tag and photo alts are never blank.
+const pageName = sp ? l10n(sp.commonName, locale) || sp.scientificName : name
+
 // Built in frontmatter for the same reason as everywhere else: a newline inside a
 // JSX text node collapses away, so this would render as "33photos".
 const title = `${total} ${t.mushrooms.photos}`
 ---
 
-<Layout
-  title={`${sp ? l10n(sp.commonName, locale) : name} — ${t.mushrooms.gallery}`}
-  locale={locale}
->
+<Layout title={`${pageName} — ${t.mushrooms.gallery}`} locale={locale}>
   <section class="gallery-page">
     <div class="page-header">
-      <span class="page-header__tag">╔══ {sp ? l10n(sp.commonName, locale) : name}</span>
+      <span class="page-header__tag">╔══ {pageName}</span>
       <span class="page-header__sub">{sp?.scientificName}</span>
     </div>
 
@@ -99,7 +100,7 @@ const title = `${total} ${t.mushrooms.photos}`
                   >
                     <Image
                       src={img}
-                      alt={`${sp ? l10n(sp.commonName, locale) : name} — ${i + 1}`}
+                      alt={`${pageName} — ${i + 1}`}
                       loading="lazy"
                       widths={[320, 640]}
                       width={640}

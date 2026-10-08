@@ -127,6 +127,9 @@ export default {
     names: 'Names',
     scientificName: 'Scientific name',
     commonNames: 'Common names',
+    noCommonName: 'No common name',
+    literalName:
+      'Names marked with * are literal translations of the scientific name; no established common name exists.',
     alternateNames: 'also known as',
     nomenclature: 'Nomenclature',
     acceptedName: 'Accepted name',

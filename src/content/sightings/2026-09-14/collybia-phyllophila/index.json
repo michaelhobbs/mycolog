@@ -1,0 +1,16 @@
+{
+  "species": "collybia-phyllophila",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.52047,
+    "lng": 11.08284
+  },
+  "images": [
+    "./images/collybia-phyllophila1.jpg",
+    "./images/collybia-phyllophila2.jpg",
+    "./images/collybia-phyllophila3.jpg"
+  ]
+}

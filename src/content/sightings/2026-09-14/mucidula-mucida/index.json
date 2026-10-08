@@ -1,0 +1,17 @@
+{
+  "species": "mucidula-mucida",
+  "locationSlug": "pflegersee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-14",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.52022,
+    "lng": 11.08467
+  },
+  "images": [
+    "./images/mucidula-mucida1.jpg",
+    "./images/mucidula-mucida2.jpg",
+    "./images/mucidula-mucida3.jpg",
+    "./images/mucidula-mucida4.jpg"
+  ]
+}

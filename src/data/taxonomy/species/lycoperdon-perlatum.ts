@@ -136,7 +136,7 @@ export const taxonomy: TaxonomyData = {
       year: 1801,
     },
   ],
-  lastUpdated: '2026-10-06',
+  lastUpdated: '2026-10-08',
 }
 
 export default taxonomy

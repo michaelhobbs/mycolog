@@ -1,8 +1,35 @@
 {
   "scientificName": "Laetiporus sulphureus",
-  "commonName": {
-    "en": "Chicken of the Woods",
-    "de": ""
+  "wikidataId": "Q772098",
+  "commonName": { "en": "Chicken of the Woods", "de": "Schwefelporling" },
+  "determiningFeatures": [
+    {
+      "en": "Bright sulphur-yellow bracket fans with an orange centre, in overlapping clusters",
+      "de": "Leuchtend schwefelgelbe Konsolen mit oranger Mitte, in dachziegeligen Büscheln"
+    },
+    {
+      "en": "Soft, watery, crumbling sulphur-yellow flesh",
+      "de": "Weiches, wässeriges, zerfallendes schwefelgelbes Fleisch"
+    },
+    {
+      "en": "Tiny, sulphur-yellow pores underneath; no stem, attached directly to the wood",
+      "de": "Feine schwefelgelbe Poren auf der Unterseite; ohne Stiel direkt am Holz angewachsen"
+    },
+    {
+      "en": "Usually on trunks and stumps of oak, wild cherry and other broadleaves",
+      "de": "Meist an Stämmen und Stümpfen von Eiche, Vogelkirsche und anderem Laubholz"
+    }
+  ],
+  "notes": {
+    "en": "The \"chicken of the woods\": a large, unmistakable bracket whose young fans are a celebrated wild food. It must always be thoroughly cooked, and it upsets some people, so a first taste should be small.",
+    "de": "Der \"Hühnerpilz des Waldes\": eine große, unverwechselbare Tramete, deren junge Fruchtkörper als Wildspeisepilz geschätzt werden. Nur gut durchgegart verwenden — er kann bei manchen Menschen Unverträglichkeiten auslösen, daher beim ersten Mal sparsam probieren."
   },
-  "determiningFeatures": []
+  "habitat": {
+    "en": "A brown-rot decay fungus of trunks and stumps of broadleaf trees, especially oak and cherry",
+    "de": "Braunfäule-Erreger an Stämmen und Stümpfen von Laubbäumen, besonders Eiche und Kirsche"
+  },
+  "edibility": {
+    "en": "Edible when young and properly cooked, though it disagrees with some people",
+    "de": "Jung und gut gegart essbar, bei manchen Menschen jedoch unverträglich"
+  }
 }

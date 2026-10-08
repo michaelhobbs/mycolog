@@ -1,0 +1,12 @@
+{
+  "species": "mucidula-mucida",
+  "locationSlug": "kankerbach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.48436,
+    "lng": 11.15267
+  },
+  "images": ["./images/mucidula-mucida1.jpg", "./images/mucidula-mucida2.jpg"]
+}

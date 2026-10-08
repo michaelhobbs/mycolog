@@ -77,7 +77,7 @@ const species = speciesEntries
                 {m.cover && (
                   <Image
                     src={m.cover}
-                    alt={l10n(m.commonName, locale)}
+                    alt={l10n(m.commonName, locale) || m.scientificName}
                     loading="lazy"
                     width={640}
                     widths={[320, 640]}
@@ -86,7 +86,7 @@ const species = speciesEntries
               </div>
               <div class="card__body">
                 <span class="card__species">{m.scientificName}</span>
-                <span class="card__name">{l10n(m.commonName, locale)}</span>
+                <span class="card__name">{l10n(m.commonName, locale) || m.scientificName}</span>
                 <span class="card__meta" data-species-count>
                   {countLabel}
                 </span>

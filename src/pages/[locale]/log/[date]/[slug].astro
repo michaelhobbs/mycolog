@@ -54,8 +54,14 @@ const fullSrcs = sighting
 // Re-ordering the gallery (choosing the main photo) is a dev-only workflow.
 const dev = import.meta.env.DEV
 
+// A sighting's species may have no common name in the current locale; fall back
+// to the scientific name so the page title, tag and photo alts are never blank.
+const speciesName = sighting
+  ? l10n(sighting.species.commonName, locale) || sighting.species.scientificName
+  : ''
+
 const pageTitle = sighting
-  ? `${l10n(sighting.species.commonName, locale)} (${formatDate(sighting.dateSpotted, locale)}) — myco.log`
+  ? `${speciesName} (${formatDate(sighting.dateSpotted, locale)}) — myco.log`
   : 'myco.log'
 ---
 
@@ -65,7 +71,7 @@ const pageTitle = sighting
       <span class="page-header__tag"
         >╔══ {
           sighting
-            ? `${l10n(sighting.species.commonName, locale)} (${formatDate(sighting.dateSpotted, locale)})`
+            ? `${speciesName} (${formatDate(sighting.dateSpotted, locale)})`
             : t.sighting.missing
         }</span
       >
@@ -111,7 +117,7 @@ const pageTitle = sighting
                 >
                   <Image
                     src={img}
-                    alt={`${l10n(sighting.species.commonName, locale)} — ${i + 1}`}
+                    alt={`${speciesName} — ${i + 1}`}
                     loading="lazy"
                     width={640}
                     widths={[320, 640]}

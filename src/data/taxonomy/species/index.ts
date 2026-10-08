@@ -6,6 +6,7 @@ import { taxonomy as amanita_muscariaTaxonomy } from './amanita-muscaria'
 import { taxonomy as amanita_pantherinaTaxonomy } from './amanita-pantherina'
 import { taxonomy as amanita_phalloidesTaxonomy } from './amanita-phalloides'
 import { taxonomy as armillaria_melleaTaxonomy } from './armillaria-mellea'
+import { taxonomy as atheniella_flavoalbaTaxonomy } from './atheniella-flavoalba'
 import { taxonomy as auricularia_auricula_judaeTaxonomy } from './auricularia-auricula-judae'
 import { taxonomy as boletus_edulisTaxonomy } from './boletus-edulis'
 import { taxonomy as butyriboletus_appendiculatusTaxonomy } from './butyriboletus-appendiculatus'
@@ -16,13 +17,12 @@ import { taxonomy as cantharellus_cibariusTaxonomy } from './cantharellus-cibari
 import { taxonomy as clathrus_archeriTaxonomy } from './clathrus-archeri'
 import { taxonomy as clavulina_coralloidesTaxonomy } from './clavulina-coralloides'
 import { taxonomy as clavulinopsis_helvolaTaxonomy } from './clavulinopsis-helvola'
-import { taxonomy as clitocybe_gibbaTaxonomy } from './clitocybe-gibba'
-import { taxonomy as clitocybe_phyllophilaTaxonomy } from './clitocybe-phyllophila'
+import { taxonomy as collybia_phyllophilaTaxonomy } from './collybia-phyllophila'
+import { taxonomy as collybiopsis_vaillantiiTaxonomy } from './collybiopsis-vaillantii'
+import { taxonomy as coprinopsis_niveaTaxonomy } from './coprinopsis-nivea'
 import { taxonomy as coprinopsis_pseudoniveaTaxonomy } from './coprinopsis-pseudonivea'
 import { taxonomy as coprinus_comatusTaxonomy } from './coprinus-comatus'
-import { taxonomy as coprinus_niveusTaxonomy } from './coprinus-niveus'
 import { taxonomy as cordyceps_militarisTaxonomy } from './cordyceps-militaris'
-import { taxonomy as cordyceps_ophioglossoidesTaxonomy } from './cordyceps-ophioglossoides'
 import { taxonomy as cortinarius_largusTaxonomy } from './cortinarius-largus'
 import { taxonomy as craterellus_lutescensTaxonomy } from './craterellus-lutescens'
 import { taxonomy as craterellus_tubaeformisTaxonomy } from './craterellus-tubaeformis'
@@ -31,33 +31,39 @@ import { taxonomy as dacrymyces_chrysopermusTaxonomy } from './dacrymyces-chryso
 import { taxonomy as diatrype_disciformisTaxonomy } from './diatrype-disciformis'
 import { taxonomy as ganoderma_applanatumTaxonomy } from './ganoderma-applanatum'
 import { taxonomy as gomphidius_glutinosusTaxonomy } from './gomphidius-glutinosus'
+import { taxonomy as guepinia_helvelloidesTaxonomy } from './guepinia-helvelloides'
 import { taxonomy as hydnellum_peckiiTaxonomy } from './hydnellum-peckii'
 import { taxonomy as hydnum_repandumTaxonomy } from './hydnum-repandum'
+import { taxonomy as hygrocybe_acutoconicaTaxonomy } from './hygrocybe-acutoconica'
 import { taxonomy as hygrocybe_cantharellusTaxonomy } from './hygrocybe-cantharellus'
+import { taxonomy as infundibulicybe_gibbaTaxonomy } from './infundibulicybe-gibba'
 import { taxonomy as inocybe_sindoniaTaxonomy } from './inocybe-sindonia'
 import { taxonomy as laccaria_amethystinaTaxonomy } from './laccaria-amethystina'
 import { taxonomy as lactarius_deterrimusTaxonomy } from './lactarius-deterrimus'
+import { taxonomy as laetiporus_sulphureusTaxonomy } from './laetiporus-sulphureus'
 import { taxonomy as lepiota_clypeolariaTaxonomy } from './lepiota-clypeolaria'
 import { taxonomy as lycoperdon_perlatumTaxonomy } from './lycoperdon-perlatum'
 import { taxonomy as macrolepiota_proceraTaxonomy } from './macrolepiota-procera'
-import { taxonomy as marasmiellus_vaillantiiTaxonomy } from './marasmiellus-vaillantii'
-import { taxonomy as mycena_flavoalbaTaxonomy } from './mycena-flavoalba'
+import { taxonomy as mucidula_mucidaTaxonomy } from './mucidula-mucida'
 import { taxonomy as mycena_viridimarginataTaxonomy } from './mycena-viridimarginata'
 import { taxonomy as otidea_alutaceaTaxonomy } from './otidea-alutacea'
-import { taxonomy as oudemansiella_mucidaTaxonomy } from './oudemansiella-mucida'
 import { taxonomy as panellus_mitisTaxonomy } from './panellus-mitis'
+import { taxonomy as podofomes_mollisTaxonomy } from './podofomes-mollis'
 import { taxonomy as pseudohydnum_gelatinosumTaxonomy } from './pseudohydnum-gelatinosum'
 import { taxonomy as ramaria_aureaTaxonomy } from './ramaria-aurea'
 import { taxonomy as rickenella_fibulaTaxonomy } from './rickenella-fibula'
 import { taxonomy as rubroboletus_rhodoxanthusTaxonomy } from './rubroboletus-rhodoxanthus'
 import { taxonomy as rubroboletus_satanasTaxonomy } from './rubroboletus-satanas'
 import { taxonomy as russula_delicaTaxonomy } from './russula-delica'
+import { taxonomy as russula_langeiTaxonomy } from './russula-langei'
 import { taxonomy as russula_parazureaTaxonomy } from './russula-parazurea'
 import { taxonomy as sarcondon_imbricatusTaxonomy } from './sarcondon-imbricatus'
 import { taxonomy as schizophyllum_communeTaxonomy } from './schizophyllum-commune'
 import { taxonomy as suillellus_luridusTaxonomy } from './suillellus-luridus'
+import { taxonomy as suillus_bovinusTaxonomy } from './suillus-bovinus'
 import { taxonomy as thelephora_terrestrisTaxonomy } from './thelephora-terrestris'
-import { taxonomy as tremiscus_helvelloidesTaxonomy } from './tremiscus-helvelloides'
+import { taxonomy as tolypocladium_longisegmentatumTaxonomy } from './tolypocladium-longisegmentatum'
+import { taxonomy as tolypocladium_ophioglossoidesTaxonomy } from './tolypocladium-ophioglossoides'
 import { taxonomy as tricholoma_sulphureumTaxonomy } from './tricholoma-sulphureum'
 
 export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = {
@@ -66,6 +72,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'amanita-pantherina': amanita_pantherinaTaxonomy,
   'amanita-phalloides': amanita_phalloidesTaxonomy,
   'armillaria-mellea': armillaria_melleaTaxonomy,
+  'atheniella-flavoalba': atheniella_flavoalbaTaxonomy,
   'auricularia-auricula-judae': auricularia_auricula_judaeTaxonomy,
   'boletus-edulis': boletus_edulisTaxonomy,
   'butyriboletus-appendiculatus': butyriboletus_appendiculatusTaxonomy,
@@ -76,13 +83,12 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'clathrus-archeri': clathrus_archeriTaxonomy,
   'clavulina-coralloides': clavulina_coralloidesTaxonomy,
   'clavulinopsis-helvola': clavulinopsis_helvolaTaxonomy,
-  'clitocybe-gibba': clitocybe_gibbaTaxonomy,
-  'clitocybe-phyllophila': clitocybe_phyllophilaTaxonomy,
+  'collybia-phyllophila': collybia_phyllophilaTaxonomy,
+  'collybiopsis-vaillantii': collybiopsis_vaillantiiTaxonomy,
+  'coprinopsis-nivea': coprinopsis_niveaTaxonomy,
   'coprinopsis-pseudonivea': coprinopsis_pseudoniveaTaxonomy,
   'coprinus-comatus': coprinus_comatusTaxonomy,
-  'coprinus-niveus': coprinus_niveusTaxonomy,
   'cordyceps-militaris': cordyceps_militarisTaxonomy,
-  'cordyceps-ophioglossoides': cordyceps_ophioglossoidesTaxonomy,
   'cortinarius-largus': cortinarius_largusTaxonomy,
   'craterellus-lutescens': craterellus_lutescensTaxonomy,
   'craterellus-tubaeformis': craterellus_tubaeformisTaxonomy,
@@ -91,32 +97,38 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'diatrype-disciformis': diatrype_disciformisTaxonomy,
   'ganoderma-applanatum': ganoderma_applanatumTaxonomy,
   'gomphidius-glutinosus': gomphidius_glutinosusTaxonomy,
+  'guepinia-helvelloides': guepinia_helvelloidesTaxonomy,
   'hydnellum-peckii': hydnellum_peckiiTaxonomy,
   'hydnum-repandum': hydnum_repandumTaxonomy,
+  'hygrocybe-acutoconica': hygrocybe_acutoconicaTaxonomy,
   'hygrocybe-cantharellus': hygrocybe_cantharellusTaxonomy,
+  'infundibulicybe-gibba': infundibulicybe_gibbaTaxonomy,
   'inocybe-sindonia': inocybe_sindoniaTaxonomy,
   'laccaria-amethystina': laccaria_amethystinaTaxonomy,
   'lactarius-deterrimus': lactarius_deterrimusTaxonomy,
+  'laetiporus-sulphureus': laetiporus_sulphureusTaxonomy,
   'lepiota-clypeolaria': lepiota_clypeolariaTaxonomy,
   'lycoperdon-perlatum': lycoperdon_perlatumTaxonomy,
   'macrolepiota-procera': macrolepiota_proceraTaxonomy,
-  'marasmiellus-vaillantii': marasmiellus_vaillantiiTaxonomy,
-  'mycena-flavoalba': mycena_flavoalbaTaxonomy,
+  'mucidula-mucida': mucidula_mucidaTaxonomy,
   'mycena-viridimarginata': mycena_viridimarginataTaxonomy,
   'otidea-alutacea': otidea_alutaceaTaxonomy,
-  'oudemansiella-mucida': oudemansiella_mucidaTaxonomy,
   'panellus-mitis': panellus_mitisTaxonomy,
+  'podofomes-mollis': podofomes_mollisTaxonomy,
   'pseudohydnum-gelatinosum': pseudohydnum_gelatinosumTaxonomy,
   'ramaria-aurea': ramaria_aureaTaxonomy,
   'rickenella-fibula': rickenella_fibulaTaxonomy,
   'rubroboletus-rhodoxanthus': rubroboletus_rhodoxanthusTaxonomy,
   'rubroboletus-satanas': rubroboletus_satanasTaxonomy,
   'russula-delica': russula_delicaTaxonomy,
+  'russula-langei': russula_langeiTaxonomy,
   'russula-parazurea': russula_parazureaTaxonomy,
   'sarcondon-imbricatus': sarcondon_imbricatusTaxonomy,
   'schizophyllum-commune': schizophyllum_communeTaxonomy,
   'suillellus-luridus': suillellus_luridusTaxonomy,
+  'suillus-bovinus': suillus_bovinusTaxonomy,
   'thelephora-terrestris': thelephora_terrestrisTaxonomy,
-  'tremiscus-helvelloides': tremiscus_helvelloidesTaxonomy,
+  'tolypocladium-longisegmentatum': tolypocladium_longisegmentatumTaxonomy,
+  'tolypocladium-ophioglossoides': tolypocladium_ophioglossoidesTaxonomy,
   'tricholoma-sulphureum': tricholoma_sulphureumTaxonomy,
 }

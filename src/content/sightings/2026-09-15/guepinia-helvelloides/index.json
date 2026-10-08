@@ -1,0 +1,18 @@
+{
+  "species": "guepinia-helvelloides",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-15",
+  "dateIdentified": "2026-09-22",
+  "location": {
+    "lat": 47.48413,
+    "lng": 11.1531
+  },
+  "images": [
+    "./images/guepinia-helvelloides1.jpg",
+    "./images/guepinia-helvelloides2.jpg",
+    "./images/guepinia-helvelloides3.jpg",
+    "./images/guepinia-helvelloides4.jpg",
+    "./images/guepinia-helvelloides5.jpg"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "species": "mucidula-mucida",
+  "locationSlug": "eibsee",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-04",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.46154,
+    "lng": 10.98006
+  },
+  "images": [
+    "./images/mucidula-mucida1.jpg",
+    "./images/mucidula-mucida2.jpg",
+    "./images/mucidula-mucida3.jpg"
+  ]
+}

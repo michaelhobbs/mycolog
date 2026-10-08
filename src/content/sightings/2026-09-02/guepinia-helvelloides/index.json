@@ -1,0 +1,16 @@
+{
+  "dateIdentified": "2026-09-10",
+  "species": "guepinia-helvelloides",
+  "locationSlug": "kankerbach",
+  "dateSpotted": "2026-09-02",
+  "location": {
+    "lat": 47.48428,
+    "lng": 11.15272
+  },
+  "images": [
+    "./images/guepinia-helvelloides1.jpg",
+    "./images/guepinia-helvelloides2.jpg",
+    "./images/guepinia-helvelloides3.jpg"
+  ],
+  "authors": ["michael"]
+}

@@ -1,0 +1,18 @@
+{
+  "species": "atheniella-flavoalba",
+  "locationSlug": "kochelberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-05",
+  "location": {
+    "lat": 47.47436,
+    "lng": 11.10777
+  },
+  "images": [
+    "./images/atheniella-flavoalba1.jpg",
+    "./images/atheniella-flavoalba2.jpg",
+    "./images/atheniella-flavoalba3.jpg",
+    "./images/atheniella-flavoalba4.jpg",
+    "./images/atheniella-flavoalba5.jpg"
+  ]
+}

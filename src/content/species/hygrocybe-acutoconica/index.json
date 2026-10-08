@@ -1,0 +1,35 @@
+{
+  "scientificName": "Hygrocybe acutoconica",
+  "wikidataId": "Q2255842",
+  "commonName": { "en": "Persistent Waxcap", "de": "Safrangelber Saftling" },
+  "determiningFeatures": [
+    {
+      "en": "Conical, acutely pointed cap, bright lemon-yellow when young, fading pale as it dries or ages",
+      "de": "Spitz kegeliger Hut, jung leuchtend zitronengelb, beim Abtrocknen oder mit Alter ausblassend"
+    },
+    {
+      "en": "Waxy, pale cream-yellow gills, free or slightly adnexed",
+      "de": "Wachsartige, blass cremegelbe Lamellen, frei oder leicht angewachsen"
+    },
+    {
+      "en": "Slender, hollow, shiny yellowish stem, longitudinally fibrous",
+      "de": "Schlanker, hohler, glänzend gelblicher Stiel, längsfaserig"
+    },
+    {
+      "en": "No ring or veil; thin, watery, yellowish flesh with no distinctive smell",
+      "de": "Ohne Ring und Velum; dünnes, wässeriges, gelbliches Fleisch ohne auffälligen Geruch"
+    }
+  ],
+  "notes": {
+    "en": "One of the larger waxcaps, most often seen on old grassland and mossy woodland rides; the erect, sharply conical caps give it a very distinct silhouette. The epithet acutoconica (\"sharply conical\") describes exactly that cap.",
+    "de": "Einer der größeren Saftlinge, meist auf Altgrasland und moosigen Waldwegen; die steil aufgerichteten, spitzkegeligen Hüte verleihen ihm eine markante Silhouette. Das Epitheton acutoconica (\"spitzkegelig\") beschreibt genau diesen Hut."
+  },
+  "habitat": {
+    "en": "Grasslands, mossy lawns, woodland edges and rides, often in small groups",
+    "de": "Grünland, Moosrasen, Waldränder und -wege, oft in kleinen Gruppen"
+  },
+  "edibility": {
+    "en": "Edible but of little culinary value",
+    "de": "Essbar, aber ohne nennenswerten Speisewert"
+  }
+}

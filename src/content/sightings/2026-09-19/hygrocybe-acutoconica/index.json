@@ -1,0 +1,18 @@
+{
+  "species": "hygrocybe-acutoconica",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-19",
+  "dateIdentified": "2026-10-07",
+  "location": {
+    "lat": 47.48183,
+    "lng": 11.14931
+  },
+  "images": [
+    "./images/hygrocybe-acutoconica1.jpg",
+    "./images/hygrocybe-acutoconica2.jpg",
+    "./images/hygrocybe-acutoconica3.jpg",
+    "./images/hygrocybe-acutoconica4.jpg",
+    "./images/hygrocybe-acutoconica5.jpg"
+  ]
+}

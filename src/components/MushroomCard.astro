@@ -28,7 +28,7 @@ const fullUrls = await Promise.all(
 <div class="tui-card">
   <div class="tui-card__head">
     <a href={`/${locale}/log/${s.slug}`} class="tui-card__title"
-      >┌─ {t(s.species.commonName, locale)}</a
+      >┌─ {t(s.species.commonName, locale) || s.species.scientificName}</a
     >
     <a href={`/${locale}/log/${s.slug}`} class="tui-card__more">{'>'}{dict.card.more}</a>
   </div>
@@ -52,7 +52,7 @@ const fullUrls = await Promise.all(
         >
           <Image
             src={img}
-            alt={t(s.species.commonName, locale)}
+            alt={t(s.species.commonName, locale) || s.species.scientificName}
             loading="lazy"
             width={640}
             widths={[640, 320]}

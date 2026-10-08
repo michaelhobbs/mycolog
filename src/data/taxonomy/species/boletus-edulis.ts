@@ -603,7 +603,7 @@ export const taxonomy: TaxonomyData = {
       parentUsageId: '356530',
     },
   ],
-  lastUpdated: '2026-10-06',
+  lastUpdated: '2026-10-08',
 }
 
 export default taxonomy

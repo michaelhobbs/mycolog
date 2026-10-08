@@ -117,6 +117,17 @@ const wikiCommon = (data?.names.commonNames ?? [])
   .map((c) => c.value)
 const commonNames = dedupe([l10n(commonName, locale), ...wikiCommon])
 
+// The site's own common name for this locale, and the two annotations built
+// from it. `l10n` never returns undefined, so an empty string means "no common
+// name is recorded in this language"; the dedicated form is used so a species
+// without one says so instead of silently dropping the row. A trailing `*` is
+// the site's mark for a name that is a literal translation of the scientific
+// name rather than an established vernacular name; the row shows the mark so
+// the note can be traced back to the name it explains.
+const ownName = commonName ? l10n(commonName, locale) : ''
+const noCommonName = !!commonName && ownName === ''
+const literalName = ownName.endsWith('*')
+
 // Wikidata lists the scientific name (and infraspecific variants of it) among
 // the aliases of most items, and often repeats a common name there too. Both
 // are already stated elsewhere on the page, so an alias list echoing them back
@@ -187,6 +198,8 @@ const allNamesLabel = t.mushrooms.allNames.replace(
         </div>
       )
     }
+    {noCommonName && <p class="src-note">{t.mushrooms.noCommonName}</p>}
+    {literalName && <p class="src-note">{t.mushrooms.literalName}</p>}
     {
       aliases.length > 0 && (
         <div class="row">

@@ -131,6 +131,7 @@ export default {
     literalName:
       'Mit * gekennzeichnete Namen sind wörtliche Übersetzungen des wissenschaftlichen Namens; ein etablierter Trivialname existiert nicht.',
     alternateNames: 'auch bekannt als',
+    bavarianNames: 'Bayerische Namen',
     nomenclature: 'Nomenklatur',
     acceptedName: 'Anerkannter Name',
     basionym: 'Basionym',

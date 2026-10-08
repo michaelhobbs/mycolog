@@ -117,6 +117,22 @@ const wikiCommon = (data?.names.commonNames ?? [])
   .map((c) => c.value)
 const commonNames = dedupe([l10n(commonName, locale), ...wikiCommon])
 
+// Bavarian (`bar`) common names are a regional variety of German, not one of
+// the site's locales, so they can never come out of `l10n` and must not be
+// mixed into the list above -- a Bavarian variant read as if it were the
+// standard German name loses exactly the thing that makes it worth showing.
+// They get a row of their own on both locales, under a label that says what
+// they are: a Bavarian form is only useful to a reader who is told it is one.
+//
+// The names come from the Wikidata snapshot, which records every `bar` claim
+// of P1843 (two for Amanita muscaria, the only species in the collection that
+// has any). A value already listed as a common name is dropped, since a
+// Bavarian form identical to the standard one carries no information.
+const listed = new Set(commonNames.map(fold))
+const bavarianNames = dedupe(
+  (data?.names.commonNames ?? []).filter((c) => c.lang === 'bar').map((c) => c.value),
+).filter((v) => !listed.has(fold(v)))
+
 // The site's own common name for this locale, and the two annotations built
 // from it. `l10n` never returns undefined, so an empty string means "no common
 // name is recorded in this language"; the dedicated form is used so a species
@@ -195,6 +211,15 @@ const allNamesLabel = t.mushrooms.allNames.replace(
           <span class="row__label">{t.mushrooms.commonNames}</span>
           <span class="row__dots" />
           <span class="row__value">{commonNames.join(', ')}</span>
+        </div>
+      )
+    }
+    {
+      bavarianNames.length > 0 && (
+        <div class="row">
+          <span class="row__label">{t.mushrooms.bavarianNames}</span>
+          <span class="row__dots" />
+          <span class="row__value">{bavarianNames.join(', ')}</span>
         </div>
       )
     }

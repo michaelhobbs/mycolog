@@ -131,6 +131,7 @@ export default {
     literalName:
       'Names marked with * are literal translations of the scientific name; no established common name exists.',
     alternateNames: 'also known as',
+    bavarianNames: 'Bavarian names',
     nomenclature: 'Nomenclature',
     acceptedName: 'Accepted name',
     basionym: 'Basionym',

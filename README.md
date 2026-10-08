@@ -330,15 +330,19 @@ note under [Key commands](#key-commands).
 ### Base style & palette
 
 - Loads the **OpenFreeMap** `fiord` style (vector tiles from OpenMapTiles/OSM).
-- A `applyPalette()` pass re-paints the base layers to a dark-green terminal
-  look: dark woods/residential, teal water, green-toned roads, and accent
-  dashed hiking paths; several layers (parks, city names, etc.) are toggled or
-  recolored.
+- Every theme bakes a per-theme style snapshot to **`public/map-themes/{theme}.json`**
+  with `scripts/generate-map-themes.mjs` (`npm run update-map-themes`): the
+  theme's base palette is merged into the fiord layer specs for a dark-green
+  terminal look (dark woods/residential, teal water, green-toned roads, accent
+  dashed hiking paths; parks, city names and other layers recolored or toggled
+  off). It is a committed freeze, not a build-time fetch.
 - The palette lives in **`src/lib/map-palette.ts`** as a plain layer → paint
-  record. `MapVector.astro` and `MiniMap.astro` apply it to a live map via
-  `applyPalette()`, and `scripts/generate-thumbnails.mjs` merges the same record
-  into a style object, so the build-time thumbnails and the interactive maps stay
-  in sync by construction. Layer ids come from the `fiord` style and are not
+  record. `MapVector.astro`, `MiniMap.astro` and `LocationPicker.astro` load
+  the baked JSON with `themeStyleUrl()`, switch themes with `map.setStyle()`,
+  and re-add site layers from `metadata.mycoOverlays` on `style.load`; the
+  thumbnail script merges the same record into its build-time style object, so
+  the thumbnails and the interactive maps stay in sync by construction. Layer
+  ids come from the `fiord` style and are not
   stable across style versions (`landcover_glacier` is currently absent), so
   every consumer skips missing layers rather than assuming they exist.
 

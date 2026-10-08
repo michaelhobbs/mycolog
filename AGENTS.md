@@ -346,7 +346,8 @@ gruvbox → solarized → catppuccin → phosphor`); its visible
   with no `margin-left: auto` of its own**: the bar's free space belongs to one
   anchor at a time (see the comment on `.nav__links`), and a third `auto` would
   split it and strand the toggle mid-bar.
-- **Maps repaint on `myco:theme`; thumbnails do not.**
+- **Maps load a baked per-theme style; they never mutate paint after load.
+  Thumbnails do not repaint either** (they are baked at build time).
   `src/lib/map-palette.ts` carries a base/text palette and an overlay set per
   theme — `PALETTE`/`LABEL_TEXT` + `OVERLAY_TUI` (tui),
   `PALETTE_MONO`/`MONO_LABEL_TEXT` + `OVERLAY_MONO`, `PALETTE_BRUT` +
@@ -357,14 +358,33 @@ gruvbox → solarized → catppuccin → phosphor`); its visible
   `PALETTE_CATPPUCCIN` and `PALETTE_PHOSPHOR` with matching overlay sets —
   dispatched through the `BASE_PALETTES`/`LABEL_RECORDS`/`OVERLAY_RECORDS`
   records, so adding a tenth theme is one map instead of a new branch.
-  `applyPalette(map)` runs at load; `applyOverlayPalette(map)` runs once more
-  at the **end** of each map's load handler — those layers do not exist
-  earlier — and both re-run on `myco:theme`. `currentTheme()` resolves
+  `scripts/generate-map-themes.mjs` (`npm run update-map-themes`) clones the
+  **fiord** base style (`https://tiles.openfreemap.org/styles/fiord`, cached at
+  `.cache/map-themes/fiord.json`, `--force` to refetch) and writes one
+  committed snapshot per theme to **`public/map-themes/{theme}.json`**: the
+  base palette `mergePaint`d into the existing fiord layer specs, the label
+  text from `LABEL_RECORDS[theme]`, `HIDDEN_LAYERS` set `visibility: none`,
+  and the overlay paints stashed as **`metadata.mycoOverlays`**. It is not
+  wired into `prebuild`/`predev` — the build keeps its _single_ network fetch
+  (the thumbnail tiles) and a stale snapshot is a deliberate freeze until the
+  script is re-run.
+  Components then construct the map with `style: themeStyleUrl(currentTheme())`
+  (`/map-themes/{theme}.json`) and a `myco:theme` change is **`map.setStyle(themeStyleUrl(...))`** —
+  a full style swap, not a repaint. Site-added layers (sighting clusters/markers/
+  labels, hiking labels, contours, the region/mask) are (re)added from a single
+  idempotent `applySiteLayers()` registered on **both** `map.on('load')` and
+  `map.on('style.load')` (the swap fires the latter; adders guard on
+  `map.getSource`) and read colours through `overlayPaints(map)` /
+  `metadata.mycoOverlays` via `overlayPaint(ovs, layer, base)` — `base` keeps
+  the geometry/opacity defaults that belong to the `addLayer` call and the
+  table only ever carries colour, so a theme cannot disturb radii, dashes or
+  sizes. Do not reintroduce per-frame `setPaintProperty` re-painting; the
+  baked JSON is deliberate so a theme is data, not a code path.
+  `currentTheme()` resolves
   `document.documentElement.dataset.theme` against the nine names with an
   `unknown → tui` fallback; the head script stores unvalidated values, so any
-  nonmatching `data-theme` is expected to land there. Only colour-ish paint
-  properties live in the overlay records, so a repaint can never disturb radii,
-  dashes or text sizes. Build-time thumbnails import `PALETTE`/`LABEL_TEXT`/
+  nonmatching `data-theme` is expected to land there. Build-time thumbnails
+  import `PALETTE`/`LABEL_TEXT`/
   `LABEL_LAYERS`/`HIDDEN_LAYERS` and **bake the tui palette**: they stay dark
   under mono at least, a limitation that is deliberate (a static image cannot
   follow a visitor's choice) — do not restructure the exports around it.

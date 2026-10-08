@@ -24,8 +24,8 @@
    Components must never hardcode a colour (or a border width, or a shadow):
    reach for a token here instead. The exceptions are data-as-colour
    (Wikidata swatches in `ValueMark`) and the map palettes in
-   `src/lib/map-palette.ts`, which are runtime paint properties CSS cannot
-   reach.
+   `src/lib/map-palette.ts`, which the map system bakes into per-theme style
+   JSONs at `/map-themes/{theme}.json` rather than CSS.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {

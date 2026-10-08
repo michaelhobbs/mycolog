@@ -39,9 +39,7 @@ const { locale, initial = null } = Astro.props as {
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
-  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
-
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
+  import { currentTheme, themeStyleUrl } from '../lib/map-palette'
 
   function init() {
     const container = document.getElementById('picker-map')
@@ -65,7 +63,7 @@ const { locale, initial = null } = Astro.props as {
 
     const map = new maplibregl.Map({
       container,
-      style: STYLE_URL,
+      style: themeStyleUrl(currentTheme()),
       center: center as [number, number],
       zoom: 11,
     })
@@ -89,14 +87,11 @@ const { locale, initial = null } = Astro.props as {
     }
 
     map.on('load', () => {
-      // The shared palettes (previously a partial inline copy of the dark
-      // one), repainted on a theme change like every other map.
-      const retheme = () => {
-        applyPalette(map)
-        applyOverlayPalette(map)
-      }
-      document.addEventListener('myco:theme', retheme)
-      retheme()
+      // The baked style JSON carries this theme's colours; a theme change
+      // swaps it wholesale (the picker adds no layers of its own).
+      document.addEventListener('myco:theme', () => {
+        map.setStyle(themeStyleUrl(currentTheme()))
+      })
 
       if (initial) updatePin(new maplibregl.LngLat(initial.lng, initial.lat))
       map.on('click', (e) => {

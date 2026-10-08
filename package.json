@@ -22,7 +22,8 @@
     "update-wikidata-icons": "node scripts/fetch-wikidata-icons.mjs",
     "update-species-wikidata": "node scripts/fetch-species-wikidata.mjs",
     "resolve-species-wikidata": "node scripts/resolve-species-wikidata.mjs",
-    "update-species-taxonomy": "node scripts/update-species-taxonomy.mjs"
+    "update-species-taxonomy": "node scripts/update-species-taxonomy.mjs",
+    "update-map-themes": "node scripts/generate-map-themes.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

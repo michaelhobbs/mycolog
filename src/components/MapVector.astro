@@ -73,10 +73,8 @@ const sightingsJSON = JSON.stringify(clientSightings)
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
-  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
+  import { currentTheme, overlayPaint, overlayPaints, themeStyleUrl } from '../lib/map-palette'
   import mlcontour from 'maplibre-contour'
-
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
 
   // Altitude contours generated on the fly from free raster-DEM tiles
   // (AWS Mapzen "terrarium" elevation tiles, z0-14, no key required).
@@ -90,10 +88,13 @@ const sightingsJSON = JSON.stringify(clientSightings)
   })
   demSource.setupMaplibre(maplibregl)
 
-  // Dark green hypsometric terrain, teal lakes/rivers, green-toned roads +
-  // accent trails all come from the shared palette in ../lib/map-palette.
+  // Hypsometric terrain, water, roads and accent-trail colours all arrive
+  // pre-merged in the baked `/map-themes/{theme}.json` style; everything this
+  // site adds on top reads its colours from that style's overlay table.
 
   function addHikingLayers(map: maplibregl.Map) {
+    if (map.getLayer('hiking-peak')) return
+    const ovs = overlayPaints(map)
     const add = (
       id: string,
       type: 'symbol' | 'line',
@@ -153,11 +154,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'text-offset': [0.7, 0],
         'text-allow-overlap': false,
       },
-      paint: {
-        'text-color': '#d4f0d4',
-        'text-halo-color': '#0e120b',
-        'text-halo-width': 1.5,
-      },
+      paint: overlayPaint(ovs, 'hiking-peak', { 'text-halo-width': 1.5 }),
     })
 
     // --- hiking POIs (shelters, guideposts, drinking water, viewpoints) ---
@@ -195,11 +192,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'text-offset': [0, 0.5],
         'text-allow-overlap': false,
       },
-      paint: {
-        'text-color': '#8fbf8f',
-        'text-halo-color': '#0e120b',
-        'text-halo-width': 1.2,
-      },
+      paint: overlayPaint(ovs, 'hiking-poi', { 'text-halo-width': 1.2 }),
     })
 
     // --- named hiking trail labels (from transportation_name) ---
@@ -221,16 +214,13 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'symbol-spacing': 300,
         'text-rotation-alignment': 'map',
       },
-      paint: {
-        'text-color': '#33ff33',
-        'text-halo-color': '#0e120b',
-        'text-halo-width': 1.4,
-      },
+      paint: overlayPaint(ovs, 'hiking-trail-label', { 'text-halo-width': 1.4 }),
     })
   }
 
   function addContours(map: maplibregl.Map) {
     if (map.getSource('hiking-contours')) return
+    const ovs = overlayPaints(map)
 
     map.addSource('hiking-contours', {
       type: 'vector',
@@ -263,11 +253,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'source-layer': 'contours',
         filter: ['==', ['get', 'level'], 0],
         layout: { 'line-join': 'round', 'line-cap': 'round' },
-        paint: {
-          'line-color': '#3a4a35',
+        paint: overlayPaint(ovs, 'hiking-contour-minor', {
           'line-width': 0.6,
           'line-opacity': 0.9,
-        },
+        }) as any,
       },
       beforeId,
     )
@@ -280,15 +269,21 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'source-layer': 'contours',
         filter: ['>=', ['get', 'level'], 1],
         layout: { 'line-join': 'round', 'line-cap': 'round' },
-        paint: {
-          'line-color': '#5a6c52',
+        paint: overlayPaint(ovs, 'hiking-contour-major', {
           'line-width': 0.9,
           'line-opacity': 1,
-        },
+        }) as any,
       },
       beforeId,
     )
   }
+
+  // The filter event listener is registered once per page (a map re-layers
+  // itself on every theme change, so a listener added inside a layer-adding
+  // function would pile up); it always calls whichever `applyFilter` closure is
+  // currently live, i.e. the one bound to the current `sightings` source.
+  let applyFilterRef: (() => void) | null = null
+  document.addEventListener('myco:filter', () => applyFilterRef?.())
 
   // Mushroom sightings pinned as accent dots + labels, from the data embedded
   // on the page (data-sightings with a pre-resolved `name` in the active locale).
@@ -300,6 +295,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
   // happen to overlap decluster once their on-screen distance exceeds the radius.
   function addSightings(map: maplibregl.Map, sightings: any[]) {
     if (map.getSource('sightings') || !sightings.length) return
+    const ovs = overlayPaints(map)
     const locale = document.getElementById('map')?.dataset.locale ?? 'en'
     const linkLabel = locale === 'de' ? 'Im Protokoll ansehen →' : 'See in log →'
 
@@ -348,9 +344,11 @@ const sightingsJSON = JSON.stringify(clientSightings)
     if (document.querySelector('[data-species-filter]')) {
       // Read once here as well as on the event: the map's style usually takes
       // longer to load than it takes to change the filter, so the first paint
-      // would otherwise show everything.
+      // would otherwise show everything. The listener itself is registered
+      // once per page below and always calls the *current* closure, so a theme
+      // switch (which re-adds this source) cannot leave a stale one behind.
       applyFilter()
-      document.addEventListener('myco:filter', applyFilter)
+      applyFilterRef = applyFilter
     }
 
     // --- cluster circle + count badge ---
@@ -359,12 +357,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
       type: 'circle',
       source: 'sightings',
       filter: ['has', 'point_count'],
-      paint: {
-        'circle-color': '#33ff33',
+      paint: overlayPaint(ovs, 'sighting-cluster', {
         'circle-radius': ['step', ['get', 'point_count'], 14, 10, 18, 30, 22],
-        'circle-stroke-color': '#0e120b',
         'circle-stroke-width': 2,
-      },
+      }) as any,
     })
 
     map.addLayer({
@@ -377,11 +373,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'text-font': ['Noto Sans Bold'],
         'text-size': 12,
       },
-      paint: {
-        'text-color': '#0e120b',
-        'text-halo-color': '#33ff33',
-        'text-halo-width': 1,
-      },
+      paint: overlayPaint(ovs, 'sighting-cluster-count', { 'text-halo-width': 1 }) as any,
     })
 
     // --- individual marker + label (hidden when part of a cluster) ---
@@ -390,12 +382,10 @@ const sightingsJSON = JSON.stringify(clientSightings)
       type: 'circle',
       source: 'sightings',
       filter: ['!', ['has', 'point_count']],
-      paint: {
-        'circle-color': '#33ff33',
+      paint: overlayPaint(ovs, 'sighting-dot', {
         'circle-radius': 6,
-        'circle-stroke-color': '#0e120b',
         'circle-stroke-width': 1.5,
-      },
+      }) as any,
     })
 
     map.addLayer({
@@ -411,11 +401,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
         'text-offset': [1.1, 0],
         'text-allow-overlap': false,
       },
-      paint: {
-        'text-color': '#33ff33',
-        'text-halo-color': '#0e120b',
-        'text-halo-width': 1.4,
-      },
+      paint: overlayPaint(ovs, 'sighting-label', { 'text-halo-width': 1.4 }) as any,
     })
 
     // Transparent hit layer over individual markers for easy clicking.
@@ -692,7 +678,7 @@ const sightingsJSON = JSON.stringify(clientSightings)
 
     const map = new maplibregl.Map({
       container,
-      style: STYLE_URL,
+      style: themeStyleUrl(currentTheme()),
       center: [lon, lat],
       bounds: [
         [w, s],
@@ -700,75 +686,78 @@ const sightingsJSON = JSON.stringify(clientSightings)
       ],
     })
 
-    map.on('load', () => {
-      // Repaint on a theme change: the base recolours plus this site's own
-      // layers (which do not exist until the end of this handler, hence the
-      // second pass below).
-      document.addEventListener('myco:theme', () => {
-        applyPalette(map)
-        applyOverlayPalette(map)
-      })
-
-      applyPalette(map)
+    // The baked style JSON already carries the theme's fiord recolours and
+    // label treatment, so nothing is mutated after load. The site's own layers
+    // are layered on top with their colours read from that JSON's overlay
+    // table; a theme change swaps the whole style with `setStyle()` and the
+    // `style.load` event it fires re-layers them in the new colours.
+    const applySiteLayers = () => {
       addHikingLayers(map)
       addContours(map)
 
       // Mask first so the viewport is always framed, even if a later layer
       // fails. Everything outside the 15 km box stays hidden behind it.
-      const mask = {
-        type: 'FeatureCollection' as const,
-        features: [
-          {
-            type: 'Feature' as const,
-            properties: {},
-            geometry: {
-              type: 'Polygon' as const,
-              coordinates: [
-                [
-                  [-180, -90],
-                  [180, -90],
-                  [180, 90],
-                  [-180, 90],
-                  [-180, -90],
+      if (!map.getSource('box-mask')) {
+        const mask = {
+          type: 'FeatureCollection' as const,
+          features: [
+            {
+              type: 'Feature' as const,
+              properties: {},
+              geometry: {
+                type: 'Polygon' as const,
+                coordinates: [
+                  [
+                    [-180, -90],
+                    [180, -90],
+                    [180, 90],
+                    [-180, 90],
+                    [-180, -90],
+                  ],
+                  [
+                    [w, s],
+                    [w, n],
+                    [e, n],
+                    [e, s],
+                    [w, s],
+                  ],
                 ],
-                [
-                  [w, s],
-                  [w, n],
-                  [e, n],
-                  [e, s],
-                  [w, s],
-                ],
-              ],
+              },
             },
-          },
-        ],
+          ],
+        }
+        const ovs = overlayPaints(map)
+        map.addSource('box-mask', { type: 'geojson', data: mask })
+        map.addLayer({
+          id: 'box-mask-fill',
+          type: 'fill',
+          source: 'box-mask',
+          paint: overlayPaint(ovs, 'box-mask-fill', { 'fill-opacity': 1 }) as any,
+        })
+        map.addLayer({
+          id: 'box-mask-outline',
+          type: 'line',
+          source: 'box-mask',
+          paint: overlayPaint(ovs, 'box-mask-outline', { 'line-width': 1.5 }) as any,
+        })
       }
 
-      map.addSource('box-mask', { type: 'geojson', data: mask })
-      map.addLayer({
-        id: 'box-mask-fill',
-        type: 'fill',
-        source: 'box-mask',
-        paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
-      })
-      map.addLayer({
-        id: 'box-mask-outline',
-        type: 'line',
-        source: 'box-mask',
-        paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
-      })
-
-      try {
-        addSightings(map, JSON.parse(container.dataset.sightings || '[]'))
-      } catch (err) {
-        console.error('[map] addSightings failed:', err)
+      if (!map.getSource('sightings')) {
+        try {
+          addSightings(map, JSON.parse(container.dataset.sightings || '[]'))
+        } catch (err) {
+          console.error('[map] addSightings failed:', err)
+        }
       }
+    }
+    map.on('load', applySiteLayers)
+    map.on('style.load', applySiteLayers)
 
-      // Masks, contours, hiking and sighting layers now exist: colour them
-      // for the active theme (they were added with the tui values).
-      applyOverlayPalette(map)
+    // A theme change swaps the baked style wholesale; the `style.load` that
+    // `setStyle` fires re-layers the site's additions in the new colours.
+    document.addEventListener('myco:theme', () => {
+      map.setStyle(themeStyleUrl(currentTheme()))
     })
-
     map.on('error', (e: any) => {
       console.error('[map] maplibre error:', e?.error)
     })

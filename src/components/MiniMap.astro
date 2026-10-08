@@ -60,9 +60,7 @@ const regionData = region ? JSON.stringify(region) : ''
   import '../lib/maplibre-worker'
   // maplibre-gl v6 is ESM-only and no longer has a default export.
   import * as maplibregl from 'maplibre-gl'
-  import { applyPalette, applyOverlayPalette } from '../lib/map-palette'
-
-  const STYLE_URL = 'https://tiles.openfreemap.org/styles/fiord'
+  import { currentTheme, overlayPaint, overlayPaints, themeStyleUrl } from '../lib/map-palette'
 
   const container = document.getElementById('minimap')
   const frame = container?.closest('.mini-map-frame') as HTMLElement | null
@@ -106,6 +104,7 @@ const regionData = region ? JSON.stringify(region) : ''
   // Masks everything outside the 15 km box (MapVector's box-mask).
   function addMask(map: maplibregl.Map, [w, s, e, n]: [number, number, number, number]) {
     if (map.getSource('mini-mask')) return
+    const ovs = overlayPaints(map)
 
     const mask = {
       type: 'FeatureCollection' as const,
@@ -141,13 +140,13 @@ const regionData = region ? JSON.stringify(region) : ''
       id: 'mini-mask-fill',
       type: 'fill',
       source: 'mini-mask',
-      paint: { 'fill-color': '#141414', 'fill-opacity': 1 },
+      paint: overlayPaint(ovs, 'mini-mask-fill', { 'fill-opacity': 1 }) as any,
     })
     map.addLayer({
       id: 'mini-mask-outline',
       type: 'line',
       source: 'mini-mask',
-      paint: { 'line-color': '#4a6a4a', 'line-width': 1.5 },
+      paint: overlayPaint(ovs, 'mini-mask-outline', { 'line-width': 1.5 }) as any,
     })
   }
 
@@ -164,7 +163,8 @@ const regionData = region ? JSON.stringify(region) : ''
   }
 
   function addRegion(map: maplibregl.Map) {
-    if (!region) return
+    if (!region || map.getSource('mini-region')) return
+    const ovs = overlayPaints(map)
     const radiusM = (region.radiusKm ?? 1) * 1000
     const circleFeature = {
       type: 'Feature' as const,
@@ -177,35 +177,33 @@ const regionData = region ? JSON.stringify(region) : ''
       id: 'mini-region-fill',
       type: 'fill',
       source: 'mini-region',
-      paint: { 'fill-color': '#33ff33', 'fill-opacity': 0.1 },
+      paint: overlayPaint(ovs, 'mini-region-fill', { 'fill-opacity': 0.1 }) as any,
     })
     map.addLayer({
       id: 'mini-region-line',
       type: 'line',
       source: 'mini-region',
-      paint: {
-        'line-color': '#33ff33',
+      paint: overlayPaint(ovs, 'mini-region-line', {
         'line-width': 1.5,
         'line-opacity': 0.85,
         'line-dasharray': [3, 2],
-      },
+      }) as any,
     })
   }
 
   function addMarkers(map: maplibregl.Map) {
-    if (!features.length) return
+    if (!features.length || map.getSource('sighting')) return
+    const ovs = overlayPaints(map)
 
     map.addSource('sighting', { type: 'geojson', data: pts })
     map.addLayer({
       id: 'sighting-dot',
       type: 'circle',
       source: 'sighting',
-      paint: {
-        'circle-color': '#33ff33',
+      paint: overlayPaint(ovs, 'sighting-dot', {
         'circle-radius': 6,
-        'circle-stroke-color': '#0e120b',
         'circle-stroke-width': 1.5,
-      },
+      }) as any,
     })
 
     if (features.some((f) => f.properties?.label)) {
@@ -221,11 +219,7 @@ const regionData = region ? JSON.stringify(region) : ''
           'text-offset': [1.1, 0],
           'text-allow-overlap': false,
         },
-        paint: {
-          'text-color': '#33ff33',
-          'text-halo-color': '#0e120b',
-          'text-halo-width': 1.4,
-        },
+        paint: overlayPaint(ovs, 'sighting-label', { 'text-halo-width': 1.4 }) as any,
       })
     }
   }
@@ -246,7 +240,7 @@ const regionData = region ? JSON.stringify(region) : ''
 
     const map = new maplibregl.Map({
       container,
-      style: STYLE_URL,
+      style: themeStyleUrl(currentTheme()),
       center: [clng, clat],
       bounds: [
         [w, s],
@@ -254,23 +248,18 @@ const regionData = region ? JSON.stringify(region) : ''
       ],
     })
 
-    map.on('load', () => {
-      // Repaint on a theme change; the overlay pass runs again below because
-      // the mask/region/marker layers are added after this point.
-      document.addEventListener('myco:theme', () => {
-        applyPalette(map)
-        applyOverlayPalette(map)
-      })
-
-      applyPalette(map)
+    // The baked theme style needs no post-load recolouring; the site's own
+    // layers are added with their colours read from that JSON's overlay table.
+    // A theme change swaps the style wholesale and `style.load` re-layers them.
+    function applySiteLayers() {
       if (!region) addMask(map, [w, s, e, n])
       addRegion(map)
-      try {
-        addMarkers(map)
-      } catch (err) {
-        console.error('[minimap] addMarkers failed:', err)
-      }
-      applyOverlayPalette(map)
+      addMarkers(map)
+    }
+    map.on('load', applySiteLayers)
+    map.on('style.load', applySiteLayers)
+    document.addEventListener('myco:theme', () => {
+      map.setStyle(themeStyleUrl(currentTheme()))
     })
 
     map.on('error', (e: any) => {

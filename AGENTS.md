@@ -707,6 +707,59 @@ committed snapshot like the Wikidata one, not a build-time fetch.
   `dist/**/*.html` contains `colDatasetKey` — the snapshots ship as rendered
   markup, never as an inlined payload.
 
+## Foraging status (Germany)
+
+`src/data/legal/foraging-de.ts` is a committed snapshot with **two independent
+facts per species**: `protection` (federal — what BArtSchV Annex 1 forbids and
+what its §2(1) exempts for small quantities of personal use) and `redList`
+(the German Red List of macrofungi, Dämmrich et al. 2016). Threatened is not
+protected, so the two never collapse into one verdict; shapes live in
+`src/data/legal/types.ts`. Regenerate with `npm run update-species-legal`
+(`--force` refetches the raw sources, `--verbose` prints the matched Red List
+row so a match can be audited). Raw fetches cache in `.cache/legal/` (ZIP
+extracted to `rl/`), gitignored. Like the Wikidata and taxonomy snapshots it is
+**not** wired into `prebuild`/`predev`: the build has no network for this, and
+a freeze is deliberate until someone runs the script.
+
+- **Parsing the law is done from the authoritative HTML**, not a transcription:
+  `parseAnlageFungi` slices the Fungi section (`>Pilze<` … `1)Nur europ`),
+  takes `cells[2] === '+'` as protected, and strips footnote markers from
+  `lawBinomial`; `parseSection2Exemptions` scans **after the `:`** of the
+  exemption sentence (scanning the whole page pulled in the neighbouring
+  "Natur entnommen" and reported 7 exemptions instead of 6).
+- **Genus-level Annex entries (`X spp.`) match the _accepted_ genus only.**
+  Testing through a historical combination flagged _Rickenella fibula_ (once a
+  _Hygrocybe_) and _Suillellus luridus_ (once a _Boletus_) as protected. The
+  law froze its names in 2005; our history includes splits that came later.
+  `matchedBy` is therefore `'accepted' | 'synonym' | 'genus'`, where `genus`
+  can only come from the accepted name.
+- **A Red List row that _is_ the name beats a row that merely lists it as a
+  synonym, and species-level (`Auswertung` S/M) beats an aggregate** — in the
+  other order, _Boletus edulis_ resolves to a _Boletus betulicola_ row whose
+  concept column names `B. edulis`, i.e. `D` instead of `*`.
+- Expected counts, as the regression check: **4 prohibited** (`albatrellus-ovinus`,
+  `butyriboletus-appendiculatus`, `hygrocybe-acutoconica`, `hygrocybe-cantharellus`),
+  **2 exempt** (`boletus-edulis`, `cantharellus-cibarius`), 58 not listed; Red
+  List 62/64 — `russula-langei` and `tolypocladium-longisegmentatum` have no row
+  in the 2016 list. FFH annexes contain no fungi, and Wikidata carries no
+  German legal or Red List status, so neither source is consulted.
+- **Rendering is a `Block` in `SpeciesData.astro` between Ecology and
+  Edibility**, gated on `foraging[slug]` — a species added since the last
+  regeneration omits the whole block rather than reading as "not protected".
+  It needs the new `slug` prop (the page passes `name`, the collection id);
+  row strings are built **in frontmatter** (the JSX-newline rule), and the
+  source line carries BArtSchV Annex 1 + the Red List ZIP as external links.
+- The general "before you pick" `Notice` lives **inside** that block, and the
+  location pages carry their own place-rules `Notice`
+  (`locations.foragingTitle`/`foragingBody`), so the federal + Bavarian prose
+  has exactly one home per page type. All wording, including the
+  `mushrooms.redListCategories` code map (`0,1,2,3,G,R,V,*,D,nb`), is in
+  `src/i18n/{en,de}.ts` — the categories are data-driven labels, so a code the
+  map does not know renders as the bare code rather than nothing. Adding a
+  structured key under `mushrooms` is why `FACET_LABEL` in
+  `species-facets-build.ts` is typed through a string-only mapped type — the
+  facet labels index `t.mushrooms` and must never receive an object.
+
 ## Wikidata morphology data
 
 `src/data/wikidata/` holds a typed snapshot of the fungal morphology properties

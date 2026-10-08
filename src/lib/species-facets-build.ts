@@ -27,7 +27,14 @@ import type {
 // Facet names reuse the species page's own wording, so a label can never say
 // "Attachment" here and "Ansetzung" nowhere. Typed against `en` as const so a
 // renamed or misspelt key is a compile error rather than an `undefined` heading.
-const FACET_LABEL: Record<FacetKey, keyof typeof en.mushrooms> = {
+// The mapped type restricts the pool to keys whose value is a plain string:
+// `mushrooms` also holds structured data (the Red List category map), and
+// indexing with those keys would hand a whole object to `label`.
+type MushroomStringKey = {
+  [K in keyof typeof en.mushrooms]: (typeof en.mushrooms)[K] extends string ? K : never
+}[keyof typeof en.mushrooms]
+
+const FACET_LABEL: Record<FacetKey, MushroomStringKey> = {
   hymeniumType: 'hymeniumType',
   capShape: 'capShape',
   hymeniumAttachment: 'hymeniumAttachment',

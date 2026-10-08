@@ -19,7 +19,9 @@
 // have neither and 1 has a drawing belonging to a different value.
 import Block from './Block.astro'
 import NameCite from './NameCite.astro'
+import Notice from './Notice.astro'
 import ValueMark from './ValueMark.astro'
+import { foraging, foragingSources } from '../data/legal/foraging-de'
 import type { NameUsage, TaxonomyData } from '../data/taxonomy/types'
 import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
 import type { Locale } from '../i18n'
@@ -38,11 +40,14 @@ interface Props {
   habitat?: Localized
   edibility?: Localized
   scientificName: string
+  /** Collection slug, used to look the species up in the foraging snapshot. */
+  slug: string
   /** The Index Fungorum topology for this species, when one was resolved. */
   taxonomy?: TaxonomyData
 }
 
-const { data, locale, t, commonName, habitat, edibility, scientificName, taxonomy } = Astro.props
+const { data, locale, t, commonName, habitat, edibility, scientificName, slug, taxonomy } =
+  Astro.props
 
 /** Prefer the requested language, then English, so a value is never blank. */
 const labelOf = (ref: AnyRef) => ref.labels[locale] ?? ref.labels.en ?? ref.labels.de ?? ref.qid
@@ -196,6 +201,30 @@ const allNamesLabel = t.mushrooms.allNames.replace(
   '{count}',
   String(taxonomy?.fullHistory.length ?? 0),
 )
+
+// --- Foraging status (Germany) ---------------------------------------------
+//
+// Two independent facts from the generated snapshot: federal species
+// protection (BArtSchV Annex 1 + its §2(1) exemptions) and the German Red
+// List of macrofungi. Threatened is not protected, so the two never collapse
+// into one verdict. A species added after the snapshot was last regenerated
+// has no entry, and then the whole block is omitted rather than shown as
+// "not protected". The strings are built here, not in the template: a
+// newline inside a JSX text node is dropped (see `authority` above).
+const legal = foraging[slug]
+const protectionBase = legal
+  ? legal.protection === 'prohibited'
+    ? t.mushrooms.protectionProhibited
+    : legal.protection === 'smallQuantityExempt'
+      ? t.mushrooms.protectionExempt
+      : t.mushrooms.protectionNotListed
+  : ''
+const protectionText = legal?.lawName ? `${protectionBase} (${legal.lawName})` : protectionBase
+const redListCats: Record<string, string | undefined> = t.mushrooms.redListCategories
+const redListText = legal?.redList
+  ? `${legal.redList.code} — ${redListCats[legal.redList.code] ?? legal.redList.code}`
+  : ''
+const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingSources.retrieved)
 ---
 
 <Block title={t.mushrooms.names}>
@@ -361,6 +390,42 @@ const allNamesLabel = t.mushrooms.allNames.replace(
   </div>
   {habitat && <p class="prose">{l10n(habitat, locale)}</p>}
 </Block>
+
+{
+  legal && (
+    <Block title={t.mushrooms.foraging}>
+      <div class="rows">
+        <div class="row">
+          <span class="row__label">{t.mushrooms.foragingProtection}</span>
+          <span class="row__dots" />
+          <span class="row__value">{protectionText}</span>
+        </div>
+        {legal.redList && (
+          <div class="row">
+            <span class="row__label">{t.mushrooms.foragingRedList}</span>
+            <span class="row__dots" />
+            <span class="row__value">{redListText}</span>
+          </div>
+        )}
+      </div>
+      <Notice
+        title={t.mushrooms.foragingNoticeTitle}
+        body={t.mushrooms.foragingNoticeBody}
+        margin={false}
+      />
+      <p class="src-note">
+        {foragingNote}{' '}
+        <a href={foragingSources.bartschvAnlage1} rel="noopener noreferrer" target="_blank">
+          {t.mushrooms.sourceLaw}
+        </a>
+        {' · '}
+        <a href={foragingSources.redListZip} rel="noopener noreferrer" target="_blank">
+          {t.mushrooms.sourceRedList}
+        </a>
+      </p>
+    </Block>
+  )
+}
 
 <Block title={t.mushrooms.edibility}>
   {

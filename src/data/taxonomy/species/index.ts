@@ -30,6 +30,7 @@ import { taxonomy as dacrymyces_chrysopermusTaxonomy } from './dacrymyces-chryso
 import { taxonomy as diatrype_disciformisTaxonomy } from './diatrype-disciformis'
 import { taxonomy as ganoderma_applanatumTaxonomy } from './ganoderma-applanatum'
 import { taxonomy as gomphidius_glutinosusTaxonomy } from './gomphidius-glutinosus'
+import { taxonomy as gomphus_clavatusTaxonomy } from './gomphus-clavatus'
 import { taxonomy as guepinia_helvelloidesTaxonomy } from './guepinia-helvelloides'
 import { taxonomy as hydnellum_peckiiTaxonomy } from './hydnellum-peckii'
 import { taxonomy as hydnum_repandumTaxonomy } from './hydnum-repandum'
@@ -96,6 +97,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'diatrype-disciformis': diatrype_disciformisTaxonomy,
   'ganoderma-applanatum': ganoderma_applanatumTaxonomy,
   'gomphidius-glutinosus': gomphidius_glutinosusTaxonomy,
+  'gomphus-clavatus': gomphus_clavatusTaxonomy,
   'guepinia-helvelloides': guepinia_helvelloidesTaxonomy,
   'hydnellum-peckii': hydnellum_peckiiTaxonomy,
   'hydnum-repandum': hydnum_repandumTaxonomy,

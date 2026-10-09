@@ -11,7 +11,7 @@ export const foragingSources: ForagingSources = {
     'https://www.rote-liste-zentrum.de/wp-content/uploads/Download_RoteListe_Grosspilze_2016_20210317-1608.zip',
   redListCitation:
     'Dämmrich et al. (2016): Rote Liste der Großpilze und vorläufige Gesamtartenliste der Ständer- und Schlauchpilze (Basidiomycota und Ascomycota) Deutschlands. In: Matzke-Hajek, Hofbauer & Ludwig (Hrsg.), Rote Liste gefährdeter Tiere, Pflanzen und Pilze Deutschlands, Band 8, Naturschutz und Biologische Vielfalt 70 (8), 31-433.',
-  retrieved: '2026-10-08',
+  retrieved: '2026-10-09',
 }
 
 export const foraging: Record<string, ForagingEntry> = {
@@ -138,6 +138,12 @@ export const foraging: Record<string, ForagingEntry> = {
   'gomphidius-glutinosus': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'gomphus-clavatus': {
+    protection: 'smallQuantityExempt',
+    lawName: 'Gomphus clavatus',
+    matchedBy: 'accepted',
+    redList: { code: '3', matchedBy: 'accepted' },
   },
   'guepinia-helvelloides': {
     protection: 'notListed',

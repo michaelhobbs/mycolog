@@ -739,9 +739,10 @@ a freeze is deliberate until someone runs the script.
   concept column names `B. edulis`, i.e. `D` instead of `*`.
 - Expected counts, as the regression check: **4 prohibited** (`albatrellus-ovinus`,
   `butyriboletus-appendiculatus`, `hygrocybe-acutoconica`, `hygrocybe-cantharellus`),
-  **2 exempt** (`boletus-edulis`, `cantharellus-cibarius`), 58 not listed; Red
-  List 62/64 — `russula-langei` and `tolypocladium-longisegmentatum` have no row
-  in the 2016 list. FFH annexes contain no fungi, and Wikidata carries no
+  **3 exempt** (`boletus-edulis`, `cantharellus-cibarius`, `gomphus-clavatus`),
+  58 not listed; Red List 63/65 — `russula-langei` and
+  `tolypocladium-longisegmentatum` have no row in the 2016 list. FFH annexes
+  contain no fungi, and Wikidata carries no
   German legal or Red List status, so neither source is consulted.
 - **Rendering is a `Block` in `SpeciesData.astro` between Ecology and
   Edibility**, gated on `foraging[slug]` — a species added since the last

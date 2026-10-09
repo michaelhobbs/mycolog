@@ -20,6 +20,7 @@ import { hydnumRepandumQ13684 } from './Q13684'
 import { clavulinaCoralloidesQ138027 } from './Q138027'
 import { clavulinopsisHelvolaQ138029 } from './Q138029'
 import { craterellusLutescensQ1478429 } from './Q1478429'
+import { gomphusClavatusQ1478471 } from './Q1478471'
 import { ramariaAureaQ1479710 } from './Q1479710'
 import { caloceraCorneaQ175548 } from './Q175548'
 import { clathrusArcheriQ1757951 } from './Q1757951'
@@ -95,6 +96,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q138027: clavulinaCoralloidesQ138027,
   Q138029: clavulinopsisHelvolaQ138029,
   Q1478429: craterellusLutescensQ1478429,
+  Q1478471: gomphusClavatusQ1478471,
   Q1479710: ramariaAureaQ1479710,
   Q175548: caloceraCorneaQ175548,
   Q1757951: clathrusArcheriQ1757951,
@@ -167,6 +169,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q138027: { slug: 'clavulina-coralloides', scientificName: 'Clavulina coralloides' },
   Q138029: { slug: 'clavulinopsis-helvola', scientificName: 'Clavulinopsis helvola' },
   Q1478429: { slug: 'craterellus-lutescens', scientificName: 'Craterellus lutescens' },
+  Q1478471: { slug: 'gomphus-clavatus', scientificName: 'Gomphus clavatus' },
   Q1479710: { slug: 'ramaria-aurea', scientificName: 'Ramaria aurea' },
   Q175548: { slug: 'calocera-cornea', scientificName: 'Calocera cornea' },
   Q1757951: { slug: 'clathrus-archeri', scientificName: 'Clathrus archeri' },

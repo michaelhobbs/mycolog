@@ -1,10 +1,40 @@
 {
   "scientificName": "Gomphus clavatus",
+  "wikidataId": "Q1478471",
   "commonName": {
     "en": "Pig's Ears",
     "de": "Schweinsohr"
   },
-  "determiningFeatures": [],
+  "determiningFeatures": [
+    {
+      "en": "Vase- to fan-shaped fruit bodies, usually clustered and fused at the base",
+      "de": "Vasen- bis fächerförmige Fruchtkörper, meist büschelig und an der Basis verwachsen"
+    },
+    {
+      "en": "Orange-brown to lilac upper surface with a wavy, ragged margin",
+      "de": "Orangebraune bis lila Oberseite mit welligem, ausgefranstem Rand"
+    },
+    {
+      "en": "Wrinkled violet-to-lilac underside with blunt, forking ridges (no true gills) running down the stem",
+      "de": "Runzelige violette bis lila Unterseite mit stumpfen, gabeligen Leisten (keine echten Lamellen), die am Stiel herablaufen"
+    },
+    {
+      "en": "Firm white to pale lilac flesh with a mild, mushroomy taste and little smell",
+      "de": "Festes weißes bis blasses lila Fleisch mit mildem, pilzigem Geschmack und kaum Geruch"
+    }
+  ],
+  "notes": {
+    "en": "A distant relative of the chanterelles with an earthy, meaty texture; rated choice by some, though it can cause gastric upset and is declining across much of Europe.",
+    "de": "Ein entfernter Verwandter der Pfifferlinge mit erdigem, fleischigem Biss; von manchen als hervorragend geschätzt, kann jedoch Magen-Darm-Beschwerden auslösen und geht in weiten Teilen Europas zurück."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with spruce and fir in moist, shaded conifer forest, often near trunks and roots",
+    "de": "Mykorrhiza-Partner von Fichte und Tanne in feuchten, schattigen Nadelwäldern, oft nahe Stämmen und Wurzeln"
+  },
+  "edibility": {
+    "en": "Edible when well cooked; some people react badly to it",
+    "de": "Gut durchgegart essbar; manche Menschen reagieren empfindlich"
+  },
   "cover": {
     "sighting": "2026-09-15/gomphus-clavatus",
     "index": 7

@@ -707,6 +707,63 @@ committed snapshot like the Wikidata one, not a build-time fetch.
   `dist/**/*.html` contains `colDatasetKey` — the snapshots ship as rendered
   markup, never as an inlined payload.
 
+## Species classification (Catalogue of Life)
+
+A species' higher ranks (phylum → class → order → family → genus) come from the
+**published Catalogue of Life**, stored as a committed snapshot. This is the
+site's source of truth for classification; Wikidata's `parent taxon (P171)`
+chain is deliberately _not_ used, because the catalogue is the authoritative
+checklist and the two disagree on a handful of families.
+
+- **`src/data/col/species/`** holds one generated module per species keyed by
+  _collection slug_, plus an `index.ts` barrel exporting `speciesClassification`.
+  Types in `src/data/col/types.ts` (`ColClassification`/`ColRanks`/`ColTaxon`).
+  Regenerate with `npm run update-species-col`; `--force` rewrites unchanged
+  files, `--dry-run` reports without writing. Everything under that directory is
+  generated — do not hand-edit.
+- **The dataset key lives in `scripts/config/col.mjs`**
+  (`COL_CLASSIFICATION_DATASET_KEY`, currently **316441** = `COL26.9 XR`). This
+  is the Catalogue of Life **Extended Release**, not the base `COL26.9`
+  (316321): the base release omits taxa and families this site has — no
+  `Calocera cornea`, and `Pseudohydnum`/`Infundibulicybe` get no family — whereas
+  XR resolves all three. Bump both the key and `COL_CLASSIFICATION_RELEASE`
+  together; releases are versioned and the snapshot is a deliberate freeze.
+- **Join is by Wikidata's `P10585` ("Catalogue of Life") id**, read textually
+  from `src/data/wikidata/species/Q*.ts`, with a name fallback via ChecklistBank's
+  **`match/nameusage`** endpoint (`getTaxonInfo`/`matchNameUsage` in
+  `scripts/lib/col.mjs`). The free-text `nameusage?q=` search is **not** used: it
+  does not understand binomials (`q=Calocera cornea` returns the bivalve genus
+  _Cornea_), and the match endpoint returns the usage `rank`, which the script
+  requires to be a species rank — a genus-level fallback is _rejected_, never
+  stored as the species' own classification.
+- **When COL holds no species-rank usage under our name, the script falls back to
+  the species' Index Fungorum usage** (`matchedBy: 'index-fungorum'`), read from
+  the dataset **1028** crawl the taxonomy snapshot already uses: it takes the
+  accepted usage id (`colUsageId`) from `src/data/taxonomy/species/{slug}.ts` and
+  fetches that taxon's `info` chain, so the Classification block agrees with the
+  page's Nomenclature block on the accepted name. Such a row stores
+  `colDatasetKey: 1028` / `colRelease: 'Index Fungorum'`, so a renderer must
+  branch on `matchedBy` rather than assuming every row is Catalogue of Life. It is
+  a resolution fallback, not a second source of truth: COL is still tried first,
+  and today only `collybia-phyllophila` takes it.
+- **Not wired into `prebuild`/`predev`, deliberately.** Like the taxonomy and
+  Wikidata snapshots, the build has no network; `speciesClassification[slug]`
+  being undefined is a supported state, so a new species renders no
+  classification until someone runs the script.
+- **Ranks are optional and a missing one is an honest gap.** Catalogue of Life's
+  chain can skip a rank (`Tolypocladium` has no order even in XR), so a slot may
+  be absent; never fill it by guessing. `colId`, `colRelease` and `matchedBy` are
+  stored alongside so a stale join is auditable.
+- Current coverage is **65/65**. `collybia-phyllophila` is read from Index
+  Fungorum (`Collybia phyllophila`, family `Clitocybaceae`) via the fallback
+  above, because the COL release holds no _Collybia phyllophila_ for our name (its
+  _Clitocybe phyllophila_ is a different genus). Four rows still lack one rank —
+  `cordyceps-militaris`, `tolypocladium-longisegmentatum` and
+  `tolypocladium-ophioglossoides` have no `order`, and `guepinia-helvelloides` no
+  `family` — and those are real gaps in the sources, not lookup failures.
+- Keep the barrel a **frontmatter-only import**; it is never imported by a client
+  script.
+
 ## Foraging status (Germany)
 
 `src/data/legal/foraging-de.ts` is a committed snapshot with **two independent

@@ -46,10 +46,32 @@ export async function searchNameUsages(datasetKey, name, { limit = 20, log = con
   return data.result || []
 }
 
+// Best match for a scientific name. Unlike the free-text `nameusage?q=` search,
+// this understands binomials and carries the matched usage's rank, so a caller
+// can reject a genus-level fallback for a species name. Returns null when
+// nothing matches.
+export async function matchNameUsage(datasetKey, name, { log = console.log } = {}) {
+  const url = `${COL_API_BASE}/dataset/${datasetKey}/match/nameusage?q=${encodeURIComponent(name)}`
+  const res = await fetchRetry(url, 4, log)
+  const data = await res.json()
+  return data.usage || null
+}
+
 // Get a specific name usage by ID
 export async function getNameUsage(datasetKey, usageId, { log = console.log } = {}) {
   const url = `${COL_API_BASE}/dataset/${datasetKey}/nameusage/${usageId}`
   const res = await fetchRetry(url, 4, log)
+  return res.json()
+}
+
+// Usage plus its classification chain (kingdom -> genus), where each entry is
+// { rank, name, id }. This is the endpoint behind a catalogueoflife.org taxon
+// page. Returns null for a taxon id that does not exist in the dataset.
+export async function getTaxonInfo(datasetKey, taxonId, { log = console.log } = {}) {
+  const url = `${COL_API_BASE}/dataset/${datasetKey}/taxon/${taxonId}/info`
+  const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT } })
+  if (res.status === 404) return null
+  if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
   return res.json()
 }
 

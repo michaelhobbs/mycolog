@@ -10,6 +10,7 @@ import SpeciesGallery from '../../../components/SpeciesGallery.astro'
 import SpeciesSources from '../../../components/SpeciesSources.astro'
 import { speciesWikidata } from '../../../data/wikidata/species'
 import { speciesTaxonomy } from '../../../data/taxonomy/species'
+import { speciesClassification } from '../../../data/col/species'
 import { getTranslations, formatDate, locales } from '../../../i18n'
 import { l10n } from '../../../i18n/helpers'
 import { buildLocationMap, locationName } from '../../../lib/sightings'
@@ -64,6 +65,11 @@ const wikidata = sp?.wikidataId ? speciesWikidata[sp.wikidataId] : undefined
 // per-species lookup. Undefined until `update-species-taxonomy` has run for
 // a newly added species.
 const taxonomy = speciesTaxonomy[name]
+
+// The Catalogue of Life classification snapshot, keyed by collection slug.
+// Undefined until `update-species-col` has run for a newly added species; COL
+// is the site source of truth but some ranks may be absent (honest gaps).
+const classification = speciesClassification[name]
 
 // Built here rather than inline in the template: a newline inside a JSX text
 // node collapses away, so `{t.mushrooms.sightings} ({entries.length})` on its
@@ -126,6 +132,7 @@ const sightingsTitle = `${t.mushrooms.sightings} (${entries.length})`
               habitat={habitat}
               edibility={edibility}
               taxonomy={taxonomy}
+              classification={classification}
             />
 
             {features.length > 0 && (

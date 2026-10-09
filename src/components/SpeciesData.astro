@@ -23,6 +23,7 @@ import Notice from './Notice.astro'
 import ValueMark from './ValueMark.astro'
 import { foraging, foragingSources } from '../data/legal/foraging-de'
 import type { NameUsage, TaxonomyData } from '../data/taxonomy/types'
+import type { ColClassification } from '../data/col/types'
 import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
 import type { Locale } from '../i18n'
 import type { Translations } from '../i18n'
@@ -44,10 +45,22 @@ interface Props {
   slug: string
   /** The Index Fungorum topology for this species, when one was resolved. */
   taxonomy?: TaxonomyData
+  /** The Catalogue of Life classification snapshot for this species, when available. */
+  classification?: ColClassification
 }
 
-const { data, locale, t, commonName, habitat, edibility, scientificName, slug, taxonomy } =
-  Astro.props
+const {
+  data,
+  locale,
+  t,
+  commonName,
+  habitat,
+  edibility,
+  scientificName,
+  slug,
+  taxonomy,
+  classification,
+} = Astro.props
 
 /** Prefer the requested language, then English, so a value is never blank. */
 const labelOf = (ref: AnyRef) => ref.labels[locale] ?? ref.labels.en ?? ref.labels.de ?? ref.qid
@@ -202,6 +215,42 @@ const allNamesLabel = t.mushrooms.allNames.replace(
   String(taxonomy?.fullHistory.length ?? 0),
 )
 
+// --- Classification (Catalogue of Life) ------------------------------------
+//
+// The higher ranks (phylum -> genus) from the committed classification
+// snapshot, rendered as a tree because the chain's shape is the point: each
+// rank branches off the previous one down to the genus. A rank slot is
+// optional and a missing one is an honest gap in the source (`Tolypocladium`
+// has no order even in the extended release), so a level is dropped rather
+// than shown empty -- the same rule the morphology rows use. The root (the
+// highest present rank) carries no branch character; every deeper level is
+// indented under a `└─` elbow. `matchedBy` says which source answered:
+// anything but the Index Fungorum fallback is Catalogue of Life, and the note
+// names it truthfully.
+const classificationRanks = classification
+  ? [
+      { label: t.mushrooms.phylum, taxon: classification.classification.phylum },
+      { label: t.mushrooms.class, taxon: classification.classification.class },
+      { label: t.mushrooms.order, taxon: classification.classification.order },
+      { label: t.mushrooms.family, taxon: classification.classification.family },
+      { label: t.mushrooms.genus, taxon: classification.classification.genus },
+    ].filter((r) => r.taxon)
+  : []
+// The branch prefix is built here, not in the template: it is `└─ ` at each
+// depth plus the indent of the levels above it, and Prettier would happily
+// wrap a `'   '.repeat(i - 1)` sat inline. The UI renders in `--font-mono`
+// everywhere, so the box characters and their spaces stay on a fixed grid.
+const classificationNodes = classificationRanks.map((r, i) => ({
+  branch: i === 0 ? '' : '   '.repeat(i - 1) + '└─ ',
+  name: r.taxon?.name ?? '',
+  rank: r.label,
+}))
+const classificationSource =
+  classification?.matchedBy === 'index-fungorum'
+    ? t.mushrooms.sourceIndexFungorum
+    : t.mushrooms.sourceCatalogueOfLife
+const classificationNote = t.mushrooms.classificationNote.replace('{source}', classificationSource)
+
 // --- Foraging status (Germany) ---------------------------------------------
 //
 // Two independent facts from the generated snapshot: federal species
@@ -292,6 +341,7 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
             </span>
           </div>
         )}
+
         {restHistory.length > 0 && (
           <details class="more">
             <summary class="more__summary">{allNamesLabel}</summary>
@@ -325,6 +375,23 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
         )}
       </div>
       <p class="src-note">{t.mushrooms.nomenclatureNote}</p>
+    </Block>
+  )
+}
+
+{
+  classification && (
+    <Block title={t.mushrooms.classification}>
+      <ul class="tree">
+        {classificationNodes.map((node) => (
+          <li class="tree__node">
+            <span class="tree__branch">{node.branch}</span>
+            <span class="tree__name">{node.name}</span>
+            <span class="tree__rank">{node.rank}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="src-note">{classificationNote}</p>
     </Block>
   )
 }
@@ -517,6 +584,43 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
     font-size: 0.8125rem;
     margin: 0;
     padding: 0.6rem 0.75rem;
+  }
+
+  /* Classification tree: a list, not label/value rows, because the point is
+     the nesting. The `└─` elbows and their indents are box characters drawn on
+     the mono grid the UI already assumes, so the branches line up level to
+     level. `white-space: pre` on the branch keeps its trailing spaces (HTML
+     would collapse them). The rank follows the name as muted metadata, so it
+     is not confused for part of the tree. */
+  .tree {
+    border: var(--border-w) solid var(--border-char);
+    background: var(--bg-surface);
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .tree__node {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    line-height: 1.9;
+  }
+
+  .tree__branch {
+    color: var(--fg-muted);
+    white-space: pre;
+    flex-shrink: 0;
+  }
+
+  .tree__name {
+    color: var(--fg-bright);
+  }
+
+  .tree__rank {
+    color: var(--fg-dim);
+    font-size: 0.75rem;
   }
 
   .prose {

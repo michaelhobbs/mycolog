@@ -35,3 +35,22 @@ export function entryForQid(qid: string): GlossaryEntry | undefined {
 export function entriesInGroup(group: GlossaryEntry['group']): GlossaryEntry[] {
   return entries.filter((e) => e.group === group)
 }
+
+/**
+ * The glossary entry for an infraspecific rank abbreviation, as `NameCite`
+ * renders it. The keys are exactly the markers `nameParts` (SpeciesData.astro)
+ * can produce, so a variation's marker always resolves to the right entry --
+ * `ssp.` and `subsp.` are the same rank -- and an unlisted marker renders plain.
+ */
+const RANK_MARKERS: Record<string, string> = {
+  'var.': 'variety',
+  'subsp.': 'subspecies',
+  'ssp.': 'subspecies',
+  'f.': 'forma',
+  forma: 'forma',
+  'f.sp.': 'forma-specialis',
+}
+
+export function rankEntryForMarker(marker: string): GlossaryEntry | undefined {
+  return glossaryById[RANK_MARKERS[marker.toLowerCase()] ?? '']
+}

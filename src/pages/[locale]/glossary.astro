@@ -12,11 +12,11 @@
 // Illustrations reuse the same drawings and spore-print swatches as the
 // species rows (ValueMark), keyed by the entry's Wikidata QID, so the page
 // agrees with the rows it explains. Terms without a QID -- the anatomy and
-// nomenclature concepts -- deliberately carry none, and few entries share
-// already-drawn values via their `seeAlso`, so nothing is invented for looks.
+// nomenclature concepts -- deliberately carry none, so nothing is invented for
+// looks.
 import Layout from '../../layouts/Layout.astro'
 import ValueMark from '../../components/ValueMark.astro'
-import { GLOSSARY_GROUPS, entriesInGroup, glossaryById } from '../../data/glossary'
+import { GLOSSARY_GROUPS, entriesInGroup } from '../../data/glossary'
 import type { GlossaryEntry } from '../../data/glossary'
 import { getTranslations, locales } from '../../i18n'
 import type { Locale } from '../../i18n'
@@ -46,22 +46,12 @@ const total = GLOSSARY_GROUPS.reduce((n, g) => n + entriesInGroup(g).length, 0)
             {entriesInGroup(group).map((entry) => (
               <article id={entry.id} class="entry">
                 <div class="entry__head">
-                  <h3 class="entry__term">{entry.term}</h3>
+                  <h3 class:list={['entry__term', { 'entry__term--upright': entry.upright }]}>
+                    {entry.term}
+                  </h3>
                   {entry.qid && <ValueMark qid={entry.qid} variant="chip" />}
                 </div>
                 <p class="entry__body">{entry.body}</p>
-                {entry.seeAlso && entry.seeAlso.length > 0 && (
-                  <p class="entry__also">
-                    {entry.seeAlso
-                      .map((id) => glossaryById[id])
-                      .filter((e): e is GlossaryEntry => !!e)
-                      .map((e) => (
-                        <a href={`#${e.id}`} class="entry__also-link">
-                          {e.term}
-                        </a>
-                      ))}
-                  </p>
-                )}
               </article>
             ))}
           </div>
@@ -142,29 +132,14 @@ const total = GLOSSARY_GROUPS.reduce((n, g) => n + entriesInGroup(g).length, 0)
     font-style: italic;
   }
 
+  /* Nomenclatural rank abbreviations are never italicised. */
+  .entry__term--upright {
+    font-style: normal;
+  }
+
   .entry__body {
     color: var(--fg);
     font-size: 0.8125rem;
     line-height: 1.65;
-  }
-
-  .entry__also {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.375rem;
-    margin-top: 0.5rem;
-    padding-top: 0.375rem;
-    border-top: 1px dashed var(--fg-muted);
-  }
-
-  .entry__also-link {
-    color: var(--accent-text);
-    font-size: 0.6875rem;
-    text-decoration: none;
-    text-transform: uppercase;
-  }
-
-  .entry__also-link:hover {
-    text-decoration: underline;
   }
 </style>

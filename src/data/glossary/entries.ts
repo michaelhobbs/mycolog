@@ -261,6 +261,40 @@ export const entries: GlossaryEntry[] = [
     body: 'An infraspecific variation is a named rank below the species level, printed after the species name: variety (var.), subspecies (subsp.) or form (f.). Varieties and forms are the ones most often recorded on the species pages — the name splits into base + rank abbreviation + varietal name.',
   },
   {
+    id: 'variety',
+    term: 'var. (variety)',
+    group: 'nomenclature',
+    upright: true,
+    short:
+      'The rank just below species: a wild variant that breeds true but is not distinct enough to be a subspecies.',
+    body: 'A variety (abbreviated var.) is a rank below species. It names a wild population that keeps its distinguishing features when it reproduces, but is not considered distinct enough to be a subspecies or a species of its own. Many older mycological names are varieties that have since been raised to species or sunk into synonymy.',
+  },
+  {
+    id: 'subspecies',
+    term: 'subsp. (subspecies)',
+    group: 'nomenclature',
+    upright: true,
+    short:
+      'A geographically or ecologically distinct population below the species rank; also written ssp.',
+    body: 'A subspecies (abbreviated subsp., also ssp.) is a population of a species that is distinct enough — usually by geography or host — to be named, but not enough to be a separate species. In mycology it is less common than the variety and form ranks.',
+  },
+  {
+    id: 'forma',
+    term: 'f. (forma)',
+    group: 'nomenclature',
+    upright: true,
+    short: 'The lowest named rank below species — a minor variant, often a colour or surface form.',
+    body: 'A form (abbreviated f., also written forma) is the lowest rank used below the species level. It marks a minor, often single-feature variant — an albino, a colour form, a smooth or scaly form — that turns up sporadically within a population rather than defining a separate geographic or host race. Mycologists apply it more loosely than botanists do.',
+  },
+  {
+    id: 'forma-specialis',
+    term: 'f.sp. (forma specialis)',
+    group: 'nomenclature',
+    upright: true,
+    short: 'A form told apart by the host it infects rather than by its appearance.',
+    body: 'A forma specialis (abbreviated f.sp., plural formae speciales) is a rank used mainly for parasitic fungi: the forms look alike but each specialises in a particular host species or plant family. It is common among crop pathogens such as rusts and smuts, where the host range — not the morphology — is the defining character.',
+  },
+  {
     id: 'author-citation',
     term: 'author citation',
     group: 'nomenclature',

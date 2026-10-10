@@ -5,6 +5,14 @@
 //
 // The split happens in the caller (frontmatter helpers cannot return JSX),
 // so this component only renders the parts it is handed.
+//
+// The rank marker (`var.`, `subsp.`, `f.` …) is run through GlossaryTerm, so
+// every infraspecific option in the Nomenclature block carries the same
+// tooltip as the value names elsewhere. A marker with no glossary entry --
+// `lusus`, should one ever appear -- renders as plain text.
+import GlossaryTerm from './GlossaryTerm.astro'
+import { rankEntryForMarker } from '../data/glossary'
+
 interface Parts {
   base: string
   marker: string
@@ -18,11 +26,18 @@ interface Props {
 }
 
 const { parts, cite } = Astro.props
+const mark = parts.marker ? rankEntryForMarker(parts.marker) : undefined
 ---
 
 <span class="nm">
   <em>{parts.base}</em>
-  {parts.marker && <span class="nm__rank">{parts.marker}</span>}
+  {
+    parts.marker && (
+      <span class="nm__rank">
+        <GlossaryTerm id={mark?.id}>{parts.marker}</GlossaryTerm>
+      </span>
+    )
+  }
   {parts.tail && <em>{parts.tail}</em>}
   {cite && <span class="nm__cite">{cite}</span>}
 </span>

@@ -35,6 +35,7 @@ export interface GlossaryEntry {
   /** Wikidata QID of the term, when one exists -- links the page to the
    *  existing ValueMark drawings/colours. */
   qid?: string
-  /** Related glossary entry ids, shown on the page. */
-  seeAlso?: string[]
+  /** Render the term upright rather than italic -- for nomenclatural rank
+   *  abbreviations (`var.`, `subsp.`, `f.`), which are never italicised. */
+  upright?: boolean
 }

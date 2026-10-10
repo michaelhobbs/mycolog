@@ -1042,9 +1042,10 @@ type="application/json">`. The 232 KB of species snapshots never reach the
   and the published sighting set, so the three cannot disagree; it is in
   `species-facets.ts`, not the component, because a chip count computed from a
   different pass than the card visibility is a silent off-by-one.
-- **Targets are sized for touch, not just for looks.** Chips, property summaries,
-  the header summary and `[ Reset ]` are all `min-height: 2.25rem` (36px) and go
-  to `2.75rem` (44px) under `@media (pointer: coarse)`. A chip is the whole point
+- **Targets are sized for touch, not just for looks.** The toggle, chips, property
+  summaries, the drawer's header row and `[ Reset ]` are all `min-height: 2.25rem`
+  (36px) and go to `2.75rem` (44px) under `@media (pointer: coarse)` (the square
+  toggle also grows its `width` so it stays square). A chip is the whole point
   of the panel; at 24px it is a miss on a phone. Selected chips **invert** —
   `--accent` fill with `--bg` text — rather than taking an accent-coloured
   outline, because a fill survives greyscale and colour-blindness the way an
@@ -1057,12 +1058,13 @@ type="application/json">`. The 232 KB of species snapshots never reach the
   and goes blank on the selected chip, so a content-sized slot re-flows all 71
   chips. `[ Reset ]` is toggled with `data-visible` → `visibility: hidden`, not
   the `hidden` attribute — `display: none` removed its box, so the first
-  selection pushed a button into the header and dropped the page by a line.
-  `visibility: hidden` also keeps it out of the tab order and the accessibility
-  tree, so an unfiltered panel shows a gap where the button will appear.
-  Anything else in the header that appears on selection (`[data-filter-names]`,
-  a section's `[data-facet-badge]`) has to be pinned by `margin-left: auto` on
-  what follows it, so its arrival does not move its neighbours.
+  selection pushed a button into the drawer's header row and dropped the page by
+  a line. `visibility: hidden` also keeps it out of the tab order and the
+  accessibility tree, so an unfiltered drawer shows a gap where the button will
+  appear. Anything else in the drawer that appears on selection
+  (`[data-filter-names]`, a section's `[data-facet-badge]`) has to be pinned by
+  `margin-left: auto` on what follows it, so its arrival does not move its
+  neighbours.
 - **`setValue(facet, value)` is the single write path**, so the URL, counts,
   cards and map always follow from one click handler. Do not add a second.
 - **`paintFacets` only ever opens a section, never closes one.** It opens a
@@ -1071,19 +1073,30 @@ type="application/json">`. The 232 KB of species snapshots never reach the
   `closedByUser`, which is populated from each section's own `toggle` event.
   Otherwise a reader's collapse would be undone by the next click anywhere else
   in the panel.
-- **The panel is a `<details>` that ships closed, and so do its eight sections.**
-  Collapsed it is one summary line, and a reader who never filters sees content
-  rather than 71 chips; the sections are closed so expanding the panel once
-  reveals a readable list of eight properties instead of every chip at once. A
-  shared `?f=…` link force-opens the panel, because arriving at a mysteriously
-  filtered page with the filter hidden is the one outcome worth avoiding.
-- **The selection is restated in words, not as a second control set.** The
-  header carries `[data-filter-names]` — the labels of the selected values,
-  comma-joined, clipped with `text-overflow: ellipsis` so a long selection cannot
-  push the count and `[ Reset ]` off the line. `paintNames()` is the only writer.
-  It is deliberately not chips: the chips inside already carry the state, and a
-  removable copy in the summary would be two places to read and two things that
-  can disagree.
+- **The collapsed state is one icon (`filter__toggle`, a funnel) sitting on top
+  of a `<details>` that ships closed — and so do its eight sections.** 71 chips
+  is a lot of chrome above the content and on /mushrooms it pushes the grid off
+  the first screen, so the initial state is just the funnel (plus `.filter__badge`,
+  the count of selected values — painted by `paintBadge()`, the only thing a
+  _closed_ panel may carry). Clicking it opens the drawer **in this same spot**:
+  `.filter[open]` gains the box (border/background/shadow) around the toggle and
+  body, so the drawer is where the header line used to be, never anchored to the
+  icon elsewhere. Inside the open drawer the toggle turns transparent and reads
+  as the close control, accent-tinted. The sections are closed too, so expanding
+  the drawer reveals a readable list of eight properties instead of every chip at
+  once. A shared `?f=…` link force-opens the panel, because arriving at a
+  mysteriously-filtered page with the filter hidden is the one outcome worth
+  avoiding. `[ Reset ]` lives **inside the body**, not the summary, so clearing
+  never toggles the drawer shut (keep it that way — the old interactive header
+  had to `preventDefault` the summary; a body button does not).
+- **The selection is restated in words, but only inside the open drawer.** The
+  drawer's header row (`filter__meta`) carries `[data-filter-names]` — the labels
+  of the selected values, comma-joined, clipped with `text-overflow: ellipsis` so
+  a long selection cannot push the count and `[ Reset ]` off the line.
+  `paintNames()` is the only writer. It is deliberately not chips: the chips
+  inside already carry the state, and a removable copy would be two places to
+  read and two things that can disagree. The collapsed icon shows only the badge
+  — never names or the results count — or the toggle would re-clutter itself.
 - **A bare `/* */` in an Astro template is not a comment** — it renders as text.
   It must be `{/* */}`, or the comment is printed on the page. `astro check` does
   not catch it, so assert it by scanning `dist` bodies for `/*`.

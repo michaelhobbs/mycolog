@@ -51,8 +51,9 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
 {
   /* The whole panel is a <details> and ships *closed*, not just the properties
     inside it: 71 chips is a lot of chrome above the content, and on /mushrooms it
-    pushes the actual grid off the first screen. Collapsed it is one summary line,
-    and a reader who never filters sees a page that looks unfiltered. */
+    pushes the actual grid off the first screen. Collapsed it is one icon -- a
+    funnel -- so an unfiltered page reads clean; the drawer that was the header
+    line appears in this same spot when the icon is clicked. */
 }
 <details
   class="filter"
@@ -63,25 +64,47 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
   data-label-sightings={t.log.sightingsCount}
   hidden
 >
-  <summary class="filter__hdr">
-    <span class="filter__title">{t.filter.title}</span>
+  <summary class="filter__toggle" aria-label={t.filter.title}>
     {
-      /* The selection in words, so a *closed* panel still says what is filtered.
-        Plain text on purpose: the chips inside carry the state, and a second set
-        of controls up here would be two places to read and two ways to disagree. */
+      /*
+      The funnel is the toggle. The badge is the only thing that can appear on
+      it: the number of selected values, so a *closed* panel still says that a
+      filter is active without restating every chip.
+    */
     }
-    <span class="filter__names" data-filter-names hidden></span>
-    <output class="filter__count" data-filter-count></output>
-    {
-      /* A real <button> so clearing is keyboard reachable; preventDefault in the
-        handler keeps the enclosing <summary> from also toggling the panel. */
-    }
-    <button type="button" class="filter__reset" data-filter-reset data-visible="false">
-      [ {t.filter.reset} ]
-    </button>
+    <svg
+      class="filter__icon"
+      viewBox="0 0 16 16"
+      width="15"
+      height="15"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path d="M14 3H2l5 6v4l2 1v-5z" fill="none" stroke="currentColor" stroke-linejoin="round"
+      ></path>
+    </svg>
+    <span class="filter__badge" data-filter-badge hidden></span>
   </summary>
 
   <div class="filter__body">
+    <div class="filter__meta">
+      {
+        /* The selection in words, now *inside* the drawer: the chips already
+          carry the state, and a second set of controls in the collapsed icon
+          would be two places to read and two ways to disagree. */
+      }
+      <span class="filter__names" data-filter-names hidden></span>
+      <output class="filter__count" data-filter-count></output>
+      {
+        /* A real <button> so clearing is keyboard reachable. It lives in the
+          body, not the summary, so clearing never toggles the drawer shut: it
+          just empties the selection and repaints. */
+      }
+      <button type="button" class="filter__reset" data-filter-reset data-visible="false">
+        [ {t.filter.reset} ]
+      </button>
+    </div>
+
     <p class="filter__hint">{t.filter.hint}</p>
 
     {
@@ -171,6 +194,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
     const resultsEl = root.querySelector<HTMLElement>('[data-filter-count]')
     const resetBtn = root.querySelector<HTMLElement>('[data-filter-reset]')
     const namesEl = root.querySelector<HTMLElement>('[data-filter-names]')
+    const badgeEl = root.querySelector<HTMLElement>('[data-filter-badge]')
 
     /*
      * Properties the reader has shut by hand.
@@ -214,10 +238,9 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
       if (!target) return
 
       if (target.closest('[data-filter-reset]')) {
-        // The clear control lives in the <summary>, so the click would also
-        // toggle the panel shut as it handled the clear.
-        event.preventDefault()
-        event.stopPropagation()
+        // Clear the selection without shutting the drawer: unlike the old
+        // header, this button is inside the body, so nothing needs preventing
+        // here -- the panel stays open so the reader can see the state reset.
         for (const key of FACET_KEYS) delete selection[key]
         writeUrl()
         apply()
@@ -312,6 +335,7 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
       paintChips()
       paintFacets()
       paintNames()
+      paintBadge()
 
       // `visibility` rather than `hidden`, so the button keeps its box and the page
       // does not jump the first time a value is selected.
@@ -380,12 +404,11 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
     }
 
     /**
-     * The selection, restated in words in the collapsed header.
+     * The selection, restated in words in the open drawer.
      *
-     * A closed panel that says only "12 of 47 species" leaves the reader unable
-     * to tell a filter from a broken page. Text, not chips: the chips inside
-     * already carry the state, and a second set of controls here would be two
-     * places to read and two things that can disagree.
+     * The reader opens the drawer to see what is filtered -- chips already say
+     * which values are on, so this text is a second, quieter reading of the same
+     * state, never a second set of controls that could disagree with the chips.
      */
     function paintNames() {
       if (!namesEl) return
@@ -397,6 +420,23 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
       }
       namesEl.textContent = labels.length > 0 ? `${labels.join(', ')} ·` : ''
       namesEl.hidden = labels.length === 0
+    }
+
+    /**
+     * The only thing the collapsed icon carries: a count of selected values.
+     *
+     * With the header-line still in the drawer, the closed state would otherwise
+     * be a bare funnel with no hint that anything is filtered. The badge is the
+     * number of chips on, summed across facets, shown only while that is > 0.
+     */
+    function paintBadge() {
+      if (!badgeEl) return
+      let n = 0
+      for (const facet of payload.facets) {
+        n += selection[facet.key]?.length ?? 0
+      }
+      badgeEl.textContent = String(n)
+      badgeEl.hidden = n === 0
     }
 
     function paintFacets() {
@@ -419,48 +459,99 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
 </script>
 
 <style>
+  /* The closed state is the toggle alone: no box, no text -- just the funnel,
+     so an unfiltered page reads as a page, not as a filter panel. The box and
+     the drawer appear in this same spot when the icon is clicked. */
   .filter {
     margin-bottom: 1.25rem;
+  }
+
+  .filter[open] {
     border: var(--border-w) solid var(--border-char);
     background: var(--bg-surface);
-    padding: 0.625rem 0.75rem;
+    padding: 0.5rem 0.75rem 0.625rem;
     box-shadow: var(--shadow);
     border-radius: var(--radius);
   }
 
   /* 2.25rem = 36px, and the coarse-pointer bump below takes touch to 44px.
-     Every control in here is a tap target: chips are the whole point of the
-     panel, and a 24px-tall chip is a miss on a phone. */
-  .filter__hdr {
-    display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
+     Every control in here is a tap target: the toggle opens the whole drawer,
+     and a 24px-tall target is a miss on a phone. */
+  .filter__toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    color: var(--fg-dim);
+    background: var(--bg-surface);
+    border: var(--border-w) solid var(--border-char);
     cursor: pointer;
     list-style: none;
-    /* Matches the property summaries, so the two levels read as one control set. */
-    min-height: 2.25rem;
-    padding: 0.25rem 0;
+    box-shadow: var(--shadow);
+    touch-action: manipulation;
+    transition:
+      color 0.1s,
+      box-shadow 0.1s;
   }
 
-  .filter__hdr::-webkit-details-marker {
+  .filter__toggle::-webkit-details-marker {
     display: none;
   }
 
-  .filter__hdr::before {
-    content: '+';
-    color: var(--fg-dim);
-    font-size: 0.6875rem;
-    width: 0.75rem;
-  }
-
-  .filter[open] > .filter__hdr::before {
-    content: '−';
-  }
-
-  .filter__title {
+  .filter__toggle:hover {
     color: var(--fg-bright);
-    font-weight: 700;
-    font-size: 0.8125rem;
+    box-shadow: var(--shadow-press);
+  }
+
+  .filter__toggle:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+
+  /* Inside the open drawer the icon is the close control, not a box of its own. */
+  .filter[open] > .filter__toggle {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    color: var(--accent-text);
+  }
+
+  .filter__icon {
+    flex: none;
+  }
+
+  /* The only thing that can rest on the collapsed icon: the number of selected
+     values, over the accent so a filtered state reads at a glance. */
+  .filter__badge {
+    position: absolute;
+    top: -0.3125rem;
+    right: -0.3125rem;
+    box-sizing: border-box;
+    min-width: 1rem;
+    height: 1rem;
+    padding: 0 0.25rem;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-radius: 0.5rem;
+    font-size: 0.625rem;
+    font-variant-numeric: tabular-nums;
+    line-height: 1rem;
+    text-align: center;
+  }
+
+  .filter__badge[hidden] {
+    display: none;
+  }
+
+  /* The drawer's header row: selection in words, the results count, [ Reset ]. */
+  .filter__meta {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 0;
   }
 
   /* The selection in words. It is allowed to shrink and clip rather than push
@@ -503,10 +594,11 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
    * Reserved, not absent.
    *
    * `hidden` (display: none) removes the box, so the first selection pushed the
-   * button into the header and shoved the page down by a line — the first click
-   * of a filter moved everything under it. `visibility: hidden` keeps the space
-   * while taking the control out of the tab order and the accessibility tree, so
-   * an unfiltered panel is unchanged apart from a gap where the button will be.
+   * button into the drawer's header row and shoved the page down by a line -- the
+   * first click of a filter moved everything under it. `visibility: hidden` keeps
+   * the space while taking the control out of the tab order and the accessibility
+   * tree, so an unfiltered drawer is unchanged apart from a gap where the button
+   * will be.
    */
   .filter__reset[data-visible='false'] {
     visibility: hidden;
@@ -692,11 +784,17 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
   }
 
   @media (pointer: coarse) {
-    .filter__hdr,
+    .filter__toggle,
+    .filter__meta,
     .filter__reset,
     .facet__summary,
     .value {
       min-height: 2.75rem;
+    }
+
+    /* The toggle is a square; keep it square when it grows. */
+    .filter__toggle {
+      width: 2.75rem;
     }
   }
 </style>

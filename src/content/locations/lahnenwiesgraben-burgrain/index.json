@@ -3,6 +3,18 @@
     "en": "Lahnenwiesgraben (Burgrain)",
     "de": "Lahnenwiesgraben (Burgrain)"
   },
+  "description": {
+    "en": "Lower course of the Lahnenwiesgraben where the mountain stream cuts through its final ravine and fans out towards the Loisach at Burgrain; shaded, damp ravine woodland of spruce, silver fir and scattered beech on mossy banks and boulders beside the brook.",
+    "de": "Unterer Lauf des Lahnenwiesgrabens, wo der Gebirgsbach seine letzte Schlucht durchschneidet und sich bei Burgrain zur Loisach hin auffächert; schattiger, feuchter Schluchtwald aus Fichte, Weißtanne und einzelnen Buchen an moosigen Ufern und Blöcken am Bach."
+  },
+  "forestType": {
+    "en": "Montane spruce–fir ravine forest",
+    "de": "Montaner Fichten-Tannen-Schluchtwald"
+  },
+  "soilType": {
+    "en": "Calcareous stream loam over limestone and moraine debris",
+    "de": "Kalkhaltiger Bachlehm über Kalkschutt und Moräne"
+  },
   "center": {
     "lat": 47.52287,
     "lng": 11.09242

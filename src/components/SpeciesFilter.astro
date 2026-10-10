@@ -103,6 +103,8 @@ const payloadJson = JSON.stringify(payload).replace(/</g, '\\u003c')
                 aria-pressed="false"
                 data-value={value.id}
                 data-facet={facet.key}
+                data-glossary={value.glossary?.id}
+                data-glossary-short={value.glossary?.short}
               >
                 <span class="value__label">{value.label}</span>
                 {/* Start at the static total; the script replaces it on load with

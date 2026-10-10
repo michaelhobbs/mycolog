@@ -1,0 +1,63 @@
+---
+// Wraps a rendered technical term so it becomes a glossary entry point.
+//
+// Renders the slotted label unchanged as a link to /glossary#id, with the
+// tooltip short definition carried in `data-glossary-short` so the shared
+// tooltip manager (GlossaryTip.astro, mounted once in Layout) can show it
+// without any client-side data bundle. A glossary miss renders the slot as
+// plain text: no dead link, no tooltip.
+//
+// The element is an <a>, not a <button>: hover/focus shows the quick tooltip
+// and activation opens the full glossary section, which gives touch users a
+// real affordance instead of depending on hover. The `:hover` rule is wrapped
+// by the PostCSS plugin like every other. Do not wrap an existing interactive
+// element with this component (a button inside a link) -- the filter chips use
+// the data attributes directly instead.
+import { entryForId, entryForQid } from '../data/glossary'
+
+interface Props {
+  /** A glossary entry id (see src/data/glossary/entries.ts). */
+  id?: string
+  /** A Wikidata morphology/ecology/edibility QID, resolved via the registry. */
+  qid?: string
+  class?: string
+}
+
+const { id, qid, class: className } = Astro.props
+const entry = id ? entryForId(id) : qid ? entryForQid(qid) : undefined
+const m = Astro.url.pathname.match(/^\/(en|de)\//)
+const locale = m ? m[1] : 'en'
+---
+
+{
+  entry ? (
+    <a
+      class:list={['gloss', className]}
+      href={`/${locale}/glossary#${entry.id}`}
+      data-glossary={entry.id}
+      data-glossary-short={entry.short}
+    >
+      <slot />
+    </a>
+  ) : (
+    <slot />
+  )
+}
+
+<style>
+  .gloss {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-underline-offset: 0.2em;
+    cursor: help;
+  }
+
+  .gloss:hover {
+    color: var(--accent-text);
+  }
+
+  .gloss:focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 2px;
+  }
+</style>

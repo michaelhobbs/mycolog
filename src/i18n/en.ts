@@ -14,6 +14,7 @@ export default {
     mushrooms: 'Mushrooms',
     locations: 'Locations',
     backlog: 'Backlog',
+    glossary: 'Glossary',
     themeMono: 'Switch to mono theme',
     themeTui: 'Switch to TUI theme',
     themeBrut: 'Switch to brutalist theme',
@@ -209,6 +210,18 @@ export default {
     empty: 'No species found',
     results: '{count} suggestions',
   },
+  glossary: {
+    title: 'Glossary',
+    subtitle: 'The terms used on the species pages, briefly explained.',
+    more: 'more',
+    structure: 'Mushroom anatomy',
+    capShape: 'Cap shape',
+    hymeniumAttachment: 'Hymenium attachment',
+    stipe: 'Stipe',
+    ecology: 'Ecology',
+    edibility: 'Edibility',
+    nomenclature: 'Nomenclature',
+  },
   locations: {
     title: 'Locations',
     subtitle: 'The areas where mushrooms have been found',
@@ -294,5 +307,6 @@ export default {
     logTitle: 'log — myco.log',
     identificationsTitle: 'identifications — myco.log',
     backlogTitle: 'backlog — myco.log',
+    glossaryTitle: 'glossary — myco.log',
   },
 } as const

@@ -2,6 +2,7 @@
 import type { Locale } from '../i18n'
 import { getTranslations, locales, defaultLocale } from '../i18n'
 import { getRelativeLocaleUrl } from 'astro:i18n'
+import GlossaryTip from '../components/GlossaryTip.astro'
 import Lightbox from '../components/Lightbox.astro'
 import SiteSearch from '../components/SiteSearch.astro'
 import '../styles/theme.css'
@@ -203,6 +204,7 @@ function localizedPath(targetLocale: Locale): string {
           {'> '}
           {t.nav.identifications}
         </a>
+        <a href={`/${locale}/glossary`} class="nav__mobile-link">{'>'} {t.nav.glossary}</a>
         <div class="nav__mobile-lang">
           {
             locales.map((loc) => (
@@ -226,19 +228,23 @@ function localizedPath(targetLocale: Locale): string {
       <div class="footer__inner">
         <span class="footer__content">
           <span>{t.footer.copyright}</span>
-          <a
-            class="footer__rss"
-            href={`/${locale}/rss.xml`}
-            rel="alternate"
-            type="application/rss+xml"
-          >
-            {t.footer.rss}
-          </a>
+          <span class="footer__links">
+            <a class="footer__rss" href={`/${locale}/glossary`}>{t.nav.glossary}</a>
+            <a
+              class="footer__rss"
+              href={`/${locale}/rss.xml`}
+              rel="alternate"
+              type="application/rss+xml"
+            >
+              {t.footer.rss}
+            </a>
+          </span>
         </span>
       </div>
     </footer>
 
     <Lightbox locale={locale} />
+    <GlossaryTip locale={locale} />
 
     <script>
       // ─── Theme toggle ───────────────────────────────────────────────
@@ -610,6 +616,12 @@ function localizedPath(targetLocale: Locale): string {
     align-items: baseline;
     justify-content: space-between;
     gap: 1.5rem;
+  }
+
+  .footer__links {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
   }
 
   .footer__rss {

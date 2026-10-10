@@ -14,6 +14,7 @@ export default {
     mushrooms: 'Pilze',
     locations: 'Orte',
     backlog: 'Backlog',
+    glossary: 'Glossar',
     themeMono: 'Zum Mono-Theme wechseln',
     themeTui: 'Zum TUI-Theme wechseln',
     themeBrut: 'Zum Brutalist-Theme wechseln',
@@ -209,6 +210,18 @@ export default {
     empty: 'Keine Art gefunden',
     results: '{count} Vorschläge',
   },
+  glossary: {
+    title: 'Glossar',
+    subtitle: 'Die Fachbegriffe der Artseiten, kurz erklärt.',
+    more: 'mehr',
+    structure: 'Anatomie des Fruchtkörpers',
+    capShape: 'Hutform',
+    hymeniumAttachment: 'Lamellenansatz',
+    stipe: 'Stiel',
+    ecology: 'Ökologie',
+    edibility: 'Genießbarkeit',
+    nomenclature: 'Nomenklatur',
+  },
   locations: {
     title: 'Orte',
     subtitle: 'Die Gebiete, in denen Pilze gefunden wurden',
@@ -294,5 +307,6 @@ export default {
     logTitle: 'protokoll — myco.log',
     identificationsTitle: 'bestimmungen — myco.log',
     backlogTitle: 'rückstand — myco.log',
+    glossaryTitle: 'glossar — myco.log',
   },
 } as const

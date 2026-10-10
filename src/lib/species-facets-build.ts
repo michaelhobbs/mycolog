@@ -7,6 +7,7 @@
 // rules.
 
 import type { CollectionEntry } from 'astro:content'
+import { glossaryByQid } from '../data/glossary'
 import { speciesWikidata } from '../data/wikidata/species'
 import type { ItemRef, WikidataSpeciesData } from '../data/wikidata/species/types'
 import { getTranslations } from '../i18n'
@@ -200,17 +201,24 @@ export function buildFilterPayload(source: FilterSource): FilterPayload {
     // `NO_DATA` chip today because every sighting carries a locationSlug, and an
     // empty bucket would be a control that can only ever match zero.
     if (!tally || tally.size === 0) continue
-    const values: FacetValueMeta[] = [...tally.entries()].map(([id, count]) => ({
-      id,
-      count,
-      none: id === NO_DATA,
-      label:
-        id === NO_DATA
-          ? t.mushrooms.noData
-          : key === 'location'
-            ? (nameOfLocation.get(id) ?? id)
-            : labelOfValue(valueLabels.get(id), locale, id),
-    }))
+    const values: FacetValueMeta[] = [...tally.entries()].map(([id, count]) => {
+      // The curated glossary only covers value terms, so a location (or the
+      // NO_DATA bucket) never carries a tooltip. `none` and `none: id===NO_DATA`
+      // are the only two shapes without a possible entry.
+      const gloss = key === 'location' || id === NO_DATA ? undefined : glossaryByQid[id]
+      return {
+        id,
+        count,
+        none: id === NO_DATA,
+        glossary: gloss ? { id: gloss.id, short: gloss.short } : undefined,
+        label:
+          id === NO_DATA
+            ? t.mushrooms.noData
+            : key === 'location'
+              ? (nameOfLocation.get(id) ?? id)
+              : labelOfValue(valueLabels.get(id), locale, id),
+      }
+    })
     // Count descending, so the common values lead; but the `NO_DATA` bucket goes
     // last regardless -- it is the largest in most facets, and leading every
     // facet with "not recorded" would read as the site's main subject.

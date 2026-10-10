@@ -68,6 +68,12 @@ export interface FacetValueMeta {
   count: number
   /** True for the synthetic `NO_DATA` value. */
   none: boolean
+  /**
+   * The tooltip source, baked in at build time for the handful of curated term
+   * values. This is plain data -- never an import of the glossary module -- so
+   * the browser script receives the two short strings and nothing else.
+   */
+  glossary?: { id: string; short: string }
 }
 
 export interface FacetMeta {

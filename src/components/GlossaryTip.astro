@@ -1,0 +1,180 @@
+---
+// The document-level glossary tooltip, mounted once in Layout like Lightbox.
+//
+// One fixed-position popover for the whole page, driven by one delegated
+// listener: every `[data-glossary]` element (GlossaryTerm links, filter chips)
+// shares it, so a species page never carries a positioned instance per value.
+// The manager reads the definition out of the element's `data-glossary-short`
+// attribute -- baked in at render time, never fetched from the glossary module
+// at runtime -- so the site ships no definitions payload.
+//
+// Interaction contract:
+//   - hover (mouse only, gated on `(hover: hover)`) shows it near the term;
+//   - focus (keyboard Tab) shows it too, with `aria-describedby` linking the
+//     term to the popover so the definition is read out;
+//   - click on a term link navigates to the glossary section, which is also
+//     what touch users get (no dependence on hover);
+//   - the popover itself is `pointer-events: none` apart from its link, so it
+//     can never intercept the tap meant for the element underneath it.
+import type { Locale } from '../i18n'
+import { getTranslations } from '../i18n'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getTranslations(locale)
+---
+
+<div class="gloss-pop" id="glossary-pop" role="tooltip" hidden>
+  <span class="gloss-pop__text" data-gloss-pop-text></span>
+  <a
+    class="gloss-pop__more"
+    data-gloss-pop-link
+    data-label={t.glossary.more}
+    href="#"
+    rel="noopener noreferrer"></a>
+</div>
+
+<script>
+  const pop = document.getElementById('glossary-pop')
+  if (pop) init(pop)
+
+  function init(pop: HTMLElement) {
+    const text = pop.querySelector('[data-gloss-pop-text]')
+    const link = pop.querySelector<HTMLAnchorElement>('[data-gloss-pop-link]')
+    const langM = location.pathname.match(/^\/(en|de)\//)
+    const locale = langM ? langM[1] : 'en'
+    const hasHover = window.matchMedia('(hover: hover)').matches
+
+    let target: HTMLElement | null = null
+    let timer = 0
+
+    const clear = () => window.clearTimeout(timer)
+
+    function show(el: HTMLElement) {
+      const id = el.getAttribute('data-glossary')
+      const short = el.getAttribute('data-glossary-short')
+      if (!id || !short || !text || !link) return
+      target = el
+      text.textContent = short
+      link.href = `/${locale}/glossary#${id}`
+      link.textContent = link.getAttribute('data-label') ?? ''
+      pop.hidden = false
+      const r = el.getBoundingClientRect()
+      const pw = pop.offsetWidth
+      const ph = pop.offsetHeight
+      let top = r.top - ph - 10
+      if (top < 10) top = r.bottom + 10
+      const left = Math.min(Math.max(r.left, 10), window.innerWidth - pw - 10)
+      pop.style.top = `${top}px`
+      pop.style.left = `${left}px`
+      el.setAttribute('aria-describedby', 'glossary-pop')
+    }
+
+    function hide() {
+      clear()
+      if (target) target.removeAttribute('aria-describedby')
+      target = null
+      pop.hidden = true
+    }
+
+    const termOf = (e: Event) =>
+      e.target instanceof Element ? e.target.closest<HTMLElement>('[data-glossary]') : null
+    const inPop = (e: Event) =>
+      e.target instanceof Element ? e.target.closest('[data-gloss-pop-link]') != null : false
+
+    // Mouse: enter shows (hover-capable screens only), leaving hides after a
+    // beat so the pointer can reach the popover's own link.
+    document.addEventListener('mouseover', (e) => {
+      const term = termOf(e)
+      clear()
+      if (term) {
+        if (hasHover) show(term)
+        return
+      }
+      if (inPop(e)) return
+      if (target) timer = window.setTimeout(hide, 160)
+    })
+
+    // Keyboard / focus: Tab onto a term shows the definition; leaving hides --
+    // unless focus is moving into the popover itself, or the pointer is leaving
+    // the document altogether. A phone has no Tab key to land on a term, but it
+    // does focus controls on tap -- so gate on the input method, or every tap
+    // on a filter chip would flash the popover on a touch screen.
+    const finePointer = window.matchMedia('(hover: hover), (pointer: fine)').matches
+    document.addEventListener('focusin', (e) => {
+      const term = termOf(e)
+      if (term && finePointer) show(term)
+    })
+    document.addEventListener('focusout', (e) => {
+      const term = termOf(e)
+      if (
+        term &&
+        target === term &&
+        !(e.relatedTarget instanceof Element && e.relatedTarget.closest('#glossary-pop'))
+      ) {
+        hide()
+      }
+    })
+
+    // Any tap closes it -- except a tap on the popover's own link, whose click
+    // must still fire (hiding it under pointerdown would swallow the tap and
+    // the navigation with it).
+    document.addEventListener('pointerdown', (e) => {
+      if (e.target instanceof Element && e.target.closest('#glossary-pop')) return
+      hide()
+    })
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hide()
+    })
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget && target) timer = window.setTimeout(hide, 200)
+    })
+    window.addEventListener('scroll', hide, { passive: true })
+    window.addEventListener('resize', hide)
+  }
+</script>
+
+<style>
+  .gloss-pop {
+    position: fixed;
+    z-index: 200;
+    max-width: 17rem;
+    background: var(--bg-surface);
+    border: var(--border-w) solid var(--border-char);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.625rem;
+    color: var(--fg);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    /* Never hit-tested except its own link: a tooltip must not swallow the
+       tap meant for whatever is underneath it. */
+    pointer-events: none;
+  }
+
+  /* An author `display` would otherwise beat the UA's [hidden] rule (the same
+     trap as .nav__theme): keep the popover display:none while hidden. */
+  .gloss-pop[hidden] {
+    display: none;
+  }
+
+  .gloss-pop__text {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .gloss-pop__more {
+    pointer-events: auto;
+    color: var(--accent-text);
+    text-decoration: none;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+  }
+
+  .gloss-pop__more:hover {
+    text-decoration: underline;
+  }
+</style>

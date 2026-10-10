@@ -18,6 +18,7 @@
 // An unknown QID renders as text with neither, never a broken image -- 4 values
 // have neither and 1 has a drawing belonging to a different value.
 import Block from './Block.astro'
+import GlossaryTerm from './GlossaryTerm.astro'
 import NameCite from './NameCite.astro'
 import Notice from './Notice.astro'
 import ValueMark from './ValueMark.astro'
@@ -85,9 +86,14 @@ const edibilityVals = (data?.edibility.values ?? []).map(val)
 
 // Rows with no data are dropped, so a species missing `spore print color` does
 // not get a row reading "Spore print — not stated", which reads as a finding.
+// `gloss` names a glossary entry for the row's *heading*; it is deliberately
+// set on only the three headings a general reader may not know (hymenium,
+// stipe, spore print) -- "Cap shape" is self-explanatory, and the value words
+// below each heading get their own tooltips via their QIDs.
 const morphRows = [
   {
     label: t.mushrooms.hymeniumType,
+    gloss: 'hymenium',
     vals: morphology?.hymeniumType ? [val(morphology.hymeniumType)] : [],
   },
   { label: t.mushrooms.capShape, vals: (morphology?.capShape ?? []).map(val) },
@@ -97,10 +103,12 @@ const morphRows = [
   },
   {
     label: t.mushrooms.stipeCharacter,
+    gloss: 'stipe',
     vals: morphology?.stipeCharacter ? [val(morphology.stipeCharacter)] : [],
   },
   {
     label: t.mushrooms.sporePrintColor,
+    gloss: 'spore-print',
     vals: morphology?.sporePrintColor ? [val(morphology.sporePrintColor)] : [],
   },
 ].filter((r) => r.vals.length > 0)
@@ -320,7 +328,9 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
     <Block title={t.mushrooms.nomenclature}>
       <div class="rows">
         <div class="row">
-          <span class="row__label">{t.mushrooms.acceptedName}</span>
+          <span class="row__label">
+            <GlossaryTerm id="accepted-name">{t.mushrooms.acceptedName}</GlossaryTerm>
+          </span>
           <span class="row__dots" />
           <span class="row__value">
             <NameCite
@@ -331,7 +341,9 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
         </div>
         {taxonomy.basionym && (
           <div class="row">
-            <span class="row__label">{t.mushrooms.basionym}</span>
+            <span class="row__label">
+              <GlossaryTerm id="basionym">{t.mushrooms.basionym}</GlossaryTerm>
+            </span>
             <span class="row__dots" />
             <span class="row__value">
               <NameCite
@@ -402,12 +414,16 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
       <div class="rows">
         {morphRows.map((row) => (
           <div class="row">
-            <span class="row__label">{row.label}</span>
+            <span class="row__label">
+              {row.gloss ? <GlossaryTerm id={row.gloss}>{row.label}</GlossaryTerm> : row.label}
+            </span>
             <span class="row__dots" />
             <span class="row__value">
               {row.vals.map((v) => (
                 <span class="value">
-                  <span class="value__text">{v.text}</span>
+                  <span class="value__text">
+                    <GlossaryTerm qid={v.qid}>{v.text}</GlossaryTerm>
+                  </span>
                   <ValueMark qid={v.qid} />
                 </span>
               ))}
@@ -431,7 +447,9 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
           <span class="row__value">
             {ecoVals.map((v) => (
               <span class="value">
-                <span class="value__text">{v.text}</span>
+                <span class="value__text">
+                  <GlossaryTerm qid={v.qid}>{v.text}</GlossaryTerm>
+                </span>
                 <ValueMark qid={v.qid} />
               </span>
             ))}
@@ -501,7 +519,9 @@ const foragingNote = t.mushrooms.foragingSourcesNote.replace('{date}', foragingS
         {edibilityVals.map((v) => (
           <li class="value">
             <ValueMark qid={v.qid} variant="chip" />
-            <span class="value__text">{v.text}</span>
+            <span class="value__text">
+              <GlossaryTerm qid={v.qid}>{v.text}</GlossaryTerm>
+            </span>
           </li>
         ))}
       </ul>

@@ -1,0 +1,170 @@
+---
+// The glossary: the curated terms used on the species pages, grouped by the
+// same categories the morphology rows and the filter panel use.
+//
+// The terms are served to the rest of the site by src/data/glossary -- the
+// tooltip manager reads the `short` definitions out of data attributes, and
+// this page renders the long `body` text. A term's anchor (`/glossary#id`) is
+// what every dotted-underlined term on a species page links to; a reader who
+// lands here from a term keeps their place because the `:target` scroll-margin
+// in Layout.css clears the sticky header.
+//
+// Illustrations reuse the same drawings and spore-print swatches as the
+// species rows (ValueMark), keyed by the entry's Wikidata QID, so the page
+// agrees with the rows it explains. Terms without a QID -- the anatomy and
+// nomenclature concepts -- deliberately carry none, and few entries share
+// already-drawn values via their `seeAlso`, so nothing is invented for looks.
+import Layout from '../../layouts/Layout.astro'
+import ValueMark from '../../components/ValueMark.astro'
+import { GLOSSARY_GROUPS, entriesInGroup, glossaryById } from '../../data/glossary'
+import type { GlossaryEntry } from '../../data/glossary'
+import { getTranslations, locales } from '../../i18n'
+import type { Locale } from '../../i18n'
+
+export function getStaticPaths() {
+  return locales.map((locale) => ({ params: { locale } }))
+}
+
+const { locale } = Astro.params as { locale: Locale }
+const t = getTranslations(locale)
+const groupLabel = (group: GlossaryEntry['group']) => t.glossary[group]
+const total = GLOSSARY_GROUPS.reduce((n, g) => n + entriesInGroup(g).length, 0)
+---
+
+<Layout title={t.meta.glossaryTitle} locale={locale}>
+  <section class="glossary-page">
+    <div class="page-header">
+      <span class="page-header__tag">╔══ {t.glossary.title}</span>
+      <span class="page-header__sub">{t.glossary.subtitle} · {total} {t.nav.glossary}</span>
+    </div>
+
+    {
+      GLOSSARY_GROUPS.map((group) => (
+        <section id={group} class="group">
+          <h2 class="group__title">{groupLabel(group)}</h2>
+          <div class="group__entries">
+            {entriesInGroup(group).map((entry) => (
+              <article id={entry.id} class="entry">
+                <div class="entry__head">
+                  <h3 class="entry__term">{entry.term}</h3>
+                  {entry.qid && <ValueMark qid={entry.qid} variant="chip" />}
+                </div>
+                <p class="entry__body">{entry.body}</p>
+                {entry.seeAlso && entry.seeAlso.length > 0 && (
+                  <p class="entry__also">
+                    {entry.seeAlso
+                      .map((id) => glossaryById[id])
+                      .filter((e): e is GlossaryEntry => !!e)
+                      .map((e) => (
+                        <a href={`#${e.id}`} class="entry__also-link">
+                          {e.term}
+                        </a>
+                      ))}
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </section>
+</Layout>
+
+<style>
+  .glossary-page {
+    padding-bottom: 2rem;
+  }
+
+  .page-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header__tag {
+    display: block;
+    color: var(--fg-bright);
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .page-header__sub {
+    color: var(--fg-dim);
+    font-size: 0.8125rem;
+  }
+
+  .group {
+    margin-bottom: 2rem;
+  }
+
+  .group__title {
+    display: inline-block;
+    color: var(--fg-dim);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--fg-muted);
+  }
+
+  .group__entries {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .entry {
+    border: var(--border-w) solid var(--border-char);
+    background: var(--bg-surface);
+    box-shadow: var(--shadow);
+    border-radius: var(--radius);
+    padding: 0.625rem 0.75rem;
+  }
+
+  /* The anchor a species-page term links to. Layout.css already clears the
+     sticky header via the global `:target` scroll-margin. */
+  .entry:target {
+    border-color: var(--accent-dim);
+  }
+
+  .entry__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .entry__term {
+    color: var(--fg-bright);
+    font-size: 0.875rem;
+    font-style: italic;
+  }
+
+  .entry__body {
+    color: var(--fg);
+    font-size: 0.8125rem;
+    line-height: 1.65;
+  }
+
+  .entry__also {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-top: 0.5rem;
+    padding-top: 0.375rem;
+    border-top: 1px dashed var(--fg-muted);
+  }
+
+  .entry__also-link {
+    color: var(--accent-text);
+    font-size: 0.6875rem;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .entry__also-link:hover {
+    text-decoration: underline;
+  }
+</style>

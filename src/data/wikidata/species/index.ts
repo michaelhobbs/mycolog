@@ -58,6 +58,7 @@ import { mucidulaMucidaQ54371399 } from './Q54371399'
 import { lycoperdonPerlatumQ545130 } from './Q545130'
 import { tricholomaSulphureumQ583388 } from './Q583388'
 import { caloboletusRadicansQ64785775 } from './Q64785775'
+import { hericiumFlagellumQ67086840 } from './Q67086840'
 import { suillellusLuridusQ752494 } from './Q752494'
 import { infundibulicybeGibbaQ765631 } from './Q765631'
 import { laetiporusSulphureusQ772098 } from './Q772098'
@@ -134,6 +135,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q545130: lycoperdonPerlatumQ545130,
   Q583388: tricholomaSulphureumQ583388,
   Q64785775: caloboletusRadicansQ64785775,
+  Q67086840: hericiumFlagellumQ67086840,
   Q752494: suillellusLuridusQ752494,
   Q765631: infundibulicybeGibbaQ765631,
   Q772098: laetiporusSulphureusQ772098,
@@ -210,6 +212,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q545130: { slug: 'lycoperdon-perlatum', scientificName: 'Lycoperdon perlatum' },
   Q583388: { slug: 'tricholoma-sulphureum', scientificName: 'Tricholoma sulphureum' },
   Q64785775: { slug: 'caloboletus-radicans', scientificName: 'Caloboletus radicans' },
+  Q67086840: { slug: 'hericium-flagellum', scientificName: 'Hericium flagellum' },
   Q752494: { slug: 'suillellus-luridus', scientificName: 'Suillellus luridus' },
   Q765631: { slug: 'infundibulicybe-gibba', scientificName: 'Infundibulicybe gibba' },
   Q772098: { slug: 'laetiporus-sulphureus', scientificName: 'Laetiporus sulphureus' },

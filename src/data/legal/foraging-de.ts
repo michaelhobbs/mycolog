@@ -11,7 +11,7 @@ export const foragingSources: ForagingSources = {
     'https://www.rote-liste-zentrum.de/wp-content/uploads/Download_RoteListe_Grosspilze_2016_20210317-1608.zip',
   redListCitation:
     'Dämmrich et al. (2016): Rote Liste der Großpilze und vorläufige Gesamtartenliste der Ständer- und Schlauchpilze (Basidiomycota und Ascomycota) Deutschlands. In: Matzke-Hajek, Hofbauer & Ludwig (Hrsg.), Rote Liste gefährdeter Tiere, Pflanzen und Pilze Deutschlands, Band 8, Naturschutz und Biologische Vielfalt 70 (8), 31-433.',
-  retrieved: '2026-10-09',
+  retrieved: '2026-10-10',
 }
 
 export const foraging: Record<string, ForagingEntry> = {
@@ -148,6 +148,10 @@ export const foraging: Record<string, ForagingEntry> = {
   'guepinia-helvelloides': {
     protection: 'notListed',
     redList: { code: 'G', matchedBy: 'synonym' },
+  },
+  'hericium-flagellum': {
+    protection: 'notListed',
+    redList: { code: '2', matchedBy: 'accepted' },
   },
   'hydnellum-peckii': {
     protection: 'notListed',

@@ -32,6 +32,7 @@ import { taxonomy as ganoderma_applanatumTaxonomy } from './ganoderma-applanatum
 import { taxonomy as gomphidius_glutinosusTaxonomy } from './gomphidius-glutinosus'
 import { taxonomy as gomphus_clavatusTaxonomy } from './gomphus-clavatus'
 import { taxonomy as guepinia_helvelloidesTaxonomy } from './guepinia-helvelloides'
+import { taxonomy as hericium_flagellumTaxonomy } from './hericium-flagellum'
 import { taxonomy as hydnellum_peckiiTaxonomy } from './hydnellum-peckii'
 import { taxonomy as hydnum_repandumTaxonomy } from './hydnum-repandum'
 import { taxonomy as hygrocybe_acutoconicaTaxonomy } from './hygrocybe-acutoconica'
@@ -99,6 +100,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'gomphidius-glutinosus': gomphidius_glutinosusTaxonomy,
   'gomphus-clavatus': gomphus_clavatusTaxonomy,
   'guepinia-helvelloides': guepinia_helvelloidesTaxonomy,
+  'hericium-flagellum': hericium_flagellumTaxonomy,
   'hydnellum-peckii': hydnellum_peckiiTaxonomy,
   'hydnum-repandum': hydnum_repandumTaxonomy,
   'hygrocybe-acutoconica': hygrocybe_acutoconicaTaxonomy,

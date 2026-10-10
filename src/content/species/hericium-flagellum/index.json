@@ -1,8 +1,38 @@
 {
   "scientificName": "Hericium flagellum",
+  "wikidataId": "Q67086840",
   "commonName": {
     "en": "",
-    "de": ""
+    "de": "Tannen-Stachelbart"
   },
-  "determiningFeatures": []
+  "determiningFeatures": [
+    {
+      "en": "White, coral-like fruit body of many repeatedly forking branches, up to 30 cm or more across, ageing cream to yellowish",
+      "de": "Weißer, korallenartiger Fruchtkörper aus vielen mehrfach gabelnden Ästen, bis über 30 cm breit, im Alter creme- bis gelblich"
+    },
+    {
+      "en": "Long white spines (up to about 20 mm) hanging in tufts from the branch tips, unlike the spines running along the branches of the Ästiger Stachelbart",
+      "de": "Lange weiße Stacheln (bis etwa 20 mm), die büschelig von den Astenden herabhängen – anders als die Stacheln entlang der Äste beim Ästigen Stachelbart"
+    },
+    {
+      "en": "Firm, fleshy white flesh with a mild, pleasant smell and taste",
+      "de": "Festes, fleischiges weißes Fleisch mit mildem, angenehmem Geruch und Geschmack"
+    },
+    {
+      "en": "Grows on dead wood of conifers, especially silver fir, on standing and fallen trunks and stumps",
+      "de": "Wächst auf Totholz von Nadelbäumen, besonders Weißtanne, an stehenden und liegenden Stämmen und Stümpfen"
+    }
+  ],
+  "habitat": {
+    "en": "Saprobe and weak parasite on conifer deadwood, above all silver fir (Abies alba), in cool, humid montane mixed forest; late summer to November",
+    "de": "Saprobiont und Schwächeparasit an Nadelholz-Totholz, vor allem Weißtanne (Abies alba), in kühlen, feuchten Bergmischwäldern; Spätsommer bis November"
+  },
+  "edibility": {
+    "en": "Edible when young, but rare and legally protected in parts of Europe; best left in place",
+    "de": "Jung essbar, aber selten und in Teilen Europas geschützt; sollte besser stehen gelassen werden"
+  },
+  "notes": {
+    "en": "Confirmed as a species distinct from Hericium coralloides by sexual incompatibility studies in 1983; strongly tied to silver fir and red-listed as threatened across much of Europe.",
+    "de": "1983 durch Kreuzungsexperimente als eigene Art vom Ästigen Stachelbart (H. coralloides) bestätigt; stark an die Weißtanne gebunden und in weiten Teilen Europas als gefährdet eingestuft."
+  }
 }

@@ -97,6 +97,14 @@ function localizedPath(targetLocale: Locale): string {
               { 'nav__link--active': currentPath.includes('/identifications') },
             ]}>[{t.nav.identifications}]</a
           >
+          <a
+            href={`/${locale}/glossary`}
+            class:list={[
+              'nav__link',
+              'nav__link--glossary',
+              { 'nav__link--active': currentPath.includes('/glossary') },
+            ]}>[{t.nav.glossary}]</a
+          >
         </div>
 
         <!--
@@ -425,6 +433,23 @@ function localizedPath(targetLocale: Locale): string {
 
   .nav__link--active {
     color: var(--accent-text);
+  }
+
+  /* The eighth link, and the reason `nav.identifications` reads `[IDs]` rather
+     than `[Identifications]` -- the shorter label is what makes room for it.
+     Measured (en, JS on, search closed): the bar's folded contents need 781px,
+     so with the nav collapsing only at 768 either label would push 769-780px
+     pages into a horizontal scrollbar; `[IDs]` brings the need down to 781 and
+     this gate removes the last 12px. The link returns at 800 (19px of slack)
+     and, below the collapse breakpoint, the mobile menu and footer carry it. */
+  .nav__link--glossary {
+    display: none;
+  }
+
+  @media (min-width: 800px) {
+    .nav__link--glossary {
+      display: inline;
+    }
   }
 
   .nav__lang {

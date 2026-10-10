@@ -15,6 +15,7 @@ export const GLOSSARY_GROUPS = [
   'capShape',
   'hymeniumAttachment',
   'stipe',
+  'sporePrintColor',
   'ecology',
   'edibility',
   'nomenclature',

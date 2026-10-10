@@ -5,10 +5,10 @@
 // pulling a content collection or a Wikidata snapshot in here would ship all of
 // it to the browser on every one of the built pages.
 //
-// Why hand-rolled rather than a library: the corpus is 58 species. Scoring it is
-// 58 x 4 folded fields -- microseconds -- and `package.json` carries four runtime
-// dependencies, all of them load-bearing. A fuzzy-search library would be the
-// first dependency here that exists only for 58 records.
+// Why hand-rolled rather than a library: the corpus is 69 species. Scoring it is
+// a few hundred folded fields -- microseconds -- and `package.json` carries four
+// runtime dependencies, all of them load-bearing. A fuzzy-search library would be
+// the first dependency here that exists only for 69 records.
 //
 // Four score layers, best first, so a hit on a whole word can never be outranked
 // by a lucky trigram overlap:
@@ -17,6 +17,12 @@
 //   2. the query *is* a field token                 ("cep", "steinpilz")
 //   3. every query token is a field token           ("boletus edulis")
 //   4. fuzzy: trigram Dice, boosted by an edit distance of 1
+//
+// Each field is multiplied by a per-field weight on top. The site's curated
+// common names are worth the most, then the scientific name, then the slug, and
+// `SearchRecord.names` (the Wikidata common names and aliases) last: aliases are
+// a fallback corpus, and one that merely overlaps a real name by trigrams must
+// not displace it -- see `NAME_WEIGHT` for the measurement that pins the bound.
 //
 // Two rules do the real work, and both are here because measurement said so
 // rather than because they are conventional:
@@ -29,9 +35,10 @@
 //   - **Every query token must clear the threshold, and the worst one decides.**
 //     Taking the best token would let "edulis zzzz" match *Boletus edulis*.
 //
-// Verified against the real 58 names by `npm run check:search`: `flignpilz`,
+// Verified against the real names by `npm run check:search`: `flignpilz`,
 // `flugelpilz`, `harmasch`, `anhansel`, `knollenblater`, `canterelle` and
-// `rohrling` all resolve; `zzzz`, `wucht` and `xymyc` all return nothing.
+// `rohrling` all resolve, as do the Wikidata aliases `fly amanita`, `wood ear`
+// and `Fliangschwammerl`; `zzzz`, `wucht` and `xymyc` all return nothing.
 
 import type { Locale } from '../i18n'
 
@@ -42,6 +49,11 @@ export interface SearchRecord {
   scientific: string
   en: string
   de: string
+  /** Common-name extras -- Wikidata `P1843` values and aliases -- beyond the
+   *  site's own `en`/`de`, so `fly amanita` or `Fliangschwammerl` find the
+   *  species the page lists them under "also known as". Never the site's own
+   *  names or the scientific name (they are fields already). Possibly empty. */
+  names: string[]
 }
 
 export interface SearchResult {
@@ -52,6 +64,11 @@ export interface SearchResult {
   label: string
   /** The name in the other locale, when it differs. */
   altLabel: string
+  /** The extra name that the query matched best in, when it beat every standard
+   *  field -- the name a reader typed that only "also known as" explains.
+   *  Empty when the match is on a standard field, so the suggestion row can
+   *  keep showing the other-locale name instead. */
+  matchedName: string
   href: string
 }
 
@@ -63,6 +80,16 @@ const ALL_TOKENS = 850
 /** A token within one edit (insert, delete, substitute or transpose) of a target. */
 const NEAR_EXACT = 0.95
 const FUZZY_SCALE = 500
+/**
+ * The multiplier applied to `SearchRecord.names` fields.
+ *
+ * Chosen from the score bands, not taste, and bounded from both sides. It must
+ * stay above 500/900 (~0.56) so an exact alias hit (900 x w) still clears the
+ * fuzzy ceiling (500) -- "wood ear" must find *Jelly ear* -- and below the
+ * measured 0.83 at which *Spargelpilz*'s trigram overlap with the typo
+ * `flugelpilz` overtakes *Fliegenpilz*'s. 0.8 sits in that window with margin.
+ */
+const NAME_WEIGHT = 0.8
 /** Dice coefficient a token must reach to count as a fuzzy match at all. */
 const MIN_DICE = 0.34
 /** Below this length a query token may only match as a substring. */
@@ -250,6 +277,14 @@ export function scoreField(foldedQuery: string, foldedField: string): number {
  * the common name should outrank the same hit on the scientific name, and a hit
  * on the slug is weaker than either because a slug is an internal handle, not a
  * name a reader would have seen on the page.
+ *
+ * `SearchRecord.names` is weighted *below* every other field (see `NAME_WEIGHT`)
+ * on purpose. Aliases are a fallback corpus, and an alias that merely overlaps a
+ * typo by trigrams must never displace a real hit on the species' own name:
+ * `Spargelpilz` is a *Coprinus comatus* alias, and an unweighted `flugelpilz`
+ * (a typo of *Fliegenpilz*) scores it above *Amanita muscaria*. The weight keeps
+ * the two apart without silencing aliases, because an exact alias hit is still
+ * far above the fuzzy ceiling -- see `NAME_WEIGHT`.
  */
 function fieldScores(foldedQuery: string, record: SearchRecord): number[] {
   return [
@@ -261,13 +296,36 @@ function fieldScores(foldedQuery: string, record: SearchRecord): number[] {
 }
 
 /**
+ * Each extra common name scored as its own field. Returns the best alongside
+ * the raw name, so `search` can tell the caller *which* name answered when one
+ * outscored every standard field -- that is the name a suggestion row must show
+ * to explain itself.
+ */
+function nameScores(foldedQuery: string, record: SearchRecord): { score: number; name: string }[] {
+  const foldedNames = record.names.map((name) => ({ name, folded: fold(name) }))
+  return foldedNames
+    .map(({ name, folded }) => ({
+      score: scoreField(foldedQuery, folded) * NAME_WEIGHT,
+      name,
+    }))
+    .sort((a, b) => b.score - a.score)
+}
+
+/**
  * Rank records against a query.
  *
  * `locale` picks which common name is the headline, but **both** are always
  * searched: a reader who types `Fliegenpilz` on the English page should find the
- * species, and gets its English name back as the suggestion. Nine of the 58
- * entries have no German name at all, so each name falls back to the other
- * rather than rendering an empty suggestion.
+ * species, and gets its English name back as the suggestion. Some entries carry
+ * no German name at all, so each name falls back to the other rather than
+ * rendering an empty suggestion.
+ *
+ * `record.names` (Wikidata common names and aliases) is searched too, with one
+ * rule over the headline: a suggestion only surfaces `matchedName` when it
+ * strictly outscored every standard field. The site's own common name is the
+ * answer a reader is heading for, so it stays the headline even when the query
+ * only touched an alias -- but a name that *explains the hit* must be visible,
+ * or the row appears with nothing lit up.
  *
  * Ties are broken alphabetically so the order is stable between keystrokes --
  * two records scoring identically would otherwise swap places on every repaint
@@ -283,9 +341,18 @@ export function search(
 
   const results: SearchResult[] = []
   for (const record of records) {
+    const standard = fieldScores(foldedQuery, record)
     let best = 0
-    for (const s of fieldScores(foldedQuery, record)) if (s > best) best = s
+    for (const s of standard) if (s > best) best = s
+
+    let matchedName = ''
+    for (const { score, name } of nameScores(foldedQuery, record)) {
+      if (score <= best) break
+      best = score
+      matchedName = name
+    }
     if (best <= 0) continue
+
     const en = record.en || record.de
     const de = record.de || record.en
     const label = locale === 'de' ? de : en
@@ -294,6 +361,7 @@ export function search(
       record,
       score: best,
       label,
+      matchedName,
       // Only worth showing when it is genuinely a different name.
       altLabel: altLabel === label ? '' : altLabel,
       href: `/${locale}/mushrooms/${record.slug}`,

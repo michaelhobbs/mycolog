@@ -1,4 +1,5 @@
 import { getCollection } from 'astro:content'
+import { speciesWikidata } from '../data/wikidata/species'
 import { buildSearchIndex } from '../lib/search-index-build'
 
 /**
@@ -17,7 +18,7 @@ import { buildSearchIndex } from '../lib/search-index-build'
  */
 export async function GET() {
   const species = await getCollection('species')
-  return new Response(JSON.stringify(buildSearchIndex(species)), {
+  return new Response(JSON.stringify(buildSearchIndex(species, speciesWikidata)), {
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
   })
 }

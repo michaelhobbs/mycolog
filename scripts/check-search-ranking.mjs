@@ -12,11 +12,15 @@
 //
 // It reads the content files directly rather than going through `getCollection`,
 // because that needs Astro's virtual module -- and because asserting against the
-// files on disk is what makes this check independent of a build having run.
+// files on disk is what makes this check independent of a build having run. The
+// Wikidata name snapshots are read the same way, one file per QID, because the
+// barrel's extensionless internal imports are not resolvable under
+// `--experimental-strip-types`; both routes load the *same* object literals, so
+// the fixture agrees with the endpoint's `speciesWikidata` barrel.
 
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 
 import { buildSearchIndex } from '../src/lib/search-index-build.ts'
 import { MAX_SUGGESTIONS, highlightRanges, search } from '../src/lib/fuzzy-search.ts'
@@ -32,7 +36,19 @@ const entries = readdirSync(speciesDir, { withFileTypes: true })
     return { id: dirent.name, data }
   })
 
-const records = buildSearchIndex(entries)
+// Same data as the endpoint's `speciesWikidata` barrel, assembled by importing
+// each generated snapshot module by its QID filename. See the header note.
+const wikidataDir = join(root, 'src', 'data', 'wikidata', 'species')
+const wikidata = {}
+for (const file of readdirSync(wikidataDir).filter((f) => /^Q\d+\.ts$/.test(f))) {
+  const module = await import(pathToFileURL(join(wikidataDir, file)).href)
+  const snapshot = Object.values(module)[0]
+  if (snapshot && typeof snapshot.wikidataId === 'string') {
+    wikidata[snapshot.wikidataId] = snapshot
+  }
+}
+
+const records = buildSearchIndex(entries, wikidata)
 const slugs = new Set(records.map((record) => record.slug))
 
 /**
@@ -81,6 +97,19 @@ const cases = [
   { query: 'wood hedgehog', locale: 'de', expect: 'hydnum-repandum' },
   { query: 'common funnel', locale: 'de', expect: 'infundibulicybe-gibba' },
 
+  // Wikidata common names and aliases -- the names the page shows under "Common
+  // names" and "also known as" -- must resolve even though they are not the
+  // site's own names. A reader who only knows a species by one of these has no
+  // other way to land on it.
+  { query: 'fly amanita', locale: 'en', expect: 'amanita-muscaria' },
+  { query: 'Fliangschwammerl', locale: 'de', expect: 'amanita-muscaria' },
+  { query: 'Fliegenschwamm', locale: 'de', expect: 'amanita-muscaria' },
+  { query: 'schafporling', locale: 'de', expect: 'albatrellus-ovinus' },
+  { query: 'wood ear', locale: 'en', expect: 'auricularia-auricula-judae' },
+  { query: 'death cap', locale: 'en', expect: 'amanita-phalloides' },
+  // An older accepted name, kept only as a Wikidata alias.
+  { query: 'Armillariella mellea', locale: 'de', expect: 'armillaria-mellea' },
+
   // Nonsense must find nothing rather than return whatever is least wrong.
   { query: 'zzzz', locale: 'de', expect: null },
   { query: 'wucht', locale: 'de', expect: null },
@@ -128,9 +157,10 @@ if (records.length !== entries.length) {
 for (const record of records) {
   if (!record.slug) shapeProblems.push(`empty slug: ${JSON.stringify(record)}`)
   if (!record.scientific) shapeProblems.push(`${record.slug}: no scientific name`)
-  // Nine entries have no German name; that is a content gap, not a bug, so this
+  // Some entries have no German name; that is a content gap, not a bug, so this
   // asserts the *fallback* rather than demanding a translation.
   if (!record.en && !record.de) shapeProblems.push(`${record.slug}: no common name at all`)
+  if (!Array.isArray(record.names)) shapeProblems.push(`${record.slug}: no names array`)
   for (const locale of ['en', 'de']) {
     const results = search(records, record[locale] || record.scientific, locale)
     if (results[0]?.record.slug !== record.slug) {
@@ -218,7 +248,7 @@ for (const { text, query, want } of highlightCases) {
 // written as "append the gap, then append the mark" with no reconciliation.
 const roundTripProblems = []
 for (const record of records) {
-  const lines = [record.scientific, record.en, record.de].filter(Boolean)
+  const lines = [record.scientific, record.en, record.de, ...record.names].filter(Boolean)
   for (const line of lines) {
     for (const query of ['a', 'boletus', 'pilz', 'xyzzy', 'muscaria']) {
       const ranges = highlightRanges(line, query)

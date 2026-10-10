@@ -561,6 +561,13 @@ const listboxId = `search-list-${locale}`
         // reading now, the name a book would use, and the name they may have
         // typed instead. The scientific line is never omitted — it is the one
         // string that is identical in both locales.
+        //
+        // The third line normally shows the name in the other locale; when the
+        // query reached the row through a Wikidata common name or alias because
+        // no standard field matched, it shows that name instead — a row that
+        // appears with nothing lit up would be unfindable-again, and the other
+        // locale's name is exactly the thing the reader did not type.
+        const altLine = result.matchedName || result.altLabel
         const name = document.createElement('span')
         name.className = 'search__name'
         scoped(name)
@@ -572,11 +579,11 @@ const listboxId = `search-list-${locale}`
         highlightInto(scientific, result.record.scientific, query)
         option.append(name, scientific)
 
-        if (result.altLabel) {
+        if (altLine) {
           const alt = document.createElement('span')
           alt.className = 'search__alt'
           scoped(alt)
-          highlightInto(alt, result.altLabel, query)
+          highlightInto(alt, altLine, query)
           option.append(alt)
         }
 
@@ -587,8 +594,8 @@ const listboxId = `search-list-${locale}`
         // spoken form, and lists all three lines in the order they are drawn.
         option.setAttribute(
           'aria-label',
-          result.altLabel
-            ? `${result.label}, ${result.record.scientific}, ${result.altLabel}`
+          altLine
+            ? `${result.label}, ${result.record.scientific}, ${altLine}`
             : `${result.label}, ${result.record.scientific}`,
         )
 

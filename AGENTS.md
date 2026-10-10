@@ -1118,10 +1118,43 @@ there is no coupling to keep in sync.
   already knows the locale, so one file serves both locales and stays cached
   when the reader switches. One of the 64 entries has no German name and one has
   no English one, so each name falls back to the other — never render an empty suggestion.
+- **The site's own names are not the whole corpus.** Each record also carries a
+  `names` array — the Wikidata `taxon common name (P1843)` values and aliases the
+  species page prints under "Common names" and "also known as" — restricted to
+  the languages the page actually shows (`en`, `de`, and Bavarian `bar`). It is
+  built in `search-index-build.ts` from the committed `speciesWikidata` snapshots
+  keyed by the entry's `wikidataId`, and deduped against the site's `en`/`de`
+  names and the scientific name so nothing is scored twice. A species with no QID
+  (or an unregenerated snapshot) just gets `[]`, which is supported. This adds
+  ~12 KB raw / ~3 KB gzipped to the index.
+  - **`names` are weighted `NAME_WEIGHT = 0.8`, below every other field, and the
+    bound is load-bearing.** An exact alias (`900 × 0.8 = 720`) must still clear
+    the fuzzy ceiling (500) so `wood ear` finds _Jelly ear_ (`auricularia-auricula-judae`);
+    but an alias that merely _overlaps a typo by trigrams_ must not displace a
+    real hit on the species' own name. Measured: _Coprinus comatus_' alias
+    `Spargelpilz` out-dices the typo `flugelpilz` against _Fliegenpilz_
+    (_Amanita muscaria_), and at weight 0.98 it won; 0.83 is the crossover, so do
+    not raise `NAME_WEIGHT` past ~0.8. Keep `{ query: 'flugelpilz', expect: 'amanita-muscaria' }`
+    in `check-search-ranking.mjs` to pin this.
+  - **A suggestion surfaces the matched name, but only when it is what found the
+    row.** `search()` returns `matchedName` for the best `names` field _only when
+    it strictly outscored every standard field_; the headline stays the site's
+    own common name. `SiteSearch` prints `matchedName` on the third line in place
+    of the other-locale `altLabel` then, so a row reached through an alias is
+    never drawn with nothing highlighted. When a standard field matched,
+    `matchedName` is `''` and the third line falls back to `altLabel` exactly as
+    before — zero change to the existing display.
+  - **The fixture loads the snapshots the same way the endpoint does, not through
+    the barrel.** `check-search-ranking.mjs` imports each `src/data/wikidata/species/Q*.ts`
+    by QID filename, because the barrel's extensionless internal imports are not
+    resolvable under `node --experimental-strip-types`; both routes read the same
+    object literals, so the fixture cannot disagree with `speciesWikidata`.
 - **`search-index-build.ts` is the only build-time half and must stay out of the
-  client bundle**, mirroring `species-facets-build.ts`. Neither of its imports is
-  a runtime import, which is also what lets `node --experimental-strip-types`
-  load it from a plain script.
+  client bundle**, mirroring `species-facets-build.ts`. Its Astro/Wikidata imports
+  are type-only (`CollectionEntry`, `SearchRecord`, `WikidataSpeciesData`), so
+  `node --experimental-strip-types` can load it from a plain script; the one value
+  import, `fold` from `./fuzzy-search.ts`, is deliberately written with the `.ts`
+  extension because Node will not resolve it otherwise.
 - **`fuzzy-search.ts` is the only half the browser runs**, and it is DOM-free so
   `scripts/check-search-ranking.mjs` can rank with the _same_ function. Run
   `npm run check:search` after touching the matcher or any species name: the

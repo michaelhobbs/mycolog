@@ -1,0 +1,23 @@
+{
+  "species": "armillaria-mellea",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.52291,
+    "lng": 11.09321
+  },
+  "images": [
+    "./images/armillaria-mellea1.jpg",
+    "./images/armillaria-mellea2.jpg",
+    "./images/armillaria-mellea3.jpg",
+    "./images/armillaria-mellea4.jpg",
+    "./images/armillaria-mellea5.jpg",
+    "./images/armillaria-mellea6.jpg"
+  ],
+  "notes": {
+    "en": "The \"bootstraps\" proudly on display.",
+    "de": ""
+  }
+}

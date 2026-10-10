@@ -1,0 +1,35 @@
+{
+  "scientificName": "Xylaria hypoxylon",
+  "wikidataId": "Q1272474",
+  "commonName": { "en": "Candlesnuff Fungus", "de": "Geweihförmige Holzkeule" },
+  "determiningFeatures": [
+    {
+      "en": "Antler- or club-shaped, flattened, often branched fruit bodies like a tiny stag's horn",
+      "de": "Geweih- bis keulenförmige, abgeflachte, oft verzweigte Fruchtkörper wie ein kleines Geweih"
+    },
+    {
+      "en": "Black, carbonaceous surface with powdery whitish-grey tips while young",
+      "de": "Schwarze, kohlige Oberfläche; die Spitzen jung weißgrau bereift"
+    },
+    {
+      "en": "The pale tips darken as the sexual fruit bodies mature",
+      "de": "Die hellen Spitzen dunkeln nach, wenn die sexuellen Fruchtkörper reifen"
+    },
+    {
+      "en": "Grows in dense tufts on dead hardwood stumps and logs",
+      "de": "Wächst in dichten Büscheln an morschen Laubholz-Stümpfen und -Stämmen"
+    }
+  ],
+  "notes": {
+    "en": "One of the most common decomposers of hardwood; the pale 'snuff' on the tips is the asexual conidial stage, which turns to sooty black as the perithecia mature.",
+    "de": "Einer der häufigsten Zersetzer des Laubholzes; der helle Belag an den Spitzen ist die ungeschlechtliche Konidienphase, die beim Reifen der Perithezien rußschwarz wird."
+  },
+  "habitat": {
+    "en": "Saprobic on dead and decaying stumps and logs of broadleaves, especially beech; also on buried wood",
+    "de": "Saprobiontisch an morschen Stümpfen und Stämmen von Laubhölzern, besonders Buche; auch an vergrabenem Holz"
+  },
+  "edibility": {
+    "en": "Inedible — too small and tough to be of any culinary value",
+    "de": "Ungenießbar — zu klein und zäh, ohne kulinarischen Wert"
+  }
+}

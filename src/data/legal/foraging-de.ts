@@ -123,6 +123,10 @@ export const foraging: Record<string, ForagingEntry> = {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },
+  'cyathus-striatus': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
   'dacrymyces-chrysopermus': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
@@ -191,6 +195,12 @@ export const foraging: Record<string, ForagingEntry> = {
   },
   'laetiporus-sulphureus': {
     protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'leccinum-scabrum': {
+    protection: 'smallQuantityExempt',
+    lawName: 'Leccinum spp.',
+    matchedBy: 'genus',
     redList: { code: '*', matchedBy: 'accepted' },
   },
   'lepiota-clypeolaria': {
@@ -288,6 +298,10 @@ export const foraging: Record<string, ForagingEntry> = {
     redList: { code: '*', matchedBy: 'synonym' },
   },
   'tricholoma-sulphureum': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'xylaria-hypoxylon': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },

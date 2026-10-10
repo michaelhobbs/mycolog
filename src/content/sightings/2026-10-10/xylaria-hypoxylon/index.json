@@ -1,0 +1,20 @@
+{
+  "species": "xylaria-hypoxylon",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.52279,
+    "lng": 11.09443
+  },
+  "images": [
+    "./images/xylaria-hypoxylon1.jpg",
+    "./images/xylaria-hypoxylon2.jpg",
+    "./images/xylaria-hypoxylon3.jpg",
+    "./images/xylaria-hypoxylon4.jpg",
+    "./images/xylaria-hypoxylon5.jpg",
+    "./images/xylaria-hypoxylon6.jpg",
+    "./images/xylaria-hypoxylon7.jpg"
+  ]
+}

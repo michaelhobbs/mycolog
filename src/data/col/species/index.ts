@@ -26,6 +26,7 @@ import { classification as cortinarius_largusClassification } from './cortinariu
 import { classification as craterellus_lutescensClassification } from './craterellus-lutescens'
 import { classification as craterellus_tubaeformisClassification } from './craterellus-tubaeformis'
 import { classification as cudoniella_acicularisClassification } from './cudoniella-acicularis'
+import { classification as cyathus_striatusClassification } from './cyathus-striatus'
 import { classification as dacrymyces_chrysopermusClassification } from './dacrymyces-chrysopermus'
 import { classification as diatrype_disciformisClassification } from './diatrype-disciformis'
 import { classification as ganoderma_applanatumClassification } from './ganoderma-applanatum'
@@ -42,6 +43,7 @@ import { classification as inocybe_sindoniaClassification } from './inocybe-sind
 import { classification as laccaria_amethystinaClassification } from './laccaria-amethystina'
 import { classification as lactarius_deterrimusClassification } from './lactarius-deterrimus'
 import { classification as laetiporus_sulphureusClassification } from './laetiporus-sulphureus'
+import { classification as leccinum_scabrumClassification } from './leccinum-scabrum'
 import { classification as lepiota_clypeolariaClassification } from './lepiota-clypeolaria'
 import { classification as lycoperdon_perlatumClassification } from './lycoperdon-perlatum'
 import { classification as macrolepiota_proceraClassification } from './macrolepiota-procera'
@@ -67,6 +69,7 @@ import { classification as thelephora_terrestrisClassification } from './theleph
 import { classification as tolypocladium_longisegmentatumClassification } from './tolypocladium-longisegmentatum'
 import { classification as tolypocladium_ophioglossoidesClassification } from './tolypocladium-ophioglossoides'
 import { classification as tricholoma_sulphureumClassification } from './tricholoma-sulphureum'
+import { classification as xylaria_hypoxylonClassification } from './xylaria-hypoxylon'
 
 export const speciesClassification: Record<string, import('../types').ColClassification> = {
   'albatrellus-ovinus': albatrellus_ovinusClassification,
@@ -94,6 +97,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'craterellus-lutescens': craterellus_lutescensClassification,
   'craterellus-tubaeformis': craterellus_tubaeformisClassification,
   'cudoniella-acicularis': cudoniella_acicularisClassification,
+  'cyathus-striatus': cyathus_striatusClassification,
   'dacrymyces-chrysopermus': dacrymyces_chrysopermusClassification,
   'diatrype-disciformis': diatrype_disciformisClassification,
   'ganoderma-applanatum': ganoderma_applanatumClassification,
@@ -110,6 +114,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'laccaria-amethystina': laccaria_amethystinaClassification,
   'lactarius-deterrimus': lactarius_deterrimusClassification,
   'laetiporus-sulphureus': laetiporus_sulphureusClassification,
+  'leccinum-scabrum': leccinum_scabrumClassification,
   'lepiota-clypeolaria': lepiota_clypeolariaClassification,
   'lycoperdon-perlatum': lycoperdon_perlatumClassification,
   'macrolepiota-procera': macrolepiota_proceraClassification,
@@ -135,4 +140,5 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'tolypocladium-longisegmentatum': tolypocladium_longisegmentatumClassification,
   'tolypocladium-ophioglossoides': tolypocladium_ophioglossoidesClassification,
   'tricholoma-sulphureum': tricholoma_sulphureumClassification,
+  'xylaria-hypoxylon': xylaria_hypoxylonClassification,
 }

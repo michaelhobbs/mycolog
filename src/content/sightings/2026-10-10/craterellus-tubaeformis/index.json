@@ -1,0 +1,17 @@
+{
+  "species": "craterellus-tubaeformis",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.5229,
+    "lng": 11.09339
+  },
+  "images": [
+    "./images/craterellus-tubaeformis1.jpg",
+    "./images/craterellus-tubaeformis2.jpg",
+    "./images/craterellus-tubaeformis3.jpg",
+    "./images/craterellus-tubaeformis4.jpg"
+  ]
+}

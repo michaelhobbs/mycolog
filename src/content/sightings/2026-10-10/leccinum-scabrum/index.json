@@ -1,0 +1,23 @@
+{
+  "species": "leccinum-scabrum",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.52271,
+    "lng": 11.09434
+  },
+  "images": [
+    "./images/leccinum-scabrum1.jpg",
+    "./images/leccinum-scabrum2.jpg",
+    "./images/leccinum-scabrum3.jpg",
+    "./images/leccinum-scabrum4.jpg",
+    "./images/leccinum-scabrum5.jpg",
+    "./images/leccinum-scabrum6.jpg",
+    "./images/leccinum-scabrum7.jpg",
+    "./images/leccinum-scabrum8.jpg",
+    "./images/leccinum-scabrum9.jpg",
+    "./images/leccinum-scabrum10.jpg"
+  ]
+}

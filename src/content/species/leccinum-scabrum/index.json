@@ -1,0 +1,35 @@
+{
+  "scientificName": "Leccinum scabrum",
+  "wikidataId": "Q628977",
+  "commonName": { "en": "Brown Birch Bolete", "de": "Gemeiner Birkenpilz" },
+  "determiningFeatures": [
+    {
+      "en": "Cap hemispherical to cushion-shaped, drier, grey-brown to warm brown, margin often overhanging the tubes",
+      "de": "Hut halbkugelig bis polsterig, trocken, graubraun bis warmbraun, Rand oft überhängend"
+    },
+    {
+      "en": "Tubes whitish to grey, later brownish-grey; pores round, bruising greyish-brown",
+      "de": "Röhren weißlich bis grau, später graubraun; Poren rund und bei Druck graubraun nachdunkelnd"
+    },
+    {
+      "en": "White stem covered in dense, coarse, dark grey-brown to blackish scabers, crowded at the top; never ringed or netted",
+      "de": "Weißer Stiel mit dichten, groben, dunkelgraubraunen bis schwärzlichen Schüppchen, oben gehäuft; ohne Ring und ohne Netz"
+    },
+    {
+      "en": "Firm white flesh that slowly turns pinkish-grey to violet-grey in the stem, especially at the base",
+      "de": "Festes weißes Fleisch, das im Stiel langsam rosa-grau bis violettgrau nachdunkelt, besonders an der Basis"
+    }
+  ],
+  "notes": {
+    "en": "A faithful mycorrhizal partner of birch; the cap colour varies greatly — the dark scabers on the white stem are the reliable feature.",
+    "de": "Treuer Mykorrhiza-Partner der Birke; die Hutfarbe variiert stark — die dunklen Schüppchen auf dem weißen Stiel sind das sichere Merkmal."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with birch in damp birch and mixed woodland, on mossy woodland edges and along paths",
+    "de": "Mykorrhiza-Partner der Birke in feuchten Birken- und Mischwäldern, an moosigen Waldrändern und Wegrändern"
+  },
+  "edibility": {
+    "en": "Good edible mushroom",
+    "de": "Guter Speisepilz"
+  }
+}

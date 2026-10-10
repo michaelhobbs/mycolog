@@ -14,6 +14,7 @@ import { tolypocladiumLongisegmentatumQ108430550 } from './Q108430550'
 import { podofomesMollisQ114852018 } from './Q114852018'
 import { suillusBovinusQ1165762 } from './Q1165762'
 import { mycenaEpipterygiaQ1183020 } from './Q1183020'
+import { xylariaHypoxylonQ1272474 } from './Q1272474'
 import { amanitaMuscariaQ131227 } from './Q131227'
 import { collybiopsisVaillantiiQ136395649 } from './Q136395649'
 import { hydnumRepandumQ13684 } from './Q13684'
@@ -22,6 +23,7 @@ import { clavulinopsisHelvolaQ138029 } from './Q138029'
 import { craterellusLutescensQ1478429 } from './Q1478429'
 import { gomphusClavatusQ1478471 } from './Q1478471'
 import { ramariaAureaQ1479710 } from './Q1479710'
+import { cyathusStriatusQ1519672 } from './Q1519672'
 import { caloceraCorneaQ175548 } from './Q175548'
 import { clathrusArcheriQ1757951 } from './Q1757951'
 import { rickenellaFibulaQ1770667 } from './Q1770667'
@@ -57,6 +59,7 @@ import { lactariusDeterrimusQ498221 } from './Q498221'
 import { mucidulaMucidaQ54371399 } from './Q54371399'
 import { lycoperdonPerlatumQ545130 } from './Q545130'
 import { tricholomaSulphureumQ583388 } from './Q583388'
+import { leccinumScabrumQ628977 } from './Q628977'
 import { caloboletusRadicansQ64785775 } from './Q64785775'
 import { hericiumFlagellumQ67086840 } from './Q67086840'
 import { suillellusLuridusQ752494 } from './Q752494'
@@ -91,6 +94,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q114852018: podofomesMollisQ114852018,
   Q1165762: suillusBovinusQ1165762,
   Q1183020: mycenaEpipterygiaQ1183020,
+  Q1272474: xylariaHypoxylonQ1272474,
   Q131227: amanitaMuscariaQ131227,
   Q136395649: collybiopsisVaillantiiQ136395649,
   Q13684: hydnumRepandumQ13684,
@@ -99,6 +103,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q1478429: craterellusLutescensQ1478429,
   Q1478471: gomphusClavatusQ1478471,
   Q1479710: ramariaAureaQ1479710,
+  Q1519672: cyathusStriatusQ1519672,
   Q175548: caloceraCorneaQ175548,
   Q1757951: clathrusArcheriQ1757951,
   Q1770667: rickenellaFibulaQ1770667,
@@ -134,6 +139,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q54371399: mucidulaMucidaQ54371399,
   Q545130: lycoperdonPerlatumQ545130,
   Q583388: tricholomaSulphureumQ583388,
+  Q628977: leccinumScabrumQ628977,
   Q64785775: caloboletusRadicansQ64785775,
   Q67086840: hericiumFlagellumQ67086840,
   Q752494: suillellusLuridusQ752494,
@@ -165,6 +171,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q114852018: { slug: 'podofomes-mollis', scientificName: 'Podofomes mollis' },
   Q1165762: { slug: 'suillus-bovinus', scientificName: 'Suillus bovinus' },
   Q1183020: { slug: 'mycena-epipterygia', scientificName: 'Mycena epipterygia' },
+  Q1272474: { slug: 'xylaria-hypoxylon', scientificName: 'Xylaria hypoxylon' },
   Q131227: { slug: 'amanita-muscaria', scientificName: 'Amanita muscaria' },
   Q136395649: { slug: 'collybiopsis-vaillantii', scientificName: 'Collybiopsis vaillantii' },
   Q13684: { slug: 'hydnum-repandum', scientificName: 'Hydnum repandum' },
@@ -173,6 +180,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q1478429: { slug: 'craterellus-lutescens', scientificName: 'Craterellus lutescens' },
   Q1478471: { slug: 'gomphus-clavatus', scientificName: 'Gomphus clavatus' },
   Q1479710: { slug: 'ramaria-aurea', scientificName: 'Ramaria aurea' },
+  Q1519672: { slug: 'cyathus-striatus', scientificName: 'Cyathus striatus' },
   Q175548: { slug: 'calocera-cornea', scientificName: 'Calocera cornea' },
   Q1757951: { slug: 'clathrus-archeri', scientificName: 'Clathrus archeri' },
   Q1770667: { slug: 'rickenella-fibula', scientificName: 'Rickenella fibula' },
@@ -211,6 +219,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q54371399: { slug: 'mucidula-mucida', scientificName: 'Mucidula mucida' },
   Q545130: { slug: 'lycoperdon-perlatum', scientificName: 'Lycoperdon perlatum' },
   Q583388: { slug: 'tricholoma-sulphureum', scientificName: 'Tricholoma sulphureum' },
+  Q628977: { slug: 'leccinum-scabrum', scientificName: 'Leccinum scabrum' },
   Q64785775: { slug: 'caloboletus-radicans', scientificName: 'Caloboletus radicans' },
   Q67086840: { slug: 'hericium-flagellum', scientificName: 'Hericium flagellum' },
   Q752494: { slug: 'suillellus-luridus', scientificName: 'Suillellus luridus' },

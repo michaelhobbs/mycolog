@@ -1,0 +1,17 @@
+{
+  "species": "hydnum-repandum",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.52297,
+    "lng": 11.09455
+  },
+  "images": [
+    "./images/hydnum-repandum1.jpg",
+    "./images/hydnum-repandum2.jpg",
+    "./images/hydnum-repandum3.jpg",
+    "./images/hydnum-repandum4.jpg"
+  ]
+}

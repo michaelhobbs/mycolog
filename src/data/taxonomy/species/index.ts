@@ -26,6 +26,7 @@ import { taxonomy as cortinarius_largusTaxonomy } from './cortinarius-largus'
 import { taxonomy as craterellus_lutescensTaxonomy } from './craterellus-lutescens'
 import { taxonomy as craterellus_tubaeformisTaxonomy } from './craterellus-tubaeformis'
 import { taxonomy as cudoniella_acicularisTaxonomy } from './cudoniella-acicularis'
+import { taxonomy as cyathus_striatusTaxonomy } from './cyathus-striatus'
 import { taxonomy as dacrymyces_chrysopermusTaxonomy } from './dacrymyces-chrysopermus'
 import { taxonomy as diatrype_disciformisTaxonomy } from './diatrype-disciformis'
 import { taxonomy as ganoderma_applanatumTaxonomy } from './ganoderma-applanatum'
@@ -42,6 +43,7 @@ import { taxonomy as inocybe_sindoniaTaxonomy } from './inocybe-sindonia'
 import { taxonomy as laccaria_amethystinaTaxonomy } from './laccaria-amethystina'
 import { taxonomy as lactarius_deterrimusTaxonomy } from './lactarius-deterrimus'
 import { taxonomy as laetiporus_sulphureusTaxonomy } from './laetiporus-sulphureus'
+import { taxonomy as leccinum_scabrumTaxonomy } from './leccinum-scabrum'
 import { taxonomy as lepiota_clypeolariaTaxonomy } from './lepiota-clypeolaria'
 import { taxonomy as lycoperdon_perlatumTaxonomy } from './lycoperdon-perlatum'
 import { taxonomy as macrolepiota_proceraTaxonomy } from './macrolepiota-procera'
@@ -67,6 +69,7 @@ import { taxonomy as thelephora_terrestrisTaxonomy } from './thelephora-terrestr
 import { taxonomy as tolypocladium_longisegmentatumTaxonomy } from './tolypocladium-longisegmentatum'
 import { taxonomy as tolypocladium_ophioglossoidesTaxonomy } from './tolypocladium-ophioglossoides'
 import { taxonomy as tricholoma_sulphureumTaxonomy } from './tricholoma-sulphureum'
+import { taxonomy as xylaria_hypoxylonTaxonomy } from './xylaria-hypoxylon'
 
 export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = {
   'albatrellus-ovinus': albatrellus_ovinusTaxonomy,
@@ -94,6 +97,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'craterellus-lutescens': craterellus_lutescensTaxonomy,
   'craterellus-tubaeformis': craterellus_tubaeformisTaxonomy,
   'cudoniella-acicularis': cudoniella_acicularisTaxonomy,
+  'cyathus-striatus': cyathus_striatusTaxonomy,
   'dacrymyces-chrysopermus': dacrymyces_chrysopermusTaxonomy,
   'diatrype-disciformis': diatrype_disciformisTaxonomy,
   'ganoderma-applanatum': ganoderma_applanatumTaxonomy,
@@ -110,6 +114,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'laccaria-amethystina': laccaria_amethystinaTaxonomy,
   'lactarius-deterrimus': lactarius_deterrimusTaxonomy,
   'laetiporus-sulphureus': laetiporus_sulphureusTaxonomy,
+  'leccinum-scabrum': leccinum_scabrumTaxonomy,
   'lepiota-clypeolaria': lepiota_clypeolariaTaxonomy,
   'lycoperdon-perlatum': lycoperdon_perlatumTaxonomy,
   'macrolepiota-procera': macrolepiota_proceraTaxonomy,
@@ -135,4 +140,5 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'tolypocladium-longisegmentatum': tolypocladium_longisegmentatumTaxonomy,
   'tolypocladium-ophioglossoides': tolypocladium_ophioglossoidesTaxonomy,
   'tricholoma-sulphureum': tricholoma_sulphureumTaxonomy,
+  'xylaria-hypoxylon': xylaria_hypoxylonTaxonomy,
 }

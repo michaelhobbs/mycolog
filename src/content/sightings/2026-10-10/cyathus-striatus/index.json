@@ -1,0 +1,22 @@
+{
+  "species": "cyathus-striatus",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-10",
+  "location": {
+    "lat": 47.52246,
+    "lng": 11.09473
+  },
+  "images": [
+    "./images/cyathus-striatus1.jpg",
+    "./images/cyathus-striatus2.jpg",
+    "./images/cyathus-striatus3.jpg",
+    "./images/cyathus-striatus4.jpg",
+    "./images/cyathus-striatus5.jpg",
+    "./images/cyathus-striatus6.jpg",
+    "./images/cyathus-striatus7.jpg",
+    "./images/cyathus-striatus8.jpg",
+    "./images/cyathus-striatus9.jpg"
+  ]
+}

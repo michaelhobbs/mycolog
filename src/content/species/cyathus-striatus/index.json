@@ -1,0 +1,35 @@
+{
+  "scientificName": "Cyathus striatus",
+  "wikidataId": "Q1519672",
+  "commonName": { "en": "Fluted Bird's Nest", "de": "Gestreifter Teuerling" },
+  "determiningFeatures": [
+    {
+      "en": "Goblet- to vase-shaped fruit bodies, narrowed towards the base and opening into a broad mouth",
+      "de": "Becher- bis vasenförmige Fruchtkörper, zur Basis verjüngt und in einen breiten Mund mündend"
+    },
+    {
+      "en": "Outer surface woolly-velvety, brown to grey-brown; inner surface strikingly longitudinally grooved and silvery-grey",
+      "de": "Außenseite samtig-filzig, braun bis graubraun; Innenseite auffällig längsgerillt und silbergrau"
+    },
+    {
+      "en": "Inside, several flat grey disc-like peridioles (the 'eggs') attached by fine elastic cords",
+      "de": "Im Inneren mehrere flache, graue, scheibenförmige Peridiolen (die „Eier“), die an feinen elastischen Fäden hängen"
+    },
+    {
+      "en": "Grows in tufts and rows on decayed wood, twigs and woody debris",
+      "de": "Wächst büschelig und reihenweise an morschem Holz, Zweigen und Holzresten"
+    }
+  ],
+  "notes": {
+    "en": "The peridioles are the spore packages: raindrops splash them out of the open cup while the elastic cord stays stuck to the substrate — an ingenious dispersal mechanism.",
+    "de": "Die Peridiolen sind die Sporenpakete: Regentropfen schleudern sie aus dem offenen Becher, während der elastische Faden am Untergrund haften bleibt — ein ausgeklügelter Verbreitungsmechanismus."
+  },
+  "habitat": {
+    "en": "On strongly decayed wood, twigs and chips of broadleaves, also on buried wood, in damp, shady places",
+    "de": "An stark zersetztem Holz, Zweigen und Holzschnitzeln von Laubgehölzen, auch an vergrabenem Holz, an feuchten, schattigen Stellen"
+  },
+  "edibility": {
+    "en": "Inedible — small, tough and of no culinary value",
+    "de": "Ungenießbar — klein, zäh und ohne kulinarischen Wert"
+  }
+}

@@ -14,8 +14,8 @@ import { colorsFor, iconUrlFor } from '../lib/wikidata-icons'
 
 interface Props {
   qid: string
-  /** `row` is the large morphology/ecology size, `chip` the compact edibility one. */
-  variant?: 'row' | 'chip'
+  /** `row` is the large morphology/ecology size, `chip` the compact edibility one, `glossary` a larger compact size for the glossary page. */
+  variant?: 'row' | 'chip' | 'glossary'
 }
 
 const { qid, variant = 'row' } = Astro.props
@@ -85,8 +85,8 @@ const label = colors.join(' ')
       src={icon}
       alt=""
       loading="lazy"
-      width={variant === 'row' ? 112 : 28}
-      height={variant === 'row' ? 112 : 28}
+      width={variant === 'row' ? 112 : variant === 'glossary' ? 140 : 28}
+      height={variant === 'row' ? 112 : variant === 'glossary' ? 140 : 28}
     />
   ) : fill ? (
     <span
@@ -121,6 +121,12 @@ const label = colors.join(' ')
   .mark--chip {
     width: 1.4rem;
     height: 1.4rem;
+  }
+
+  /* A larger size for the glossary page. */
+  .mark--glossary {
+    width: 8.75rem;
+    height: 8.75rem;
   }
 
   /* Drawn as a spore print rather than a flat chip: a cap pressed gill-down

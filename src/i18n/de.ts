@@ -15,6 +15,7 @@ export default {
     locations: 'Orte',
     backlog: 'Backlog',
     glossary: 'Glossar',
+    themeButton: 'Theme wechseln',
     themeMono: 'Zum Mono-Theme wechseln',
     themeTui: 'Zum TUI-Theme wechseln',
     themeBrut: 'Zum Brutalist-Theme wechseln',

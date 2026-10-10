@@ -15,6 +15,7 @@ export default {
     locations: 'Locations',
     backlog: 'Backlog',
     glossary: 'Glossary',
+    themeButton: 'Change theme',
     themeMono: 'Switch to mono theme',
     themeTui: 'Switch to TUI theme',
     themeBrut: 'Switch to brutalist theme',

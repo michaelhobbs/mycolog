@@ -327,25 +327,30 @@ summary)` at zero specificity, so raising it rounds controls as well as the
   white-label fork most wants to touch; they used to be hardcoded.
 - **The theme is `<html data-theme>`**: server-rendered to `tui` in
   `Layout.astro`, overridden before first paint by the inline head script from
-  `localStorage['myco-theme']`, and flipped by the header toggle
+  `localStorage['myco-theme']`, and flipped by the header theme menu
   (`.nav__theme`), which persists the choice and fires a `myco:theme`
   `CustomEvent` on `window`. The head script deliberately does **not** validate
   the stored value: an unknown theme matches no palette block and renders the
   default one, which is the correct fallback.
-- **The toggle ships `hidden`** and is revealed by Layout's bundled script once
-  it can also restore the stored choice — the same progressive-enhancement
-  contract as `.search` and `.nav__date`. It is a **cycling** switch over all
-  nine themes in `THEMES` order (`tui → mono → brut → neobrut → nord →
-gruvbox → solarized → catppuccin → phosphor`); its visible
-  label is the theme you would switch _to_, with an unknown stored value
-  resolving to `tui` first so the cycle stays deterministic. Label and
-  `aria-label` both name the action the click performs; the strings come from
-  the `data-label-{theme}` attributes keyed by `nav.themeTui`/`themeMono`/
-  `themeBrut`/`themeNeo`/`themeNord`/`themeGruvbox`/`themeSolarized`/
-  `themeCatppuccin`/`themePhosphor`. Keep the button **between `.search` and `.nav__lang`
-  with no `margin-left: auto` of its own**: the bar's free space belongs to one
-  anchor at a time (see the comment on `.nav__links`), and a third `auto` would
-  split it and strand the toggle mid-bar.
+- **The theme control ships `hidden`** and is revealed by Layout's bundled
+  script once it can also restore the stored choice — the same
+  progressive-enhancement contract as `.search` and `.nav__date`. It is an
+  **icon button** (`.nav__theme`, a half-filled disc) that opens a menu of all
+  nine themes (`.nav__theme-menu`, `data-theme-opt` rows in `tui → mono → brut →
+neobrut → nord → gruvbox → solarized → catppuccin → phosphor` order); each row
+  is a real `<button>` labelled by `nav.themeTui`/`themeMono`/`themeBrut`/
+  `themeNeo`/`themeNord`/`themeGruvbox`/`themeSolarized`/`themeCatppuccin`/
+  `themePhosphor`. Choosing a row sets `data-theme`, persists it, repaints the
+  active row and fires `myco:theme`; the current theme's row carries
+  `aria-pressed="true"` and a `▸` marker, and an unknown stored value matches no
+  row (the default palette is what is on screen). The menu opens on click and
+  closes on selection, an outside `pointerdown`, or <kbd>Esc</kbd>, with the
+  button's `aria-expanded`/`aria-haspopup` tracking it; opening moves focus onto
+  the active row and <kbd>Esc</kbd> returns it to the button. The button's
+  `aria-label` is `nav.themeButton`. Keep the wrapper **between `.search` and
+  `.nav__lang` with no `margin-left: auto` of its own**: the bar's free space
+  belongs to one anchor at a time (see the comment on `.nav__links`), and a third
+  `auto` would split it and strand the toggle mid-bar.
 - **Maps load a baked per-theme style; they never mutate paint after load.
   Thumbnails do not repaint either** (they are baked at build time).
   `src/lib/map-palette.ts` carries a base/text palette and an overlay set per
@@ -407,7 +412,7 @@ gruvbox → solarized → catppuccin → phosphor`); its visible
   position rather than hue. A white-label fork wanting a functional red edits
   the mono block.
 - Assert after touching this: built pages carry `data-theme` plus the inline
-  head script and the (hidden) cycling toggle, and the built Layout CSS
+  head script and the (hidden) theme menu button, and the built Layout CSS
   contains all nine palettes (the tui values live on the bare `:root` block,
   so only the eight `data-theme=…` selectors appear — mono, brut, neobrut,
   nord, gruvbox, solarized, catppuccin, phosphor). `dist/index.html`

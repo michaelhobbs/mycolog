@@ -69,6 +69,7 @@ import { ganodermaApplanatumQ774576 } from './Q774576'
 import { gomphidiusGlutinosusQ790626 } from './Q790626'
 import { russulaDelicaQ843177 } from './Q843177'
 import { russulaParazureaQ882885 } from './Q882885'
+import { collybiaPhyllophilaQ883698 } from './Q883698'
 import { schizophyllumCommuneQ941733 } from './Q941733'
 
 export interface SpeciesSnapshotMeta {
@@ -149,6 +150,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q790626: gomphidiusGlutinosusQ790626,
   Q843177: russulaDelicaQ843177,
   Q882885: russulaParazureaQ882885,
+  Q883698: collybiaPhyllophilaQ883698,
   Q941733: schizophyllumCommuneQ941733,
 }
 
@@ -229,6 +231,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q790626: { slug: 'gomphidius-glutinosus', scientificName: 'Gomphidius glutinosus' },
   Q843177: { slug: 'russula-delica', scientificName: 'Russula delica' },
   Q882885: { slug: 'russula-parazurea', scientificName: 'Russula parazurea' },
+  Q883698: { slug: 'collybia-phyllophila', scientificName: 'Collybia phyllophila' },
   Q941733: { slug: 'schizophyllum-commune', scientificName: 'Schizophyllum commune' },
 }
 

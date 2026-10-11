@@ -1,0 +1,12 @@
+{
+  "species": "coprinus-comatus",
+  "locationSlug": "wamberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-11",
+  "location": {
+    "lat": 47.46829,
+    "lng": 11.13386
+  },
+  "images": ["./images/coprinus-comatus1.jpg", "./images/coprinus-comatus2.jpg"]
+}

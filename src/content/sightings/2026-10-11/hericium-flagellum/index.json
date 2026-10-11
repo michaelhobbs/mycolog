@@ -1,0 +1,22 @@
+{
+  "species": "hericium-flagellum",
+  "locationSlug": "wamberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-11",
+  "location": {
+    "lat": 47.48412,
+    "lng": 11.16681
+  },
+  "images": [
+    "./images/hericium-flagellum1.jpg",
+    "./images/hericium-flagellum2.jpg",
+    "./images/hericium-flagellum3.jpg",
+    "./images/hericium-flagellum4.jpg",
+    "./images/hericium-flagellum5.jpg",
+    "./images/hericium-flagellum6.jpg",
+    "./images/hericium-flagellum7.jpg",
+    "./images/hericium-flagellum8.jpg",
+    "./images/hericium-flagellum9.jpg"
+  ]
+}

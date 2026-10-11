@@ -1,0 +1,17 @@
+{
+  "species": "ganoderma-applanatum",
+  "locationSlug": "wamberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-11",
+  "location": {
+    "lat": 47.4839,
+    "lng": 11.16742
+  },
+  "images": [
+    "./images/ganoderma-applanatum1.jpg",
+    "./images/ganoderma-applanatum2.jpg",
+    "./images/ganoderma-applanatum3.jpg",
+    "./images/ganoderma-applanatum4.jpg"
+  ]
+}

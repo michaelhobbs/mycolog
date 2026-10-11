@@ -1,0 +1,16 @@
+{
+  "species": "macrolepiota-procera",
+  "locationSlug": "wamberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-11",
+  "location": {
+    "lat": 47.47465,
+    "lng": 11.1343
+  },
+  "images": [
+    "./images/macrolepiota-procera1.jpg",
+    "./images/macrolepiota-procera2.jpg",
+    "./images/macrolepiota-procera3.jpg"
+  ]
+}

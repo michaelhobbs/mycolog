@@ -26,7 +26,9 @@ import { craterellusLutescensQ1478429 } from './Q1478429'
 import { gomphusClavatusQ1478471 } from './Q1478471'
 import { ramariaAureaQ1479710 } from './Q1479710'
 import { cyathusStriatusQ1519672 } from './Q1519672'
+import { strophariaAeruginosaQ1552361 } from './Q1552361'
 import { xylariaLongipesQ1574302 } from './Q1574302'
+import { cortinariusViolaceusQ167887 } from './Q167887'
 import { caloceraCorneaQ175548 } from './Q175548'
 import { clathrusArcheriQ1757951 } from './Q1757951'
 import { rickenellaFibulaQ1770667 } from './Q1770667'
@@ -41,6 +43,7 @@ import { cordycepsMilitarisQ2118699 } from './Q2118699'
 import { dacrymycesChrysopermusQ2152361 } from './Q2152361'
 import { hygrocybeAcutoconicaQ2255842 } from './Q2255842'
 import { macrolepiotaProceraQ243381 } from './Q243381'
+import { hydnumRufescensQ2475470 } from './Q2475470'
 import { rubroboletusSatanasQ26203731 } from './Q26203731'
 import { butyriboletusAppendiculatusQ26203735 } from './Q26203735'
 import { rubroboletusRhodoxanthusQ26203742 } from './Q26203742'
@@ -110,7 +113,9 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q1478471: gomphusClavatusQ1478471,
   Q1479710: ramariaAureaQ1479710,
   Q1519672: cyathusStriatusQ1519672,
+  Q1552361: strophariaAeruginosaQ1552361,
   Q1574302: xylariaLongipesQ1574302,
+  Q167887: cortinariusViolaceusQ167887,
   Q175548: caloceraCorneaQ175548,
   Q1757951: clathrusArcheriQ1757951,
   Q1770667: rickenellaFibulaQ1770667,
@@ -125,6 +130,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q2152361: dacrymycesChrysopermusQ2152361,
   Q2255842: hygrocybeAcutoconicaQ2255842,
   Q243381: macrolepiotaProceraQ243381,
+  Q2475470: hydnumRufescensQ2475470,
   Q26203731: rubroboletusSatanasQ26203731,
   Q26203735: butyriboletusAppendiculatusQ26203735,
   Q26203742: rubroboletusRhodoxanthusQ26203742,
@@ -191,7 +197,9 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q1478471: { slug: 'gomphus-clavatus', scientificName: 'Gomphus clavatus' },
   Q1479710: { slug: 'ramaria-aurea', scientificName: 'Ramaria aurea' },
   Q1519672: { slug: 'cyathus-striatus', scientificName: 'Cyathus striatus' },
+  Q1552361: { slug: 'stropharia-aeruginosa', scientificName: 'Stropharia aeruginosa' },
   Q1574302: { slug: 'xylaria-longipes', scientificName: 'Xylaria longipes' },
+  Q167887: { slug: 'cortinarius-violaceus', scientificName: 'Cortinarius violaceus' },
   Q175548: { slug: 'calocera-cornea', scientificName: 'Calocera cornea' },
   Q1757951: { slug: 'clathrus-archeri', scientificName: 'Clathrus archeri' },
   Q1770667: { slug: 'rickenella-fibula', scientificName: 'Rickenella fibula' },
@@ -206,6 +214,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q2152361: { slug: 'dacrymyces-chrysopermus', scientificName: 'Dacrymyces chrysospermus' },
   Q2255842: { slug: 'hygrocybe-acutoconica', scientificName: 'Hygrocybe acutoconica' },
   Q243381: { slug: 'macrolepiota-procera', scientificName: 'Macrolepiota procera' },
+  Q2475470: { slug: 'hydnum-rufescens', scientificName: 'Hydnum rufescens' },
   Q26203731: { slug: 'rubroboletus-satanas', scientificName: 'Rubroboletus satanas' },
   Q26203735: {
     slug: 'butyriboletus-appendiculatus',

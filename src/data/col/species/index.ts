@@ -24,6 +24,7 @@ import { classification as coprinopsis_pseudoniveaClassification } from './copri
 import { classification as coprinus_comatusClassification } from './coprinus-comatus'
 import { classification as cordyceps_militarisClassification } from './cordyceps-militaris'
 import { classification as cortinarius_largusClassification } from './cortinarius-largus'
+import { classification as cortinarius_violaceusClassification } from './cortinarius-violaceus'
 import { classification as craterellus_lutescensClassification } from './craterellus-lutescens'
 import { classification as craterellus_tubaeformisClassification } from './craterellus-tubaeformis'
 import { classification as cudoniella_acicularisClassification } from './cudoniella-acicularis'
@@ -37,6 +38,7 @@ import { classification as guepinia_helvelloidesClassification } from './guepini
 import { classification as hericium_flagellumClassification } from './hericium-flagellum'
 import { classification as hydnellum_peckiiClassification } from './hydnellum-peckii'
 import { classification as hydnum_repandumClassification } from './hydnum-repandum'
+import { classification as hydnum_rufescensClassification } from './hydnum-rufescens'
 import { classification as hygrocybe_acutoconicaClassification } from './hygrocybe-acutoconica'
 import { classification as hygrocybe_cantharellusClassification } from './hygrocybe-cantharellus'
 import { classification as infundibulicybe_gibbaClassification } from './infundibulicybe-gibba'
@@ -65,6 +67,7 @@ import { classification as russula_langeiClassification } from './russula-langei
 import { classification as russula_parazureaClassification } from './russula-parazurea'
 import { classification as sarcondon_imbricatusClassification } from './sarcondon-imbricatus'
 import { classification as schizophyllum_communeClassification } from './schizophyllum-commune'
+import { classification as stropharia_aeruginosaClassification } from './stropharia-aeruginosa'
 import { classification as suillellus_luridusClassification } from './suillellus-luridus'
 import { classification as suillus_bovinusClassification } from './suillus-bovinus'
 import { classification as thelephora_terrestrisClassification } from './thelephora-terrestris'
@@ -98,6 +101,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'coprinus-comatus': coprinus_comatusClassification,
   'cordyceps-militaris': cordyceps_militarisClassification,
   'cortinarius-largus': cortinarius_largusClassification,
+  'cortinarius-violaceus': cortinarius_violaceusClassification,
   'craterellus-lutescens': craterellus_lutescensClassification,
   'craterellus-tubaeformis': craterellus_tubaeformisClassification,
   'cudoniella-acicularis': cudoniella_acicularisClassification,
@@ -111,6 +115,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'hericium-flagellum': hericium_flagellumClassification,
   'hydnellum-peckii': hydnellum_peckiiClassification,
   'hydnum-repandum': hydnum_repandumClassification,
+  'hydnum-rufescens': hydnum_rufescensClassification,
   'hygrocybe-acutoconica': hygrocybe_acutoconicaClassification,
   'hygrocybe-cantharellus': hygrocybe_cantharellusClassification,
   'infundibulicybe-gibba': infundibulicybe_gibbaClassification,
@@ -139,6 +144,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'russula-parazurea': russula_parazureaClassification,
   'sarcondon-imbricatus': sarcondon_imbricatusClassification,
   'schizophyllum-commune': schizophyllum_communeClassification,
+  'stropharia-aeruginosa': stropharia_aeruginosaClassification,
   'suillellus-luridus': suillellus_luridusClassification,
   'suillus-bovinus': suillus_bovinusClassification,
   'thelephora-terrestris': thelephora_terrestrisClassification,

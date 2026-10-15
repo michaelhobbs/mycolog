@@ -24,6 +24,7 @@ import { taxonomy as coprinopsis_pseudoniveaTaxonomy } from './coprinopsis-pseud
 import { taxonomy as coprinus_comatusTaxonomy } from './coprinus-comatus'
 import { taxonomy as cordyceps_militarisTaxonomy } from './cordyceps-militaris'
 import { taxonomy as cortinarius_largusTaxonomy } from './cortinarius-largus'
+import { taxonomy as cortinarius_violaceusTaxonomy } from './cortinarius-violaceus'
 import { taxonomy as craterellus_lutescensTaxonomy } from './craterellus-lutescens'
 import { taxonomy as craterellus_tubaeformisTaxonomy } from './craterellus-tubaeformis'
 import { taxonomy as cudoniella_acicularisTaxonomy } from './cudoniella-acicularis'
@@ -37,6 +38,7 @@ import { taxonomy as guepinia_helvelloidesTaxonomy } from './guepinia-helvelloid
 import { taxonomy as hericium_flagellumTaxonomy } from './hericium-flagellum'
 import { taxonomy as hydnellum_peckiiTaxonomy } from './hydnellum-peckii'
 import { taxonomy as hydnum_repandumTaxonomy } from './hydnum-repandum'
+import { taxonomy as hydnum_rufescensTaxonomy } from './hydnum-rufescens'
 import { taxonomy as hygrocybe_acutoconicaTaxonomy } from './hygrocybe-acutoconica'
 import { taxonomy as hygrocybe_cantharellusTaxonomy } from './hygrocybe-cantharellus'
 import { taxonomy as infundibulicybe_gibbaTaxonomy } from './infundibulicybe-gibba'
@@ -65,6 +67,7 @@ import { taxonomy as russula_langeiTaxonomy } from './russula-langei'
 import { taxonomy as russula_parazureaTaxonomy } from './russula-parazurea'
 import { taxonomy as sarcondon_imbricatusTaxonomy } from './sarcondon-imbricatus'
 import { taxonomy as schizophyllum_communeTaxonomy } from './schizophyllum-commune'
+import { taxonomy as stropharia_aeruginosaTaxonomy } from './stropharia-aeruginosa'
 import { taxonomy as suillellus_luridusTaxonomy } from './suillellus-luridus'
 import { taxonomy as suillus_bovinusTaxonomy } from './suillus-bovinus'
 import { taxonomy as thelephora_terrestrisTaxonomy } from './thelephora-terrestris'
@@ -98,6 +101,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'coprinus-comatus': coprinus_comatusTaxonomy,
   'cordyceps-militaris': cordyceps_militarisTaxonomy,
   'cortinarius-largus': cortinarius_largusTaxonomy,
+  'cortinarius-violaceus': cortinarius_violaceusTaxonomy,
   'craterellus-lutescens': craterellus_lutescensTaxonomy,
   'craterellus-tubaeformis': craterellus_tubaeformisTaxonomy,
   'cudoniella-acicularis': cudoniella_acicularisTaxonomy,
@@ -111,6 +115,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'hericium-flagellum': hericium_flagellumTaxonomy,
   'hydnellum-peckii': hydnellum_peckiiTaxonomy,
   'hydnum-repandum': hydnum_repandumTaxonomy,
+  'hydnum-rufescens': hydnum_rufescensTaxonomy,
   'hygrocybe-acutoconica': hygrocybe_acutoconicaTaxonomy,
   'hygrocybe-cantharellus': hygrocybe_cantharellusTaxonomy,
   'infundibulicybe-gibba': infundibulicybe_gibbaTaxonomy,
@@ -139,6 +144,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'russula-parazurea': russula_parazureaTaxonomy,
   'sarcondon-imbricatus': sarcondon_imbricatusTaxonomy,
   'schizophyllum-commune': schizophyllum_communeTaxonomy,
+  'stropharia-aeruginosa': stropharia_aeruginosaTaxonomy,
   'suillellus-luridus': suillellus_luridusTaxonomy,
   'suillus-bovinus': suillus_bovinusTaxonomy,
   'thelephora-terrestris': thelephora_terrestrisTaxonomy,

@@ -115,6 +115,10 @@ export const foraging: Record<string, ForagingEntry> = {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },
+  'cortinarius-violaceus': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
   'craterellus-lutescens': {
     protection: 'notListed',
     redList: { code: '3', matchedBy: 'accepted' },
@@ -166,6 +170,10 @@ export const foraging: Record<string, ForagingEntry> = {
     redList: { code: '3', matchedBy: 'accepted' },
   },
   'hydnum-repandum': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'hydnum-rufescens': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },
@@ -282,6 +290,10 @@ export const foraging: Record<string, ForagingEntry> = {
     redList: { code: '3', matchedBy: 'accepted' },
   },
   'schizophyllum-commune': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'stropharia-aeruginosa': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },

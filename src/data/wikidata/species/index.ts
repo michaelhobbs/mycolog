@@ -6,8 +6,10 @@ import { tolypocladiumOphioglossoidesQ104084181 } from './Q104084181'
 import { inocybeSindoniaQ10431265 } from './Q10431265'
 import { coprinopsisPseudoniveaQ10459215 } from './Q10459215'
 import { diatrypeDisciformisQ10474236 } from './Q10474236'
+import { boletopsisLeucomelaenaQ10508078 } from './Q10508078'
 import { mycenaViridimarginataQ10510028 } from './Q10510028'
 import { cortinariusLargusQ10570865 } from './Q10570865'
+import { podoscyphaPetalodesQ10635242 } from './Q10635242'
 import { russulaLangeiQ10658025 } from './Q10658025'
 import { cudoniellaAcicularisQ10682294 } from './Q10682294'
 import { tolypocladiumLongisegmentatumQ108430550 } from './Q108430550'
@@ -24,6 +26,7 @@ import { craterellusLutescensQ1478429 } from './Q1478429'
 import { gomphusClavatusQ1478471 } from './Q1478471'
 import { ramariaAureaQ1479710 } from './Q1479710'
 import { cyathusStriatusQ1519672 } from './Q1519672'
+import { xylariaLongipesQ1574302 } from './Q1574302'
 import { caloceraCorneaQ175548 } from './Q175548'
 import { clathrusArcheriQ1757951 } from './Q1757951'
 import { rickenellaFibulaQ1770667 } from './Q1770667'
@@ -87,8 +90,10 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q10431265: inocybeSindoniaQ10431265,
   Q10459215: coprinopsisPseudoniveaQ10459215,
   Q10474236: diatrypeDisciformisQ10474236,
+  Q10508078: boletopsisLeucomelaenaQ10508078,
   Q10510028: mycenaViridimarginataQ10510028,
   Q10570865: cortinariusLargusQ10570865,
+  Q10635242: podoscyphaPetalodesQ10635242,
   Q10658025: russulaLangeiQ10658025,
   Q10682294: cudoniellaAcicularisQ10682294,
   Q108430550: tolypocladiumLongisegmentatumQ108430550,
@@ -105,6 +110,7 @@ export const speciesWikidata: Record<string, WikidataSpeciesData> = {
   Q1478471: gomphusClavatusQ1478471,
   Q1479710: ramariaAureaQ1479710,
   Q1519672: cyathusStriatusQ1519672,
+  Q1574302: xylariaLongipesQ1574302,
   Q175548: caloceraCorneaQ175548,
   Q1757951: clathrusArcheriQ1757951,
   Q1770667: rickenellaFibulaQ1770667,
@@ -162,8 +168,10 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q10431265: { slug: 'inocybe-sindonia', scientificName: 'Inocybe sindonia' },
   Q10459215: { slug: 'coprinopsis-pseudonivea', scientificName: 'Coprinopsis pseudonivea' },
   Q10474236: { slug: 'diatrype-disciformis', scientificName: 'Diatrype disciformis' },
+  Q10508078: { slug: 'boletopsis-leucomelaena', scientificName: 'Boletopsis leucomelaena' },
   Q10510028: { slug: 'mycena-viridimarginata', scientificName: 'Mycena viridimarginata' },
   Q10570865: { slug: 'cortinarius-largus', scientificName: 'Cortinarius largus' },
+  Q10635242: { slug: 'podoscypha-petalodes', scientificName: 'Podoscypha petalodes' },
   Q10658025: { slug: 'russula-langei', scientificName: 'Russula langei' },
   Q10682294: { slug: 'cudoniella-acicularis', scientificName: 'Cudoniella acicularis' },
   Q108430550: {
@@ -183,6 +191,7 @@ export const speciesWikidataMeta: Record<string, SpeciesSnapshotMeta> = {
   Q1478471: { slug: 'gomphus-clavatus', scientificName: 'Gomphus clavatus' },
   Q1479710: { slug: 'ramaria-aurea', scientificName: 'Ramaria aurea' },
   Q1519672: { slug: 'cyathus-striatus', scientificName: 'Cyathus striatus' },
+  Q1574302: { slug: 'xylaria-longipes', scientificName: 'Xylaria longipes' },
   Q175548: { slug: 'calocera-cornea', scientificName: 'Calocera cornea' },
   Q1757951: { slug: 'clathrus-archeri', scientificName: 'Clathrus archeri' },
   Q1770667: { slug: 'rickenella-fibula', scientificName: 'Rickenella fibula' },

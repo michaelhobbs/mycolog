@@ -4,6 +4,9 @@
 // modules under src/data/col/species. This snapshot is the site's source of
 // truth for classification: Wikidata's `parent taxon` chain is deliberately
 // not used. Snapshots are committed, never fetched at build time.
+//
+// Only species without a committed snapshot are fetched by default; `--force`
+// refetches every species.
 import { promises as fs, existsSync, readdirSync } from 'fs'
 import path from 'path'
 import { format } from 'prettier'
@@ -203,9 +206,19 @@ async function main() {
   const manifest = []
   const skipped = []
   const matched = { 'wikidata-p10585': 0, 'name-search': 0, 'index-fungorum': 0 }
+  let reused = 0
 
   for (let i = 0; i < species.length; i++) {
     const { slug, scientificName, wikidataId } = species[i]
+    // A committed classification is left alone unless --force: re-resolving
+    // every species against ChecklistBank is a request per candidate id for a
+    // row that has not changed.
+    const outFile = path.join(OUT_DIR, `${slug}.ts`)
+    if (!FORCE && existsSync(outFile)) {
+      manifest.push({ slug })
+      reused++
+      continue
+    }
     try {
       const resolved = await resolveSpecies(
         {
@@ -242,7 +255,6 @@ async function main() {
       matched[matchedBy] += 1
 
       const ts = await format(renderTs(slug, data), PRETTIER)
-      const outFile = path.join(OUT_DIR, `${slug}.ts`)
       if (FORCE || !existsSync(outFile) || (await fs.readFile(outFile, 'utf8')) !== ts) {
         if (!DRY) await fs.writeFile(outFile, ts)
       }
@@ -273,6 +285,7 @@ async function main() {
   }
 
   log(`[col] wrote ${manifest.length} classification files, skipped ${skipped.length}`)
+  if (reused) log(`[col] reused ${reused} existing snapshots (pass --force to refetch)`)
   log(
     `[col] matched: ${matched['wikidata-p10585']} via P10585, ` +
       `${matched['name-search']} via search, ${matched['index-fungorum']} via Index Fungorum`,

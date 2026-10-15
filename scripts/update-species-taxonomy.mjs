@@ -3,6 +3,9 @@
 // full name history) from Index Fungorum ("Species Fungorum") via ChecklistBank for
 // each species and emit typed TS modules under src/data/taxonomy/species.
 // Generated files are not meant to be edited by hand; snapshots are committed.
+//
+// Only species without a committed snapshot are fetched by default; `--force`
+// refetches every species.
 import { promises as fs, existsSync, readdirSync } from 'fs'
 import path from 'path'
 import { format } from 'prettier'
@@ -183,9 +186,19 @@ async function main() {
   const refCache = new Map()
   const attachYear = makeYearAttacher(datasetKey, refCache, log)
   const taxonNames = await loadTaxonNames()
+  let reused = 0
 
   for (let i = 0; i < species.length; i++) {
     const { slug, scientificName, wikidataId } = species[i]
+    // A committed snapshot is left alone unless --force is given: re-fetching
+    // every species' full nomenclatural history costs dozens of requests to
+    // fetch data that has not moved.
+    const outFile = path.join(OUT_DIR, `${slug}.ts`)
+    if (!FORCE && existsSync(outFile)) {
+      manifest.push({ slug })
+      reused++
+      continue
+    }
     try {
       const wdTaxonName = wikidataId ? taxonNames.get(wikidataId) : undefined
       const expected = wdTaxonName || scientificName
@@ -283,7 +296,6 @@ async function main() {
       }
 
       const ts = await format(renderTaxonomyTs(slug, taxonomyData), PRETTIER)
-      const outFile = path.join(OUT_DIR, `${slug}.ts`)
       if (FORCE || !existsSync(outFile) || (await fs.readFile(outFile, 'utf8')) !== ts) {
         await fs.writeFile(outFile, ts)
       }
@@ -304,6 +316,7 @@ async function main() {
   await fs.writeFile(path.join(OUT_DIR, 'index.ts'), idx)
 
   log(`[col] wrote ${manifest.length} taxonomy files, skipped ${skipped.length}`)
+  if (reused) log(`[col] reused ${reused} existing snapshots (pass --force to refetch)`)
   if (skipped.length) log(`[col] skipped: ${skipped.join(', ')}`)
 }
 

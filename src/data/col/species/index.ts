@@ -7,6 +7,7 @@ import { classification as amanita_pantherinaClassification } from './amanita-pa
 import { classification as amanita_phalloidesClassification } from './amanita-phalloides'
 import { classification as armillaria_melleaClassification } from './armillaria-mellea'
 import { classification as auricularia_auricula_judaeClassification } from './auricularia-auricula-judae'
+import { classification as boletopsis_leucomelaenaClassification } from './boletopsis-leucomelaena'
 import { classification as boletus_edulisClassification } from './boletus-edulis'
 import { classification as butyriboletus_appendiculatusClassification } from './butyriboletus-appendiculatus'
 import { classification as caloboletus_calopusClassification } from './caloboletus-calopus'
@@ -53,6 +54,7 @@ import { classification as mycena_viridimarginataClassification } from './mycena
 import { classification as otidea_alutaceaClassification } from './otidea-alutacea'
 import { classification as panellus_mitisClassification } from './panellus-mitis'
 import { classification as podofomes_mollisClassification } from './podofomes-mollis'
+import { classification as podoscypha_petalodesClassification } from './podoscypha-petalodes'
 import { classification as pseudohydnum_gelatinosumClassification } from './pseudohydnum-gelatinosum'
 import { classification as ramaria_aureaClassification } from './ramaria-aurea'
 import { classification as rickenella_fibulaClassification } from './rickenella-fibula'
@@ -70,6 +72,7 @@ import { classification as tolypocladium_longisegmentatumClassification } from '
 import { classification as tolypocladium_ophioglossoidesClassification } from './tolypocladium-ophioglossoides'
 import { classification as tricholoma_sulphureumClassification } from './tricholoma-sulphureum'
 import { classification as xylaria_hypoxylonClassification } from './xylaria-hypoxylon'
+import { classification as xylaria_longipesClassification } from './xylaria-longipes'
 
 export const speciesClassification: Record<string, import('../types').ColClassification> = {
   'albatrellus-ovinus': albatrellus_ovinusClassification,
@@ -78,6 +81,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'amanita-phalloides': amanita_phalloidesClassification,
   'armillaria-mellea': armillaria_melleaClassification,
   'auricularia-auricula-judae': auricularia_auricula_judaeClassification,
+  'boletopsis-leucomelaena': boletopsis_leucomelaenaClassification,
   'boletus-edulis': boletus_edulisClassification,
   'butyriboletus-appendiculatus': butyriboletus_appendiculatusClassification,
   'caloboletus-calopus': caloboletus_calopusClassification,
@@ -124,6 +128,7 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'otidea-alutacea': otidea_alutaceaClassification,
   'panellus-mitis': panellus_mitisClassification,
   'podofomes-mollis': podofomes_mollisClassification,
+  'podoscypha-petalodes': podoscypha_petalodesClassification,
   'pseudohydnum-gelatinosum': pseudohydnum_gelatinosumClassification,
   'ramaria-aurea': ramaria_aureaClassification,
   'rickenella-fibula': rickenella_fibulaClassification,
@@ -141,4 +146,5 @@ export const speciesClassification: Record<string, import('../types').ColClassif
   'tolypocladium-ophioglossoides': tolypocladium_ophioglossoidesClassification,
   'tricholoma-sulphureum': tricholoma_sulphureumClassification,
   'xylaria-hypoxylon': xylaria_hypoxylonClassification,
+  'xylaria-longipes': xylaria_longipesClassification,
 }

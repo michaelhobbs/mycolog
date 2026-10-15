@@ -7,6 +7,7 @@ import { taxonomy as amanita_pantherinaTaxonomy } from './amanita-pantherina'
 import { taxonomy as amanita_phalloidesTaxonomy } from './amanita-phalloides'
 import { taxonomy as armillaria_melleaTaxonomy } from './armillaria-mellea'
 import { taxonomy as auricularia_auricula_judaeTaxonomy } from './auricularia-auricula-judae'
+import { taxonomy as boletopsis_leucomelaenaTaxonomy } from './boletopsis-leucomelaena'
 import { taxonomy as boletus_edulisTaxonomy } from './boletus-edulis'
 import { taxonomy as butyriboletus_appendiculatusTaxonomy } from './butyriboletus-appendiculatus'
 import { taxonomy as caloboletus_calopusTaxonomy } from './caloboletus-calopus'
@@ -53,6 +54,7 @@ import { taxonomy as mycena_viridimarginataTaxonomy } from './mycena-viridimargi
 import { taxonomy as otidea_alutaceaTaxonomy } from './otidea-alutacea'
 import { taxonomy as panellus_mitisTaxonomy } from './panellus-mitis'
 import { taxonomy as podofomes_mollisTaxonomy } from './podofomes-mollis'
+import { taxonomy as podoscypha_petalodesTaxonomy } from './podoscypha-petalodes'
 import { taxonomy as pseudohydnum_gelatinosumTaxonomy } from './pseudohydnum-gelatinosum'
 import { taxonomy as ramaria_aureaTaxonomy } from './ramaria-aurea'
 import { taxonomy as rickenella_fibulaTaxonomy } from './rickenella-fibula'
@@ -70,6 +72,7 @@ import { taxonomy as tolypocladium_longisegmentatumTaxonomy } from './tolypoclad
 import { taxonomy as tolypocladium_ophioglossoidesTaxonomy } from './tolypocladium-ophioglossoides'
 import { taxonomy as tricholoma_sulphureumTaxonomy } from './tricholoma-sulphureum'
 import { taxonomy as xylaria_hypoxylonTaxonomy } from './xylaria-hypoxylon'
+import { taxonomy as xylaria_longipesTaxonomy } from './xylaria-longipes'
 
 export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = {
   'albatrellus-ovinus': albatrellus_ovinusTaxonomy,
@@ -78,6 +81,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'amanita-phalloides': amanita_phalloidesTaxonomy,
   'armillaria-mellea': armillaria_melleaTaxonomy,
   'auricularia-auricula-judae': auricularia_auricula_judaeTaxonomy,
+  'boletopsis-leucomelaena': boletopsis_leucomelaenaTaxonomy,
   'boletus-edulis': boletus_edulisTaxonomy,
   'butyriboletus-appendiculatus': butyriboletus_appendiculatusTaxonomy,
   'caloboletus-calopus': caloboletus_calopusTaxonomy,
@@ -124,6 +128,7 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'otidea-alutacea': otidea_alutaceaTaxonomy,
   'panellus-mitis': panellus_mitisTaxonomy,
   'podofomes-mollis': podofomes_mollisTaxonomy,
+  'podoscypha-petalodes': podoscypha_petalodesTaxonomy,
   'pseudohydnum-gelatinosum': pseudohydnum_gelatinosumTaxonomy,
   'ramaria-aurea': ramaria_aureaTaxonomy,
   'rickenella-fibula': rickenella_fibulaTaxonomy,
@@ -141,4 +146,5 @@ export const speciesTaxonomy: Record<string, import('../types').TaxonomyData> = 
   'tolypocladium-ophioglossoides': tolypocladium_ophioglossoidesTaxonomy,
   'tricholoma-sulphureum': tricholoma_sulphureumTaxonomy,
   'xylaria-hypoxylon': xylaria_hypoxylonTaxonomy,
+  'xylaria-longipes': xylaria_longipesTaxonomy,
 }

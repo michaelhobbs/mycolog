@@ -11,7 +11,7 @@ export const foragingSources: ForagingSources = {
     'https://www.rote-liste-zentrum.de/wp-content/uploads/Download_RoteListe_Grosspilze_2016_20210317-1608.zip',
   redListCitation:
     'Dämmrich et al. (2016): Rote Liste der Großpilze und vorläufige Gesamtartenliste der Ständer- und Schlauchpilze (Basidiomycota und Ascomycota) Deutschlands. In: Matzke-Hajek, Hofbauer & Ludwig (Hrsg.), Rote Liste gefährdeter Tiere, Pflanzen und Pilze Deutschlands, Band 8, Naturschutz und Biologische Vielfalt 70 (8), 31-433.',
-  retrieved: '2026-10-10',
+  retrieved: '2026-10-15',
 }
 
 export const foraging: Record<string, ForagingEntry> = {
@@ -40,6 +40,10 @@ export const foraging: Record<string, ForagingEntry> = {
   'auricularia-auricula-judae': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'boletopsis-leucomelaena': {
+    protection: 'notListed',
+    redList: { code: '2', matchedBy: 'accepted' },
   },
   'boletus-edulis': {
     protection: 'smallQuantityExempt',
@@ -239,6 +243,9 @@ export const foraging: Record<string, ForagingEntry> = {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'synonym' },
   },
+  'podoscypha-petalodes': {
+    protection: 'notListed',
+  },
   'pseudohydnum-gelatinosum': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
@@ -302,6 +309,10 @@ export const foraging: Record<string, ForagingEntry> = {
     redList: { code: '*', matchedBy: 'accepted' },
   },
   'xylaria-hypoxylon': {
+    protection: 'notListed',
+    redList: { code: '*', matchedBy: 'accepted' },
+  },
+  'xylaria-longipes': {
     protection: 'notListed',
     redList: { code: '*', matchedBy: 'accepted' },
   },

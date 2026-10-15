@@ -15,7 +15,10 @@
 //
 // Usage:
 //   npm run update-species-wikidata
-//   node scripts/fetch-species-wikidata.mjs --force   # rewrite unchanged files
+//   node scripts/fetch-species-wikidata.mjs --force   # refetch every species
+//
+// Only species without a committed snapshot are fetched by default, so adding a
+// species costs one entity lookup rather than one per species.
 import { promises as fs, existsSync, readdirSync, readFileSync } from 'fs'
 import path from 'path'
 import { format } from 'prettier'
@@ -373,7 +376,7 @@ function renderIndex(manifest) {
 }
 
 async function main() {
-  const species = []
+  const all = []
   const skipped = []
   for (const slug of readdirSync(SPECIES_DIR).sort()) {
     const file = path.join(SPECIES_DIR, slug, 'index.json')
@@ -383,17 +386,28 @@ async function main() {
       skipped.push(slug)
       continue
     }
-    species.push({ slug, scientificName: doc.scientificName, qid: doc.wikidataId })
+    all.push({ slug, scientificName: doc.scientificName, qid: doc.wikidataId })
   }
 
-  console.log(`[species-data] ${species.length} species with a QID, ${skipped.length} skipped`)
+  // Only species without a committed snapshot are fetched; `--force` refetches
+  // everyone. The manifest and the prune set still cover every species, so the
+  // barrel and stale-file cleanup stay correct on an incremental run.
+  const species = FORCE ? all : all.filter((s) => !existsSync(path.join(OUT_DIR, `${s.qid}.ts`)))
+  const reused = all.length - species.length
+
+  console.log(
+    `[species-data] ${species.length} species to fetch, ${reused} already have a snapshot, ` +
+      `${skipped.length} skipped`,
+  )
   if (skipped.length) console.log(`[species-data] no wikidataId: ${skipped.join(', ')}`)
 
-  console.log(`[species-data] fetching ${species.length} entities`)
-  const ents = await entities(
-    species.map((s) => s.qid),
-    { props: 'labels|descriptions|aliases|claims', languages: LANGS.join('|') },
-  )
+  if (species.length) console.log(`[species-data] fetching ${species.length} entities`)
+  const ents = species.length
+    ? await entities(
+        species.map((s) => s.qid),
+        { props: 'labels|descriptions|aliases|claims', languages: LANGS.join('|') },
+      )
+    : new Map()
 
   // One batched label lookup for every item-valued property, so the emitted TS
   // carries readable labels and consumers never need a second request.
@@ -414,13 +428,19 @@ async function main() {
   ]) {
     for (const { qid } of species) for (const q of qidsOf(ents.get(qid), pid)) referenced.add(q)
   }
-  console.log(`[species-data] resolving ${referenced.size} referenced item labels`)
-  const labels = await labelMap([...referenced], { languages: LANGS })
+  let labels = new Map()
+  if (species.length) {
+    console.log(`[species-data] resolving ${referenced.size} referenced item labels`)
+    labels = await labelMap([...referenced], { languages: LANGS })
+  }
 
   // Formatter URLs come from the identifier properties themselves (P1630), so a
   // source that reorganises its site does not leave 47 dead links behind.
-  console.log('[species-data] reading formatter URLs from the identifier properties')
-  const formatters = await formatterUrls(Object.keys(EXTERNAL_IDS))
+  let formatters = new Map()
+  if (species.length) {
+    console.log('[species-data] reading formatter URLs from the identifier properties')
+    formatters = await formatterUrls(Object.keys(EXTERNAL_IDS))
+  }
 
   await fs.mkdir(OUT_DIR, { recursive: true })
   const unknown = new Map()
@@ -442,7 +462,9 @@ async function main() {
 
   // Prune snapshots for species that no longer exist, so a deleted species does
   // not leave a stale module behind that still typechecks and still gets bundled.
-  const keep = new Set([...species.map((s) => `${s.qid}.ts`), 'index.ts', 'types.ts'])
+  // Uses `all`, not the fetched subset, or an incremental run would delete every
+  // snapshot it did not just rewrite.
+  const keep = new Set([...all.map((s) => `${s.qid}.ts`), 'index.ts', 'types.ts'])
   let pruned = 0
   for (const name of await fs.readdir(OUT_DIR)) {
     if (!name.endsWith('.ts') || keep.has(name)) continue
@@ -450,7 +472,7 @@ async function main() {
     pruned++
   }
 
-  const manifest = species.map((s) => ({ ...s }))
+  const manifest = all.map((s) => ({ ...s }))
   const indexText = await format(renderIndex(manifest), opts)
   const indexPath = path.join(OUT_DIR, 'index.ts')
   if (FORCE || !existsSync(indexPath) || (await fs.readFile(indexPath, 'utf8')) !== indexText) {

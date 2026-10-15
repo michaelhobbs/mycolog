@@ -14,6 +14,7 @@
 // Usage:
 //   npm run resolve-species-wikidata
 //   node scripts/resolve-species-wikidata.mjs --write
+//   node scripts/resolve-species-wikidata.mjs --write --all   # re-check every entry
 import { promises as fs } from 'fs'
 import path from 'path'
 import { WD_API, ROOT, sleep, fetchRetry, entities, qidsOf, stringsOf } from './lib/wikidata.mjs'
@@ -22,6 +23,10 @@ const SPECIES_DIR = path.join(ROOT, 'src', 'content', 'species')
 const CACHE_FILE = path.join(ROOT, '.cache', 'wikidata-species-search.json')
 
 const WRITE = process.argv.includes('--write')
+// By default only species without a QID are searched -- re-resolving every
+// entry costs a search request and a batch of claims for data that has not
+// changed. --all restores the full sweep.
+const ALL = process.argv.includes('--all')
 const SPECIES_QID = 'Q7432'
 
 async function readSpecies() {
@@ -81,8 +86,13 @@ function upsert(text, key, value) {
 }
 
 async function main() {
-  const { found, empty } = await readSpecies()
-  console.log(`[species] ${found.length} species entries, ${empty.length} empty dirs`)
+  const { found: allFound, empty } = await readSpecies()
+  const found = ALL ? allFound : allFound.filter((s) => !s.doc.wikidataId)
+  const alreadyResolved = allFound.length - found.length
+  console.log(
+    `[species] ${found.length} species to resolve, ${alreadyResolved} already have a QID` +
+      (ALL ? ' (--all: including them)' : ''),
+  )
 
   if (empty.length) console.log(`[species] empty (no index.json): ${empty.join(', ')}`)
 

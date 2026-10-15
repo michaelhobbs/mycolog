@@ -1,0 +1,25 @@
+{
+  "species": "stropharia-aeruginosa",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48281,
+    "lng": 11.15041
+  },
+  "images": [
+    "./images/stropharia-aeruginosa1.jpg",
+    "./images/stropharia-aeruginosa2.jpg",
+    "./images/stropharia-aeruginosa3.jpg",
+    "./images/stropharia-aeruginosa4.jpg",
+    "./images/stropharia-aeruginosa5.jpg",
+    "./images/stropharia-aeruginosa6.jpg",
+    "./images/stropharia-aeruginosa7.jpg",
+    "./images/stropharia-aeruginosa8.jpg",
+    "./images/stropharia-aeruginosa9.jpg",
+    "./images/stropharia-aeruginosa10.jpg",
+    "./images/stropharia-aeruginosa11.jpg",
+    "./images/stropharia-aeruginosa12.jpg"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "species": "hydnum-rufescens",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48278,
+    "lng": 11.15028
+  },
+  "images": [
+    "./images/hydnum-rufescens1.jpg",
+    "./images/hydnum-rufescens2.jpg",
+    "./images/hydnum-rufescens3.jpg"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "scientificName": "Stropharia aeruginosa",
+  "wikidataId": "Q1552361",
+  "commonName": {
+    "en": "Verdigris Agaric",
+    "de": "Grünspan-Träuschling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Vivid blue-green, glutinous cap 2–8 cm across, sprinkled with white veil remnants that sit as flecks near the margin",
+      "de": "Leuchtend blaugrüner, schleimiger Hut 2–8 cm breit, mit weißen Velumresten, die am Rand als Flocken sitzen"
+    },
+    {
+      "en": "The colour fades or washes off with rain and age, turning yellow-ochre — old caps lose the blue-green entirely",
+      "de": "Die Farbe verblasst oder wird durch Regen und Alter abgewaschen und wird gelb-ocker — alte Hüte verlieren das Blaugrün völlig"
+    },
+    {
+      "en": "White stem of even thickness with a fragile dark ring; below the ring fine white scales",
+      "de": "Weißer Stiel gleicher Stärke mit zerbrechlichem dunklem Ring; unter dem Ring feine weiße Schüppchen"
+    },
+    {
+      "en": "Gills white at first, then clay-brown, often with a paler edge; spore print brownish-purple",
+      "de": "Lamellen anfangs weiß, dann lehm-braun, oft mit hellerem Rand; Sporenpulver bräunlich-violett"
+    }
+  ],
+  "notes": {
+    "en": "Told apart from lookalikes by the slimy blue-green cap with white flecks combined with the dark ring on the white stem. Reported poisonous in many guidebooks, while a few European sources call it edible — with the toxic constituents undescribed and the effects unclear, it is not worth collecting. Wood-chip mulch in gardens and parks is its favourite substrate.",
+    "de": "Von Verwechslungspartnern durch den schleimigen blaugrünen Hut mit weißen Flocken in Verbindung mit dem dunklen Ring auf weißem Stiel zu unterscheiden. In vielen Bestimmungsbüchern als giftig gemeldet, wenige europäische Quellen nennen ihn essbar — da die Gifte unbekannt und die Wirkung unklar bleiben, lohnt das Sammeln nicht. Lieblingsstandort ist Rindenmulch in Gärten und Parks."
+  },
+  "habitat": {
+    "en": "Saprotrophic on rotting wood, wood-chip mulch, grassy woodland, roadside verges and parks, spring to autumn",
+    "de": "Saprobiont auf faulendem Holz, Rindenmulch, grasigen Wäldern, Wegrändern und Parks, Frühling bis Herbst"
+  },
+  "edibility": {
+    "en": "Not recommended — widely reported as poisonous, though a few European guides list it as edible with a mildly spicy taste; treat as inedible",
+    "de": "Nicht empfohlen — in vielen Bestimmungsbüchern als giftig gemeldet, wenige europäische Quellen führen ihn als essbar mit leicht würzigem Geschmack; als ungenießbar behandeln"
+  }
+}

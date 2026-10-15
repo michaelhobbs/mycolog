@@ -1,0 +1,20 @@
+{
+  "species": "pseudohydnum-gelatinosum",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.4831,
+    "lng": 11.15179
+  },
+  "images": [
+    "./images/pseudohydnum-gelatinosum1.jpg",
+    "./images/pseudohydnum-gelatinosum2.jpg",
+    "./images/pseudohydnum-gelatinosum3.jpg",
+    "./images/pseudohydnum-gelatinosum4.jpg",
+    "./images/pseudohydnum-gelatinosum5.jpg",
+    "./images/pseudohydnum-gelatinosum6.jpg",
+    "./images/pseudohydnum-gelatinosum7.jpg"
+  ]
+}

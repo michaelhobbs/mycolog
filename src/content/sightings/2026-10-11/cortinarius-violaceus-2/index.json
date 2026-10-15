@@ -1,0 +1,12 @@
+{
+  "species": "cortinarius-violaceus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48225,
+    "lng": 11.1515
+  },
+  "images": ["./images/cortinarius-violaceus1.jpg"]
+}

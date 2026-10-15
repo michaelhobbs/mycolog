@@ -1,0 +1,42 @@
+{
+  "scientificName": "Cortinarius violaceus",
+  "wikidataId": "Q167887",
+  "commonName": {
+    "en": "Violet Webcap",
+    "de": "Dunkelvioletter Schleierling"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Deep violet to blue-black cap up to 15 cm across, dry and covered in fine downy scales — neither sticky nor slimy",
+      "de": "Dunkelvioletter bis blauschwarzer Hut bis 15 cm breit, trocken und fein filzig geschuppt — weder klebrig noch schleimig"
+    },
+    {
+      "en": "Violet flesh throughout, darker just below the cap skin and in the stem",
+      "de": "Durchgehend violettes Fleisch, unter der Huthaut und im Stiel dunkler"
+    },
+    {
+      "en": "Dark violet gills, broadly attached, turning purplish-brown with age",
+      "de": "Dunkelviolette, breit angewachsene Lamellen, die mit dem Alter bräunlich-violett werden"
+    },
+    {
+      "en": "Stem the same violet colour, woolly-fibrillose, often with a swollen base and a web-like veil that soon vanishes",
+      "de": "Stiel in der gleichen Violettfarbe, wollig-faserig, oft mit verdickter Basis und einem spinnwebartigen Velum, das schnell verschwindet"
+    },
+    {
+      "en": "Mild taste and a faint smell reminiscent of cedar wood",
+      "de": "Milder Geschmack und schwacher, zedernholzartiger Geruch"
+    }
+  ],
+  "notes": {
+    "en": "The type species of the webcaps, and one of the few violet mushrooms that is neither sticky nor slimy. Widespread but nowhere common in Europe and listed as endangered in the British Isles; it is prized for its beauty rather than its flavour, and the number of similarly coloured webcaps makes it a risky species to collect for the table.",
+    "de": "Die Typusart der Schleierlinge und einer der wenigen violetten Pilze, die weder klebrig noch schleimig sind. Weit verbreitet, aber nirgendwo häufig in Europa und in den Britischen Inseln gefährdet; geschätzt wird er wegen seiner Farbe, nicht wegen des Geschmacks, und die Menge ähnlicher Schleierlinge macht das Sammeln riskant."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with birch, oak, beech and spruce in old deciduous and coniferous forest, usually on acidic soil, late summer to autumn",
+    "de": "Mykorrhiza-Partner von Birke, Eiche, Buche und Fichte in altem Laub- und Nadelwald, bevorzugt saure Böden, Spätsommer bis Herbst"
+  },
+  "edibility": {
+    "en": "Edible at best mediocre — some guides call it inedible and report a bitter aftertaste when cooked",
+    "de": "Essbar, aber nur mittelmäßig — manche Bestimmungsbücher führen ihn als ungenießbar und melden beim Kochen bitteren Nachgeschmack"
+  }
+}

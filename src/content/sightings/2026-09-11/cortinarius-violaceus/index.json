@@ -1,0 +1,12 @@
+{
+  "species": "cortinarius-violaceus",
+  "locationSlug": "katzenstein",
+  "authors": ["conor"],
+  "dateSpotted": "2026-09-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.4754,
+    "lng": 11.06709
+  },
+  "images": ["./images/cortinarius-violaceus1.jpg"]
+}

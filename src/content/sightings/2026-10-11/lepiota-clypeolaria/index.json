@@ -1,0 +1,16 @@
+{
+  "species": "lepiota-clypeolaria",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.4838,
+    "lng": 11.15826
+  },
+  "images": [
+    "./images/lepiota-clypeolaria1.jpg",
+    "./images/lepiota-clypeolaria2.jpg",
+    "./images/lepiota-clypeolaria3.jpg"
+  ]
+}

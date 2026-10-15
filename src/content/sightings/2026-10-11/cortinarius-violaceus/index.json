@@ -1,0 +1,28 @@
+{
+  "species": "cortinarius-violaceus",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-11",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.4828,
+    "lng": 11.15053
+  },
+  "images": [
+    "./images/cortinarius-violaceus1.jpg",
+    "./images/cortinarius-violaceus2.jpg",
+    "./images/cortinarius-violaceus3.jpg",
+    "./images/cortinarius-violaceus4.jpg",
+    "./images/cortinarius-violaceus5.jpg",
+    "./images/cortinarius-violaceus6.jpg",
+    "./images/cortinarius-violaceus7.jpg",
+    "./images/cortinarius-violaceus8.jpg",
+    "./images/cortinarius-violaceus9.jpg",
+    "./images/cortinarius-violaceus10.jpg",
+    "./images/cortinarius-violaceus11.jpg",
+    "./images/cortinarius-violaceus12.jpg",
+    "./images/cortinarius-violaceus13.jpg",
+    "./images/cortinarius-violaceus14.jpg",
+    "./images/cortinarius-violaceus15.jpg"
+  ]
+}

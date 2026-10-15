@@ -1,0 +1,42 @@
+{
+  "scientificName": "Hydnum rufescens",
+  "wikidataId": "Q2475470",
+  "commonName": {
+    "en": "Terracotta Hedgehog",
+    "de": "Rotgelber Stoppelpilz"
+  },
+  "determiningFeatures": [
+    {
+      "en": "Terracotta to apricot-orange cap, 3–8 cm across — smaller, more regularly shaped and deeper coloured than the Wood Hedgehog (Hydnum repandum)",
+      "de": "Ziegel- bis aprikosenorangefarbener Hut, 3–8 cm breit — kleiner, regelmäßiger geformt und kräftiger gefärbt als der Semmel-Stoppelpilz (Hydnum repandum)"
+    },
+    {
+      "en": "Soft spines (teeth) instead of gills under the cap, cream to pale orange and 3–5 mm long",
+      "de": "Weiche Stacheln statt Lamellen unter dem Hut, cremefarben bis blassorange und 3–5 mm lang"
+    },
+    {
+      "en": "White to pale ochre stem, centrally attached and firm; flesh white to yellowish",
+      "de": "Weißer bis blassocker Stiel, mittig angewachsen und fest; Fleisch weiß bis gelblich"
+    },
+    {
+      "en": "Pleasant fruity smell and mild taste that turns slightly bitter with age",
+      "de": "Angenehm fruchtiger Geruch und milder Geschmack, der im Alter leicht bitter wird"
+    },
+    {
+      "en": "Cream-coloured spore print",
+      "de": "Cremefarbenes Sporenpulver"
+    }
+  ],
+  "notes": {
+    "en": "A smaller, deeper-coloured twin of the Wood Hedgehog, once treated as a variety of it. Both are safe to collect: no mushroom with soft spines under the cap is poisonous. The firm flesh makes this a good keeper and market mushroom — pick young specimens, because older ones often turn bitter.",
+    "de": "Ein kleinerer, kräftiger gefärbter Zwilling des Semmel-Stoppelpilzes, der früher als dessen Varietät galt. Beide sind sicher zu sammeln: Kein Pilz mit weichen Stacheln unter dem Hut ist giftig. Das feste Fleisch macht ihn zu einem guten Lager- und Marktpilz — junge Exemplare sammeln, da ältere oft bitter werden."
+  },
+  "habitat": {
+    "en": "Mycorrhizal with spruce, pine, beech and oak in coniferous, deciduous and mixed forest, summer to autumn",
+    "de": "Mykorrhiza-Partner von Fichte, Kiefer, Buche und Eiche in Nadel-, Laub- und Mischwald, Sommer bis Herbst"
+  },
+  "edibility": {
+    "en": "Edible — mild and pleasant when young, older caps often slightly bitter",
+    "de": "Essbar — jung mild und angenehm, ältere Hüte oft leicht bitter"
+  }
+}

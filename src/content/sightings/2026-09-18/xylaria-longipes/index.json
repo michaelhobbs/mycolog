@@ -1,0 +1,18 @@
+{
+  "species": "xylaria-longipes",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-18",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48404,
+    "lng": 11.158
+  },
+  "images": [
+    "./images/xylaria-longipes1.jpg",
+    "./images/xylaria-longipes2.jpg",
+    "./images/xylaria-longipes3.jpg",
+    "./images/xylaria-longipes4.jpg",
+    "./images/xylaria-longipes5.jpg"
+  ]
+}

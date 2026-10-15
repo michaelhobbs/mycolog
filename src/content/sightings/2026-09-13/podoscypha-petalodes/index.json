@@ -1,0 +1,21 @@
+{
+  "species": "podoscypha-petalodes",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-13",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48296,
+    "lng": 11.14969
+  },
+  "images": [
+    "./images/podoscypha-petalodes1.jpg",
+    "./images/podoscypha-petalodes2.jpg",
+    "./images/podoscypha-petalodes3.jpg",
+    "./images/podoscypha-petalodes4.jpg"
+  ],
+  "notes": {
+    "en": "Alt. Zoned Rosette (Podoscypha multizonata). However, it seems here there are individual \"glasses\" rather than multi-layered concentric rosettes.",
+    "de": ""
+  }
+}

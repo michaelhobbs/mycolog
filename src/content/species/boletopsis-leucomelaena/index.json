@@ -1,0 +1,39 @@
+{
+  "scientificName": "Boletopsis leucomelaena",
+  "wikidataId": "Q10508078",
+  "commonName": { "en": "Black false bolete", "de": "Schwarzweißer Rußporling" },
+  "determiningFeatures": [
+    {
+      "en": "A fleshy, annual polypore with the habit of a bolete, but the tube layer cannot be peeled from the cap flesh",
+      "de": "Ein fleischiger, einjähriger Porling mit Boletenhabitus, dessen Röhrenschicht sich nicht vom Hutfleisch lösen lässt"
+    },
+    {
+      "en": "Cap dark grey to black-brown, smooth and matt, with a faint magenta tinge when fresh; young specimens paler towards the margin",
+      "de": "Hut dunkelgrau bis schwarzbraun, glatt und matt, frisch mit leicht magentafarbenem Schimmer; jung zum Rand hin heller"
+    },
+    {
+      "en": "Pore surface creamy white, taking on a pale lilac-grey or smoky grey-brown tint, bruising pinkish; pores 1–3 per mm, slightly decurrent",
+      "de": "Porenschicht cremeweiß, später blass lilagrau oder rauchgraubraun, bei Verletzung rosa anlaufend; Poren 1–3 pro mm, leicht herablaufend"
+    },
+    {
+      "en": "All parts stain a permanent sepia-black with potassium hydroxide (KOH)",
+      "de": "Alle Teile färben sich mit Kalilauge (KOH) dauerhaft sepiaschwarz"
+    },
+    {
+      "en": "Central to eccentric stem with a whitish apex and orange mycelium at the base; fruit bodies grow in dense clusters",
+      "de": "Zentraler bis seitlicher Stiel mit weißlicher Spitze und oranger Myzelbasis; Fruchtkörper wachsen in dichten Büscheln"
+    }
+  ],
+  "notes": {
+    "en": "Easily confused with the pine-associated Boletopsis grisea, which is silvery grey, more compact and less fragile, and prefers dry sandy heath. Despite its bolete-like look, DNA places the genus near the toothed fungi such as Sarcodon.",
+    "de": "Leicht mit der an Kiefern gebundenen Boletopsis grisea zu verwechseln, die silbrig grau, kompakter und weniger zerbrechlich ist und trockene Sandheiden bevorzugt. Trotz des Boletenhabitus stellt die DNA die Gattung in die Nähe der Stachelinge wie Sarcodon."
+  },
+  "habitat": {
+    "en": "Ectomycorrhizal with spruce (Picea), in rich, grassy or mossy conifer forest on mull or raw humus; late summer to autumn",
+    "de": "Ektomykorrhiza mit Fichte (Picea) in nährstoffreichen, gras- oder moosreichen Nadelwäldern auf Mull oder Rohhumus; Spätsommer bis Herbst"
+  },
+  "edibility": {
+    "en": "Inedible — mild at first but with a soapy, slowly bitter aftertaste; rare, so leave it in place",
+    "de": "Ungenießbar — anfangs mild, doch mit seifigem, langsam bitterem Nachgeschmack; selten, daher stehen lassen"
+  }
+}

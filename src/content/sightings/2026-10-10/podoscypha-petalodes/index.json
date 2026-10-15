@@ -1,0 +1,18 @@
+{
+  "species": "podoscypha-petalodes",
+  "locationSlug": "lahnenwiesgraben-burgrain",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-10",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.52296,
+    "lng": 11.09448
+  },
+  "images": [
+    "./images/podoscypha-petalodes1.jpg",
+    "./images/podoscypha-petalodes2.jpg",
+    "./images/podoscypha-petalodes3.jpg",
+    "./images/podoscypha-petalodes4.jpg",
+    "./images/podoscypha-petalodes5.jpg"
+  ]
+}

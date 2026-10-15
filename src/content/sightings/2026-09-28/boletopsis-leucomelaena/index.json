@@ -1,0 +1,21 @@
+{
+  "species": "boletopsis-leucomelaena",
+  "locationSlug": "wamberg-approach",
+  "authors": ["michael"],
+  "dateSpotted": "2026-09-28",
+  "dateIdentified": "2026-10-15",
+  "location": {
+    "lat": 47.48304,
+    "lng": 11.14984
+  },
+  "images": [
+    "./images/boletopsis-leucomelaena1.jpg",
+    "./images/boletopsis-leucomelaena2.jpg",
+    "./images/boletopsis-leucomelaena3.jpg",
+    "./images/boletopsis-leucomelaena4.jpg"
+  ],
+  "notes": {
+    "en": "Alt. Boletopsis grisea",
+    "de": ""
+  }
+}

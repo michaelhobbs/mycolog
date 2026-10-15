@@ -1,0 +1,35 @@
+{
+  "scientificName": "Podoscypha petalodes",
+  "wikidataId": "Q10635242",
+  "commonName": { "en": "Wine Glass Fungus", "de": "" },
+  "determiningFeatures": [
+    {
+      "en": "Thin, leathery, funnel- or trumpet-shaped fruit bodies (\"wine glasses\"), often fused into a rosette, with wavy, lobed rims",
+      "de": "Dünne, lederartige, trichter- oder trompetenförmige Fruchtkörper („Weingläser“), oft zu einer Rosette verwachsen, mit welligen, gelappten Rändern"
+    },
+    {
+      "en": "Upper surface orange-brown to chestnut with concentric zones, paler at the edge; underside smooth, cream to grey",
+      "de": "Oberseite orangebraun bis kastanienbraun mit konzentrischen Zonen, zum Rand heller; Unterseite glatt, creme bis grau"
+    },
+    {
+      "en": "Underside is smooth and fertile like a Stereum — there are no pores, gills or spines",
+      "de": "Unterseite glatt und fertil wie bei einem Schichtpilz — keine Poren, Lamellen oder Stacheln"
+    },
+    {
+      "en": "Grows from dead or buried wood, often at the base of living trees; tough and papery when dry",
+      "de": "Wächst an totem oder vergrabenem Holz, oft am Fuß lebender Bäume; trocken zäh und papierartig"
+    }
+  ],
+  "notes": {
+    "en": "A mainly tropical and subtropical species whose stacked funnels are unmistakable in shape; it was originally described as Stereum petalodes. The similar Podoscypha multizonata of warmer parts of Europe forms flatter, more clearly zoned rosettes.",
+    "de": "Eine vorwiegend tropische und subtropische Art, deren aufgeschichtete Trichter in der Form unverwechselbar sind; ursprünglich als Stereum petalodes beschrieben. Die ähnliche Podoscypha multizonata wärmerer Teile Europas bildet flachere, deutlicher gezonte Rosetten."
+  },
+  "habitat": {
+    "en": "Saprobic on dead or buried wood and roots, frequently at the base of trees; in Europe mostly in warm, sheltered places such as botanic gardens and greenhouses",
+    "de": "Saprobiont an totem oder vergrabenem Holz und Wurzeln, häufig am Stammfuß; in Europa vor allem an warmen, geschützten Stellen wie Botanischen Gärten und Gewächshäusern"
+  },
+  "edibility": {
+    "en": "Inedible — thin, leathery and tough",
+    "de": "Ungenießbar — dünn, lederartig und zäh"
+  }
+}

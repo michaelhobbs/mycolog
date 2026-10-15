@@ -1,0 +1,39 @@
+{
+  "scientificName": "Xylaria longipes",
+  "wikidataId": "Q1574302",
+  "commonName": { "en": "Dead Moll's Fingers", "de": "Langstielige Ahorn-Holzkeule" },
+  "determiningFeatures": [
+    {
+      "en": "Slender, black, club-shaped fruit bodies (2.5–6.5 cm tall) on a distinct narrow sterile stalk, usually unbranched",
+      "de": "Schlanke, schwarze, keulenförmige Fruchtkörper (2,5–6,5 cm hoch) auf einem deutlichen, schmalen sterilen Stiel, meist unverzweigt"
+    },
+    {
+      "en": "Surface greyish to brownish when young and dusted with pale conidia, blackening and cracking into scales with age",
+      "de": "Oberfläche jung grau- bis bräunlich und mit hellem Konidienstaub bedeckt, später schwarz werdend und in Schuppen aufbrechend"
+    },
+    {
+      "en": "Interior flesh white and very tough",
+      "de": "Inneres Fleisch weiß und sehr zäh"
+    },
+    {
+      "en": "Differs from Xylaria polymorpha by its longer stalk, more slender clubs and smaller spores (12–16 µm against 20–32 µm)",
+      "de": "Unterscheidet sich von Xylaria polymorpha durch den längeren Stiel, schlankere Keulen und kleinere Sporen (12–16 µm gegenüber 20–32 µm)"
+    },
+    {
+      "en": "Grows directly from dead hardwood, especially sycamore maple and beech",
+      "de": "Wächst direkt an totem Laubholz, besonders Bergahorn und Buche"
+    }
+  ],
+  "notes": {
+    "en": "Named for its long stalk (longipes). The maple wood it decays is part of the \"fungal violin\" research, where controlled fungal decay was shown to shape the acoustic properties of instrument wood.",
+    "de": "Benannt nach dem langen Stiel (longipes). Das von ihr besiedelte Ahornholz ist Teil der „Pilzgeigen“-Forschung, in der ein gezielter Pilzbefall die akustischen Eigenschaften von Instrumentenholz prägt."
+  },
+  "habitat": {
+    "en": "Saprobic on dead logs, branches and stumps of broadleaves, favouring sycamore (Acer pseudoplatanus) and beech; causes a soft rot; found most of the year",
+    "de": "Saprobiont an totem Holz von Laubbäumen, bevorzugt Bergahorn (Acer pseudoplatanus) und Buche; verursacht eine Moderfäule; fast ganzjährig"
+  },
+  "edibility": {
+    "en": "Inedible — the flesh is far too hard and tough",
+    "de": "Ungenießbar — das Fleisch ist viel zu hart und zäh"
+  }
+}

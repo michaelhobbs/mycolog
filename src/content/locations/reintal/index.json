@@ -3,6 +3,18 @@
     "en": "Reintal",
     "de": "Reintal"
   },
+  "description": {
+    "en": "Broad limestone valley of the Partnach below the Bockhütte, in the Wetterstein range; open spruce and pine woodland over pale calcareous scree and river gravel, with mossy hollows and damp, rich ground along the braided bed of the river.",
+    "de": "Breites Kalktal der Partnach unterhalb der Bockhütte im Wettersteingebirge; lichter Fichten- und Kiefernwald über hellem Kalkschutt und Flusskies, mit moosigen Mulden und feuchtem, nährstoffreichem Boden entlang des verzweigten Flussbetts."
+  },
+  "forestType": {
+    "en": "Subalpine spruce–pine valley woodland",
+    "de": "Subalpiner Fichten-Kiefern-Talwald"
+  },
+  "soilType": {
+    "en": "Calcareous scree and river gravel",
+    "de": "Kalkschutt und Flusskies"
+  },
   "center": {
     "lat": 47.43507,
     "lng": 11.10522

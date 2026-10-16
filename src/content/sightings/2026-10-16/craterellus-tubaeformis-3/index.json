@@ -1,0 +1,16 @@
+{
+  "species": "craterellus-tubaeformis",
+  "locationSlug": "reintal",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-16",
+  "dateIdentified": "2026-10-16",
+  "location": {
+    "lat": 47.42718,
+    "lng": 11.10356
+  },
+  "images": [
+    "./images/craterellus-tubaeformis1.jpg",
+    "./images/craterellus-tubaeformis2.jpg",
+    "./images/craterellus-tubaeformis3.jpg"
+  ]
+}

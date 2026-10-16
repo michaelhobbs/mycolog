@@ -1,0 +1,16 @@
+{
+  "species": "hydnum-repandum",
+  "locationSlug": "reintal",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-16",
+  "dateIdentified": "2026-10-16",
+  "location": {
+    "lat": 47.43436,
+    "lng": 11.10354
+  },
+  "images": [
+    "./images/hydnum-repandum1.jpg",
+    "./images/hydnum-repandum2.jpg",
+    "./images/hydnum-repandum3.jpg"
+  ]
+}

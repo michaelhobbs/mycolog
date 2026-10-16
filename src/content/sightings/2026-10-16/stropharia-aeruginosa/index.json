@@ -1,0 +1,23 @@
+{
+  "species": "stropharia-aeruginosa",
+  "locationSlug": "reintal",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-16",
+  "dateIdentified": "2026-10-16",
+  "location": {
+    "lat": 47.43507,
+    "lng": 11.10522
+  },
+  "images": [
+    "./images/stropharia-aeruginosa1.jpg",
+    "./images/stropharia-aeruginosa2.jpg",
+    "./images/stropharia-aeruginosa3.jpg",
+    "./images/stropharia-aeruginosa4.jpg",
+    "./images/stropharia-aeruginosa5.jpg",
+    "./images/stropharia-aeruginosa6.jpg",
+    "./images/stropharia-aeruginosa7.jpg",
+    "./images/stropharia-aeruginosa8.jpg",
+    "./images/stropharia-aeruginosa9.jpg",
+    "./images/stropharia-aeruginosa10.jpg"
+  ]
+}

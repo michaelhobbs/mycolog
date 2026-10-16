@@ -1,0 +1,18 @@
+{
+  "species": "xylaria-hypoxylon",
+  "locationSlug": "kochelberg",
+  "authors": ["michael"],
+  "dateSpotted": "2026-10-16",
+  "dateIdentified": "2026-10-16",
+  "location": {
+    "lat": 47.47652,
+    "lng": 11.10805
+  },
+  "images": [
+    "./images/xylaria-hypoxylon1.jpg",
+    "./images/xylaria-hypoxylon2.jpg",
+    "./images/xylaria-hypoxylon3.jpg",
+    "./images/xylaria-hypoxylon4.jpg",
+    "./images/xylaria-hypoxylon5.jpg"
+  ]
+}
